@@ -8,22 +8,22 @@
           管理员列表
         </div>
       </li>
+    </ul>
+    <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="">
+        <div class="font-bold text-base" @click="showAddUserModal()">
           <add theme="outline" size="18" />
           新增用户
         </div>
       </li>
-    </ul>
-    <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="editUser()">
+        <div class="font-bold text-base" @click="showChangePasswordModal()">
           <edit-one theme="outline" size="18" />
           编辑用户
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="editPermission()">
+        <div class="font-bold text-base" @click="showEditPermissionModal()">
           <permissions theme="outline" size="18" />
           编辑权限
         </div>
@@ -112,15 +112,95 @@
       </div>
     </div>
   </div>
+  <dialog id="changePasswordModal" class="modal">
+    <div class="modal-box space-y-2 w-96">
+      <h3 class="font-bold text-lg">修改密码</h3>
+      <label class="input input-bordered flex items-center gap-2" disabled>
+        UID
+        <input type="text" class="grow" placeholder="" v-model="UID" disabled />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        密码
+        <input type="text" class="grow" placeholder="" v-model="password" />
+      </label>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn mr-2">取消修改</button>
+          <button class="btn btn-neutral" @click="changePassword()">确认修改</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="addUserModal" class="modal">
+    <div class="modal-box space-y-2 w-96">
+      <h3 class="font-bold text-lg">新增用户</h3>
+      <label class="input input-bordered flex items-center gap-2">
+        UID
+        <input type="text" class="grow" placeholder="" v-model="UID" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        用户名
+        <input type="text" class="grow" placeholder="" v-model="userName" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        密码
+        <input type="text" class="grow" placeholder="" v-model="password" />
+      </label>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn mr-2">取消新增</button>
+          <button class="btn btn-neutral" @click="addUser()">确认新增</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="editPermissionModal" class="modal">
+    <div class="modal-box space-y-2 w-96">
+      <h3 class="font-bold text-lg">修改权限</h3>
+      <label class="input input-bordered flex items-center gap-2" disabled>
+        UID
+        <input type="text" class="grow" placeholder="" v-model="UID" disabled />
+      </label>
+      <div>
+        <table class="table table-zebra">
+      <thead>
+        <tr>
+          <th v-for="(_, index) in ['超管', '资源', '比赛', '题单', '题目', '管理员']" :key="index"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in users.users" :key="item.UID" @click="switchSelectedStatus(index)"
+          class="cursor-pointer">
+          <td>
+            <input type="checkbox" :checked="item.Selected == true" class="checkbox" />
+          </td>
+          <th>{{ item.UID }}</th>
+          <td>
+            <div class="font-bold talbe-lg">{{ item.UserName }}</div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+      </div>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn mr-2">取消修改</button>
+          <button class="btn btn-neutral" @click="changePermission()">确认修改</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+  <div class="p-3 bg-base-200"></div>
 </template>
 
 <script lang="ts" setup name="AdminUser">
-import { DeleteOne, EditOne, Left, Right, DoubleLeft, DoubleRight, AfferentThree, Permissions, Add, Peoples } from '@icon-park/vue-next';
+import { DeleteOne, EditOne, Left, Right, DoubleLeft, DoubleRight, AfferentThree, Permissions, Add, Peoples, AddUser } from '@icon-park/vue-next';
 import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
 import { type UserType } from '@/type';
+import { list } from 'postcss';
 
 const router = useRouter();
 
@@ -145,8 +225,8 @@ function switchAllSelectedStatus(status?: boolean) {
 
 function getSelectedList() {
   let list: Array<string> = [];
-  for (let i = 0; i < users.problems.length; i++) {
-    if (users.problems[i].Selected == true) {
+  for (let i = 0; i < users.users.length; i++) {
+    if (users.users[i].Selected == true) {
       list.push(users.users[i].UID);
     }
   }
@@ -187,17 +267,23 @@ function deleteUsers() {
     })
 };
 
-interface ProblemsListType extends ProblemSimplifiedType {
+interface UserListType extends UserType {
   Selected: boolean,
 };
 
-let users = reactive<UsersType>({
-  
+let users = reactive({
+  users: Array<UserListType>(),
+  page: 1,
+  limit: 20,
+  count: 0,
 })
 
+let UID = ref<string>('');
+let password = ref<string>('');
+let userName = ref<string>('');
 
 function getAdministrators(showInfo: boolean = false) {
-  Get('api/admin/permission/list', {
+  Get('api/admin/permission/list/', {
     Page: users.page - 1,
     Limit: users.limit,
   })
@@ -215,7 +301,7 @@ function getAdministrators(showInfo: boolean = false) {
       if (showInfo) {
         push.success({
           title: '获取成功',
-          message: `一共获取了 ${users.Count} 位管理员`,
+          message: `一共获取了 ${users.count} 位管理员`,
         })
       }
     })
@@ -234,17 +320,41 @@ function changePage(page: number) {
   // syncUrl();
 }
 
-function editUser() {
+function changePassword() {
   let list = getSelectedList();
   if (list.length != 1) {
     push.warning({
       title: '操作不合法',
-      message: '请选择且仅选择一道题目进行编辑',
+      message: '请选择且仅选择一位用户进行编辑',
     })
     return;
   }
-  let PID = list[0];
-  router.push('/admin/problem/edit/' + PID);
+  UID.value = list[0];
+  Post('api/admin/user/edit/password/', {
+    UID: UID.value,
+    Password: password.value,
+  })
+    .then((res: any) => {
+      let data = res.data;
+      console.log(data);
+
+      if (data.Code == 0) {
+        push.success({
+          title: '修改成功',
+          message: `成功修改了 ${UID} 的密码`,
+        });
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+  switchAllSelectedStatus(false);
 }
 
 function editPermission() {
@@ -252,12 +362,105 @@ function editPermission() {
   if (list.length != 1) {
     push.warning({
       title: '操作不合法',
-      message: '请选择且仅选择一道题目进行编辑',
+      message: '请选择且仅选择一道用户进行编辑',
     })
     return;
   }
-  let PID = list[0];
-  router.push('/admin/problem/data/' + PID);
+  UID.value = list[0];
+  // @ts-ignore
+  changePermission.showModal();
+  switchAllSelectedStatus(false);
+}
+
+function showEditPermissionModal() {
+  // @ts-ignore
+  editPermissionModal.showModal();
+}
+
+function showAddUserModal() {
+  UID.value = userName.value = password.value = '';
+  // @ts-ignore
+  addUserModal.showModal();
+}
+
+function showChangePasswordModal() {
+  UID.value = userName.value = password.value = '';
+  let list = getSelectedList();
+  if (list.length != 1) {
+    push.warning({
+      title: '操作不合法',
+      message: '请选择且仅选择一位用户进行编辑',
+    })
+    return;
+  }
+  UID.value = list[0];
+  // @ts-ignore
+  changePasswordModal.showModal();
+}
+
+function addUser() {
+  if (UID.value == '' || password.value == '' || userName.value == '') {
+    push.warning({
+      title: '操作不合法',
+      message: '请填写完整信息',
+    })
+    return;
+  }
+
+  Post('/api/auth/register/', {
+    UID: UID.value,
+    UserName: userName.value,
+    Password: password.value,
+  })
+    .then((res: any) => {
+      let data = res.data;
+      console.log(data);
+
+      if (data.Code == 0) {
+        push.success({
+          title: '新增成功',
+          message: `成功新增用户 ${UID.value}`,
+        });
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+}
+
+function changePermission() {
+  Post('api/admin/user/edit/password/', {
+    UID: UID.value,
+    Password: password.value,
+  })
+    .then((res: any) => {
+      let data = res.data;
+      console.log(data);
+
+      if (data.Code == 0) {
+        push.success({
+          title: '修改成功',
+          message: `成功修改了 ${UID} 的密码`,
+        });
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+  getAdministrators();
+  switchAllSelectedStatus(false);
 }
 
 onMounted(() => {

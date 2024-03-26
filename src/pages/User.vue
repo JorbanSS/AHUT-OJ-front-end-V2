@@ -2,7 +2,7 @@
   <div class="flex space-x-6">
     <div class="shadow-lg bg-white p-6 Border card h-fit w-80">
       <div>
-        <img :src="BaseURL + '/resource' + user.HeadURL.slice(6)" class="" />
+        <img :src="'/resource' + user.HeadURL.slice(6)" class="" />
       </div>
     </div>
     <div class="shadow-lg bg-white p-6 Border card h-fit">
@@ -17,7 +17,6 @@ import { useRouter, useRoute } from 'vue-router';
 import { type UserType } from '@/type';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
-import { BaseURL } from '@/config';
 
 const router = useRouter();
 const route = useRoute();
