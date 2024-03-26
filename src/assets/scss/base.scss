@@ -1,0 +1,46 @@
+@import "./coverAnimate.scss";
+
+.Border {
+  border: 1px solid #ddd;
+}
+
+.Alert {
+  display: grid;
+  width: 100%;
+  grid-auto-flow: row;
+  align-content: flex-start;
+  align-items: center;
+  justify-items: center;
+  gap: 1rem/* 16px */;
+  text-align: center;
+  border-radius: var(--rounded-box, 1rem/* 16px */);
+  padding: 1rem/* 16px */;
+  --tw-text-opacity: 1;
+}
+
+@media (min-width: 400px) {
+  .Alert {
+    grid-auto-flow: column;
+    grid-template-columns: auto minmax(auto,1fr);
+    justify-items: start;
+    text-align: start;
+  }
+}
+
+$select-arrow: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4IiB3aWR0aD0iNDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE0LjgzIDE2LjQybDkuMTcgOS4xNyA5LjE3LTkuMTcgMi44MyAyLjgzLTEyIDEyLTEyLTEyeiIvPjxwYXRoIGQ9Ik0wLS43NWg0OHY0OGgtNDh6IiBmaWxsPSJub25lIi8+PC9zdmc+';
+$select-padding: 0;
+
+select {
+  border-radius: 0;
+  -webkit-appearance: none; // autoprefixer won’t add this and we still need it
+  appearance: none;
+  cursor: pointer;
+  padding: $select-padding;
+  width: 100%;
+
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    background-image: url(#{$select-arrow});
+    background-position: right 0 top 50%;
+    background-repeat: no-repeat;
+  }
+}
