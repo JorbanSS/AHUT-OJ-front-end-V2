@@ -117,7 +117,7 @@
           下载 PDF
         </button>
       </div>
-      <MdPreview :editorId="id" :modelValue="problem.description" class="p-1"/>
+      <MdPreview :editorId="id" :modelValue="problem.description" class="p-1 mb-4"/>
     </div>
   </div>
   <dialog id="codeModal" class="modal">

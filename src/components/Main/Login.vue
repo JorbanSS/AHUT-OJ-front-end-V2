@@ -9,16 +9,16 @@
       </span>
       <label class="input input-bordered flex items-center gap-2">
         账号
-        <input type="text" class="grow" placeholder="" v-model="loginInfo.UID" />
+        <input type="text" class="grow" placeholder="" v-model="loginInfo.UID" name="username" autocomplete="username" />
       </label>
       <label class="input input-bordered flex items-center gap-2">
         密码
-        <input type="password" class="grow" placeholder="" v-model="loginInfo.Pass" />
+        <input type="password" class="grow" placeholder="" v-model="loginInfo.Pass" name="password" autocomplete="current-password"  />
       </label>
       <div class="form-control">
         <label class="label cursor-pointer">
           <span class="label-text text-base font-bold">3 天内免登录</span>
-          <input type="checkbox" class="checkbox" v-model="loginInfo.save" />
+          <input type="checkbox" class="checkbox" v-model="loginInfo.Save" />
         </label>
       </div>
       <div class="flex space-x-4 justify-center">
@@ -55,7 +55,7 @@ var props = withDefaults(defineProps<propsType>(), {
 let loginInfo = reactive<LoginInfoType>({
   UID: '',
   Pass: '',
-  save: false,
+  Save: false,
 })
 
 function login() {
@@ -77,7 +77,7 @@ function login() {
         localStorage.setItem("token", data.Token);
 
         localStorage.setItem("UID", data.UID);
-        localStorage.setItem("saveLoginStatus", loginInfo.save.toString());
+        localStorage.setItem("saveLoginStatus", loginInfo.Save.toString());
 
         // userDataStore.init();
         userDataStore.login(data);

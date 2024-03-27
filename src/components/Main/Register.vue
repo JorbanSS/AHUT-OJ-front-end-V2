@@ -9,29 +9,29 @@
       </span>
       <label class="input input-bordered flex items-center gap-2">
         姓名
-        <input type="text" class="grow" placeholder="" />
+        <input type="text" class="grow" v-model="registerInfo.UserName" name="name" autocomplete="name" />
       </label>
       <label class="input input-bordered flex items-center gap-2">
         账号
-        <input type="text" class="grow" placeholder="" />
+        <input type="text" class="grow" v-model="registerInfo.UID" name="username" autocomplete="username" />
       </label>
       <div class="label" style="margin-top: -0.2rem; margin-bottom: -0.5rem;">
         <span class="label-text-alt">格式：学校首字母大写+学号，例：AHUT229074001</span>
       </div>
       <label class="input input-bordered flex items-center gap-2">
         邮箱
-        <input type="text" class="grow" placeholder="" />
+        <input type="text" class="grow" v-model="registerInfo.Email" name="email" autocomplete="email"  />
       </label>
       <div class="join">
         <label class="input input-bordered flex items-center gap-2 join-item">
           验证码
-          <input type="text" class="grow" placeholder="" />
+          <input type="text" class="grow" v-model="registerInfo.VerifyCode" />
         </label>
-        <button class="btn join-item">发送</button>
+        <button class="btn join-item" @click="sendVerifyCode()">发送</button>
       </div>
       <label class="input input-bordered flex items-center gap-2">
         密码
-        <input type="password" class="grow" placeholder="" />
+        <input type="password" class="grow" v-model="registerInfo.Pass" name="password" autocomplete="current-password" />
       </label>
       <div class="flex space-x-4 justify-center">
         <a class="link link-hover" @click="props.login">登录账户</a>
@@ -46,10 +46,11 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
 import { Close } from '@icon-park/vue-next';
-import { type LoginInfoType } from '@/type';
+import { type RegisterInfoType } from '@/type';
 import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
+import { Validator } from '@/assets/ts/globalFunctions';
 
 interface propsType {
   init?: Function;
@@ -59,25 +60,116 @@ interface propsType {
 
 var props = withDefaults(defineProps<propsType>(), {
   init: () => { },
-  register: () => { },
+  login: () => { },
 });
 
-let loginInfo = reactive<LoginInfoType>({
+let registerInfo = reactive<RegisterInfoType>({
   UID: '',
   Pass: '',
-  save: false,
+  Email: '',
+  UserName: '',
+  VerifyCode: '',
 })
 
 function register() {
-  if (loginInfo.UID == '' || loginInfo.Pass == '') {
-    push.error({
+  if (registerInfo.UID == '' || registerInfo.Pass == '' || registerInfo.Email == '' || registerInfo.UserName == '' || registerInfo.VerifyCode == '') {
+    push.warning({
       title: '数据错误',
       message: '未填写完整信息',
     })
     return;
   }
+  if (Validator.UserName(registerInfo.UserName) == false) {
+    push.warning({
+      title: '数据错误',
+      message: '用户姓名格式错误，请输入完整的真实姓名',
+    });
+    return;
+  }
+  if (Validator.UID(registerInfo.UID) == false) {
+    push.warning({
+      title: '数据错误',
+      message: '用户 UID 格式错误，正确格式为：学校首字母大写+学号，例：AHUT229074001',
+    });
+    return;
+  }
+  if (Validator.Email(registerInfo.Email) == false) {
+    push.warning({
+      title: '数据错误',
+      message: '用户邮箱格式错误',
+    });
+    return;
+  }
+  if (Validator.Password(registerInfo.Pass) == false) {
+    push.warning({
+      title: '数据错误',
+      message: '用户密码格式错误，正确格式为：8~20位英文数字符号组合',
+    });
+    return;
+  }
+
+  Post('api/auth/register/', {
+    UID: registerInfo.UID,
+    Pass: registerInfo.Pass,
+    Email: registerInfo.Email,
+    UserName: registerInfo.UserName,
+    VerifyCode: registerInfo.VerifyCode,
+  })
+    .then((res: any) => {
+      let data = res.data;
+      if (data.Code == 0) {
+        push.success({
+          title: '注册成功',
+          message: `${registerInfo.UserName}，欢迎加入 AHUT OJ!`,
+        })
+        props.login();
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
 }
 
+function sendVerifyCode() {
+  if (registerInfo.Email == '') {
+    push.warning({
+      title: '数据错误',
+      message: '邮箱未填写',
+    });
+    return;
+  }
+  if (Validator.Email(registerInfo.Email)) {
+    push.warning({
+      title: '数据错误',
+      message: '用户邮箱格式错误',
+    });
+    return;
+  }
+  Post('api/auth/login/', {
+
+  })
+    .then((res: any) => {
+      let data = res.data;
+      if (data.Code == 0) {
+
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+}
 
 </script>
 

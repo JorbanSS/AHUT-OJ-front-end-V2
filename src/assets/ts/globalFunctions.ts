@@ -17,6 +17,7 @@ export class ConvertTools {
     return time;
   }
 
+  // 打印时间
   public static PrintTime(time: TimeType | number, showDate: number = 0, showSecond: number = 0): string {
     if (typeof time === "number") time = this.Timestamp2Time(time);
     let ret = '';
@@ -44,9 +45,38 @@ export class ConvertTools {
     return alpha;
   }
 
+  // 计算百分比，0 为向下取整（默认），1 为向上取整
   public static Percentage(m: number, n: number, isCeil: number = 0): number {
     if (n == 0) return 0;
     if (isCeil) return Math.ceil(m / n * 100);
     return Math.floor(m / n * 100);
+  }
+}
+
+
+// 字符串验证工具
+export class Validator {
+  //验证用户 UID
+  public static UID(UID: string): boolean {
+    const regex = /^[A-Z]{2,}[0-9]{6,}$/;
+    return regex.test(UID);
+  }
+  
+  // 验证密码
+  public static Password(password: string): boolean {
+    const regex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_])[a-zA-Z\d\W_]{8,20}$/;
+    return regex.test(password);
+  }
+
+  // 验证用户真实姓名
+  public static UserName(name: string): boolean {
+    const regex = /^[\u4e00-\u9fa5]{2,}$/;
+    return regex.test(name);
+  }
+
+  // 验证邮箱
+  public static Email(email: string): boolean {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
   }
 }

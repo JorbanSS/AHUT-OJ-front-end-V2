@@ -410,7 +410,7 @@ function addUser() {
   Post('/api/auth/register/', {
     UID: UID.value,
     UserName: userName.value,
-    Password: password.value,
+    Pass: password.value,
   })
     .then((res: any) => {
       let data = res.data;

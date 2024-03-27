@@ -37,8 +37,17 @@ export interface UserSimplifiedType {
 export interface LoginInfoType {
   UID: string,             // UID
   Pass: string,            // 密码
-  save: boolean,           // 是否保存 3 天
+  Save: boolean,           // 是否保存 3 天
   [item: string]: any,     // 其他属性
+}
+
+
+export interface RegisterInfoType {
+  UID: string,                  // UID
+  UserName: string,             // 真实姓名
+  Pass: string,                 // 密码
+  Email: string,                // 邮箱
+  VerifyCode: string,           // 验证码
 }
 
 
@@ -257,12 +266,21 @@ export interface JudgeFilesType {
 }
 
 export interface BannerType {
-  ObjectData: string,
+  ObjectData: string,         // 图片 Base64
   [item: string]: any,        // 其他属性
 };
 
 export interface BannersType {
-  banners: Array<BannerType>,
-  Count: number,
+  banners: Array<BannerType>,   // 图片集
+  Count: number,                // 图片数
   [item: string]: any,          // 其他属性
 };
+
+
+export interface RejudgeInfoType {
+  SID?: number,           // 记录 SID
+  PID?: string,           // 题目 PID
+  UID?: string,           // 用户 UID
+  CID?: number,           // 比赛 CID
+  [item: string]: any,    // 其他属性
+}

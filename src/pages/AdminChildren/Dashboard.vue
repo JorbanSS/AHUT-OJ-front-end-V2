@@ -48,8 +48,8 @@
       </div>
       <div class="card Border bg-white shadow-lg p-6 w-fit">
         <label class="form-control w-full max-w-xs">
-          <div class="label">
-            <span class="label-text">新增首页图片（限展示三张，新增的会覆盖旧的）</span>
+          <div class="mb-2">
+            <span class="">新增首页图片</span>
           </div>
           <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="image/*"
             @change="handleImageChange" />
@@ -62,9 +62,21 @@
       <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
         <label class="input input-bordered flex items-center gap-2">
           记录号
-          <input type="text" class="grow" placeholder="">
+          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.SID">
         </label>
-        <button class="btn btn-neutral">重判</button>
+        <label class="input input-bordered flex items-center gap-2">
+          用户号
+          <input type="text" class="grow" placeholder="" v-model="rejudgeInfo.UID">
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          题号
+          <input type="text" class="grow" placeholder="" v-model="rejudgeInfo.PID">
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          比赛号
+          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.CID" >
+        </label>
+        <button class="btn btn-neutral" @click="rejudge()">重判</button>
       </div>
     </div>
   </div>
@@ -74,8 +86,50 @@
 <script lang="ts" setup name="Training">
 import { Peoples, UploadLogs, PreviewOpen, History, DocumentFolder } from '@icon-park/vue-next'
 import { push } from 'notivue';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { Post } from '@/utils/axios/request';
+import { RejudgeInfoType } from '@/type';
+
+let rejudgeInfo = reactive<RejudgeInfoType>({
+  SID: 0,
+  UID: '',
+  PID: '',
+  CID: 0,
+});
+
+function rejudge() {
+  let params: RejudgeInfoType = {};
+  if (rejudgeInfo.SID == 0 && rejudgeInfo.CID == 0 && rejudgeInfo.UID == '' && rejudgeInfo.PID == '') {
+    push.warning({
+      title: '信息错误',
+      message: '请填写至少一项信息',
+    });
+    return;
+  }
+  if (rejudgeInfo.SID) params.SID = rejudgeInfo.SID;
+  if (rejudgeInfo.UID) params.UID = rejudgeInfo.UID;
+  if (rejudgeInfo.PID) params.PID = rejudgeInfo.PID;
+  if (rejudgeInfo.CID) params.CID = rejudgeInfo.CID;
+  Post('api/submit/rejudge/', params)
+    .then((res: any) => {
+      let data = res.data;
+      if (data.Code == 0) {
+        push.success({
+          title: '操作成功',
+          message: '已开始重新判题',
+        });
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+}
 
 const imagePreview = ref<string | null>(null);
 
