@@ -1,7 +1,7 @@
 <template>
   <NavBar :login="loginAction" :logout="logoutAction" v-if="showConfig.showNavBar" />
   <div :class="{ 'max-w-5xl mx-auto m-6': !adminMode }"
-    :style="adminMode ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 188px)'" style="" class=""
+    :style="adminMode ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 48px)'" style="" class=""
     v-if="showConfig.showBody">
     <RouterView></RouterView>
   </div>

@@ -165,30 +165,32 @@ export interface ProblemListsType {
 
 // 导航栏
 export interface NavItemType {
-  title: string;                  // 显示名称
-  icon: any;                      // 图标
-  to?: { name: string };          // 路由
-  subItems?: Array<NavItemType>;  // 子项
+  title: string,                  // 显示名称
+  icon: any,                      // 图标
+  to?: { name: string },          // 路由
+  subItems?: Array<NavItemType>,  // 子项
   [item: string]: any,            // 其他属性
 }
 
 
 // 主页通知
 export interface HomeNoticeType {
-  Title: string;              // 标题
-  Content: string;            // 内容
-  UpdatedTime: number;        // 时间
-  [item: string]: any;        // 其他属性
+  Title: string,              // 标题
+  Content: string,            // 内容
+  UpdatedTime: number,        // 时间
+  UID: string,                // 用户 UID
+  CreatedTime: number,        // 创建时间
+  [item: string]: any,        // 其他属性
 }
 
 
 // 比赛通知
 export interface ContestNoticeType extends HomeNoticeType {
-  title: string;              // 标题
-  content: string;            // 内容
-  time: number;               // 时间
-  CID: number;                // 比赛 CID
-  [item: string]: any;        // 其他属性
+  title: string,              // 标题
+  content: string,            // 内容
+  time: number,               // 时间
+  CID: number,                // 比赛 CID
+  [item: string]: any,        // 其他属性
 }
 
 
@@ -231,10 +233,12 @@ export interface TimeType {
 
 // 首页更新日志
 export interface UpdateLogType {
-  ID: number;             // ID
-  Title: string;          // 标题
-  Content: string;        // 内容
-  UpdatedTime: number;    // 创建时间
+  ID: number,             // ID
+  Title: string,          // 标题
+  Content: string,        // 内容
+  CreatedTime: number,    // 创建时间
+  UpdatedTime: number,    // 创建时间
+  UID: string,            // 用户 UID
   [item: string]: any,    // 其他属性
 }
 
@@ -268,13 +272,13 @@ export interface JudgeFilesType {
 export interface BannerType {
   ObjectData: string,         // 图片 Base64
   [item: string]: any,        // 其他属性
-};
+}
 
 export interface BannersType {
   banners: Array<BannerType>,   // 图片集
   Count: number,                // 图片数
   [item: string]: any,          // 其他属性
-};
+}
 
 
 export interface RejudgeInfoType {
@@ -283,4 +287,9 @@ export interface RejudgeInfoType {
   UID?: string,           // 用户 UID
   CID?: number,           // 比赛 CID
   [item: string]: any,    // 其他属性
+}
+
+
+export interface PermissionType {
+  
 }

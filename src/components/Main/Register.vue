@@ -20,7 +20,7 @@
       </div>
       <label class="input input-bordered flex items-center gap-2">
         邮箱
-        <input type="text" class="grow" v-model="registerInfo.Email" name="email" autocomplete="email"  />
+        <input type="text" class="grow" v-model="registerInfo.Email" name="email" autocomplete="email" />
       </label>
       <div class="join">
         <label class="input input-bordered flex items-center gap-2 join-item">
@@ -31,7 +31,8 @@
       </div>
       <label class="input input-bordered flex items-center gap-2">
         密码
-        <input type="password" class="grow" v-model="registerInfo.Pass" name="password" autocomplete="current-password" />
+        <input type="password" class="grow" v-model="registerInfo.Pass" name="password"
+          autocomplete="current-password" />
       </label>
       <div class="flex space-x-4 justify-center">
         <a class="link link-hover" @click="props.login">登录账户</a>
@@ -51,6 +52,7 @@ import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { Validator } from '@/assets/ts/globalFunctions';
+import axios from 'axios';
 
 interface propsType {
   init?: Function;
@@ -107,22 +109,49 @@ function register() {
     });
     return;
   }
+  if (Validator.VerifyCode(registerInfo.VerifyCode.toUpperCase()) == false) {
+    push.warning({
+      title: '数据错误',
+      message: '验证码格式错误',
+    });
+    return;
+  }
 
-  Post('api/auth/register/', {
+  Post('api/auth/codeverify', {
     UID: registerInfo.UID,
-    Pass: registerInfo.Pass,
     Email: registerInfo.Email,
-    UserName: registerInfo.UserName,
-    VerifyCode: registerInfo.VerifyCode,
+    Code: registerInfo.VerifyCode.toUpperCase(),
   })
     .then((res: any) => {
       let data = res.data;
+
       if (data.Code == 0) {
-        push.success({
-          title: '注册成功',
-          message: `${registerInfo.UserName}，欢迎加入 AHUT OJ!`,
+
+        Post('api/auth/register/', {
+          UID: registerInfo.UID,
+          Pass: registerInfo.Pass,
+          Email: registerInfo.Email,
+          UserName: registerInfo.UserName,
         })
-        props.login();
+          .then((res: any) => {
+            let data = res.data;
+            if (data.Code == 0) {
+              push.success({
+                title: '注册成功',
+                message: `${registerInfo.UserName}，欢迎加入 AHUT OJ!`,
+              })
+              props.login();
+            }
+            else {
+              push.error({
+                title: `Error: ${data.Code}`,
+                message: `${data.Msg}`,
+              })
+            }
+          })
+          .catch((err: any) => {
+            console.log(err);
+          })
       }
       else {
         push.error({
@@ -137,27 +166,47 @@ function register() {
 }
 
 function sendVerifyCode() {
-  if (registerInfo.Email == '') {
+  if (registerInfo.Email == '' || registerInfo.UID == '' || registerInfo.UserName == '') {
     push.warning({
       title: '数据错误',
-      message: '邮箱未填写',
+      message: '未填写完整信息',
     });
     return;
   }
-  if (Validator.Email(registerInfo.Email)) {
+  if (Validator.UserName(registerInfo.UserName) == false) {
+    push.warning({
+      title: '数据错误',
+      message: '用户姓名格式错误，请输入完整的真实姓名',
+    });
+    return;
+  }
+  if (Validator.UID(registerInfo.UID) == false) {
+    push.warning({
+      title: '数据错误',
+      message: '用户 UID 格式错误，正确格式为：学校首字母大写+学号，例：AHUT229074001',
+    });
+    return;
+  }
+  if (Validator.Email(registerInfo.Email) == false) {
     push.warning({
       title: '数据错误',
       message: '用户邮箱格式错误',
     });
     return;
   }
-  Post('api/auth/login/', {
-
+  Post('http://127.0.0.1:4433/api/auth/verifyemail/', {
+    Email: registerInfo.Email,
+    UID: registerInfo.UID,
+    Uname: registerInfo.UserName,
+    Method: 1,
   })
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {
-
+        push.success({
+          title: '发送成功',
+          message: `验证码已发送至 ${registerInfo.Email}`,
+        });
       }
       else {
         push.error({

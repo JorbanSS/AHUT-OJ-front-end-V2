@@ -1,10 +1,10 @@
 <template>
-  <!-- <footer class="footer footer-center p-4 bg-white text-base-content">
+  <footer class="footer footer-center p-4 bg-white text-base-content">
     <aside>
       <p>Copyright © 2019 - 2024 All right reserved.</p>
     </aside>
-  </footer> -->
-  <footer class="footer p-10 bg-white text-base-content">
+  </footer>
+  <!-- <footer class="footer p-10 bg-white text-base-content">
     <aside>
       <img src="@/assets/img/icon.png" class="rounded-full w-16 h-16" />
       <p>AHUT OJ V2<br>Providing reliable tech since 2019</p>
@@ -25,7 +25,7 @@
       <a class="link link-hover">Privacy policy</a>
       <a class="link link-hover">Cookie policy</a>
     </nav>
-  </footer>
+  </footer> -->
 </template>
 
 <script lang="ts" setup>

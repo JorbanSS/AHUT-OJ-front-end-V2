@@ -79,4 +79,10 @@ export class Validator {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(email);
   }
+
+  // 验证邮箱验证码
+  public static VerifyCode(code: string): boolean {
+    const regex = /^[A-Z\d]{6}$/;
+    return regex.test(code);
+  }
 }

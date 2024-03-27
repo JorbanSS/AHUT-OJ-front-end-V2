@@ -72,6 +72,8 @@ let notice = ref<HomeNoticeType>({
   Title: '',
   Content: '',
   UpdatedTime: 0,
+  CreatedTime: 0,
+  UID: '',
 })
 
 let banners = reactive<BannersType>({

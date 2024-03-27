@@ -157,30 +157,42 @@
   <dialog id="editPermissionModal" class="modal">
     <div class="modal-box space-y-2 w-96">
       <h3 class="font-bold text-lg">修改权限</h3>
-      <label class="input input-bordered flex items-center gap-2" disabled>
+      <label class="input input-bordered flex items-center gap-2">
         UID
-        <input type="text" class="grow" placeholder="" v-model="UID" disabled />
+        <input type="text" class="grow" placeholder="" v-model="UID" />
       </label>
       <div>
         <table class="table table-zebra">
-      <thead>
-        <tr>
-          <th v-for="(_, index) in ['超管', '资源', '比赛', '题单', '题目', '管理员']" :key="index"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in users.users" :key="item.UID" @click="switchSelectedStatus(index)"
-          class="cursor-pointer">
-          <td>
-            <input type="checkbox" :checked="item.Selected == true" class="checkbox" />
-          </td>
-          <th>{{ item.UID }}</th>
-          <td>
-            <div class="font-bold talbe-lg">{{ item.UserName }}</div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <thead>
+            <tr>
+              <th v-for="(item, index) in ['超管', '资源', '比赛', '题单', '题目', '管理员']" :key="index">
+                {{ item }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input type="checkbox" class="checkbox" />
+              </td>
+              <td>
+                <input type="checkbox" class="checkbox" />
+              </td>
+              <td>
+                <input type="checkbox" class="checkbox" />
+              </td>
+              <td>
+                <input type="checkbox" class="checkbox" />
+              </td>
+              <td>
+                <input type="checkbox" class="checkbox" />
+              </td>
+              <td>
+                <input type="checkbox" class="checkbox" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="modal-action">
         <form method="dialog">
@@ -210,6 +222,16 @@ let allSelected = ref<boolean>(false);
 function switchSelectedStatus(index: number) {
   users.users[index].Selected = !users.users[index].Selected;
 }
+
+let permission = reactive({
+  map: 0,
+  super: false,
+  resource: false,
+  contest: false,
+  problem: false,
+  problemList: false,
+  admin: false,
+});
 
 function switchAllSelectedStatus(status?: boolean) {
   if (status == undefined) {
@@ -327,7 +349,6 @@ function changePassword() {
   })
     .then((res: any) => {
       let data = res.data;
-      console.log(data);
 
       if (data.Code == 0) {
         push.success({
@@ -364,6 +385,18 @@ function editPermission() {
 }
 
 function showEditPermissionModal() {
+  UID.value = '';
+  let list = getSelectedList();
+  if (list.length > 1) {
+    push.warning({
+      title: '操作不合法',
+      message: '不选择或仅选择一位用户进行编辑',
+    })
+    return;
+  }
+  else if (list.length == 1) {
+    UID.value = list[0];
+  }
   // @ts-ignore
   editPermissionModal.showModal();
 }
@@ -385,7 +418,9 @@ function showChangePasswordModal() {
     })
     return;
   }
-  UID.value = list[0];
+  else if (list.length == 1) {
+    UID.value = list[0];
+  }
   // @ts-ignore
   changePasswordModal.showModal();
 }

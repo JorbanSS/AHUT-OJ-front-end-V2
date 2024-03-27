@@ -43,8 +43,8 @@
   <div class="grid grid-cols-12 gap-6 max-w-5xl mx-auto">
     <div class="space-y-6 col-span-4">
       <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
-        <button class="btn btn-neutral">编辑首页公告</button>
-        <button class="btn btn-neutral">编辑更新日志</button>
+        <button class="btn btn-neutral" @click="showEditHomeNoticeModal()">编辑首页公告</button>
+        <button class="btn btn-neutral" @click="editUpdateLogs()">编辑更新日志</button>
       </div>
       <div class="card Border bg-white shadow-lg p-6 w-fit">
         <label class="form-control w-full max-w-xs">
@@ -74,21 +74,41 @@
         </label>
         <label class="input input-bordered flex items-center gap-2">
           比赛号
-          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.CID" >
+          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.CID">
         </label>
         <button class="btn btn-neutral" @click="rejudge()">重判</button>
       </div>
     </div>
   </div>
   <div class="m-6"></div>
+  <dialog id="mdEditor" class="modal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg mb-4">主页公告编辑</h3>
+      <label class="input input-bordered flex items-center gap-2 mb-2">
+        标题
+        <input type="text" class="grow" placeholder="" v-model="homeNotice.Title">
+      </label>
+      <MdEditor v-model="homeNotice.Content" :height="500" />
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn mr-2">取消修改</button>
+          <button class="btn btn-neutral" @click="editHomeNotice()">提交修改</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
 </template>
 
 <script lang="ts" setup name="Training">
 import { Peoples, UploadLogs, PreviewOpen, History, DocumentFolder } from '@icon-park/vue-next'
 import { push } from 'notivue';
 import { reactive, ref } from 'vue';
-import { Post } from '@/utils/axios/request';
+import { Post, Get, Put } from '@/utils/axios/request';
 import { RejudgeInfoType } from '@/type';
+import { MdEditor } from 'md-editor-v3';
+import { type HomeNoticeType } from '@/type';
+
+import 'md-editor-v3/lib/style.css';
 
 let rejudgeInfo = reactive<RejudgeInfoType>({
   SID: 0,
@@ -170,6 +190,69 @@ function uploadImage() {
     .catch((err: any) => {
       console.log(err);
     })
+}
+
+let homeNotice = reactive<HomeNoticeType>({
+  Content: '',
+  Title: '',
+  UpdatedTime: 0,
+  CreatedTime: 0,
+  UID: '',
+})
+
+function showEditHomeNoticeModal() {
+  Get('api/notice/0', {})
+    .then((res: any) => {
+      let data = res.data;
+      if (data.Code == 0) {
+        homeNotice.Content = data.Content;
+        homeNotice.CreatedTime = data.CreatedTime;
+        homeNotice.Title = data.Title;
+        homeNotice.UpdatedTime = data.UpdatedTime;
+        homeNotice.UID = data.UID;
+        console.log(homeNotice);
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+  // @ts-ignore
+  mdEditor.showModal();
+}
+
+function editHomeNotice() {
+  Put('api/notice/0', {
+    Content: homeNotice.Content,
+    Title: homeNotice.Title,
+  })
+    .then((res: any) => {
+      let data = res.data;
+      if (data.Code == 0) {
+        push.success({
+          title: '修改成功',
+          message: '修改主页公告成功',
+        })
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+}
+
+function editUpdateLogs() {
+
 }
 
 </script>
