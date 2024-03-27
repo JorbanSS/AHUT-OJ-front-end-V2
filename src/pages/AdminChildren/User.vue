@@ -115,9 +115,9 @@
   <dialog id="changePasswordModal" class="modal">
     <div class="modal-box space-y-2 w-96">
       <h3 class="font-bold text-lg">修改密码</h3>
-      <label class="input input-bordered flex items-center gap-2" disabled>
+      <label class="input input-bordered flex items-center gap-2">
         UID
-        <input type="text" class="grow" placeholder="" v-model="UID" disabled />
+        <input type="text" class="grow" placeholder="" v-model="UID" />
       </label>
       <label class="input input-bordered flex items-center gap-2">
         密码
@@ -321,15 +321,6 @@ function changePage(page: number) {
 }
 
 function changePassword() {
-  let list = getSelectedList();
-  if (list.length != 1) {
-    push.warning({
-      title: '操作不合法',
-      message: '请选择且仅选择一位用户进行编辑',
-    })
-    return;
-  }
-  UID.value = list[0];
   Post('api/admin/user/edit/password/', {
     UID: UID.value,
     Password: password.value,
@@ -386,10 +377,11 @@ function showAddUserModal() {
 function showChangePasswordModal() {
   UID.value = userName.value = password.value = '';
   let list = getSelectedList();
-  if (list.length != 1) {
+  UID.value = list[0];
+  if (list.length > 1) {
     push.warning({
       title: '操作不合法',
-      message: '请选择且仅选择一位用户进行编辑',
+      message: '不选择或仅选择一位用户进行编辑',
     })
     return;
   }

@@ -125,14 +125,12 @@
       <h3 class="font-bold text-lg pb-6">{{ problem.PID }} {{ problem.Title }}</h3>
       <select class="select select-bordered w-72 max-w-xs text-base" v-model="submit.Lang">
         <option disabled selecte value="0">代码语言</option>
-        <option value="1">C (gcc 12.2.0)</option>
+        <option value="1">C17 (gcc 12.2.0)</option>
         <!-- <option value="2"></option> -->
         <!-- <option value="3">C++11 (g++ 12.2.0)</option> -->
         <option value="4">C++17 (g++ 12.2.0)</option>
-        <option value="5">Java (OpenJDK 17.0.10 64bit)</option>
+        <option value="5">Java17 (OpenJDK 17.0.10 64bit)</option>
         <option value="6">Python3 (3.10.13)</option>
-        <!-- <option value="2">AtCoder</option>
-        <option value="3">Virtual Judge</option> -->
       </select>
       <textarea class="textarea textarea-bordered w-full h-[340px] mt-4" placeholder=""
         v-model="submit.Source"></textarea>
