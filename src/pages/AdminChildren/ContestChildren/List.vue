@@ -216,13 +216,15 @@ function getContests(showInfo: boolean = false) {
         for (let index = 0; index < contests.contests.length; index++) {
           contests.contests[index].Selected = false;
         }
-      }
-    })
-    .then(() => {
-      if (showInfo) {
         push.success({
           title: '获取成功',
-          message: `一共获取了 ${contests.count} 道题目`,
+          message: `一共获取了 ${contests.count} 场比赛`,
+        })
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
         })
       }
     })

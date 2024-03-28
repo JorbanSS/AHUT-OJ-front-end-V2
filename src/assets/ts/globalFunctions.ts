@@ -70,7 +70,7 @@ export class Validator {
 
   // 验证用户真实姓名
   public static UserName(name: string): boolean {
-    const regex = /^[\u4e00-\u9fa5]{2,}$/;
+    const regex = /^[\u4e00-\u9fa5]{2,10}$/;
     return regex.test(name);
   }
 

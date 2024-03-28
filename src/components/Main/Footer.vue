@@ -1,7 +1,7 @@
 <template>
   <footer class="footer footer-center p-4 bg-white text-base-content">
     <aside>
-      <p>Copyright © 2019 - 2024 All right reserved.</p>
+      <p>Copyright © 2019 - 2024 All rights reserved.</p>
     </aside>
   </footer>
   <!-- <footer class="footer p-10 bg-white text-base-content">

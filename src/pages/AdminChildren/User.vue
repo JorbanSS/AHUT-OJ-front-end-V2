@@ -317,13 +317,17 @@ function getAdministrators(showInfo: boolean = false) {
         for (let index = 0; index < users.users.length; index++) {
           users.users[index].Selected = false;
         }
+        if (showInfo) {
+          push.success({
+            title: '获取成功',
+            message: `一共获取了 ${users.count} 位管理员`,
+          })
+        }
       }
-    })
-    .then(() => {
-      if (showInfo) {
-        push.success({
-          title: '获取成功',
-          message: `一共获取了 ${users.count} 位管理员`,
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
         })
       }
     })

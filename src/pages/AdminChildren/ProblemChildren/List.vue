@@ -270,14 +270,10 @@ function getProblems(showInfo: boolean = false) {
           problems.problems[index].Selected = false;
         }
       }
-    })
-    .then(() => {
-      if (showInfo) {
-        push.success({
-          title: '获取成功',
-          message: `一共获取了 ${problems.count} 道题目`,
-        })
-      }
+      push.success({
+        title: '获取成功',
+        message: `一共获取了 ${problems.count} 道题目`,
+      })
     })
     .catch((err: any) => {
       console.log(err);

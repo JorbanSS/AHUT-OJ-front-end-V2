@@ -6,6 +6,7 @@ import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import App from './App.vue';
 import router from './router';
 import VCalendar from 'v-calendar';
+import VueGtag from "vue-gtag-next";
 
 import "./assets/scss/tailwind.scss";
 import 'notivue/notifications.css';
@@ -30,5 +31,10 @@ app.use(store);
 app.use(notivue);
 app.use(autoAnimatePlugin);
 app.use(VCalendar, {})
+app.use(VueGtag, {
+  property: {
+    id: "G-WGSSB1C5MD"
+  },
+});
 
 app.mount('#app');

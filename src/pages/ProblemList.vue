@@ -17,7 +17,7 @@
   </div>
   <div class="m-6"></div>
   <div class="card shadow-lg Border bg-white">
-    <table class="table table-zebra">
+    <table class="table table-zebra mb-4">
       <thead>
         <tr>
           <th>通过状态</th>

@@ -10,9 +10,9 @@ An online judge front-end.
 
 ## 技术架构
 
-技术周边: [Node.js](https://nodejs.org/en) \ [Vue 3](https://cn.vuejs.org/) \ [Vite](https://cn.vitejs.dev/) \ [TypeScript](https://www.typescriptlang.org/) \ Scss \ Pinia \ Axios \ Router
+技术周边: [Node.js](https://nodejs.org/en) \ [Vue 3](https://cn.vuejs.org/) \ [Vite](https://cn.vitejs.dev/) \ [TypeScript](https://www.typescriptlang.org/) \ Scss \ Pinia \ Axios \ Vue-Router
 
-UI: [tailwindcss](https://www.tailwindcss.cn/) \ [daisyUI](https://daisyui.com/) \ [IconPark](https://iconpark.oceanengine.com/official) \ [Ant Design](https://ant-design.antgroup.com/index-cn)
+UI: [tailwindcss](https://www.tailwindcss.cn/) \ [daisyUI](https://daisyui.com/) \ [IconPark](https://iconpark.oceanengine.com/official)
 
 Plugin: [md-editor-v3](https://imzbf.github.io/md-editor-v3/zh-CN/index)
 
@@ -221,6 +221,14 @@ npm install @formkit/auto-animate
 
 ```sh
 npm install vue-draggable-plus
+```
+
+9. 支持谷歌分析
+
+先安装 vue-gtag, 可让您将事件数据发送到 Google Analytics（分析）、Google Ads 和 Google Marketing Platform
+
+```sh
+npm add vue-gtag-next
 ```
 
 ## 其他一些琐碎的 

@@ -194,7 +194,7 @@ function sendVerifyCode() {
     });
     return;
   }
-  Post('http://127.0.0.1:4433/api/auth/verifyemail/', {
+  Post('api/auth/verifyemail/', {
     Email: registerInfo.Email,
     UID: registerInfo.UID,
     Uname: registerInfo.UserName,

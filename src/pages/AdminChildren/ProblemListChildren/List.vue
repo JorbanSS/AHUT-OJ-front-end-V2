@@ -209,13 +209,17 @@ function getProblemLists(showInfo: boolean = false) {
   })
     .then((res: any) => {
       let data = res.data;
-      
+
       if (data.Code == 0) {
         problemLists.count = data.Size;
         problemLists.problemLists = data.Data;
         for (let index = 0; index < problemLists.problemLists.length; index++) {
           problemLists.problemLists[index].Selected = false;
         }
+        push.success({
+          title: '获取成功',
+          message: `一共获取了 ${problemLists.count} 个题单`,
+        })
       }
     })
     .then(() => {
