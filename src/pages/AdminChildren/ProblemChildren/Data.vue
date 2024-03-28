@@ -34,9 +34,10 @@
   </div>
   <div class="m-6"></div>
   <div class="mx-auto Border card shadow-lg bg-white max-w-5xl">
-    <table class="table table-zebra">
+    <table class="table table-zebra mb-4">
       <thead>
         <tr>
+          <!-- <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th> -->
           <th>文件名</th>
           <th>类型</th>
           <th>大小</th>
@@ -44,7 +45,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in judgeFiles.judgeFiles" :key="index" class="cursor-pointer">
+        <tr v-for="(item, index) in judgeFiles.judgeFiles" :key="item.PID" @click="switchSelectedStatus(index)"
+          class="cursor-pointer">
+          <!-- <td>
+            <input type="checkbox" :checked="item.Selected == true" class="checkbox" />
+          </td> -->
           <th>
             {{ item.FileName }}
           </th>
@@ -54,8 +59,9 @@
           <td>
             {{ item.FileSize }} MB
           </td>
-          <td>
-            
+          <td class="space-x-2">
+            <button class="btn btn-neutral btn-sm">查看</button>
+            <button class="btn btn-neutral btn-sm">删除</button>
           </td>
         </tr>
       </tbody>
@@ -80,6 +86,24 @@ let judgeFiles = reactive<JudgeFilesType>({
   Count: 0,
 })
 
+let allSelected = ref<boolean>(false);
+
+function switchSelectedStatus(index: number) {
+  judgeFiles.judgeFiles[index].Selected = !judgeFiles.judgeFiles[index].Selected;
+}
+
+function switchAllSelectedStatus(status?: boolean) {
+  if (status == undefined) {
+    allSelected.value = !allSelected.value;
+  }
+  else {
+    allSelected.value = status;
+  }
+  for (let i = 0; i < judgeFiles.judgeFiles.length; i++) {
+    judgeFiles.judgeFiles[i].Selected = allSelected.value;
+  }
+}
+
 function getJudgeFiles() {
   Get('api/file/' + judgeFiles.PID, {})
     .then((res: any) => {
@@ -88,8 +112,8 @@ function getJudgeFiles() {
         judgeFiles.judgeFiles = data.Data;
         judgeFiles.Count = data.Count;
         push.success({
-          title: '新增成功',
-          message: `题目 ID 为 ${data.PID}`,
+          title: '获取成功',
+          message: `获取了题目 ${judgeFiles.PID} 的 ${judgeFiles.Count} 条数据`,
         });
       }
       else {
@@ -102,6 +126,10 @@ function getJudgeFiles() {
     .catch((err: any) => {
       console.log(err);
     })
+}
+
+function deleteJudgeFile(index: number) {
+  // let judgeFileName = 
 }
 
 onMounted(() => {

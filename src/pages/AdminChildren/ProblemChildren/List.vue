@@ -254,7 +254,7 @@ let problems = reactive<ProblemsType>({
 })
 
 
-function getProblems(showInfo: boolean = false) {
+function getProblems() {
   Get('api/problem/list', {
     Page: problems.page - 1,
     Limit: problems.limit,

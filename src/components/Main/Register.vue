@@ -27,7 +27,12 @@
           验证码
           <input type="text" class="grow" v-model="registerInfo.VerifyCode" />
         </label>
-        <button class="btn join-item" @click="sendVerifyCode()">发送</button>
+        <button class="btn join-item w-[62px]" @click="sendVerifyCode()" v-if="!isCountingDown">发送</button>
+        <button class="btn join-item w-[62px]" @click="push.warning({title: '操作失败', message: '请勿频繁发送邮件'})" v-else >
+          <span class="countdown text-base">
+            <span :style="'--value: ' + second + ';'"></span>
+          </span>
+        </button>
       </div>
       <label class="input input-bordered flex items-center gap-2">
         密码
@@ -72,6 +77,22 @@ let registerInfo = reactive<RegisterInfoType>({
   UserName: '',
   VerifyCode: '',
 })
+
+let isCountingDown = ref<boolean>(false);
+let second = ref<number>(60);
+
+function startCountDown() {
+  second.value = 60;
+  isCountingDown.value = true;
+  setInterval(() => {
+    if (second.value > 0) {
+      second.value --;
+    } else {
+      isCountingDown.value = false;
+      return;
+    }
+  }, 1000);
+}
 
 function register() {
   if (registerInfo.UID == '' || registerInfo.Pass == '' || registerInfo.Email == '' || registerInfo.UserName == '' || registerInfo.VerifyCode == '') {
@@ -194,6 +215,11 @@ function sendVerifyCode() {
     });
     return;
   }
+
+  isCountingDown.value = true;
+
+  startCountDown();
+
   Post('api/auth/verifyemail/', {
     Email: registerInfo.Email,
     UID: registerInfo.UID,
