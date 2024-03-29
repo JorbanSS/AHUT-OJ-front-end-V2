@@ -35,8 +35,36 @@ const routes = [
   {
     name: "Contest",
     path: "/contest/:CID",
+    redirect: { name: "ContestDescription" },
     component: () => import("@/pages/Contest.vue"),
     meta: { title: BaseTitle + "比赛" },
+    children: [
+      {
+        name: "ContestDescription",
+        path: "description",
+        component: () => import("@/components/ContestChildren/Description.vue"),
+      },
+      {
+        name: "ContestProblems",
+        path: "problems",
+        component: () => import("@/components/ContestChildren/Problems.vue"),
+      },
+      {
+        name: "ContestRanking",
+        path: "ranking",
+        component: () => import("@/components/ContestChildren/Ranking.vue"),
+      },
+      {
+        name: "ContestRecords",
+        path: "records",
+        component: () => import("@/components/ContestChildren/Records.vue"),
+      },
+      {
+        name: "ContestDiscussion",
+        path: "discussion",
+        component: () => import("@/components/ContestChildren/Discussion.vue"),
+      },
+    ],
   },
   {
     name: "Contests",

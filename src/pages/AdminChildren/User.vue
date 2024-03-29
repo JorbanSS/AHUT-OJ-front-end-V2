@@ -157,10 +157,13 @@
   <dialog id="editPermissionModal" class="modal">
     <div class="modal-box space-y-2 w-96">
       <h3 class="font-bold text-lg">修改权限</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        UID
-        <input type="text" class="grow" placeholder="" v-model="UID" />
-      </label>
+      <div class="join">
+        <label class="input input-bordered flex items-center gap-2 join-item">
+          UID
+          <input type="text" class="grow" placeholder="" v-model="UID" />
+        </label>
+        <button class="btn join-item btn-neutral w-20" @click="getPermission(true)" >查询</button>
+      </div>
       <div>
         <table class="table table-zebra">
           <thead>
@@ -316,6 +319,7 @@ function getAdministrators(showInfo: boolean = false) {
         users.users = data.Data;
         for (let index = 0; index < users.users.length; index++) {
           users.users[index].Selected = false;
+          users.users[index].UserName = data.Data[index].Uname;
         }
         if (showInfo) {
           push.success({
@@ -378,7 +382,7 @@ function editPermission() {
   if (list.length != 1) {
     push.warning({
       title: '操作不合法',
-      message: '请选择且仅选择一道用户进行编辑',
+      message: '不选择或仅选择一位用户进行编辑',
     })
     return;
   }
@@ -401,6 +405,7 @@ function showEditPermissionModal() {
   else if (list.length == 1) {
     UID.value = list[0];
   }
+  getPermission();
   // @ts-ignore
   editPermissionModal.showModal();
 }
@@ -465,15 +470,49 @@ function addUser() {
     })
 }
 
+function getPermission(showInfo = false) {
+  if (UID.value == '') {
+    if (showInfo == true) {
+      push.warning({
+        title: '操作不合法',
+        message: `输入的用户 UID 为空`,
+      });
+    }
+    return;
+  }
+  Get('api/admin/permission/' + UID.value, {})
+    .then((res: any) => {
+      let data = res.data;
+      if (data.Code == 0) {
+        push.success({
+          title: '查询成功',
+          message: `查询到了用户 UID 为 ${UID.value} 的权限列表`,
+        });
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+}
+
 function changePermission() {
-  Post('api/admin/user/edit/password/', {
+  push.error({
+    title: '操作失败',
+    message: '该功能尚未完成',
+  });
+  return;
+  Post('api/admin/permission/edit/', {
     UID: UID.value,
     Password: password.value,
   })
     .then((res: any) => {
       let data = res.data;
-      console.log(data);
-
       if (data.Code == 0) {
         push.success({
           title: '修改成功',

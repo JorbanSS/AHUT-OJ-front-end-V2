@@ -69,7 +69,7 @@ interface propsType {
   logout?: Function;
 };
 
-var props = withDefaults(defineProps<propsType>(), {
+let props = withDefaults(defineProps<propsType>(), {
   login: () => { },
   logout: () => { },
 });

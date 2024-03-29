@@ -47,7 +47,7 @@ interface propsType {
   register?: Function;
 };
 
-var props = withDefaults(defineProps<propsType>(), {
+let props = withDefaults(defineProps<propsType>(), {
   init: () => { },
   register: () => { },
 });

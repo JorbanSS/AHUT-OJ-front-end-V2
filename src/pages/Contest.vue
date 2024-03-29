@@ -12,9 +12,6 @@
       </div>
     </div>
     <div>
-      {{ contest.description }}
-    </div>
-    <div>
       {{ ConvertTools.PrintTime(contest.BeginTime, 1) }}
       ~
       {{ ConvertTools.PrintTime(contest.EndTime, 0) }}
@@ -46,13 +43,25 @@
   <div class="flex space-x-2">
     <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
       <li v-for="item in contestNavItems" :key="item.title">
-        <a>
+        <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'" >
           <component :is="item.icon" theme="outline" size="18" />
           {{ item.title }}
-        </a>
+        </RouterLink>
       </li>
     </ul>
     <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto">
+      <li>
+        <a>
+          <bill theme="outline" size="18" />
+          克隆为题单
+        </a>
+      </li>
+      <li>
+        <a>
+          <party-balloon theme="outline" size="18" />
+          气球提示
+        </a>
+      </li>
       <li>
         <a @click="router.push('/admin/contest/edit/' + contest.CID)">
           <editor theme="outline" size="18" />
@@ -62,41 +71,8 @@
     </ul>
   </div>
   <div class="m-6"></div>
-  <div class="card shadow-lg Border bg-white">
-    <table class="table table-zebra mb-4">
-      <thead>
-        <tr>
-          <th>通过状态</th>
-          <th>题号</th>
-          <th>题目名称</th>
-          <th>通过率</th>
-          <th>通过数/提交数</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in problems" :key="item.PID" @click="goToProblem(item.PID)" class="cursor-pointer">
-          <td class="font-bold talbe-lg">
-            {{ item.Status }}
-          </td>
-          <th>
-            {{ ConvertTools.Number2Alpha(index + 1) }}
-          </th>
-          <td class="font-bold talbe-lg">
-            <div>{{ item.Title }}</div>
-          </td>
-          <td>
-            <progress class="progress progress-success w-20"
-              :value="ConvertTools.Percentage(item.ACNum, item.SubmitNum)" max="100"></progress>
-          </td>
-          <td>
-            {{ item.ACNum }}
-            /
-            {{ item.SubmitNum }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <RouterView :contest="contest" :problems="problems" >
+  </RouterView>
 </template>
 
 <script lang="ts" setup name="Contest">
@@ -107,7 +83,7 @@ import { Get } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { ConvertTools } from '@/assets/ts/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
-import { Editor } from '@icon-park/vue-next';
+import { Editor, PartyBalloon, Bill } from '@icon-park/vue-next';
 import { contestNavItems } from '@/config';
 
 const router = useRouter();
@@ -128,7 +104,7 @@ let contest = reactive<ContestType>({
   Pass: '',
 })
 
-type problems = {
+type problemsType = {
   PID: string,
   Title: string,
   SubmitNum: number,
@@ -136,7 +112,7 @@ type problems = {
   Status: string,
 }
 
-let problems = reactive<Array<problems>>([])
+let problems = reactive<Array<problemsType>>([])
 
 function getContest() {
   Get('api/contest/' + contest.CID, {
@@ -161,12 +137,6 @@ function getContest() {
         })
       }
     })
-    // .then(() => {
-    //   push.success({
-    //     title: '',
-    //     message: ``,
-    //   })
-    // })
     .catch((err: any) => {
       console.log(err);
     })
@@ -179,10 +149,6 @@ function init() {
 
 function syncUrl() {
   contest.CID = +route.params.CID;
-}
-
-function goToProblem(PID: string) {
-  router.push(`/problem/${PID}/${contest.CID}`);
 }
 
 onMounted(() => {

@@ -44,6 +44,28 @@ nvm use 20.11.1
 nvm version  # 查看当前使用的 Node.js 版本
 ```
 
+3. 安装 pnpm
+
+```sh
+npm install -g pnpm
+```
+
+在根目录下创建 `.npmrc` 的文件
+
+```
+# pnpm 配置
+shamefully-hoist=true
+auto-install-peers=true
+strict-peer-dependencies=false
+```
+
+将 package-lock.json 转成 pnpm-lock.yaml 文件，保证依赖版本不变
+
+```sh
+pnpm import
+```
+
+
 3. 使用 Vite 构建
 
 ```sh

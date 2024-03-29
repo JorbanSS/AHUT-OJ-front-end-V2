@@ -4,7 +4,7 @@
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
         <div class="font-bold text-base btn-active">
-          <trophy theme="outline" size="18" />
+          <bill theme="outline" size="18" />
           题单列表
         </div>
       </li>
@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts" setup name="ProblemListsList">
-import { DeleteOne, EditOne, Left, Right, DoubleLeft, DoubleRight, Add, Trophy } from '@icon-park/vue-next';
+import { DeleteOne, EditOne, Left, Right, DoubleLeft, DoubleRight, Add, Bill } from '@icon-park/vue-next';
 import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';

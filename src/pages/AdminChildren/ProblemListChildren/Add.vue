@@ -3,7 +3,7 @@
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
         <div class="font-bold text-base" @click="router.push('/admin/problemlist')">
-          <trophy theme="outline" size="18" />
+          <bill theme="outline" size="18" />
           题单列表
         </div>
       </li>
@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts" setup name="addProblemList">
-import { Add, Trophy, ArrowRight, DeleteOne } from '@icon-park/vue-next';
+import { Add, Bill, DeleteOne } from '@icon-park/vue-next';
 import { type ProblemListType } from '@/type';
 import { reactive, ref } from 'vue';
 import { push } from 'notivue';
