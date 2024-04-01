@@ -210,7 +210,6 @@ function showEditHomeNoticeModal() {
         homeNotice.Title = data.Title;
         homeNotice.UpdatedTime = data.UpdatedTime;
         homeNotice.UID = data.UID;
-        console.log(homeNotice);
       }
       else {
         push.error({

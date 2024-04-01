@@ -28,13 +28,16 @@
       </label>
       <div v-if="userDataStore.isLogin">
         <div class="dropdown dropdown-bottom dropdown-end">
-          <div tabindex="0" role="button" class="btn">{{ userDataStore.UserName }}</div>
+          <div tabindex="0" role="button" class="btn">
+            <div class="badge badge-neutral" :v-if="needAdminCertificate()">OP</div>
+            {{ userDataStore.UserName }}
+          </div>
           <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-white rounded-box w-36 Border font-bold">
             <li><a @click="goToUser(userDataStore.UID)">
                 <people theme="outline" size="18" />
                 个人中心
               </a></li>
-            <li><a @click="goToAdmin()">
+            <li :v-if="needAdminCertificate()"><a @click="goToAdmin()">
                 <setting-config theme="outline" size="18" />
                 管理平台
               </a></li>
@@ -58,6 +61,7 @@ import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue'
 import { Moon, SunOne, People, SettingConfig, Logout } from '@icon-park/vue-next'
 import { useUserDataStore } from '@/store/UserData';
 import { useRouter } from 'vue-router';
+import { needAdminCertificate } from '@/router/guard';
 
 const router = useRouter();
 

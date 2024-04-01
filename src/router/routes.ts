@@ -1,4 +1,5 @@
 import Admin from "./admin";
+import { needLoginCertificate } from "./guard";
 
 const BaseTitle = "AHUT OJ | ";
 
@@ -101,6 +102,19 @@ const routes = [
     meta: { title: BaseTitle + "记录" },
   },
   {
+    name: "Record",
+    path: "/record/:SID",
+    component: () => import("@/pages/Record.vue"),
+    meta: { title: BaseTitle + "记录" },
+    beforeEnter: (
+      to: RouteLocationNormalized,
+      from: RouteLocationNormalized,
+      next: NavigationGuardNext
+    ) => {
+      if (needLoginCertificate()) next();
+    },
+  },
+  {
     name: "About",
     path: "/about",
     component: () => import("@/pages/About.vue"),
@@ -113,10 +127,10 @@ const routes = [
     meta: { title: BaseTitle + "加入我们" },
   },
   {
-    name: "Record",
-    path: "/record/:SID",
-    component: () => import("@/pages/Record.vue"),
-    meta: { title: BaseTitle + "记录" },
+    name: "Editor",
+    path: "/editor",
+    component: () => import("@/pages/Editor.vue"),
+    meta: { title: BaseTitle + "Editor" },
   },
   {
     name: "Problem",

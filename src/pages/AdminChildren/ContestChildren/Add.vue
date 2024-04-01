@@ -194,7 +194,6 @@ function addContest() {
     });
     return;
   }
-  console.log(list.value.length);
   
   if (list.value.length == 0) {
     push.error({

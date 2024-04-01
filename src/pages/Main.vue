@@ -120,6 +120,7 @@ async function autoLogin() {
         userDataStore.init();
         return;
       }
+      getUserPermission(data.UID);
       data.PermissionMap = userInfo.permissionMap;
       userDataStore.loginSimplified(data);
       userDataStore.updatePermissionMap(data.PermissionMap);
@@ -195,6 +196,7 @@ watch(() => route.path, () => {
 })
 
 onMounted(() => {
+  // getUserPermission(userDataStore.UID);
   autoLogin();
 });
 

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
+    "@guolao/vue-monaco-editor": "^1.5.1",
     "@icon-park/vue-next": "^1.4.2",
     "@popperjs/core": "^2.11.8",
     "axios": "^1.6.8",

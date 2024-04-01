@@ -209,17 +209,19 @@ function getContests(showInfo: boolean = false) {
   })
     .then((res: any) => {
       let data = res.data;
-      
+
       if (data.Code == 0) {
         contests.count = data.Size;
         contests.contests = data.Data;
         for (let index = 0; index < contests.contests.length; index++) {
           contests.contests[index].Selected = false;
         }
-        push.success({
-          title: '获取成功',
-          message: `一共获取了 ${contests.count} 场比赛`,
-        })
+        if (showInfo == true) {
+          push.success({
+            title: '获取成功',
+            message: `一共获取了 ${contests.count} 场比赛`,
+          })
+        }
       }
       else {
         push.error({

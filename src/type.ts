@@ -293,3 +293,48 @@ export interface RejudgeInfoType {
 export interface PermissionType {
   
 }
+
+
+// 比赛排行榜 - 题目
+export interface ContestRankingProblemType {
+  PID: string,                 // 题目 PID
+  Status: string,              // 状态
+  // CENumber: number,            // CE 数量
+  // JudgeErrorNumber: number,    // 判题错误数量
+  SubmitNumber: number,        // 提交数量
+  Time: number,                // 提交时间
+  [item: string]: any,         // 其他属性
+}
+
+
+// 比赛排行榜 - 用户
+export interface ContestRankingUserType {
+  UserID: string,                              // 用户 UID
+  Uname: string,                               // 用户名
+  ACNumber: number,                            // AC 数量
+  AllSubmit: number,                           // 提交数量
+  PenaltySubmit: number,                       // 罚时提交数量
+  Problems: Array<ContestRankingProblemType>,  // 题目列表
+  [item: string]: any,                         // 其他属性
+}
+
+
+// 比赛排行榜
+export interface ContestRankingType {
+  count: number,                           // 比赛大小
+  ranking: Array<ContestRankingUserType>,  // 排行榜
+  [item: string]: any,                     // 其他属性
+}
+
+
+// 权限
+export interface PermissionType {
+  map: number,              // 权限 bit
+  super: boolean,           // 超管
+  problemList: boolean,     // 题单
+  resource: boolean,        // 资源
+  contest: boolean,         // 比赛
+  problem: boolean,         // 题目
+  admin: boolean,           // 管理员
+  [item: string]: any,      // 其他属性
+}

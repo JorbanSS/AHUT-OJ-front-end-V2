@@ -130,6 +130,7 @@ function getJudgeFiles() {
 
 function deleteJudgeFile(index: number) {
   // let judgeFileName = 
+  return index;
 }
 
 onMounted(() => {

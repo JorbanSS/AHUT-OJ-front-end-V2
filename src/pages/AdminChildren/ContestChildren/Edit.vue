@@ -233,7 +233,7 @@ function editContest() {
         // contest.CID = data.CID;
         push.success({
           title: '编辑成功',
-          message: `比赛 ID 为 ${data.CID}`,
+          message: `比赛 ID 为 ${contest.CID}`,
         });
       }
       else {

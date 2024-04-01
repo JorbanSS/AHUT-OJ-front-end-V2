@@ -13,6 +13,7 @@ import {
   Peoples,
   MoreTwo,
   Bill,
+  Code,
 } from "@icon-park/vue-next";
 
 
@@ -21,15 +22,16 @@ export const navItems: Array<NavItemType> = [
   { title: "题单", icon: Bill, to: { name: "ProblemLists" } },
   { title: "比赛", icon: Trophy, to: { name: "Contests" } },
   { title: "训练", icon: Muscle, to: { name: "Training" } },
-  {
-    title: "工具",
-    icon: Toolkit,
-    subItems: [
-      { title: "近期比赛", icon: ListOne, to: { name: "RecentContests" } },
-      { title: "排行榜", icon: RankingList, to: { name: "RankingList" } },
-    ],
-  },
+  // {
+  //   title: "工具",
+  //   icon: Toolkit,
+  //   subItems: [
+  //     { title: "近期比赛", icon: ListOne, to: { name: "RecentContests" } },
+  //     { title: "排行榜", icon: RankingList, to: { name: "RankingList" } },
+  //   ],
+  // },
   { title: "记录", icon: Data, to: { name: "Records" } },
+  { title: "Editor", icon: Code, to: { name: "Editor" } },
   { title: "关于", icon: Info, to: { name: "About" } },
 ];
 

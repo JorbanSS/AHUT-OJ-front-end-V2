@@ -43,7 +43,8 @@
   <div class="flex space-x-2">
     <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
       <li v-for="item in contestNavItems" :key="item.title">
-        <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'" >
+        <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'"
+          :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(7).toLowerCase() }">
           <component :is="item.icon" theme="outline" size="18" />
           {{ item.title }}
         </RouterLink>
@@ -51,7 +52,7 @@
     </ul>
     <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto">
       <li>
-        <a>
+        <a @click="cloneToProblemList()">
           <bill theme="outline" size="18" />
           克隆为题单
         </a>
@@ -71,7 +72,7 @@
     </ul>
   </div>
   <div class="m-6"></div>
-  <RouterView :contest="contest" :problems="problems" >
+  <RouterView :contest="contest" :problems="problems">
   </RouterView>
 </template>
 
@@ -128,6 +129,7 @@ function getContest() {
         contest.CID = data.CID;
         contest.IsPublic = data.IsPublic;
         contest.description = data.Description;
+        contest.problems = data.Data;
         problems = data.Data;
       }
       else {
@@ -149,6 +151,13 @@ function init() {
 
 function syncUrl() {
   contest.CID = +route.params.CID;
+}
+
+function cloneToProblemList() {
+  push.info({
+    title: `操作失败`,
+    message: `该功能尚未完成`,
+  })
 }
 
 onMounted(() => {

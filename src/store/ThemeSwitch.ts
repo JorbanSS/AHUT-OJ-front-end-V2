@@ -24,7 +24,6 @@ export const useThemeSwitchStore = defineStore(
     switchTheme(theme?: number) {
       if (typeof theme != 'undefined') this.theme = theme;
       else this.theme = 3 - this.theme;
-      console.log(this.theme);
     },
   }
 })

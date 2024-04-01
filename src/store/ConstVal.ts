@@ -8,9 +8,9 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
       DarkTheme: 2,
 
       // 权限 bit 表
-      UNLOGINBit: 0b0000_0001,
-      CommonUserBit: 0b0000_0010,
-      AdministratorBit: 0b0000_0100,
+      UnLoginBit: 0b0000_0001,
+      UserBit: 0b0000_0010,
+      AdminBit: 0b0000_0100,
       ProblemAdminBit: 0b0000_1000,
       ContestAdminBit: 0b0001_0000,
       SourceBorwserBit: 0b0010_0000,

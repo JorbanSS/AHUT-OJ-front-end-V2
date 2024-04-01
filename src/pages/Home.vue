@@ -8,9 +8,9 @@
     <button class="btn btn-sm" onclick="homeNotice.showModal()">详情</button>
   </div>
   <div class="mt-6"></div>
-  <div class="flex flex-row space-x-6 h-96">
-    <div class="basis-2/3">
-      <div class="carousel h-full rounded-2xl shadow-lg Border">
+  <div class="flex space-x-6 h-96">
+    <div class="">
+      <div class="carousel w-full h-full rounded-2xl shadow-lg Border">
         <div class="carousel-item relative w-full" v-for="(item, index) in banners.banners" :key="index"
           :id="`slide${index}`">
           <img :src="'data:image/*;base64,' + item.ObjectData" class="w-full" />
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="basis-1/3 card rounded-2xl bg-white shadow-lg Border">
+    <div class=" card rounded-2xl bg-white shadow-lg Border">
       <div class="text-lg m-4 font-bold">
         版本更新日志
       </div>

@@ -63,8 +63,6 @@ interface propsType {
   problems?: Array<problemsType>,
 };
 
-// let problems = reactive<Array<problems>>([])
-
 let props = withDefaults(defineProps<propsType>(), {
   contest: () => ({
     CID: 0,

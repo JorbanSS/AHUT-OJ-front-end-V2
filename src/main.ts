@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { createNotivue } from 'notivue';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
+import { install as VueMonacoEditorPlugin } from '@guolao/vue-monaco-editor'
 
 import App from './App.vue';
 import router from './router';
@@ -26,15 +27,23 @@ const notivue = createNotivue({
   }
 });
 
-app.use(router);
 app.use(store);
+app.use(router);
 app.use(notivue);
 app.use(autoAnimatePlugin);
 app.use(VCalendar, {})
-app.use(VueGtag, {
-  property: {
-    id: "G-WGSSB1C5MD"
+if (import.meta.env.MODE == "production") {
+  app.use(VueGtag, {
+    property: {
+      id: "G-WGSSB1C5MD"
+    },
+  });
+};
+app.use(VueMonacoEditorPlugin, {
+  paths: {
+    vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs'
   },
+  "vs/nls": { availableLanguages: { "*": "de" } }
 });
 
 app.mount('#app');

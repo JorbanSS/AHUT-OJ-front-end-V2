@@ -214,7 +214,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
-import { type UserType } from '@/type';
+import { type UserType, type PermissionType } from '@/type';
 import { list } from 'postcss';
 
 const router = useRouter();
@@ -226,7 +226,7 @@ function switchSelectedStatus(index: number) {
   users.users[index].Selected = !users.users[index].Selected;
 }
 
-let permission = reactive({
+let permission = reactive<PermissionType>({
   map: 0,
   super: false,
   resource: false,

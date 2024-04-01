@@ -1,6 +1,11 @@
 <template>
-  <div class="card bg-white Border p-6 sha">
-    {{ contest.description }}
+  <div class="card bg-white Border p-6 shadow-lg">
+    <div v-if="contest.description">
+      {{ contest.description }}
+    </div>
+    <div v-else>
+      暂无比赛描述
+    </div>
   </div>
 </template>
 

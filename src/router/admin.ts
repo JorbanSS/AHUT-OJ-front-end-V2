@@ -1,3 +1,13 @@
+import {
+  needLoginCertificate,
+  needAdminCertificate,
+  needContestAdminCertificate,
+  needProblemListAdminCertificate,
+  needProblemAdminCertificate,
+  needSourceBorwserAdminCertificate,
+  needSuperAdminCertificate
+} from "./guard.ts"
+
 const BaseTitle = "AHUT OJ | ";
 
 const Admin = {
@@ -6,6 +16,13 @@ const Admin = {
   path: "/admin",
   component: () => import("@/pages/Admin.vue"),
   meta: { title: BaseTitle + "管理平台" },
+  beforeEnter: (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+    next: NavigationGuardNext
+  ) => {
+    if (needAdminCertificate()) next();
+  },
   children: [
     {
       name: "AdminDashboard",
@@ -17,6 +34,13 @@ const Admin = {
       path: "problem",
       redirect: "/admin/problem/list",
       component: () => import("@/pages/AdminChildren/Problem.vue"),
+      beforeEnter: (
+        to: RouteLocationNormalized,
+        from: RouteLocationNormalized,
+        next: NavigationGuardNext
+      ) => {
+        if (needProblemAdminCertificate()) next();
+      },
       children: [
         {
           name: "ProblemsList",
@@ -55,6 +79,13 @@ const Admin = {
       path: "problemlist",
       redirect: "/admin/problemlist/list",
       component: () => import("@/pages/AdminChildren/ProblemList.vue"),
+      beforeEnter: (
+        to: RouteLocationNormalized,
+        from: RouteLocationNormalized,
+        next: NavigationGuardNext
+      ) => {
+        if (needProblemListAdminCertificate()) next();
+      },
       children: [
         {
           name: "ProblemListsList",
@@ -78,6 +109,13 @@ const Admin = {
       path: "contest",
       redirect: "/admin/contest/list",
       component: () => import("@/pages/AdminChildren/Contest.vue"),
+      beforeEnter: (
+        to: RouteLocationNormalized,
+        from: RouteLocationNormalized,
+        next: NavigationGuardNext
+      ) => {
+        if (needContestAdminCertificate()) next();
+      },
       children: [
         {
           name: "ContestsList",
@@ -105,6 +143,13 @@ const Admin = {
       name: "AdminUser",
       path: "user",
       component: () => import("@/pages/AdminChildren/User.vue"),
+      beforeEnter: (
+        to: RouteLocationNormalized,
+        from: RouteLocationNormalized,
+        next: NavigationGuardNext
+      ) => {
+        if (needSuperAdminCertificate()) next();
+      },
     },
     {
       name: "AdminOther",

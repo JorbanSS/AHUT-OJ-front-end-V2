@@ -65,6 +65,9 @@ strict-peer-dependencies=false
 pnpm import
 ```
 
+```sh
+pnpm install
+```
 
 3. 使用 Vite 构建
 
@@ -251,6 +254,12 @@ npm install vue-draggable-plus
 
 ```sh
 npm add vue-gtag-next
+```
+
+10. 安装 Vue Monaco Editor
+
+```sh
+pnpm i @guolao/vue-monaco-editor
 ```
 
 ## 其他一些琐碎的 
