@@ -25,7 +25,7 @@ const MONACO_EDITOR_OPTIONS = {
   formatOnPaste: true,
 }
 
-const code = ref('// some code...')
+const code = ref('// C++ Editor')
 const editorRef = shallowRef()
 const handleMount = (editor: any) => (editorRef.value = editor);
 

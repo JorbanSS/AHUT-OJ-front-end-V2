@@ -23,6 +23,9 @@ dependencies:
   canvas-confetti:
     specifier: ^1.9.2
     version: 1.9.2
+  image-conversion:
+    specifier: ^2.1.1
+    version: 2.1.1
   md-editor-v3:
     specifier: ^4.12.2
     version: 4.12.2(@codemirror/view@6.26.0)(@lezer/common@1.2.1)(vue@3.4.21)
@@ -1624,6 +1627,10 @@ packages:
     resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
     dev: true
+
+  /image-conversion@2.1.1:
+    resolution: {integrity: sha512-hnMOmP7q2jxA+52FZ+wHNhg3fdFRlgfngsQH2JQHEQkafY7tj/8F15e6Rv/RxDegc872jvyaRHwMbkTZK1Cjbg==}
+    dev: false
 
   /immutable@4.3.5:
     resolution: {integrity: sha512-8eabxkth9gZatlwl5TBuJnCsoTADlL6ftEr7A4qgdaTsPyreilDSnUk57SO+jfKcNtxPa22U5KK6DSeAYhpBJw==}

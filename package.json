@@ -15,6 +15,7 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.6.8",
     "canvas-confetti": "^1.9.2",
+    "image-conversion": "^2.1.1",
     "md-editor-v3": "^4.12.2",
     "notivue": "^2.2.1",
     "pinia": "^2.1.7",

@@ -63,64 +63,44 @@ strict-peer-dependencies=false
 
 ```sh
 pnpm import
-```
 
-```sh
 pnpm install
 ```
 
-3. 使用 Vite 构建
+4. 使用 Vite 构建
 
 ```sh
-npm init vite@latest
+pnpm init vite@latest
 
-npm install  # 补全依赖
+pnpm install  # 补全依赖
 
 touch .gitignore
 ```
 
 将 `node_modules/` 放入 `.gitignore`
 
-4. 安装 Vue Router
+5. 安装其余环境
 
 ```sh
-npm install vue-router@4
-```
+pnpm install vue-router@4
 
-5. 安装 Pinia
+pnpm install pinia
 
-```sh
-npm install pinia
-```
+pnpm install sass
 
-6. 安装 Sass
+pnpm install vite-plugin-vue-setup-extend -D
 
-```sh
-npm install sass
-```
+pnpm install axios
 
-7. 安装其余环境
-
-```sh
-npm install vite-plugin-vue-setup-extend -D
-
-npm install axios
-
-npm install -D ts-node
+pnpm install -D ts-node
 ```
 
 ## 安装组件
 
-1. 安装 md-editor-v3
+1. 安装 tailwindcss
 
 ```sh
-npm install md-editor-v3
-```
-
-2. 安装 tailwindcss
-
-```sh
-npm install -D tailwindcss postcss autoprefixer
+pnpm install -D tailwindcss postcss autoprefixer
 
 npx tailwindcss init -p
 ```
@@ -156,20 +136,10 @@ export default {
 import "./assets/scss/tailwind.css";
 ```
 
-测试
-
-```html
-<template>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-</template>
-```
-
-3. 安装 daisyUI
+2. 安装 daisyUI
 
 ```sh
-npm i -D daisyui@latest
+pnpm i -D daisyui@latest
 ```
 
 在 tailwind.config.js 文件里追加 daisyUI 的设置
@@ -180,22 +150,28 @@ module.exports = {
 }
 ```
 
-测试
-
-```html
-<div class="dropdown">
-  <div tabindex="0" role="button" class="btn m-1">Click</div>
-  <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-    <li><a>Item 1</a></li>
-    <li><a>Item 2</a></li>
-  </ul>
-</div>
-```
-
-4. 安装 IconPark
+3. 安装其余组件
 
 ```sh
-npm install @icon-park/vue-next --save
+pnpm install md-editor-v3
+
+pnpm install @icon-park/vue-next --save
+
+pnpm i notivue
+
+pnpm install v-calendar@next @popperjs/core
+
+pnpm install vue-draggable-plus
+
+pnpm i image-conversion --save
+
+pnpm add vue-gtag-next
+
+pnpm i @guolao/vue-monaco-editor
+
+pnpm install --save vue-clipboard3
+
+pnpm install --save canvas-confetti
 ```
 
 `main.ts` 中添加
@@ -204,63 +180,13 @@ npm install @icon-park/vue-next --save
 import '@icon-park/vue/styles/index.css';
 ```
 
-引用
-
-```html
-<template>
-  <home theme="filled"/>
-</template>
-
-<script>
-import {Home} from '@icon-park/vue-next';
-
-export default {
-    components: {
-        Home
-    }
-}
-</script>
-```
-
-5. 安装 notivue
+4. 安装 AutoAnimate
 
 ```sh
-npm i notivue
-```
-
-6. 安装 VCalendar
-
-```sh
-npm install v-calendar@next @popperjs/core
-```
-
-7. 安装 AutoAnimate
-
-```sh
-npm install @formkit/auto-animate
+pnpm install @formkit/auto-animate
 ```
 
 使用 `v-auto-animate` 作用于其父元素对象上
-
-8. 安装 vue draggable plus
-
-```sh
-npm install vue-draggable-plus
-```
-
-9. 支持谷歌分析
-
-先安装 vue-gtag, 可让您将事件数据发送到 Google Analytics（分析）、Google Ads 和 Google Marketing Platform
-
-```sh
-npm add vue-gtag-next
-```
-
-10. 安装 Vue Monaco Editor
-
-```sh
-pnpm i @guolao/vue-monaco-editor
-```
 
 ## 其他一些琐碎的 
 
@@ -268,12 +194,6 @@ pnpm i @guolao/vue-monaco-editor
 
 ```ts
 import VueSetupExtend from 'vite-plugin-vue-setup-extend'
-```
-
-```sh
-npm install --save vue-clipboard3
-
-npm install --save canvas-confetti
 ```
 
 修改如下来实现用 `@/` 访问项目根目录
@@ -310,5 +230,5 @@ npm install --save canvas-confetti
 ## 运行项目
 
 ```sh
-npm run dev
+pnpm run dev
 ```
