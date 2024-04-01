@@ -79,14 +79,16 @@
 <script lang="ts" setup name="Contest">
 import { ref, reactive, onMounted, watch } from 'vue';
 import { type ContestType } from '@/type.ts';
-import '@/utils/axios/request';
-import { Get } from '@/utils/axios/request';
+// import '@/utils/axios/request';
+import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { ConvertTools } from '@/assets/ts/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 import { Editor, PartyBalloon, Bill } from '@icon-park/vue-next';
 import { contestNavItems } from '@/config';
+import { useUserDataStore } from '@/store/UserData';
 
+const userDataStore = useUserDataStore();
 const router = useRouter();
 const route = useRoute();
 
@@ -153,11 +155,45 @@ function syncUrl() {
   contest.CID = +route.params.CID;
 }
 
+// type cloneType = {
+//   PID: string,
+//   Title: string,
+//   SubmitNum: number,
+//   ACNum: number,
+//   Status: string,
+// }
+
 function cloneToProblemList() {
-  push.info({
-    title: `操作失败`,
-    message: `该功能尚未完成`,
+  Post('api/contest/clone/', {
+    CID: contest.CID,
+    UID: userDataStore.UID,
   })
+    .then((res: any) => {
+      let data = res.data;
+      if (data.Code == 0) {
+        let LID =data.LID
+        push.success({
+          title: '克隆成功',
+          message: `已克隆竞赛 #${contest.CID}`,
+          // button: {
+          //   text: '查看题单',
+          //   onClick: () => {
+          //   router.push({ name: 'ProblemList', params: { LID: LID} });
+          //   }
+          // }
+        })
+        router.push(`/problemlist/${LID}`)
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
 }
 
 onMounted(() => {

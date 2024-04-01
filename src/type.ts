@@ -290,24 +290,22 @@ export interface RejudgeInfoType {
 }
 
 
-export interface PermissionType {
+// export interface PermissionType {
   
-}
+// }
 
 
-// 比赛排行榜 - 题目
+// XCPC - 比赛排行榜 - 题目
 export interface ContestRankingProblemType {
   PID: string,                 // 题目 PID
   Status: string,              // 状态
-  // CENumber: number,            // CE 数量
-  // JudgeErrorNumber: number,    // 判题错误数量
   SubmitNumber: number,        // 提交数量
   Time: number,                // 提交时间
   [item: string]: any,         // 其他属性
 }
 
 
-// 比赛排行榜 - 用户
+// XCPC- 比赛排行榜 - 用户
 export interface ContestRankingUserType {
   UserID: string,                              // 用户 UID
   Uname: string,                               // 用户名
@@ -317,12 +315,38 @@ export interface ContestRankingUserType {
   Problems: Array<ContestRankingProblemType>,  // 题目列表
   [item: string]: any,                         // 其他属性
 }
+//计算公式:AC Time+PenaltySubmit*20*min
 
-
-// 比赛排行榜
+// XCPC - 比赛排行榜
 export interface ContestRankingType {
   count: number,                           // 比赛大小
   ranking: Array<ContestRankingUserType>,  // 排行榜
+  [item: string]: any,                     // 其他属性
+}
+
+// IOI - 比赛排行榜 - 题目
+export interface IOIContestRankingProblemType {
+  PID: string,                 // 题目 PID
+  Submited: boolean,          // 是否提交
+  Time: number,                // 提交时间
+  PassSample: number,           // 通过数据数量
+  SampleNumber: number,         // 判题数据数量
+  [item: string]: any,         // 其他属性
+}
+
+// IOI - 比赛排行榜 - 用户
+export interface IOIContestRankingUserType {
+  UserID: string,                              // 用户 UID
+  Uname: string,                               // 用户名
+  ACNumber: number,                            // AC 数量
+  Problems: Array<IOIContestRankingProblemType>,  // 题目列表
+  [item: string]: any,                         // 其他属性
+}
+
+// IOI - 比赛排行榜
+export interface IOIContestRankingType {
+  count: number,                           // 比赛大小
+  ranking: Array<IOIContestRankingUserType>,  // 排行榜
   [item: string]: any,                     // 其他属性
 }
 

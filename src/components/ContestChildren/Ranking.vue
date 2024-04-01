@@ -3,7 +3,7 @@
     <table class="table table-zebra table-pin-rows table-pin-cols table-fixed text-center">
       <thead>
         <tr>
-          <th class="w-14" >place</th>
+          <th class="w-14" >Place</th>
           <th class="w-32">Name</th>
           <th class="w-32">UID</th>
           <th class="w-14">Solved</th>
@@ -19,7 +19,7 @@
           <td>{{ item1.UserID }}</td>
           <td>{{ item1.ACNumber }}</td>
           <td v-for="(item2, index2) in item1.Problems" :key="index2" :class="{ 'bg-green-200': item2.Status == 'AC' }" >
-            {{ item2.Status == "JUDGING" ? "" : item2.Status }}
+            {{ item2.Status == "NULL" ? "" : item2.Status }}
             <div v-if="item2.SubmitNumber > 1">
               ({{ item2.SubmitNumber }})
             </div>
