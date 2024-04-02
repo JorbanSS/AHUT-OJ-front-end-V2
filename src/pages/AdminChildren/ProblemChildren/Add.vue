@@ -74,7 +74,8 @@
       <option value="1">MarkDown</option>
     </select>
     <div v-if="problem.ContentType == 1">
-      <MdEditor v-model="problem.description" :height="500" />
+      <MdEditor v-model="problem.description" :height="500" :toolbars="markdownToolbars"
+        @onUploadImg="uploadProblemImage" />
     </div>
     <div v-else>
       <label class="form-control">
@@ -107,15 +108,19 @@
 
 <script lang="ts" setup name="AddProblem">
 import { Add, StopwatchStart, Disk, DocumentFolder } from '@icon-park/vue-next';
-import { type ProblemType } from '@/type';
-import { reactive } from 'vue';
+import { type ProblemType, type ImageUploadType } from '@/type';
+import { ref, reactive } from 'vue';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
+import { markdownToolbars } from '@/config';
+import { ImageUtils } from '@/utils/fileUtils';
 
-const router = useRouter();
 import 'md-editor-v3/lib/style.css';
+
+const problemImageInput = ref<File | null>(null);
+const router = useRouter();
 
 let problem = reactive<ProblemType>({
   PID: '',
@@ -194,6 +199,88 @@ function addProblem() {
 function changeVisible() {
   problem.Visible = 1 - problem.Visible;
 }
+
+let imageUpload = reactive<ImageUploadType>({
+  image: null,
+  blob: new Blob,
+  selectImage(image: File) {
+    const allowedImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+    imageUpload.image = image;
+    if (allowedImageTypes.includes(image.type) == false) {
+      push.error({
+        title: '图片格式错误',
+        message: '请选择 jpg 或 png 格式的图片',
+      })
+      return;
+    }
+    push.success({
+      title: '选择成功',
+      message: '已选择',
+    })
+  }
+})
+
+const problemImageChangeHandle = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    problemImageInput.value = target.files[0];
+    imageUpload.selectImage(target.files[0]);
+  }
+};
+
+function uploadProblemImage(files: any) {
+  if (files.length == 0) {
+    push.error({
+      title: '请选择图片',
+      message: '请选择一张图片',
+    })
+    return;
+  }
+  imageUpload.selectImage(files[0]);
+  if (imageUpload.image == null) {
+    push.error({
+      title: '请选择图片',
+      message: '请选择一张图片',
+    })
+    return;
+  }
+  if (ImageUtils.check(imageUpload.image) == false) {
+    return;
+  }
+  ImageUtils.compress(imageUpload.image).
+    then((res: any) => {
+      imageUpload.blob = res;
+
+      // @ts-ignore
+      ImageUtils.uploadProblemImage(res, imageUpload.image.name)
+        .then((res: any) => {
+          console.log(res);
+
+          // let data = res.data;
+          // if (data.Code == 0) {
+          //   let imageURL = data.ImageURL;
+          //   problem.description += `\n![](${imageURL})`;
+          //   push.success({
+          //     title: '插入成功',
+          //     message: '插入图片成功',
+          //   })
+          // }
+        })
+        .catch((err: any) => {
+          console.log(err);
+        })
+    })
+}
+
+// const onUploadImg = async (files: any, callback: any) => {
+//   console.log(1122);
+//   const res = await Promise.all(
+//     files.map((file: any) => {
+
+//     })
+//   );
+//   callback(res.map((item) => item.data.url));
+// }
 
 </script>
 

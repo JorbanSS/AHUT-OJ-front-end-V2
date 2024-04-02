@@ -36,14 +36,39 @@ export class ImageUtils {
     });
   }
 
-  public static uploadProblemImage(image: Blob) {
-    let file = new FormData();
-    file.append("image", image);
-    console.log(image);
-    return new Promise((resolve) => {
-      Post("api/file/image/", image)
+  public static uploadProblemImage(image: Blob, name: string) {
+    let fromData = new FormData();
+    fromData.append("file", image, name);
+    return new Promise(() => {
+      Post("api/file/image/", fromData, 1)
         .then((res: any) => {
-          // resolve(res);
+          let data = res.data;
+          console.log(data);
+          
+          if (data.Code == 0) {
+            push.success({
+              title: "上传成功",
+              message: `${data.Msg}`,
+            });
+          } else {
+            push.error({
+              title: `Error: ${data.Code}`,
+              message: `${data.Msg}`,
+            });
+          }
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    });
+  }
+
+  public static uploadUserImage(image: Blob, name: string) {
+    let file = new FormData();
+    file.append("image", image, name);
+    return new Promise(() => {
+      Post("api/user/editHead/", file, 1)
+        .then((res: any) => {
           let data = res.data;
           if (data.Code == 0) {
             push.success({
@@ -63,30 +88,14 @@ export class ImageUtils {
     });
   }
 
-  public static uploadUserImage(image: Blob) {
-    let file = new FormData();
-    file.append("image", image);
-    return new Promise((resolve) => {
-      Post("api/user/editHead/", file)
-        .then((res: any) => {
-          resolve(res);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
-    });
-  }
-
-  public static uploadBannerImage(image: Blob) {
+  public static uploadBannerImage(image: Blob, name: string) {
     let fromData = new FormData();
-    fromData.append("file", image);
     console.log(image);
-    console.log(fromData);
-
-    return new Promise((resolve, reject) => {
+    
+    fromData.append("file", image, name);
+    return new Promise(() => {
       Post("api/notice/images/", fromData, 1)
         .then((res: any) => {
-          // resolve(res);
           let data = res.data;
           if (data.Code == 0) {
             push.success({

@@ -1,4 +1,5 @@
 import { type NavItemType } from "./type";
+import { ToolbarNames } from "md-editor-v3";
 
 import {
   DocumentFolder,
@@ -15,7 +16,6 @@ import {
   Bill,
   Code,
 } from "@icon-park/vue-next";
-
 
 export const navItems: Array<NavItemType> = [
   { title: "题库", icon: DocumentFolder, to: { name: "Problems" } },
@@ -50,4 +50,38 @@ export const adminNavItems: Array<NavItemType> = [
   { title: "训练", icon: Muscle, to: { name: "AdminTraining" } },
   { title: "用户", icon: Peoples, to: { name: "AdminUser" } },
   { title: "杂项", icon: MoreTwo, to: { name: "AdminOther" } },
+];
+
+export const markdownToolbars: ToolbarNames[] = [
+  "bold",
+  "underline",
+  "italic",
+  "-",
+  "title",
+  "strikeThrough",
+  "sub",
+  "sup",
+  "quote",
+  "unorderedList",
+  "orderedList",
+  "task",
+  "-",
+  "codeRow",
+  "code",
+  "link",
+  "image",
+  "table",
+  "mermaid",
+  "katex",
+  "-",
+  "revoke",
+  "next",
+  "save",
+  "=",
+  "pageFullscreen",
+  "fullscreen",
+  "preview",
+  "htmlPreview",
+  "catalog",
+  // "github",
 ];

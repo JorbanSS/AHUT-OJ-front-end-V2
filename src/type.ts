@@ -281,7 +281,7 @@ export interface BannersType {
 }
 
 
-export interface BannerUploadType {
+export interface ImageUploadType {
   image: File | null,           // 图片
   blob: Blob | null,            // 图片 Blob
   [item: string]: any,          // 其他属性

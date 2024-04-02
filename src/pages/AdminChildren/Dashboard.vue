@@ -79,6 +79,17 @@
         <button class="btn btn-neutral" @click="rejudge()">重判</button>
       </div>
     </div>
+    <div class="space-y-6 col-span-4">
+      <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
+        <div class="flex">
+          <google theme="outline" size="22" />
+          <a class="ml-3 font-bold link link-hover"
+            href="https://analytics.google.com/analytics/web/?authuser=0#/p434271978/realtime/overview"
+            target="_blank">已接入
+            Google Analytics</a>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="m-6"></div>
   <dialog id="mdEditor" class="modal">
@@ -88,7 +99,7 @@
         标题
         <input type="text" class="grow" placeholder="" v-model="homeNotice.Title">
       </label>
-      <MdEditor v-model="homeNotice.Content" :height="500" />
+      <MdEditor v-model="homeNotice.Content" :height="500" :toolbars="markdownToolbars" />
       <div class="modal-action">
         <form method="dialog">
           <button class="btn mr-2">取消修改</button>
@@ -100,13 +111,14 @@
 </template>
 
 <script lang="ts" setup name="Training">
-import { Peoples, UploadLogs, PreviewOpen, History, DocumentFolder } from '@icon-park/vue-next'
+import { Peoples, UploadLogs, PreviewOpen, History, DocumentFolder, Google } from '@icon-park/vue-next'
 import { push } from 'notivue';
 import { reactive, ref } from 'vue';
 import { Post, Get, Put } from '@/utils/axios/request';
-import { BannerUploadType, RejudgeInfoType } from '@/type';
+import { type ImageUploadType, type RejudgeInfoType } from '@/type';
 import { MdEditor } from 'md-editor-v3';
 import { type HomeNoticeType } from '@/type';
+import { markdownToolbars } from '@/config';
 
 import 'md-editor-v3/lib/style.css';
 import { ImageUtils } from '@/utils/fileUtils';
@@ -154,13 +166,12 @@ function rejudge() {
     })
 }
 
-let banner = reactive<BannerUploadType>({
+let banner = reactive<ImageUploadType>({
   image: null,
   blob: new Blob,
   selectImage(image: File) {
     const allowedBannerTypes = ["image/jpg", "image/jpeg", "image/png"];
     banner.image = image;
-
     if (allowedBannerTypes.includes(image.type) == false) {
       push.error({
         title: '图片格式错误',
@@ -194,41 +205,15 @@ function uploadBanner() {
   if (ImageUtils.check(banner.image) == false) {
     return;
   }
-
-  // return;
   ImageUtils.compress(banner.image).
     then((res: any) => {
       banner.blob = res;
-      console.log(res);
-      console.log(banner.blob);
-      console.log(typeof res);
-
-      // console.log(banner.image);
-      // console.log(banner.blob);
-      ImageUtils.uploadBannerImage(res);
+      // @ts-ignore
+      ImageUtils.uploadBannerImage(res, banner.image.name);
     })
-  // Post('api/notice/images/', {
-
-  // })
-  //   .then((res: any) => {
-  //     let data = res.data;
-  //     if (data.Code == 0) {
-
-  //       push.success({
-  //         title: '上传成功',
-  //         message: '上传首页图片成功',
-  //       });
-  //     }
-  //     else {
-  //       push.error({
-  //         title: `Error: ${data.Code}`,
-  //         message: `${data.Msg}`,
-  //       })
-  //     }
-  //   })
-  //   .catch((err: any) => {
-  //     console.log(err);
-  //   })
+    .catch((err: any) => {
+      console.log(err);
+    })
 }
 
 let homeNotice = reactive<HomeNoticeType>({

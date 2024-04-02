@@ -90,7 +90,7 @@
       <option value="1">MarkDown</option>
     </select>
     <div v-if="problem.ContentType == 1">
-      <MdEditor v-model="problem.description" :height="500" />
+      <MdEditor v-model="problem.description" :height="500" :toolbars="markdownToolbars" />
     </div>
     <div v-else>
       <label class="form-control">
@@ -130,6 +130,7 @@ import { MdEditor } from 'md-editor-v3';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter, useRoute } from 'vue-router';
 import { type ProblemsType, type ProblemSimplifiedType } from '@/type';
+import { markdownToolbars } from '@/config';
 
 const router = useRouter();
 const route = useRoute();
