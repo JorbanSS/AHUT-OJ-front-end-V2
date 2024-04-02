@@ -57,14 +57,6 @@ var props = withDefaults(defineProps<propsType>(), {
   logout: () => { },
 });
 
-function goToUser(UID: string) {
-  router.push(`/user/${UID}`);
-}
-
-function goToAdmin() {
-  router.replace('/admin');
-}
-
 </script>
 
 <style scoped></style>

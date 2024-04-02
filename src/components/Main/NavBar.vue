@@ -33,11 +33,11 @@
             {{ userDataStore.UserName }}
           </div>
           <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-white rounded-box w-36 Border font-bold">
-            <li><a @click="goToUser(userDataStore.UID)">
+            <li><a @click="router.push(`/user/${userDataStore.UID}`)">
                 <people theme="outline" size="18" />
                 个人中心
               </a></li>
-            <li :v-if="needAdminCertificate()"><a @click="goToAdmin()">
+            <li :v-if="needAdminCertificate()"><a @click="router.replace('/admin')">
                 <setting-config theme="outline" size="18" />
                 管理平台
               </a></li>
@@ -77,14 +77,6 @@ let props = withDefaults(defineProps<propsType>(), {
   login: () => { },
   logout: () => { },
 });
-
-function goToUser(UID: string) {
-  router.push(`/user/${UID}`);
-}
-
-function goToAdmin() {
-  router.replace('/admin');
-}
 
 </script>
 
