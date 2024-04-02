@@ -281,6 +281,13 @@ export interface BannersType {
 }
 
 
+export interface BannerUploadType {
+  image: File | null,           // 图片
+  blob: Blob | null,            // 图片 Blob
+  [item: string]: any,          // 其他属性
+}
+
+
 export interface RejudgeInfoType {
   SID?: number,           // 记录 SID
   PID?: string,           // 题目 PID

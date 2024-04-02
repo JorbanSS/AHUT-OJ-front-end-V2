@@ -52,7 +52,7 @@
             <span class="">新增首页图片</span>
           </div>
           <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept=".jpg,.jpeg,.png"
-            :on-change="banner.selectImage" />
+            ref="bannerImageInput" @change="bannerImageChangeHandle" />
         </label>
         <div class="m-1"></div>
         <button class="btn btn-neutral" @click="uploadBanner()">上传图片</button>
@@ -104,12 +104,14 @@ import { Peoples, UploadLogs, PreviewOpen, History, DocumentFolder } from '@icon
 import { push } from 'notivue';
 import { reactive, ref } from 'vue';
 import { Post, Get, Put } from '@/utils/axios/request';
-import { RejudgeInfoType } from '@/type';
+import { BannerUploadType, RejudgeInfoType } from '@/type';
 import { MdEditor } from 'md-editor-v3';
 import { type HomeNoticeType } from '@/type';
 
 import 'md-editor-v3/lib/style.css';
 import { ImageUtils } from '@/utils/fileUtils';
+
+const bannerImageInput = ref<File | null>(null);
 
 let rejudgeInfo = reactive<RejudgeInfoType>({
   SID: 0,
@@ -152,28 +154,13 @@ function rejudge() {
     })
 }
 
-const imagePreview = ref<string | null>(null);
-
-const handleImageChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        imagePreview.value = reader.result;
-      }
-    };
-    reader.readAsDataURL(file);
-  }
-};
-
-
-let banner = reactive({
+let banner = reactive<BannerUploadType>({
   image: null,
   blob: new Blob,
   selectImage(image: File) {
     const allowedBannerTypes = ["image/jpg", "image/jpeg", "image/png"];
+    banner.image = image;
+
     if (allowedBannerTypes.includes(image.type) == false) {
       push.error({
         title: '图片格式错误',
@@ -181,8 +168,20 @@ let banner = reactive({
       })
       return;
     }
+    push.success({
+      title: '选择成功',
+      message: '已选择',
+    })
   }
 })
+
+const bannerImageChangeHandle = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    bannerImageInput.value = target.files[0];
+    banner.selectImage(target.files[0]);
+  }
+};
 
 function uploadBanner() {
   if (banner.image == null) {
@@ -195,10 +194,19 @@ function uploadBanner() {
   if (ImageUtils.check(banner.image) == false) {
     return;
   }
-  ImageUtils.compress(banner.image).then((res: any) => {
-    banner.blob = res.data;
-    ImageUtils.uploadBannerImage(banner.blob);
-  })
+
+  // return;
+  ImageUtils.compress(banner.image).
+    then((res: any) => {
+      banner.blob = res;
+      console.log(res);
+      console.log(banner.blob);
+      console.log(typeof res);
+
+      // console.log(banner.image);
+      // console.log(banner.blob);
+      ImageUtils.uploadBannerImage(res);
+    })
   // Post('api/notice/images/', {
 
   // })

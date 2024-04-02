@@ -1,6 +1,6 @@
 import { push } from "notivue";
 import { Post } from "@/utils/axios/request";
-import imageConversion, { compress, compressAccurately } from "image-conversion";
+import * as imageConversion from "image-conversion";
 
 export class ImageUtils {
   public static check(image: File): boolean {
@@ -39,10 +39,23 @@ export class ImageUtils {
   public static uploadProblemImage(image: Blob) {
     let file = new FormData();
     file.append("image", image);
+    console.log(image);
     return new Promise((resolve) => {
-      Post("api/file/image/", file)
+      Post("api/file/image/", image)
         .then((res: any) => {
-          resolve(res);
+          // resolve(res);
+          let data = res.data;
+          if (data.Code == 0) {
+            push.success({
+              title: "上传成功",
+              message: `${data.Msg}`,
+            });
+          } else {
+            push.error({
+              title: `Error: ${data.Code}`,
+              message: `${data.Msg}`,
+            });
+          }
         })
         .catch((err: any) => {
           console.log(err);
@@ -65,12 +78,27 @@ export class ImageUtils {
   }
 
   public static uploadBannerImage(image: Blob) {
-    let file = new FormData();
-    file.append("image", image);
-    return new Promise((resolve) => {
-      Post("api/notice/images/", file)
+    let fromData = new FormData();
+    fromData.append("file", image);
+    console.log(image);
+    console.log(fromData);
+
+    return new Promise((resolve, reject) => {
+      Post("api/notice/images/", fromData, 1)
         .then((res: any) => {
-          resolve(res);
+          // resolve(res);
+          let data = res.data;
+          if (data.Code == 0) {
+            push.success({
+              title: "上传成功",
+              message: `${data.Msg}`,
+            });
+          } else {
+            push.error({
+              title: `Error: ${data.Code}`,
+              message: `${data.Msg}`,
+            });
+          }
         })
         .catch((err: any) => {
           console.log(err);

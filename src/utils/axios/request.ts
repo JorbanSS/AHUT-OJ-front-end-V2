@@ -16,6 +16,12 @@ if (import.meta.env.MODE == "production") {
   port = 8080;
 }
 
+// 请求头
+const contentType = [
+  "application/json; charset=UTF-8",
+  "multipart/form-data",
+];
+
 const instance = axios.create({
   baseURL: host,
   timeout: 2000, // 请求 2s 超时
@@ -50,14 +56,17 @@ instance.interceptors.response.use(
   }
 );
 
-export function Get(url: string, params: any) {
+export function Get(url: string, params: any, content = 0) {
   return instance.get(url, {
     params,
+    headers: { "Content-Type": contentType[content] },
   });
 }
 
-export function Post(url: string, data: any) {
-  return instance.post(url, data);
+export function Post(url: string, data: any, content = 0) {
+  return instance.post(url, data, {
+    headers: { "Content-Type": contentType[content] },
+  });
 }
 
 export function Del(url: string) {
