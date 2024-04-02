@@ -8,6 +8,11 @@ import {
   needSuperAdminCertificate
 } from "./guard.ts"
 
+import {
+  RouteLocationNormalized,
+  NavigationGuardNext,
+} from 'vue-router';
+
 const BaseTitle = "AHUT OJ | ";
 
 const Admin = {
@@ -17,7 +22,9 @@ const Admin = {
   component: () => import("@/pages/Admin.vue"),
   meta: { title: BaseTitle + "管理平台" },
   beforeEnter: (
+    // @ts-ignore
     to: RouteLocationNormalized,
+    // @ts-ignore
     from: RouteLocationNormalized,
     next: NavigationGuardNext
   ) => {
@@ -35,7 +42,9 @@ const Admin = {
       redirect: "/admin/problem/list",
       component: () => import("@/pages/AdminChildren/Problem.vue"),
       beforeEnter: (
+        // @ts-ignore
         to: RouteLocationNormalized,
+        // @ts-ignore
         from: RouteLocationNormalized,
         next: NavigationGuardNext
       ) => {
@@ -80,7 +89,9 @@ const Admin = {
       redirect: "/admin/problemlist/list",
       component: () => import("@/pages/AdminChildren/ProblemList.vue"),
       beforeEnter: (
+        // @ts-ignore
         to: RouteLocationNormalized,
+        // @ts-ignore
         from: RouteLocationNormalized,
         next: NavigationGuardNext
       ) => {
@@ -110,7 +121,9 @@ const Admin = {
       redirect: "/admin/contest/list",
       component: () => import("@/pages/AdminChildren/Contest.vue"),
       beforeEnter: (
+        // @ts-ignore
         to: RouteLocationNormalized,
+        // @ts-ignore
         from: RouteLocationNormalized,
         next: NavigationGuardNext
       ) => {
@@ -144,7 +157,9 @@ const Admin = {
       path: "user",
       component: () => import("@/pages/AdminChildren/User.vue"),
       beforeEnter: (
+        // @ts-ignore
         to: RouteLocationNormalized,
+        // @ts-ignore
         from: RouteLocationNormalized,
         next: NavigationGuardNext
       ) => {

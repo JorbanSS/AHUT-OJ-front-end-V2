@@ -102,16 +102,17 @@ async function autoLogin() {
   let token = localStorage.getItem("token");
   let UID = localStorage.getItem("UID");
   let saveLoginStatus = localStorage.getItem("saveLoginStatus");
-  let userInfo: any = sessionStorage.getItem("userInfo");
+  let userInfoString = sessionStorage.getItem("userInfo") as string;
+
   let data: UserSimplifiedType = {
     UID: "",
     UserName: "",
     PermissionMap: 0,
   };
 
-  if (token && userInfo && userInfo != "") {
-    userInfo = JSON.parse(userInfo);
-    if (userInfo && userInfo.UID && userInfo.UID == UID) {
+  if (token && userInfoString && userInfoString != "") {
+    let userInfo = JSON.parse(userInfoString);
+    if (userInfo.UID == UID) {
       data.UID = userInfo.UID;
       if (userInfo.UserName) {
         data.UserName = userInfo.UserName;
@@ -120,8 +121,8 @@ async function autoLogin() {
         userDataStore.init();
         return;
       }
-      getUserPermission(data.UID);
-      data.PermissionMap = userInfo.permissionMap;
+      // getUserPermission(data.UID);
+      data.PermissionMap = userInfo.PermissionMap;
       userDataStore.loginSimplified(data);
       userDataStore.updatePermissionMap(data.PermissionMap);
     }
@@ -130,7 +131,9 @@ async function autoLogin() {
       return;
     }
     showConfig.init();
+    return;
   }
+
   if (saveLoginStatus == "true" && token != null) {
     Get('api/user/info', {})
       .then((res: any) => {
@@ -154,6 +157,9 @@ async function autoLogin() {
       .catch((err: any) => {
         console.log(err);
       })
+  }
+  else {
+    userDataStore.init();
   }
 }
 

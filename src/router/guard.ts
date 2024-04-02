@@ -132,7 +132,9 @@ export function needSuperAdminCertificate(): boolean {
         title: "权限不足",
         message: "非超管无权访问",
       });
+      
     }
+    return true;
   } else {
     return false;
   }

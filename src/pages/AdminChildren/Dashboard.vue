@@ -51,11 +51,11 @@
           <div class="mb-2">
             <span class="">新增首页图片</span>
           </div>
-          <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept="image/*"
-            @change="handleImageChange" />
+          <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept=".jpg,.jpeg,.png"
+            :on-change="banner.selectImage" />
         </label>
         <div class="m-1"></div>
-        <button class="btn btn-neutral" @click="uploadImage()">上传图片</button>
+        <button class="btn btn-neutral" @click="uploadBanner()">上传图片</button>
       </div>
     </div>
     <div class="space-y-6 col-span-4">
@@ -109,6 +109,7 @@ import { MdEditor } from 'md-editor-v3';
 import { type HomeNoticeType } from '@/type';
 
 import 'md-editor-v3/lib/style.css';
+import { ImageUtils } from '@/utils/fileUtils';
 
 let rejudgeInfo = reactive<RejudgeInfoType>({
   SID: 0,
@@ -167,29 +168,59 @@ const handleImageChange = (event: Event) => {
   }
 };
 
-function uploadImage() {
-  Post('api/notice/images/', {
 
+let banner = reactive({
+  image: null,
+  blob: new Blob,
+  selectImage(image: File) {
+    const allowedBannerTypes = ["image/jpg", "image/jpeg", "image/png"];
+    if (allowedBannerTypes.includes(image.type) == false) {
+      push.error({
+        title: '图片格式错误',
+        message: '请选择 jpg 或 png 格式的图片',
+      })
+      return;
+    }
+  }
+})
+
+function uploadBanner() {
+  if (banner.image == null) {
+    push.error({
+      title: '请选择图片',
+      message: '请选择一张图片',
+    })
+    return;
+  }
+  if (ImageUtils.check(banner.image) == false) {
+    return;
+  }
+  ImageUtils.compress(banner.image).then((res: any) => {
+    banner.blob = res.data;
+    ImageUtils.uploadBannerImage(banner.blob);
   })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+  // Post('api/notice/images/', {
 
-        push.success({
-          title: '上传成功',
-          message: '上传首页图片成功',
-        });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
+  // })
+  //   .then((res: any) => {
+  //     let data = res.data;
+  //     if (data.Code == 0) {
+
+  //       push.success({
+  //         title: '上传成功',
+  //         message: '上传首页图片成功',
+  //       });
+  //     }
+  //     else {
+  //       push.error({
+  //         title: `Error: ${data.Code}`,
+  //         message: `${data.Msg}`,
+  //       })
+  //     }
+  //   })
+  //   .catch((err: any) => {
+  //     console.log(err);
+  //   })
 }
 
 let homeNotice = reactive<HomeNoticeType>({

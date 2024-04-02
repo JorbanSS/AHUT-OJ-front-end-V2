@@ -1,6 +1,3 @@
-import { useUserDataStore } from "@/store/UserData";
-import { type UserType } from '@/type';
-
 export class UserDataLocalStorage {
   public static init() {
     localStorage.removeItem("token");
@@ -11,6 +8,6 @@ export class UserDataLocalStorage {
   public static update(data: any) {
     localStorage.setItem("token", data.token);
     localStorage.setItem("UID", data.UID);
-    localStorage.setItem("saveLoginStatus", data.saveLoginStatus.toString());
+    localStorage.setItem("saveLoginStatus", JSON.stringify(data.saveLoginStatus));
   }
 }

@@ -1,5 +1,9 @@
 import Admin from "./admin";
 import { needLoginCertificate } from "./guard";
+import {
+  RouteLocationNormalized,
+  NavigationGuardNext
+} from 'vue-router';
 
 const BaseTitle = "AHUT OJ | ";
 
@@ -107,7 +111,9 @@ const routes = [
     component: () => import("@/pages/Record.vue"),
     meta: { title: BaseTitle + "记录" },
     beforeEnter: (
+      // @ts-ignore
       to: RouteLocationNormalized,
+      // @ts-ignore
       from: RouteLocationNormalized,
       next: NavigationGuardNext
     ) => {

@@ -171,7 +171,7 @@ pnpm i @guolao/vue-monaco-editor
 
 pnpm install --save vue-clipboard3
 
-pnpm install --save canvas-confetti
+pnpm install --save canvas-confetti  # 五彩纸屑
 ```
 
 `main.ts` 中添加

@@ -59,6 +59,8 @@ let loginInfo = reactive<LoginInfoType>({
 })
 
 function login() {
+  userDataStore.init();
+
   if (loginInfo.UID == '' || loginInfo.Pass == '') {
     push.error({
       title: '数据错误',
@@ -75,11 +77,10 @@ function login() {
       let data = res.data;
       if (data.Code == 0) {
         localStorage.setItem("token", data.Token);
-
         localStorage.setItem("UID", data.UID);
         localStorage.setItem("saveLoginStatus", loginInfo.Save.toString());
+        sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
 
-        // userDataStore.init();
         userDataStore.login(data);
         userDataStore.updatePermissionMap(data.PermissionMap);
 
