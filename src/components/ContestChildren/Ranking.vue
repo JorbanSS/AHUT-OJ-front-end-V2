@@ -19,14 +19,15 @@
           <td>{{ item1.Uname }}</td>
           <td>{{ item1.UserID }}</td>
           <td>{{ item1.ACNumber }}</td>
-          <td>{{ item1.Penalty }}</td>
-          <td v-for="(item2, index2) in item1.Problems" :key="index2" class="px-0 py-2" :style="`${getBackgroundColor(item2)};`">
+          <td>{{ Math.round(item1.Penalty / 60 / 1000) }}</td>
+          <td v-for="(item2, index2) in item1.Problems" :key="index2" class="px-0 pb-1 pt-0"
+            :style="`${getBackgroundColor(item2)};`">
             <div class="font-bold">
               <div class="font-bold">
                 {{ item2.Status == "NULL" ? "" : item2.Status == "AC" ? "+" : "-" }}
               </div>
               <div class="text-xs" v-if="item2.SubmitNumber">
-                {{ item2.SubmitNumber }}
+                {{ item2.SubmitNumber }}/{{ Math.round(item2.Time / 60 / 1000) }}
               </div>
             </div>
           </td>
@@ -44,18 +45,31 @@ import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
-import { } from '@icon-park/vue-next';
+import { Server } from '@icon-park/vue-next';
 import { useConstValStore } from '@/store/ConstVal';
+import { getServerTime } from '@/utils/globalFunctions';
 
 const route = useRoute();
 const router = useRouter();
 const constValStore = useConstValStore();
 
+let currentTime = ref<number>(0);
+
+type problemsType = {
+  PID: string,
+  Title: string,
+  SubmitNum: number,
+  ACNum: number,
+  Status: string,
+}
+
 interface propsType {
-  contest?: ContestType;
+  problems?: Array<problemsType>,
+  contest?: ContestType,
 };
 
 let props = withDefaults(defineProps<propsType>(), {
+  problems: () => [],
   contest: () => ({
     CID: 0,
     BeginTime: 0,
@@ -95,6 +109,11 @@ function getContestRanking() {
         })
       }
     })
+    .then(() => {
+      getPenalty();
+      getPionners();
+      sortRanking();
+    })
     .catch((err: any) => {
       console.log(err);
     })
@@ -107,21 +126,62 @@ function getBackgroundColor(item: ContestRankingProblemType): string {
     return baseBackgroundColor + constValStore.RANKING_COLOR_FIRST_AC;
   }
   return item.Status == "AC" ?
-  baseBackgroundColor + constValStore.RANKING_COLOR_AC :
-  baseBackgroundColor + constValStore.RANKING_COLOR_NOT_AC;
+    baseBackgroundColor + constValStore.RANKING_COLOR_AC :
+    baseBackgroundColor + constValStore.RANKING_COLOR_NOT_AC;
+}
+
+function getPenalty() {
+  for (let i = 0; i < ranking.ranking.length; i++) {
+    let penalty = 0;
+    for (let j = 0; j < ranking.ranking[i].Problems.length; j++) {
+      if (ranking.ranking[i].Problems[j].Status == "AC") {
+        penalty += ranking.ranking[i].Problems[j].Time;
+      }
+    }
+    ranking.ranking[i].Penalty = penalty;
+  }
 }
 
 function getPionners() {
-  
+  for (let i = 0; i < props.problems.length; i++) {
+    let pioneer = -1, minTime = props.contest.EndTime - props.contest.BeginTime;
+    for (let j = 0; j < ranking.count; j++) {
+      if (ranking.ranking[j].Problems[i].Status == "AC") {
+        if (ranking.ranking[j].Problems[i].Time < minTime) {
+          pioneer = j;
+          minTime = ranking.ranking[j].Problems[i].Time;
+        }
+      }
+    }
+    if (pioneer != -1) {
+      ranking.ranking[pioneer].Problems[i].isPioneer = true;
+    }
+  }
 }
+
+function sortRanking() {
+  ranking.ranking.sort((a: any, b: any) => {
+    if (a.ACNumber == b.ACNumber) {
+      return b.Penalty - a.Penalty;
+    }
+    return b.ACNumber - a.ACNumber;
+  })
+}
+
+// setInterval(() => {
+//   getServerTime().then(() => {
+//     console.log(currentTime.value);
+//   })
+// }, 2000);
 
 onMounted(() => {
   if (props.contest.CID == 0) {
     props.contest.CID = route.params.CID as unknown as number;
   }
   getContestRanking();
+  // getServerTime().then((res: any) => {
+  //   currentTime.value = res;
+  // })
 })
 
 </script>
-
-<style scoped></style>

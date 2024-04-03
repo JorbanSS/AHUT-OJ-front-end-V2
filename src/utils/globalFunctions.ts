@@ -1,4 +1,6 @@
 import { TimeType } from "@/type/common";
+import { Get } from "@/utils/axios/request";
+import { push } from "notivue";
 
 // 转换工具
 export class ConvertTools {
@@ -82,7 +84,32 @@ export class Validator {
 
   // 验证邮箱验证码
   public static VerifyCode(code: string): boolean {
-    const regex = /^[A-Z\d]{6}$/;
+    const regex = /^[a-zA-Z\d]{6}$/;
     return regex.test(code);
   }
+}
+
+// 获取服务器时间
+export function getServerTime() {
+  return new Promise((resolve, reject) => {
+    Get('api/now', {})
+    .then((res: any) => {
+      let data = res.data;
+      if (data.code == 0) {
+        let serverTime = data.time;
+        if (serverTime < 1e10) serverTime *= 1000;
+        resolve(serverTime);
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+        reject(data);
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+  })
 }

@@ -4,9 +4,9 @@ import { type BucketType, type BucketsType } from "@/type/oss";
 
 export class OssUtils {
   // 删除对象
-  public static deleteObject(bucketName: string, objectName: string) {
+  // public static deleteObject(bucketName: string, objectName: string) {
 
-  }
+  // }
 
   // 获取桶列表
   public static getBucketList() {

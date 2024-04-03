@@ -16,7 +16,3 @@ const route = useRoute();
 const router = useRouter();
 
 </script>
-
-<style scoped>
-
-</style>@/utils/globalFunctions

@@ -86,9 +86,8 @@ function goToProblem(PID: string) {
 }
 
 onMounted(() => {
-
+  console.log(props.problems);
+  
 });
 
 </script>
-
-<style scoped></style>@/utils/globalFunctions
