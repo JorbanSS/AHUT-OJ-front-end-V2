@@ -52,11 +52,11 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
 import { Close } from '@icon-park/vue-next';
-import { type RegisterInfoType } from '@/type';
+import { type RegisterInfoType } from '@/type/user';
 import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
-import { Validator } from '@/assets/ts/globalFunctions';
+import { Validator } from '@/utils/globalFunctions';
 import axios from 'axios';
 
 interface propsType {
@@ -248,4 +248,4 @@ function sendVerifyCode() {
 
 </script>
 
-<style scoped></style>
+<style scoped></style>@/utils/globalFunctions

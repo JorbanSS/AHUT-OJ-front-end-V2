@@ -1,4 +1,4 @@
-import { TimeType } from "@/type";
+import { TimeType } from "@/type/common";
 
 // 转换工具
 export class ConvertTools {

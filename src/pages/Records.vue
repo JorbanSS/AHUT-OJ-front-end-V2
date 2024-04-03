@@ -93,7 +93,7 @@ import '@/utils/axios/request'
 import { Get } from '@/utils/axios/request'
 import { Left, Right } from '@icon-park/vue-next';
 import { push } from 'notivue';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 import { useConstValStore } from '@/store/ConstVal';
 import { useRouter } from 'vue-router';
 
@@ -158,4 +158,4 @@ watch(() => records.page, () => {
   getRecords();
 })
 
-</script>
+</script>@/utils/globalFunctions

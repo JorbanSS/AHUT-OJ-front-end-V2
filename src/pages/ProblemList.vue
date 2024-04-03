@@ -61,7 +61,7 @@ import { type ProblemListType } from '@/type/problemList';
 import '@/utils/axios/request';
 import { Get } from '@/utils/axios/request';
 import { push } from 'notivue';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
@@ -171,5 +171,3 @@ onMounted(() => {
 })
 
 </script>
-
-<style scoped></style>

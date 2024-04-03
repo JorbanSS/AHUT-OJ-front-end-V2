@@ -11,11 +11,11 @@
 
 <script lang="ts" setup name="ContestDescription">
 import { ref, reactive, onMounted, watch } from 'vue';
-import { ContestType } from '@/type';
+import { ContestType } from '@/type/contest';
 import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 import { } from '@icon-park/vue-next';
 
@@ -47,4 +47,4 @@ let props = withDefaults(defineProps<propsType>(), {
 
 </script>
 
-<style scoped></style>
+<style scoped></style>@/utils/globalFunctions

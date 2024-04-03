@@ -54,7 +54,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { Remind, Cattle, Ranking, ToTop } from '@icon-park/vue-next';
 import { type HomeNoticeType, type UpdateLogsType, type BannersType } from '@/type/oj';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 import { Get, Post } from '@/utils/axios/request';
 import { MdPreview, MdCatalog } from 'md-editor-v3';
 import { push } from 'notivue';
@@ -131,4 +131,4 @@ onMounted(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped></style>@/utils/globalFunctions

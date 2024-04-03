@@ -90,7 +90,7 @@
 
 <script lang="ts" setup name="AddProblemList">
 import { Add, Bill, DeleteOne, EditOne } from '@icon-park/vue-next';
-import { type ProblemListType } from '@/type';
+import { type ProblemListType } from '@/type/problemList';
 import { reactive, ref, onMounted } from 'vue';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';
@@ -99,7 +99,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useUserDataStore } from '@/store/UserData';
 import { VueDraggable } from 'vue-draggable-plus'
 import 'md-editor-v3/lib/style.css';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 
 const userDataStore = useUserDataStore();
 const router = useRouter();
@@ -261,4 +261,4 @@ onMounted(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped></style>@/utils/globalFunctions

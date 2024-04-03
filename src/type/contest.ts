@@ -31,9 +31,9 @@ export interface ContestRankingProblemType {
   Status: string,              // 状态
   SubmitNumber: number,        // 提交数量
   Time: number,                // 提交时间
+  isPioneer: boolean,          // 一血
   [item: string]: any,         // 其他属性
 }
-
 
 // XCPC - 比赛排行榜 - 用户
 export interface ContestRankingUserType {
@@ -45,7 +45,6 @@ export interface ContestRankingUserType {
   Problems: Array<ContestRankingProblemType>,  // 题目列表
   [item: string]: any,                         // 其他属性
 }
-// 计算公式:AC Time+PenaltySubmit*20*min
 
 // XCPC - 比赛排行榜
 export interface ContestRankingType {
@@ -56,12 +55,12 @@ export interface ContestRankingType {
 
 // IOI - 比赛排行榜 - 题目
 export interface IOIContestRankingProblemType {
-  PID: string,                 // 题目 PID
-  Submited: boolean,          // 是否提交
-  Time: number,                // 提交时间
+  PID: string,                  // 题目 PID
+  Submited: boolean,            // 是否提交
+  Time: number,                 // 提交时间
   PassSample: number,           // 通过数据数量
   SampleNumber: number,         // 判题数据数量
-  [item: string]: any,         // 其他属性
+  [item: string]: any,          // 其他属性
 }
 
 // IOI - 比赛排行榜 - 用户

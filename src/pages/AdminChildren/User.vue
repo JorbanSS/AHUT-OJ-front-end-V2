@@ -214,7 +214,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
-import { type UserType, type PermissionType } from '@/type';
+import { type UserType, type PermissionType } from '@/type/user';
 import { list } from 'postcss';
 
 const router = useRouter();

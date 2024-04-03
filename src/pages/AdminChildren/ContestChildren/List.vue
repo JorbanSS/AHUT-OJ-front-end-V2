@@ -108,7 +108,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
-import { type ContestsType, type ContestSimplifiedType } from '@/type';
+import { type ContestsType, type ContestSimplifiedType } from '@/type/contest';
 
 const router = useRouter();
 

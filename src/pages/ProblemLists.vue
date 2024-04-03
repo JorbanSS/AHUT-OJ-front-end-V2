@@ -88,7 +88,7 @@ import '@/utils/axios/request'
 import { Get } from '@/utils/axios/request'
 import { Left, Right, DoubleLeft, DoubleRight } from '@icon-park/vue-next';
 import { push } from 'notivue';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -151,5 +151,3 @@ watch(() => problemLists.page, () => {
 })
 
 </script>
-
-<style scoped></style>

@@ -108,7 +108,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
-import { type ProblemListsType, type ProblemListSimplifiedType } from '@/type';
+import { type ProblemListsType, type ProblemListSimplifiedType } from '@/type/problemList';
 
 const router = useRouter();
 

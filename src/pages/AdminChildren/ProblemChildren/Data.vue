@@ -75,7 +75,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter, useRoute } from 'vue-router';
-import { type JudgeFilesType } from '@/type';
+import { type JudgeFilesType } from '@/type/problem';
 
 const router = useRouter();
 const route = useRoute();

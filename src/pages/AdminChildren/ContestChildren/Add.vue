@@ -99,7 +99,7 @@
 
 <script lang="ts" setup name="addcontest">
 import { Add, Trophy, ArrowRight, DeleteOne } from '@icon-park/vue-next';
-import { type ContestType } from '@/type';
+import { type ContestType } from '@/type/contest';
 import { reactive, ref } from 'vue';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';
@@ -108,7 +108,7 @@ import { useRouter } from 'vue-router';
 import { useUserDataStore } from '@/store/UserData';
 import { VueDraggable } from 'vue-draggable-plus'
 import 'md-editor-v3/lib/style.css';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 
 const userDataStore = useUserDataStore();
 const router = useRouter();
@@ -255,4 +255,4 @@ function changePublic() {
 
 </script>
 
-<style scoped></style>
+<style scoped></style>@/utils/globalFunctions

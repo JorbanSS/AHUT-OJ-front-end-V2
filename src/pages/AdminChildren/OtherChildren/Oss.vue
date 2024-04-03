@@ -38,36 +38,19 @@
   <div class="card bg-white Border shadow-lg max-w-5xl mx-auto pb-4">
     <div class="overflow-x-auto">
       <table class="table table-zebra">
-        <!-- head -->
         <thead>
           <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
+            <th v-for="(item, index) in ['名称', '修改日期', '类型', '大小']">
+              {{ item }}
+            </th>
           </tr>
         </thead>
         <tbody>
-          <!-- row 1 -->
-          <tr>
-            <th>1</th>
-            <td>Cy Ganderton</td>
+          <tr v-for="(item, index) in buckets.buckets" :key="index" >
+            <th>{{ item.name }}</th>
+            <td>{{ item.creationData }}</td>
             <td>Quality Control Specialist</td>
             <td>Blue</td>
-          </tr>
-          <!-- row 2 -->
-          <tr>
-            <th>2</th>
-            <td>Hart Hagerty</td>
-            <td>Desktop Support Technician</td>
-            <td>Purple</td>
-          </tr>
-          <!-- row 3 -->
-          <tr>
-            <th>3</th>
-            <td>Brice Swyre</td>
-            <td>Tax Accountant</td>
-            <td>Red</td>
           </tr>
         </tbody>
       </table>
@@ -82,11 +65,38 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';
 import { useRoute, useRouter } from 'vue-router';
-import { } from '@/type';
-import { list } from 'postcss';
+import { type BucketType, type BucketsType } from '@/type/oss';
 
 const router = useRouter();
 const route = useRoute();
+
+const buckets = reactive<BucketsType>({
+  buckets: [],
+
+  getBuckets() {
+    Get('api/oss/bucket', {})
+    .then((res: any) => {
+      let data = res.data;
+      if (data.Code == 0) {
+        console.log(data);
+        buckets.buckets = data.Buckets;
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+  }
+})
+
+onMounted(() => {
+  buckets.getBuckets();
+})
 
 </script>
 

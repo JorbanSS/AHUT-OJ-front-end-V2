@@ -62,7 +62,7 @@ import { type RecordType } from '@/type/record';
 import '@/utils/axios/request'
 import { Get } from '@/utils/axios/request'
 import { push } from 'notivue';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 import { useConstValStore } from '@/store/ConstVal';
 import { useRoute } from 'vue-router';
 
@@ -110,4 +110,4 @@ onMounted(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped></style>@/utils/globalFunctions

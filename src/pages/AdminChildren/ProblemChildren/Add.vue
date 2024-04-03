@@ -108,7 +108,8 @@
 
 <script lang="ts" setup name="AddProblem">
 import { Add, StopwatchStart, Disk, DocumentFolder } from '@icon-park/vue-next';
-import { type ProblemType, type ImageUploadType } from '@/type';
+import { type ProblemType } from '@/type/problem';
+import { type ImageUploadType } from '@/type/common';
 import { ref, reactive } from 'vue';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';

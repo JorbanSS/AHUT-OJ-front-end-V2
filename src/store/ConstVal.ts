@@ -52,6 +52,10 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
         "你的输出结果也许是正确的，但是格式存在问题，请检查输出结果的换行情况\n\n例如 C++: cout << a; 和 cout << a << endl;\n\n或者检查输出结果的空个间隔情况、中英文格式等",
       SUBMIT_RESULT_FAILED:
         "判题出现了问题，也许你的代码最终运行结果是正确的，请尝试单击下方重判按钮，尝试重新判题。",
+
+      RANKING_COLOR_NOT_AC: "#FFD0D0",
+      RANKING_COLOR_AC: "#E1FFB5",
+      RANKING_COLOR_FIRST_AC: "#3DB03D",
     };
   },
   getters: {},

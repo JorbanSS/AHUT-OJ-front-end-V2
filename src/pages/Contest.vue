@@ -81,7 +81,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import { type ContestType } from '@/type/contest';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 import { Editor, PartyBalloon, Bill } from '@icon-park/vue-next';
 import { contestNavItems } from '@/config';
@@ -186,5 +186,3 @@ onMounted(() => {
 })
 
 </script>
-
-<style scoped></style>

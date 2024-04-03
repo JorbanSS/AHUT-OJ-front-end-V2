@@ -123,13 +123,12 @@
 
 <script lang="ts" setup name="AddProblem">
 import { DeleteOne, EditOne, DocumentFolder, StopwatchStart, Disk, Add } from '@icon-park/vue-next';
-import { type ProblemType } from '@/type';
+import { type ProblemType, type ProblemsType, type ProblemSimplifiedType } from '@/type/problem';
 import { ref, reactive, onMounted } from 'vue';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter, useRoute } from 'vue-router';
-import { type ProblemsType, type ProblemSimplifiedType } from '@/type';
 import { markdownToolbars } from '@/config';
 
 const router = useRouter();

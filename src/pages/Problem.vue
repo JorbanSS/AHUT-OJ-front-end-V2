@@ -152,7 +152,7 @@ import { type SubmitCodeType } from '@/type/record';
 import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
-import { ConvertTools } from '@/assets/ts/globalFunctions';
+import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 import { Check, Tips, Disk, StopwatchStart, Copy, FilePdf, Editor, Data as ICONdata } from '@icon-park/vue-next'
 import { MdPreview, MdCatalog } from 'md-editor-v3';
@@ -355,4 +355,4 @@ onMounted(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped></style>@/utils/globalFunctions

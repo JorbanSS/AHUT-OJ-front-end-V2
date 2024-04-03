@@ -115,7 +115,9 @@ import { Peoples, UploadLogs, PreviewOpen, History, DocumentFolder, Google } fro
 import { push } from 'notivue';
 import { reactive, ref, onMounted } from 'vue';
 import { Post, Get, Put } from '@/utils/axios/request';
-import { type ImageUploadType, type RejudgeInfoType, type HomeNoticeType, type showOjStastics } from '@/type';
+import { type ImageUploadType } from '@/type/common';
+import { type HomeNoticeType, type OjStasticsType } from '@/type/oj';
+import { type RejudgeInfoType } from '@/type/record';
 import { MdEditor } from 'md-editor-v3';
 import { markdownToolbars } from '@/config';
 import { ImageUtils } from '@/utils/fileUtils';
@@ -248,7 +250,7 @@ function showEditHomeNoticeModal() {
   mdEditor.showModal();
 }
 
-let ojStastics = reactive<showOjStastics>({
+let ojStastics = reactive<OjStasticsType>({
   UserNumber: 0,
   TotalSubmit: 0,
   TodaySubmit: 0,

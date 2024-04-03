@@ -34,7 +34,7 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue';
 import { Close } from '@icon-park/vue-next';
-import { type LoginInfoType } from '@/type';
+import { type LoginInfoType } from '@/type/user';
 import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
