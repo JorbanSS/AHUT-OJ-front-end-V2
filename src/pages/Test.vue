@@ -1,5 +1,5 @@
 <template>
-  <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+  <!-- <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
     <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
       <div
         style="max-width: 500px; margin: 0 auto; background-color: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);">
@@ -17,6 +17,11 @@
           Copyright © 2019 - 2024 All rights reserved.</p>
       </div>
     </div>
+  </div> -->
+  <div class="bg-white p-6 card shandow-lg Border">
+    <button class="btn btn-neutral w-fit" @click="test()" >
+      测试运行
+    </button>
   </div>
 </template>
 
@@ -24,13 +29,15 @@
 <script lang="ts" setup name="Records">
 
 import { push } from 'notivue'
+import { Get, Post } from '@/utils/axios/request';
+import { OssUtils } from '@/utils/ossUtils';
 
-
-function sendMessage() {
+function test() {
   push.success({
     title: 'Message sent',
     message: 'Your message has been successfully sent.'
   })
+  OssUtils.getBucketList();
 }
 
 </script>

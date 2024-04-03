@@ -39,22 +39,22 @@ export class ImageUtils {
   public static uploadProblemImage(image: Blob, name: string) {
     let fromData = new FormData();
     fromData.append("file", image, name);
-    return new Promise(() => {
+    return new Promise((resolve, reject) => {
       Post("api/file/image/", fromData, 1)
         .then((res: any) => {
           let data = res.data;
-          console.log(data);
-          
           if (data.Code == 0) {
             push.success({
               title: "上传成功",
-              message: `${data.Msg}`,
+              message: `图片压缩后为 ${Math.round(image.size / 1024)} KB`,
             });
+            resolve(data);
           } else {
             push.error({
               title: `Error: ${data.Code}`,
               message: `${data.Msg}`,
             });
+            reject(data);
           }
         })
         .catch((err: any) => {
@@ -66,20 +66,22 @@ export class ImageUtils {
   public static uploadUserImage(image: Blob, name: string) {
     let file = new FormData();
     file.append("image", image, name);
-    return new Promise(() => {
+    return new Promise((resolve, reject) => {
       Post("api/user/editHead/", file, 1)
         .then((res: any) => {
           let data = res.data;
           if (data.Code == 0) {
             push.success({
               title: "上传成功",
-              message: `${data.Msg}`,
+              message: `图片压缩后为 ${Math.round(image.size / 1024)} KB`,
             });
+            resolve(data);
           } else {
             push.error({
               title: `Error: ${data.Code}`,
               message: `${data.Msg}`,
             });
+            reject(data);
           }
         })
         .catch((err: any) => {
@@ -90,23 +92,23 @@ export class ImageUtils {
 
   public static uploadBannerImage(image: Blob, name: string) {
     let fromData = new FormData();
-    console.log(image);
-    
     fromData.append("file", image, name);
-    return new Promise(() => {
+    return new Promise((resolve, reject) => {
       Post("api/notice/images/", fromData, 1)
         .then((res: any) => {
           let data = res.data;
           if (data.Code == 0) {
             push.success({
               title: "上传成功",
-              message: `${data.Msg}`,
+              message: `图片压缩后为 ${Math.round(image.size / 1024)} KB`,
             });
+            resolve(data);
           } else {
             push.error({
               title: `Error: ${data.Code}`,
               message: `${data.Msg}`,
             });
+            reject(data);
           }
         })
         .catch((err: any) => {

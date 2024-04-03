@@ -5,19 +5,16 @@ import {
   needProblemListAdminCertificate,
   needProblemAdminCertificate,
   needSourceBorwserAdminCertificate,
-  needSuperAdminCertificate
-} from "./guard.ts"
+  needSuperAdminCertificate,
+} from "./guard.ts";
 
-import {
-  RouteLocationNormalized,
-  NavigationGuardNext,
-} from 'vue-router';
+import { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 
 const BaseTitle = "AHUT OJ | ";
 
 const Admin = {
   name: "Admin",
-  redirect: "/admin/dashboard",
+  redirect: { name: "AdminDashboard" },
   path: "/admin",
   component: () => import("@/pages/Admin.vue"),
   meta: { title: BaseTitle + "管理平台" },
@@ -39,7 +36,7 @@ const Admin = {
     {
       name: "AdminProblem",
       path: "problem",
-      redirect: "/admin/problem/list",
+      redirect: { name: "ProblemsList" },
       component: () => import("@/pages/AdminChildren/Problem.vue"),
       beforeEnter: (
         // @ts-ignore
@@ -54,39 +51,45 @@ const Admin = {
         {
           name: "ProblemsList",
           path: "list",
-          component: () => import("@/pages/AdminChildren/ProblemChildren/List.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ProblemChildren/List.vue"),
         },
         {
           name: "AddProblem",
           path: "add",
-          component: () => import("@/pages/AdminChildren/ProblemChildren/Add.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ProblemChildren/Add.vue"),
         },
         {
           name: "EditProblem",
           path: "edit/:PID",
-          component: () => import("@/pages/AdminChildren/ProblemChildren/Edit.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ProblemChildren/Edit.vue"),
         },
         {
           name: "ProblemData",
           path: "data/:PID",
-          component: () => import("@/pages/AdminChildren/ProblemChildren/Data.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ProblemChildren/Data.vue"),
         },
         {
           name: "ImportProblem",
           path: "import",
-          component: () => import("@/pages/AdminChildren/ProblemChildren/Import.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ProblemChildren/Import.vue"),
         },
         {
           name: "ExportProblem",
           path: "export",
-          component: () => import("@/pages/AdminChildren/ProblemChildren/Export.vue"),
-        }
+          component: () =>
+            import("@/pages/AdminChildren/ProblemChildren/Export.vue"),
+        },
       ],
     },
     {
       name: "AdminProblemList",
       path: "problemlist",
-      redirect: "/admin/problemlist/list",
+      redirect: { name: "ProblemListsList" },
       component: () => import("@/pages/AdminChildren/ProblemList.vue"),
       beforeEnter: (
         // @ts-ignore
@@ -101,24 +104,27 @@ const Admin = {
         {
           name: "ProblemListsList",
           path: "list",
-          component: () => import("@/pages/AdminChildren/ProblemListChildren/List.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ProblemListChildren/List.vue"),
         },
         {
           name: "AddProblemList",
           path: "add",
-          component: () => import("@/pages/AdminChildren/ProblemListChildren/Add.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ProblemListChildren/Add.vue"),
         },
         {
           name: "EditProblemList",
           path: "edit/:LID",
-          component: () => import("@/pages/AdminChildren/ProblemListChildren/Edit.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ProblemListChildren/Edit.vue"),
         },
       ],
     },
     {
       name: "AdminContest",
       path: "contest",
-      redirect: "/admin/contest/list",
+      redirect: { name: "ContestsList" },
       component: () => import("@/pages/AdminChildren/Contest.vue"),
       beforeEnter: (
         // @ts-ignore
@@ -133,17 +139,20 @@ const Admin = {
         {
           name: "ContestsList",
           path: "list",
-          component: () => import("@/pages/AdminChildren/ContestChildren/List.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ContestChildren/List.vue"),
         },
         {
           name: "AddContest",
           path: "add",
-          component: () => import("@/pages/AdminChildren/ContestChildren/Add.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ContestChildren/Add.vue"),
         },
         {
           name: "EditContest",
           path: "edit/:CID",
-          component: () => import("@/pages/AdminChildren/ContestChildren/Edit.vue"),
+          component: () =>
+            import("@/pages/AdminChildren/ContestChildren/Edit.vue"),
         },
       ],
     },
@@ -170,8 +179,17 @@ const Admin = {
       name: "AdminOther",
       path: "other",
       component: () => import("@/pages/AdminChildren/Other.vue"),
+      redirect: { name: "AdminOss" },
+      children: [
+        {
+          name: "AdminOss",
+          path: "oss",
+          component: () =>
+            import("@/pages/AdminChildren/OtherChildren/Oss.vue"),
+        },
+      ],
     },
-  ]
+  ],
 };
 
 export default Admin;

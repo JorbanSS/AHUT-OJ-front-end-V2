@@ -1,11 +1,10 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "http://127.0.0.1:4433";
+// axios.defaults.baseURL = "http://127.0.0.1:4433";
 // axios.defaults.baseURL = '/api/';
-axios.defaults.baseURL = "/";
-axios.defaults.headers.post["Content-Type"] = "application/json;charset=UTF-8";
+// axios.defaults.baseURL = "/";
 
-let host: string;
+export let host: string;
 export let port: number;
 
 if (import.meta.env.MODE == "production") {
@@ -17,10 +16,7 @@ if (import.meta.env.MODE == "production") {
 }
 
 // 请求头
-const contentType = [
-  "application/json; charset=UTF-8",
-  "multipart/form-data",
-];
+const contentType = ["application/json; charset=UTF-8", "multipart/form-data"];
 
 const instance = axios.create({
   baseURL: host,
@@ -28,14 +24,11 @@ const instance = axios.create({
 });
 
 // axios.defaults.withCredentials = false;
-// let token = '';
-// axios.defaults.headers.common['token'] = token;
 
 // 全局 http request 拦截
 instance.interceptors.request.use(
   function (config) {
     let token = localStorage.getItem("token");
-
     config.headers.Authorization = token;
     return config;
   },
@@ -69,10 +62,14 @@ export function Post(url: string, data: any, content = 0) {
   });
 }
 
-export function Del(url: string) {
-  return instance.delete(url);
+export function Del(url: string, content = 0) {
+  return instance.delete(url, {
+    headers: { "Content-Type": contentType[content] },
+  });
 }
 
-export function Put(url: string, data: any) {
-  return instance.put(url, data);
+export function Put(url: string, data: any, content = 0) {
+  return instance.put(url, data, {
+    headers: { "Content-Type": contentType[content] },
+  });
 }

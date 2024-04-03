@@ -361,7 +361,7 @@ function changePassword() {
       if (data.Code == 0) {
         push.success({
           title: '修改成功',
-          message: `成功修改了 ${UID} 的密码`,
+          message: `成功修改了 ${UID.value} 的密码`,
         });
       }
       else {

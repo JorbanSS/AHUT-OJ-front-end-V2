@@ -79,7 +79,6 @@
 <script lang="ts" setup name="Contest">
 import { ref, reactive, onMounted, watch } from 'vue';
 import { type ContestType } from '@/type.ts';
-// import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { ConvertTools } from '@/assets/ts/globalFunctions';
@@ -171,18 +170,12 @@ function cloneToProblemList() {
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {
-        let LID =data.LID
+        let LID = data.LID;
         push.success({
           title: '克隆成功',
-          message: `已克隆竞赛 #${contest.CID}`,
-          // button: {
-          //   text: '查看题单',
-          //   onClick: () => {
-          //   router.push({ name: 'ProblemList', params: { LID: LID} });
-          //   }
-          // }
+          message: `已克隆竞赛 ${contest.CID}`,
         })
-        router.push(`/problemlist/${LID}`)
+        router.push(`/problemlist/${LID}`);
       }
       else {
         push.error({

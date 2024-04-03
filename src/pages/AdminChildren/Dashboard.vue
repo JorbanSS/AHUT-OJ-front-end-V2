@@ -119,9 +119,9 @@ import { type ImageUploadType, type RejudgeInfoType } from '@/type';
 import { MdEditor } from 'md-editor-v3';
 import { type HomeNoticeType } from '@/type';
 import { markdownToolbars } from '@/config';
+import { ImageUtils } from '@/utils/fileUtils';
 
 import 'md-editor-v3/lib/style.css';
-import { ImageUtils } from '@/utils/fileUtils';
 
 const bannerImageInput = ref<File | null>(null);
 

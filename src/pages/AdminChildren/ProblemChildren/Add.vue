@@ -116,6 +116,7 @@ import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
 import { markdownToolbars } from '@/config';
 import { ImageUtils } from '@/utils/fileUtils';
+import { host } from '@/utils/axios/request';
 
 import 'md-editor-v3/lib/style.css';
 
@@ -250,21 +251,18 @@ function uploadProblemImage(files: any) {
   ImageUtils.compress(imageUpload.image).
     then((res: any) => {
       imageUpload.blob = res;
-
       // @ts-ignore
       ImageUtils.uploadProblemImage(res, imageUpload.image.name)
         .then((res: any) => {
-          console.log(res);
-
-          // let data = res.data;
-          // if (data.Code == 0) {
-          //   let imageURL = data.ImageURL;
-          //   problem.description += `\n![](${imageURL})`;
-          //   push.success({
-          //     title: '插入成功',
-          //     message: '插入图片成功',
-          //   })
-          // }
+          let data = res;
+          if (data.Code == 0) {
+            let imageURL = data.ImageURL;
+            problem.description += `\n\n![](/${imageURL})\n\n`;
+            push.success({
+              title: '插入成功',
+              message: '插入图片成功',
+            })
+          }
         })
         .catch((err: any) => {
           console.log(err);
