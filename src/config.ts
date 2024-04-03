@@ -1,4 +1,4 @@
-import { type NavItemType } from "./type";
+import { type NavItemType } from "@/type/oj";
 import { ToolbarNames } from "md-editor-v3";
 
 import {

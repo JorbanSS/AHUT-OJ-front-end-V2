@@ -24,15 +24,7 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
       SUBMIT_LANG_JAVA: 5,
       SUBMIT_LANG_PYTHON3: 6,
 
-      SUBMIT_LANG: [
-        "",
-        "C",
-        "C++",
-        "C++11",
-        "C++17",
-        "Java",
-        "Python3",
-      ],
+      SUBMIT_LANG: ["", "C", "C++", "C++11", "C++17", "Java", "Python3"],
 
       // 题目来源
       PROBLEM_ORIGIN_LOCAL: -1,

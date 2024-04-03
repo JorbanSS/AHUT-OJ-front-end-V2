@@ -73,13 +73,13 @@
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button class="btn" @click="router.push('/admin/problem/edit/' + problem.PID)">
-            <editor theme="outline" size="18"/>
+            <editor theme="outline" size="18" />
             <div class="text-base">
               题目编辑
             </div>
           </button>
           <button class="btn" @click="router.push('/admin/problem/data/' + problem.PID)">
-            <ICONdata theme="outline" size="18"/>
+            <ICONdata theme="outline" size="18" />
             <div class="text-base">
               数据编辑
             </div>
@@ -117,7 +117,7 @@
           下载 PDF
         </button>
       </div>
-      <MdPreview :editorId="id" :modelValue="problem.description" class="p-1 mb-4"/>
+      <MdPreview :editorId="id" :modelValue="problem.description" class="p-1 mb-4" />
     </div>
   </div>
   <dialog id="codeModal" class="modal">
@@ -146,7 +146,9 @@
 
 <script lang="ts" setup name="Problem">
 import { ref, reactive, onMounted, watch } from 'vue';
-import { type ProblemType, type ContestType, type SubmitCodeType } from '@/type.ts';
+import { type ProblemType } from '@/type/problem';
+import { type ContestType } from '@/type/contest';
+import { type SubmitCodeType } from '@/type/record';
 import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
@@ -217,9 +219,7 @@ type problems = {
 let problems = reactive<Array<problems>>([])
 
 function getProblem() {
-  Get('api/problem/' + problem.PID, {
-    // Pass='',
-  })
+  Get('api/problem/' + problem.PID, {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {
@@ -245,11 +245,6 @@ function getProblem() {
     })
 }
 
-function init() {
-  syncUrl();
-  getProblem();
-}
-
 function syncUrl() {
   if (typeof route.params.PID == 'string') {
     problem.PID = route.params.PID;
@@ -270,7 +265,6 @@ async function copyMarkdown() {
   } catch (e) {
     push.error({
       title: '复制失败',
-      // message: '',
     })
   }
 }
@@ -285,7 +279,6 @@ async function downloadPdf() {
   } catch (e) {
     push.error({
       title: '下载失败',
-      // message: '',
     })
   }
 }
@@ -316,10 +309,10 @@ function submitCode() {
 }
 
 function getContest() {
-  if (contest.CID == 0) return;
-  Get('api/contest/' + contest.CID, {
-    // Pass='',
-  })
+  if (contest.CID == 0) {
+    return;
+  }
+  Get('api/contest/' + contest.CID, {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {
@@ -356,7 +349,8 @@ function goToProblem(PID: string) {
 }
 
 onMounted(() => {
-  init();
+  syncUrl();
+  getProblem();
 })
 
 </script>

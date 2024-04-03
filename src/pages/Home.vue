@@ -9,7 +9,7 @@
   </div>
   <div class="mt-6"></div>
   <div class="flex space-x-6 h-96">
-    <div class="">
+    <div class="basis-2/3">
       <div class="carousel w-full h-full rounded-2xl shadow-lg Border">
         <div class="carousel-item relative w-full" v-for="(item, index) in banners.banners" :key="index"
           :id="`slide${index}`">
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class=" card rounded-2xl bg-white shadow-lg Border">
+    <div class="basis-1/3 card rounded-2xl bg-white shadow-lg Border">
       <div class="text-lg m-4 font-bold">
         版本更新日志
       </div>
@@ -51,15 +51,13 @@
 </template>
 
 <script lang="ts" setup name="Home">
+import { onMounted, reactive, ref } from 'vue';
 import { Remind, Cattle, Ranking, ToTop } from '@icon-park/vue-next';
-import { type HomeNoticeType } from '@/type';
+import { type HomeNoticeType, type UpdateLogsType, type BannersType } from '@/type/oj';
 import { ConvertTools } from '@/assets/ts/globalFunctions';
 import { Get, Post } from '@/utils/axios/request';
-import { type UpdateLogsType, type BannersType } from '@/type';
 import { MdPreview, MdCatalog } from 'md-editor-v3';
 import { push } from 'notivue';
-
-import { onMounted, reactive, ref } from 'vue';
 
 import 'md-editor-v3/lib/preview.css';
 

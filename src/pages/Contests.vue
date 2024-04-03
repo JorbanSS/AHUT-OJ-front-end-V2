@@ -22,16 +22,13 @@
     <table class="table table-zebra">
       <thead>
         <tr>
-          <th>状态</th>
-          <th>比赛号</th>
-          <th>比赛名称</th>
-          <th>标签</th>
-          <th>起止时间</th>
-          <th>撰题人</th>
+          <th v-for="(item, index) in ['状态', '比赛号', '比赛名称', '标签', '起止时间', '撰题人']" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in contests.contests" :key="item.CID" @click="goToContest(item.CID)" class="cursor-pointer">
+        <tr v-for="item in contests.contests" :key="item.CID" @click="router.push(`/contest/${item.CID}`)" class="cursor-pointer">
           <td class="font-bold talbe-lg">
             {{ item.status }}
           </td>
@@ -54,9 +51,6 @@
             <span class="badge badge-neutral badge-md" v-else>
               加密
             </span>
-            <!-- <span class="badge badge-neutral badge-md" v-for="(label, index) in item.Label.split(/;| /)" :key="index">
-              {{ label }}
-            </span> -->
           </td>
           <td>
             {{ ConvertTools.PrintTime(item.BeginTime, 1) }}
@@ -90,7 +84,8 @@
       <div class="join">
         <div>
           <div>
-            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number"  min="1" :max="Math.floor(contests.count / contests.limit + 1)"/>
+            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1"
+              :max="Math.floor(contests.count / contests.limit + 1)" />
           </div>
         </div>
         <button class="btn join-item" @click="changePageTo(toPage)">跳转页面</button>
@@ -101,7 +96,7 @@
 
 <script lang="ts" setup name="Contests">
 import { ref, reactive, onMounted, watch } from 'vue';
-import { type ContestsType, type ContestSimplifiedType } from '@/type.ts';
+import { type ContestsType, type ContestSimplifiedType } from '@/type/contest';
 import '@/utils/axios/request'
 import { Get } from '@/utils/axios/request'
 import { Left, Right, DoubleLeft, DoubleRight } from '@icon-park/vue-next';
@@ -160,33 +155,20 @@ function getContests(showInfo: boolean = false) {
 
 function changePageTo(page: number) {
   if (1 <= page && page <= Math.floor(contests.count / contests.limit) + 1) contests.page = page;
-  // syncUrl();
 }
 
 function changePage(page: number) {
   if (contests.page + page >= 1 && contests.page + page <= Math.floor(contests.count / contests.limit) + 1) contests.page += page;
-  // syncUrl();
-}
-
-function init() {
-  getContests(true);
-}
-
-function syncUrl() {
-
 }
 
 onMounted(() => {
-  init();
+  getContests(true);
 })
 
 watch(() => contests.page, () => {
   getContests();
 })
 
-function goToContest(CID: number) {
-  router.push(`/contest/${CID}`);
-}
 
 </script>
 

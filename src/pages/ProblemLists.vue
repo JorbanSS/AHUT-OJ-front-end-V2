@@ -22,15 +22,14 @@
     <table class="table table-zebra">
       <thead>
         <tr>
-          <th>题单号</th>
-          <th>题单名称</th>
-          <th>标签</th>
-          <th>创建时间</th>
-          <th>创建人</th>
+          <th v-for="(item, index) in ['题单号', '题单名称', '标签', '创建时间', '创建人']" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in problemLists.problemLists" :key="item.LID" @click="goToProblemList(item.LID)" class="cursor-pointer">
+        <tr v-for="item in problemLists.problemLists" :key="item.LID" @click="router.push(`/problemlist/${item.LID}`);"
+          class="cursor-pointer">
           <th>
             {{ item.LID }}
           </th>
@@ -41,15 +40,6 @@
             <span class="badge badge-neutral badge-md">
               Offical
             </span>
-            <!-- <span class="badge badge-neutral badge-md" v-if="item.IsPublic == true">
-              公开
-            </span>
-            <span class="badge badge-neutral badge-md" v-else>
-              加密
-            </span> -->
-            <!-- <span class="badge badge-neutral badge-md" v-for="(label, index) in item.Label.split(/;| /)" :key="index">
-              {{ label }}
-            </span> -->
           </td>
           <td>
             {{ ConvertTools.PrintTime(item.StartTime, 1) }}
@@ -81,7 +71,8 @@
       <div class="join">
         <div>
           <div>
-            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1" :max="Math.floor(problemLists.count / problemLists.limit + 1)"/>
+            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1"
+              :max="Math.floor(problemLists.count / problemLists.limit + 1)" />
           </div>
         </div>
         <button class="btn join-item" @click="changePageTo(toPage)">跳转页面</button>
@@ -92,7 +83,7 @@
 
 <script lang="ts" setup name="ProblemLists">
 import { ref, reactive, onMounted, watch } from 'vue';
-import { type ProblemListsType, type ProblemListSimplifiedType } from '@/type.ts';
+import { type ProblemListsType, type ProblemListSimplifiedType } from '@/type/problemList';
 import '@/utils/axios/request'
 import { Get } from '@/utils/axios/request'
 import { Left, Right, DoubleLeft, DoubleRight } from '@icon-park/vue-next';
@@ -145,33 +136,19 @@ function getProblemLists(showInfo: boolean = false) {
 
 function changePageTo(page: number) {
   if (1 <= page && page <= Math.floor(problemLists.count / problemLists.limit) + 1) problemLists.page = page;
-  // syncUrl();
 }
 
 function changePage(page: number) {
   if (problemLists.page + page >= 1 && problemLists.page + page <= Math.floor(problemLists.count / problemLists.limit) + 1) problemLists.page += page;
-  // syncUrl();
-}
-
-function init() {
-  getProblemLists(true);
-}
-
-function syncUrl() {
-
 }
 
 onMounted(() => {
-  init();
+  getProblemLists(true);
 })
 
 watch(() => problemLists.page, () => {
   getProblemLists();
 })
-
-function goToProblemList(LID: number) {
-  router.push(`/problemlist/${LID}`);
-}
 
 </script>
 

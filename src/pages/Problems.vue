@@ -22,14 +22,14 @@
     <table class="table table-zebra">
       <thead>
         <tr>
-          <th>题号</th>
-          <th>题目名称</th>
-          <th>标签</th>
-          <th>通过率</th>
+          <th v-for="(item, index) in ['题号', '题目名称', '标签', '通过率']" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in problems.problems" :key="item.PID" @click="goToProblem(item.PID)" class="cursor-pointer">
+        <tr v-for="item in problems.problems" :key="item.PID" @click="router.push(`/problem/${item.PID}`);"
+          class="cursor-pointer">
           <th>
             {{ item.PID }}
           </th>
@@ -37,12 +37,14 @@
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
           <td class="space-x-1 space-y-0.5">
-            <span class="badge badge-neutral badge-md" v-for="(label, index) in item.Label.split(/;| /)" :key="index" v-if="item.label != ''">
+            <span class="badge badge-neutral badge-md" v-for="(label, index) in item.Label.split(/;| /)" :key="index"
+              v-if="item.label != ''">
               {{ label }}
             </span>
           </td>
           <td>
-            <progress class="progress progress-success w-20" :value="ConvertTools.Percentage(item.Accepted, item.Submit)" max="100"></progress>
+            <progress class="progress progress-success w-20"
+              :value="ConvertTools.Percentage(item.Accepted, item.Submit)" max="100"></progress>
           </td>
         </tr>
       </tbody>
@@ -68,7 +70,8 @@
       <div class="join">
         <div>
           <div>
-            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1" :max="Math.floor(problems.count / problems.limit + 1)"/>
+            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1"
+              :max="Math.floor(problems.count / problems.limit + 1)" />
           </div>
         </div>
         <button class="btn join-item" @click="changePageTo(toPage)">跳转页面</button>
@@ -79,9 +82,8 @@
 
 <script lang="ts" setup name="Problems">
 import { ref, reactive, onMounted, watch } from 'vue';
-import { type ProblemsType, type ProblemSimplifiedType } from '@/type';
-import '@/utils/axios/request'
-import { Get } from '@/utils/axios/request'
+import { type ProblemsType, type ProblemSimplifiedType } from '@/type/problem';
+import { Get } from '@/utils/axios/request';
 import { Left, Right, DoubleLeft, DoubleRight } from '@icon-park/vue-next';
 import { push } from 'notivue';
 import { ConvertTools } from '@/assets/ts/globalFunctions';
@@ -128,9 +130,9 @@ function getProblems(showInfo: boolean = false) {
     .then(() => {
       if (showInfo) {
         push.success({
-        title: '获取成功',
-        message: `一共获取了 ${problems.count} 道题目`,
-      })
+          title: '获取成功',
+          message: `一共获取了 ${problems.count} 道题目`,
+        })
       }
     })
     .catch((err: any) => {
@@ -140,28 +142,14 @@ function getProblems(showInfo: boolean = false) {
 
 function changePageTo(page: number) {
   if (1 <= page && page <= Math.floor(problems.count / problems.limit) + 1) problems.page = page;
-  // syncUrl();
 }
 
 function changePage(page: number) {
   if (problems.page + page >= 1 && problems.page + page <= Math.floor(problems.count / problems.limit) + 1) problems.page += page;
-  // syncUrl();
-}
-
-function init() {
-  getProblems(true);
-}
-
-function syncUrl() {
-
-}
-
-function goToProblem(PID: string) {
-  router.push(`/problem/${PID}`);
 }
 
 onMounted(() => {
-  init();
+  getProblems(true);
 })
 
 watch(() => problems.page, () => {

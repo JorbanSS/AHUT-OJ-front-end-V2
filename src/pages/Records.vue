@@ -22,15 +22,9 @@
     <table class="table table-zebra">
       <thead>
         <tr>
-          <th>状态</th>
-          <th>分数</th>
-          <th>提交号</th>
-          <th>题号</th>
-          <th>提交者</th>
-          <th>用时</th>
-          <th>内存</th>
-          <th>语言</th>
-          <th>提交时间</th>
+          <th v-for="(item, index) in ['状态', '分数', '提交号', '题号', '提交者', '用时', '内存', '语言', '提交时间']" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -44,10 +38,12 @@
           <th class="font-normal talbe-lg">
             {{ item.SID }}
           </th>
-          <td @click="goToProblem(item.PID)" class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目">
+          <td @click="router.push(`/problem/${item.PID}`)"
+            class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目">
             {{ item.PID }}
           </td>
-          <td @click="goToUser(item.UID)" class="font-bold text-blue-500 hover:text-blue-400 cursor-pointer">
+          <td @click="router.push(`/user/${item.UID}`)"
+            class="font-bold text-blue-500 hover:text-blue-400 cursor-pointer">
             {{ item.UID }}
           </td>
           <td>
@@ -56,7 +52,8 @@
           <td>
             {{ Math.ceil(item.UseMemory / 1024 / 1024) }} MB
           </td>
-          <td @click="goToRecord(item.SID)" class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看代码">
+          <td @click="router.push(`/record/${item.SID}`)"
+            class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看代码">
             {{ constValStore.SUBMIT_LANG[item.Lang] }}
           </td>
           <td>
@@ -91,7 +88,7 @@
 
 <script lang="ts" setup name="Records">
 import { ref, reactive, onMounted, watch } from 'vue';
-import { type RecordsType, type RecordType } from '@/type.ts';
+import { type RecordsType, type RecordType } from '@/type/record';
 import '@/utils/axios/request'
 import { Get } from '@/utils/axios/request'
 import { Left, Right } from '@icon-park/vue-next';
@@ -147,37 +144,14 @@ function getRecords(showInfo: boolean = false) {
 
 function changePageTo(page: number) {
   if (1 <= page && page <= Math.floor(records.count / records.limit) + 1) records.page = page;
-  // syncUrl();
 }
 
 function changePage(page: number) {
   if (records.page + page >= 1 && records.page + page <= Math.floor(records.count / records.limit) + 1) records.page += page;
-  // syncUrl();
-}
-
-function goToRecord(SID: number) {
-  router.push(`/record/${SID}`);
-}
-
-function goToProblem(PID: string) {
-  router.push(`/problem/${PID}`);
-}
-
-function goToUser(UID: string) {
-  router.push(`/user/${UID}`);
-}
-
-
-function init() {
-  getRecords(true);
-}
-
-function syncUrl() {
-
 }
 
 onMounted(() => {
-  init();
+  getRecords(true);
 })
 
 watch(() => records.page, () => {
@@ -185,5 +159,3 @@ watch(() => records.page, () => {
 })
 
 </script>
-
-<style scoped></style>

@@ -3,15 +3,9 @@
     <table class="table table-zebra">
       <thead>
         <tr>
-          <th>状态</th>
-          <th>分数</th>
-          <th>提交号</th>
-          <th>题号</th>
-          <th>提交者</th>
-          <th>用时</th>
-          <th>内存</th>
-          <th>语言</th>
-          <th>提交时间</th>
+          <th v-for="(item, index) in ['状态', '分数', '提交号', '题号', '提交者', '用时', '内存', '语言', '提交时间']" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -55,13 +49,16 @@
   </div>
   <div class="m-6"></div>
   <div class="mockup-code card shadow-lg px-6">
-    <pre data-prefix=""><div></div><code>{{ record.Source }}</code></pre>
+    <pre data-prefix="">
+      <div></div>
+      <code>{{ record.Source }}</code>
+    </pre>
   </div>
 </template>
 
 <script lang="ts" setup name="Code">
 import { ref, reactive, onMounted, watch } from 'vue';
-import { type RecordType } from '@/type.ts';
+import { type RecordType } from '@/type/record';
 import '@/utils/axios/request'
 import { Get } from '@/utils/axios/request'
 import { push } from 'notivue';
@@ -106,17 +103,9 @@ function getRecord() {
     })
 }
 
-function init() {
-  syncUrl();
-  getRecord();
-}
-
-function syncUrl() {
-  record.value.SID = +route.params.SID;
-}
-
 onMounted(() => {
-  init();
+  record.value.SID = +route.params.SID;
+  getRecord();
 })
 
 </script>

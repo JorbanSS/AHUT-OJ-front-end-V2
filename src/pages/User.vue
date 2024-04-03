@@ -14,7 +14,7 @@
 <script lang="ts" setup name="User">
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { type UserType } from '@/type';
+import { type UserType } from '@/type/user';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 

@@ -78,7 +78,7 @@
 
 <script lang="ts" setup name="Contest">
 import { ref, reactive, onMounted, watch } from 'vue';
-import { type ContestType } from '@/type.ts';
+import { type ContestType } from '@/type/contest';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { ConvertTools } from '@/assets/ts/globalFunctions';
@@ -145,15 +145,6 @@ function getContest() {
     })
 }
 
-function init() {
-  syncUrl();
-  getContest();
-}
-
-function syncUrl() {
-  contest.CID = +route.params.CID;
-}
-
 // type cloneType = {
 //   PID: string,
 //   Title: string,
@@ -190,7 +181,8 @@ function cloneToProblemList() {
 }
 
 onMounted(() => {
-  init();
+  contest.CID = +route.params.CID;
+  getContest();
 })
 
 </script>

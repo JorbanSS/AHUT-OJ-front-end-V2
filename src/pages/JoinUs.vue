@@ -15,7 +15,3 @@
 <script lang="ts" setup name="JoinUs">
 
 </script>
-
-<style scoped>
-
-</style>

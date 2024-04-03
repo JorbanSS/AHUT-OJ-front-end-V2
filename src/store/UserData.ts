@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { StoreNameSpace } from "./StoreNameSpace";
-import { UserSimplifiedType, UserType } from "@/type";
+import { type UserSimplifiedType, type UserType } from "@/type/user";
 
 import { UserDataSessionStorage } from "@/utils/buffer/sessionStorage";
 import { UserDataLocalStorage } from "@/utils/buffer/localStorage";

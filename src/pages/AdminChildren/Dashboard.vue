@@ -5,35 +5,35 @@
       <div class="stat">
         <div class="stat-value flex">
           <peoples theme="outline" size="28" class="mt-2 mr-2" />
-          581
+          {{ ojStastics.UserNumber }}
         </div>
         <div class="stat-title ml-9">累积注册量</div>
       </div>
       <div class="stat">
         <div class="stat-value flex">
           <history theme="outline" size="28" class="mt-2 mr-2" />
-          26657
+          {{ ojStastics.TotalSubmit }}
         </div>
         <div class="stat-title ml-9">累积提交数</div>
       </div>
       <div class="stat">
         <div class="stat-value flex">
           <preview-open theme="outline" size="32" class="mt-2 mr-2" />
-          402
+          123
         </div>
         <div class="stat-title ml-10">当日访问量</div>
       </div>
       <div class="stat">
         <div class="stat-value flex">
           <upload-logs theme="outline" size="28" class="mt-2 mr-2" />
-          12
+          {{ ojStastics.TodaySubmit }}
         </div>
         <div class="stat-title ml-9">当日提交数</div>
       </div>
       <div class="stat">
         <div class="stat-value flex">
           <document-folder theme="outline" size="28" class="mt-2 mr-2" />
-          3026
+          {{ ojStastics.ProblemNumber }}
         </div>
         <div class="stat-title ml-9">题库题目数</div>
       </div>
@@ -113,11 +113,10 @@
 <script lang="ts" setup name="Training">
 import { Peoples, UploadLogs, PreviewOpen, History, DocumentFolder, Google } from '@icon-park/vue-next'
 import { push } from 'notivue';
-import { reactive, ref } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { Post, Get, Put } from '@/utils/axios/request';
-import { type ImageUploadType, type RejudgeInfoType } from '@/type';
+import { type ImageUploadType, type RejudgeInfoType, type HomeNoticeType, type showOjStastics } from '@/type';
 import { MdEditor } from 'md-editor-v3';
-import { type HomeNoticeType } from '@/type';
 import { markdownToolbars } from '@/config';
 import { ImageUtils } from '@/utils/fileUtils';
 
@@ -249,6 +248,34 @@ function showEditHomeNoticeModal() {
   mdEditor.showModal();
 }
 
+let ojStastics = reactive<showOjStastics>({
+  UserNumber: 0,
+  TotalSubmit: 0,
+  TodaySubmit: 0,
+  ProblemNumber: 0,
+})
+function showOjStastics() {
+  Get('api/notice/data', {})
+    .then((res: any) => {
+      let data = res.data;
+      if (data.Code == 0) {
+        ojStastics.UserNumber = data.UserNumber;
+        ojStastics.TotalSubmit = data.TotalSubmit;
+        ojStastics.TodaySubmit = data.TodaySubmit;
+        ojStastics.ProblemNumber = data.ProblemNumber;
+      }
+      else {
+        push.error({
+          title: `Error: ${data.Code}`,
+          message: `${data.Msg}`,
+        })
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+}
+
 function editHomeNotice() {
   Put('api/notice/0', {
     Content: homeNotice.Content,
@@ -277,6 +304,10 @@ function editHomeNotice() {
 function editUpdateLogs() {
 
 }
+
+onMounted(() => {
+  showOjStastics();
+})
 
 </script>
 

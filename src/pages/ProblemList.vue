@@ -28,7 +28,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in problems" :key="item.PID" @click="goToProblem(item.PID)" class="cursor-pointer">
+        <tr v-for="(item, index) in problems" :key="item.PID" @click="router.push(`/problem/${item.PID}`);"
+          class="cursor-pointer">
           <td class="font-bold talbe-lg">
             <div v-if="checkAccepted(item.PID)">
 
@@ -56,7 +57,7 @@
 
 <script lang="ts" setup name="problemList">
 import { ref, reactive, onMounted, watch } from 'vue';
-import { type ProblemListType } from '@/type.ts';
+import { type ProblemListType } from '@/type/problemList';
 import '@/utils/axios/request';
 import { Get } from '@/utils/axios/request';
 import { push } from 'notivue';
@@ -83,7 +84,6 @@ let problemList = reactive<ProblemListType>({
 type problems = {
   PID: string,
   Ptitle: string,
-  
   // SubmitNum: number,
   // ACNum: number,
 }
@@ -123,7 +123,7 @@ function getproblemList(showInfo: boolean = false) {
     .catch((err: any) => {
       console.log(err);
     })
-  
+
   Get('api/training/user', {
     LID: problemList.LID,
   })
@@ -142,7 +142,7 @@ function getproblemList(showInfo: boolean = false) {
     .then(() => {
       if (showInfo) {
         push.success({
-          title: '',
+          title: '获取成功',
           message: ``,
         })
       }
@@ -152,28 +152,22 @@ function getproblemList(showInfo: boolean = false) {
     })
 }
 
-function init() {
-  syncUrl();
-  getproblemList();
-}
-
 function syncUrl() {
   problemList.LID = +route.params.LID;
 }
 
 function checkAccepted(PID: string) {
   for (let item in acceptedProblems) {
-    if (item == PID) return true;
+    if (item == PID) {
+      return true;
+    }
   }
   return false;
 }
 
-function goToProblem(PID: string) {
-  router.push(`/problem/${PID}`);
-}
-
 onMounted(() => {
-  init();
+  syncUrl();
+  getproblemList();
 })
 
 </script>

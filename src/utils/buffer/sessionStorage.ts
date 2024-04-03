@@ -1,5 +1,4 @@
-import { useUserDataStore } from "@/store/UserData";
-import { UserSimplifiedType, type UserType } from '@/type';
+import { UserSimplifiedType, type UserType } from '@/type/user';
 
 export class UserDataSessionStorage {
   public static init() {

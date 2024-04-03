@@ -26,7 +26,8 @@ import NavBar from '@/components/Main/NavBar.vue';
 import Footer from '@/components/Main/Footer.vue';
 import Login from '@/components/Main/Login.vue';
 import Register from '@/components/Main/Register.vue';
-import { UserSimplifiedType, type ShowConfigType } from '@/type';
+import { type UserSimplifiedType } from '@/type/user';
+import { type ShowConfigType } from '@/type/oj';
 import { useUserDataStore } from '@/store/UserData';
 import { Get } from '@/utils/axios/request';
 import { push } from 'notivue';
@@ -45,36 +46,19 @@ let showConfig = reactive<ShowConfigType>({
   showBody: true,
 
   init() {
-    this.showNavBar = true;
-    this.showFooter = true;
-    this.showCover = false;
-    this.showLogin = false;
-    this.showRegister = false;
-    this.showBody = true;
+    this.showNavBar = this.showFooter = this.showBody = true;
+    this.showCover = this.showLogin = this.showRegister = false;
   },
 
   showLoginDialog() {
-    this.showNavBar = false;
-    this.showFooter = false;
-    this.showCover = true;
-    this.showLogin = true;
-    this.showRegister = false;
-    this.showBody = false;
+    this.showNavBar = this.showFooter = this.showRegister = this.showBody = false;
+    this.showCover = this.showLogin = true;
   },
 
   showRegisterDialog() {
-    this.showNavBar = false;
-    this.showFooter = false;
-    this.showCover = true;
-    this.showLogin = false;
-    this.showRegister = true;
-    this.showBody = false;
+    this.showCover = this.showRegister = true;
+    this.showNavBar = this.showFooter = this.showLogin = this.showBody = false;
   },
-})
-
-
-onMounted(() => {
-  showConfig.init();
 })
 
 function loginAction() {
@@ -121,7 +105,7 @@ async function autoLogin() {
         userDataStore.init();
         return;
       }
-      // getUserPermission(data.UID);
+
       data.PermissionMap = userInfo.PermissionMap;
       userDataStore.loginSimplified(data);
       userDataStore.updatePermissionMap(data.PermissionMap);
@@ -202,7 +186,7 @@ watch(() => route.path, () => {
 })
 
 onMounted(() => {
-  // getUserPermission(userDataStore.UID);
+  showConfig.init();
   autoLogin();
 });
 
