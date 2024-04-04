@@ -3,11 +3,9 @@
     <table class="table table-zebra mb-4">
       <thead>
         <tr>
-          <th>通过状态</th>
-          <th>题号</th>
-          <th>题目名称</th>
-          <th>通过率</th>
-          <th>通过数/提交数</th>
+          <th v-for="(item, index) in ['通过状态', '题号', '题目名称', '通过率', '通过数/提交数']" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -38,16 +36,10 @@
 </template>
 
 <script lang="ts" setup name="ContestProblems">
-import { ref, reactive, onMounted, watch } from 'vue';
 import { ContestType } from '@/type/contest';
-import '@/utils/axios/request';
-import { Get, Post } from '@/utils/axios/request';
-import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
-import { useRoute, useRouter } from 'vue-router';
-import { } from '@icon-park/vue-next';
+import { useRouter } from 'vue-router';
 
-const route = useRoute();
 const router = useRouter();
 
 type problemsType = {
@@ -71,23 +63,19 @@ let props = withDefaults(defineProps<propsType>(), {
     IsPublic: 0,
     Size: 0,
     Title: '',
-    duration: 0,
-    description: '',
-    problems: '',
+    Duration: 0,
+    Description: '',
+    Problems: '',
     UID: '',
     Type: 0,
     Pass: '',
   }),
+  
   problems: () => [],
 });
 
 function goToProblem(PID: string) {
   router.push(`/problem/${PID}/${props.contest.CID}`);
 }
-
-onMounted(() => {
-  console.log(props.problems);
-  
-});
 
 </script>

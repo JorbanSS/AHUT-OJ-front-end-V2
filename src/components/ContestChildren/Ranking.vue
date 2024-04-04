@@ -8,20 +8,20 @@
           <th class="w-32">UID</th>
           <th class="w-14">Solved</th>
           <th class="w-20">Penalty</th>
-          <th v-for="(item, index1) in props.contest.problems" :key="index1" class="w-16" >
+          <th v-for="(item, index1) in props.contest.Problems" :key="index1" class="w-16">
             {{ ConvertTools.Number2Alpha(index1 + 1) }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item1, index) in ranking.ranking" :key="index">
+        <tr v-for="(item1, index) in ranking.Ranking" :key="index">
           <th>{{ index + 1 }}</th>
           <td>{{ item1.Uname }}</td>
           <td>{{ item1.UserID }}</td>
           <td>{{ item1.ACNumber }}</td>
           <td>{{ Math.round(item1.Penalty / 60 / 1000) }}</td>
           <td v-for="(item2, index2) in item1.Problems" :key="index2" class="px-0 pb-1 pt-0"
-            :style="`${getBackgroundColor(item2)};`">
+            :style="`${getRankingBackgroundColor(item2)};`">
             <div class="font-bold">
               <div class="font-bold">
                 {{ item2.Status == "NULL" ? "" : item2.Status == "AC" ? "+" : "-" }}
@@ -45,9 +45,12 @@ import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
-import { Server } from '@icon-park/vue-next';
+import { Pin, Server } from '@icon-park/vue-next';
 import { useConstValStore } from '@/store/ConstVal';
 import { getServerTime } from '@/utils/globalFunctions';
+import { _getContestRanking } from '@/api/contest';
+
+import { getRankingBackgroundColor } from "@/utils/globalFunctions";
 
 const route = useRoute();
 const router = useRouter();
@@ -77,9 +80,9 @@ let props = withDefaults(defineProps<propsType>(), {
     IsPublic: 0,
     Size: 0,
     Title: '',
-    duration: 0,
-    description: '',
-    problems: '',
+    Duration: 0,
+    Description: '',
+    Problems: '',
     UID: '',
     Type: 0,
     Pass: '',
@@ -87,86 +90,60 @@ let props = withDefaults(defineProps<propsType>(), {
 });
 
 let ranking = reactive<ContestRankingType>({
-  count: 0,
-  ranking: [],
-})
+  Count: 0,
+  Ranking: [],
+  get() {
+    let params = {
+      UseWs: false,
+    };
+    _getContestRanking(params, props.contest.CID)
+      .then((data: any) => {
+        ranking.Count = data.Size;
+        ranking.Ranking = data.Data;
+      })
+      .then(() => {
+        this.getPenalty();
+        this.getPionners();
+        this.sortRanking();
+      })
+  },
 
-function getContestRanking() {
-  Get('api/contest/' + props.contest.CID + '/rank', {
-    // Pass='',
-    UseWs: false,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        ranking.count = data.Size;
-        ranking.ranking = data.Data;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .then(() => {
-      getPenalty();
-      getPionners();
-      sortRanking();
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function getBackgroundColor(item: ContestRankingProblemType): string {
-  let baseBackgroundColor = "background-color: ";
-  if (item.Status == "NULL") return "";
-  if (item.isPioneer) {
-    return baseBackgroundColor + constValStore.RANKING_COLOR_FIRST_AC;
-  }
-  return item.Status == "AC" ?
-    baseBackgroundColor + constValStore.RANKING_COLOR_AC :
-    baseBackgroundColor + constValStore.RANKING_COLOR_NOT_AC;
-}
-
-function getPenalty() {
-  for (let i = 0; i < ranking.ranking.length; i++) {
-    let penalty = 0;
-    for (let j = 0; j < ranking.ranking[i].Problems.length; j++) {
-      if (ranking.ranking[i].Problems[j].Status == "AC") {
-        penalty += ranking.ranking[i].Problems[j].Time;
-      }
-    }
-    ranking.ranking[i].Penalty = penalty;
-  }
-}
-
-function getPionners() {
-  for (let i = 0; i < props.problems.length; i++) {
-    let pioneer = -1, minTime = props.contest.EndTime - props.contest.BeginTime;
-    for (let j = 0; j < ranking.count; j++) {
-      if (ranking.ranking[j].Problems[i].Status == "AC") {
-        if (ranking.ranking[j].Problems[i].Time < minTime) {
-          pioneer = j;
-          minTime = ranking.ranking[j].Problems[i].Time;
+  getPenalty() {
+    for (let i = 0; i < ranking.Ranking.length; i++) {
+      let penalty = 0;
+      for (let j = 0; j < ranking.Ranking[i].Problems.length; j++) {
+        if (ranking.Ranking[i].Problems[j].Status == "AC") {
+          penalty += ranking.Ranking[i].Problems[j].Time;
         }
       }
+      ranking.Ranking[i].Penalty = penalty;
     }
-    if (pioneer != -1) {
-      ranking.ranking[pioneer].Problems[i].isPioneer = true;
-    }
-  }
-}
+  },
 
-function sortRanking() {
-  ranking.ranking.sort((a: any, b: any) => {
-    if (a.ACNumber == b.ACNumber) {
-      return b.Penalty - a.Penalty;
+  getPionners() {
+    for (let i = 0; i < props.problems.length; i++) {
+      let pioneer = -1, minTime = props.contest.EndTime - props.contest.BeginTime;
+      for (let j = 0; j < ranking.Count; j++) {
+        if (ranking.Ranking[j].Problems[i].Status == "AC") {
+          if (ranking.Ranking[j].Problems[i].Time < minTime) {
+            pioneer = j;
+            minTime = ranking.Ranking[j].Problems[i].Time;
+          }
+        }
+      }
+      if (pioneer != -1) {
+        ranking.Ranking[pioneer].Problems[i].IsPioneer = true;
+      }
     }
-    return b.ACNumber - a.ACNumber;
-  })
-}
+  },
+
+  sortRanking() {
+    ranking.Ranking.sort((a: any, b: any) => {
+      if (a.ACNumber == b.ACNumber) return b.Penalty - a.Penalty;
+      return b.ACNumber - a.ACNumber;
+    })
+  },
+})
 
 // setInterval(() => {
 //   getServerTime().then(() => {
@@ -178,7 +155,7 @@ onMounted(() => {
   if (props.contest.CID == 0) {
     props.contest.CID = route.params.CID as unknown as number;
   }
-  getContestRanking();
+  ranking.get();
   // getServerTime().then((res: any) => {
   //   currentTime.value = res;
   // })

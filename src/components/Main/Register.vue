@@ -28,7 +28,7 @@
           <input type="text" class="grow" v-model="registerInfo.VerifyCode" />
         </label>
         <button class="btn join-item w-[62px]" @click="sendVerifyCode()" v-if="!isCountingDown">发送</button>
-        <button class="btn join-item w-[62px]" @click="push.warning({title: '操作失败', message: '请勿频繁发送邮件'})" v-else >
+        <button class="btn join-item w-[62px]" @click="push.warning({ title: '操作失败', message: '请勿频繁发送邮件' })" v-else>
           <span class="countdown text-base">
             <span :style="'--value: ' + second + ';'"></span>
           </span>
@@ -57,7 +57,8 @@ import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { Validator } from '@/utils/globalFunctions';
-import axios from 'axios';
+
+import { _codeVerify, _register, _verifyEmail } from "@/api/user";
 
 interface propsType {
   init?: Function;
@@ -86,7 +87,7 @@ function startCountDown() {
   isCountingDown.value = true;
   setInterval(() => {
     if (second.value > 0) {
-      second.value --;
+      second.value--;
     } else {
       isCountingDown.value = false;
       return;
@@ -138,51 +139,28 @@ function register() {
     return;
   }
 
-  Post('api/auth/codeverify', {
+  let params = {
     UID: registerInfo.UID,
     Email: registerInfo.Email,
     Code: registerInfo.VerifyCode.toUpperCase(),
-  })
-    .then((res: any) => {
-      let data = res.data;
-
-      if (data.Code == 0) {
-
-        Post('api/auth/register/', {
-          UID: registerInfo.UID,
-          Pass: registerInfo.Pass,
-          Email: registerInfo.Email,
-          UserName: registerInfo.UserName,
-        })
-          .then((res: any) => {
-            let data = res.data;
-            if (data.Code == 0) {
-              push.success({
-                title: '注册成功',
-                message: `${registerInfo.UserName}，欢迎加入 AHUT OJ!`,
-              })
-              props.login();
-            }
-            else {
-              push.error({
-                title: `Error: ${data.Code}`,
-                message: `${data.Msg}`,
-              })
-            }
+    Type: 0,
+  };
+  _codeVerify(params)
+    .then(() => {
+      let params = {
+        UID: registerInfo.UID,
+        Pass: registerInfo.Pass,
+        Email: registerInfo.Email,
+        UserName: registerInfo.UserName,
+      };
+      _register(params)
+        .then(() => {
+          push.success({
+            title: '注册成功',
+            message: `${registerInfo.UserName}，欢迎加入 AHUT OJ!`,
           })
-          .catch((err: any) => {
-            console.log(err);
-          })
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
+          props.login();
         })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
     })
 }
 
@@ -220,32 +198,20 @@ function sendVerifyCode() {
 
   startCountDown();
 
-  Post('api/auth/verifyemail/', {
+  let params = {
     Email: registerInfo.Email,
     UID: registerInfo.UID,
     Uname: registerInfo.UserName,
     Method: 1,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        push.success({
-          title: '发送成功',
-          message: `验证码已发送至 ${registerInfo.Email}`,
-        });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
+  }
+
+  _verifyEmail(params)
+    .then(() => {
+      push.success({
+        title: '发送成功',
+        message: `验证码已发送至 ${registerInfo.Email}`,
+      });
     })
 }
 
 </script>
-
-<style scoped></style>@/utils/globalFunctions

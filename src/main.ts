@@ -3,7 +3,6 @@ import { createPinia } from 'pinia';
 import { createNotivue } from 'notivue';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import { install as VueMonacoEditorPlugin } from '@guolao/vue-monaco-editor'
-
 import App from './App.vue';
 import router from './router';
 import VCalendar from 'v-calendar';

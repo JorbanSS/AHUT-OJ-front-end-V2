@@ -42,32 +42,14 @@
       </li>
     </ul>
   </div>
-  <div class="card bg-white shadow-lg Border mx-auto max-w-5xl">
-    <div class="text-2xl p-6">
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item" placeholder="Search" />
-          </div>
-        </div>
-        <select class="select select-bordered join-item">
-          <option disabled selected>Filter</option>
-          <option>Local</option>
-          <option>CodeForces</option>
-          <option>AtCoder</option>
-        </select>
-        <button class="btn join-item btn-neutral">搜索</button>
-      </div>
-    </div>
-  </div>
-  <div class="m-6"></div>
   <div class="bg-white card shadow-lg Border mx-auto max-w-5xl">
     <table class="table table-zebra">
       <thead>
         <tr>
           <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>
-          <th>用户 ID</th>
-          <th>用户名称</th>
+          <th v-for="(item, index) in ['用户 ID', '用户名称']" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -84,32 +66,7 @@
       </tbody>
     </table>
     <div class="mx-auto py-4 flex space-x-4">
-      <div class="join">
-        <button class="join-item btn" @click="changePageTo(1)">
-          <double-left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePage(-1)">
-          <left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn">
-          {{ users.page }} / {{ Math.floor(users.count / users.limit + 1) }}
-        </button>
-        <button class="join-item btn" @click="changePage(1)">
-          <right theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePageTo(Math.floor(users.count / users.limit + 1))">
-          <double-right theme="outline" size="20" />
-        </button>
-      </div>
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1"
-              :max="Math.floor(users.count / users.limit + 1)" />
-          </div>
-        </div>
-        <button class="btn join-item" @click="toPage ? changePageTo(toPage) : 0">跳转页面</button>
-      </div>
+      <Pagination :page="users.page" :maxPage="maxPage" :changePage="users.changePage" />
     </div>
   </div>
   <dialog id="changePasswordModal" class="modal">
@@ -162,7 +119,7 @@
           UID
           <input type="text" class="grow" placeholder="" v-model="UID" />
         </label>
-        <button class="btn join-item btn-neutral w-20" @click="getPermission(true)" >查询</button>
+        <button class="btn join-item btn-neutral w-20" @click="getPermission(true)">查询</button>
       </div>
       <div>
         <table class="table table-zebra">
@@ -209,15 +166,18 @@
 </template>
 
 <script lang="ts" setup name="AdminUser">
-import { DeleteOne, EditOne, Left, Right, DoubleLeft, DoubleRight, AfferentThree, Permissions, Add, Peoples, AddUser } from '@icon-park/vue-next';
-import { ref, reactive, onMounted, watch } from 'vue';
+import { DeleteOne, EditOne, AfferentThree, Permissions, Add, Peoples, AddUser } from '@icon-park/vue-next';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
 import { type UserType, type PermissionType } from '@/type/user';
 import { list } from 'postcss';
 
+import { _deleteUsers, _getAdmins, _changePassword } from "@/api/user";
+import Pagination from "@/components/Main/Pagination.vue";
 const router = useRouter();
+
 
 let toPage = ref<number>();
 let allSelected = ref<boolean>(false);
@@ -267,28 +227,17 @@ function deleteUsers() {
     })
     return;
   }
-  Post('api/user/delete/', {
+  let params = {
     UIDs: list,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        getAdministrators();
-        switchAllSelectedStatus(false);
-        push.success({
-          title: '删除成功',
-          message: `一共删除了 ${list.length} 个题目`,
-        });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
+  };
+  _deleteUsers(params)
+    .then(() => {
+      getAdministrators();
+      switchAllSelectedStatus(false);
+      push.success({
+        title: '删除成功',
+        message: `一共删除了 ${list.length} 个用户`,
+      });
     })
 };
 
@@ -301,6 +250,10 @@ let users = reactive({
   page: 1,
   limit: 20,
   count: 0,
+
+  changePage(page: number) {
+    if (1 <= page && page <= maxPage.value) users.page = page;
+  },
 })
 
 let UID = ref<string>('');
@@ -308,71 +261,39 @@ let password = ref<string>('');
 let userName = ref<string>('');
 
 function getAdministrators(showInfo: boolean = false) {
-  Get('api/admin/permission/list/', {
+  let params = {
     Page: users.page - 1,
     Limit: users.limit,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        users.count = data.Count;
-        users.users = data.Data;
-        for (let index = 0; index < users.users.length; index++) {
-          users.users[index].Selected = false;
-          users.users[index].UserName = data.Data[index].Uname;
-        }
-        if (showInfo) {
-          push.success({
-            title: '获取成功',
-            message: `一共获取了 ${users.count} 位管理员`,
-          })
-        }
+  }
+  _getAdmins(params)
+    .then((data: any) => {
+      users.count = data.Count;
+      users.users = data.Data;
+      for (let index = 0; index < users.users.length; index++) {
+        users.users[index].Selected = false;
+        users.users[index].UserName = data.Data[index].Uname;
       }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
+      if (showInfo) {
+        push.success({
+          title: '获取成功',
+          message: `一共获取了 ${users.count} 位管理员`,
         })
       }
     })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function changePageTo(page: number) {
-  if (1 <= page && page <= Math.floor(users.count / users.limit) + 1) users.page = page;
-  // syncUrl();
-}
-
-function changePage(page: number) {
-  if (users.page + page >= 1 && users.page + page <= Math.floor(users.count / users.limit) + 1) users.page += page;
-  // syncUrl();
 }
 
 function changePassword() {
-  Post('api/admin/user/edit/password/', {
+  let params = {
     UID: UID.value,
     Password: password.value,
-  })
-    .then((res: any) => {
-      let data = res.data;
+  };
 
-      if (data.Code == 0) {
-        push.success({
-          title: '修改成功',
-          message: `成功修改了 ${UID.value} 的密码`,
-        });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
+  _changePassword(params)
+    .then(() => {
+      push.success({
+        title: '修改成功',
+        message: `成功修改了 ${UID.value} 的密码`,
+      });
     })
   switchAllSelectedStatus(false);
 }
@@ -542,7 +463,6 @@ watch(() => users.page, () => {
   allSelected.value = false;
 })
 
+const maxPage = computed(() => Math.floor(users.count / users.limit) + 1);
 
 </script>
-
-<style scoped></style>

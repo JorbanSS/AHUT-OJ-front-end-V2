@@ -1,20 +1,31 @@
 <template>
-  <div class="card bg-white shadow-lg Border">
-    <div class="text-2xl mx-4 my-4">
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item" placeholder="Search" />
-          </div>
-        </div>
-        <select class="select select-bordered join-item">
-          <option disabled selected>Filter</option>
-          <option>Local</option>
-          <option>CodeForces</option>
-          <option>AtCoder</option>
-        </select>
-        <button class="btn join-item">搜索</button>
-      </div>
+  <div class="card bg-white shadow-lg Border p-6">
+    <div class="join w-fit">
+      <label class="input input-bordered flex items-center gap-2 join-item">
+        <span class="whitespace-nowrap">记录号</span>
+        <input type="text" class="grow w-32" v-model="records.searchInfo.SID" />
+      </label>
+      <button class="btn join-item btn-neutral" @click="records.goToRecord(records.searchInfo.SID)">跳转</button>
+    </div>
+    <div class="m-3"></div>
+    <div class="join w-fit">
+      <label class="input input-bordered flex items-center gap-2 join-item">
+        <span class="whitespace-nowrap">UID</span>
+        <input type="text" class="grow w-32" v-model="records.searchInfo.UID" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2 join-item">
+        <span class="whitespace-nowrap">PID</span>
+        <input type="text" class="grow w-32" v-model="records.searchInfo.PID" />
+      </label>
+      <select class="select select-bordered join-item" v-model="records.searchInfo.Lang">
+        <option value="0">
+          语言不限
+        </option>
+        <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
+          {{ item.name }}
+        </option>
+      </select>
+      <button class="btn join-item btn-neutral" @click="records.get(true)">搜索</button>
     </div>
   </div>
   <div class="mt-6"></div>
@@ -63,39 +74,22 @@
       </tbody>
     </table>
     <div class="mx-auto py-4 flex space-x-4">
-      <div class="join">
-        <button class="join-item btn" @click="changePage(-1)">
-          <left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn">
-          {{ records.page }} / {{ Math.floor(records.count / records.limit + 1) }}
-        </button>
-        <button class="join-item btn" @click="changePage(1)">
-          <right theme="outline" size="20" />
-        </button>
-      </div>
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" />
-          </div>
-        </div>
-        <button class="btn join-item" @click="changePageTo(toPage)">跳转页面</button>
-      </div>
+      <Pagination :page="records.page" :maxPage="maxPage" :changePage="records.changePage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup name="Records">
-import { ref, reactive, onMounted, watch } from 'vue';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { type RecordsType, type RecordType } from '@/type/record';
-import '@/utils/axios/request'
-import { Get } from '@/utils/axios/request'
-import { Left, Right } from '@icon-park/vue-next';
 import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useConstValStore } from '@/store/ConstVal';
 import { useRouter } from 'vue-router';
+import { submitLanguageOptions } from '@/config';
+
+import Pagination from "@/components/Main/Pagination.vue";
+import { _getRecords } from '@/api/record';
 
 const constValStore = useConstValStore();
 const router = useRouter();
@@ -110,52 +104,62 @@ let records = reactive<RecordsType>({
   UID: undefined,
   StartTime: 0,
   size: 0,
-  init() {
-    records.count = 0;
-    records.page = 1;
-    records.limit = 20;
+
+  searchInfo: {
+    LID: undefined,
+    PID: '',
+    UID: '',
+    Lang: 0,
+    Result: '',
+  },
+
+  get(showInfo: boolean = false) {
+    let params: any = {
+      Page: records.page - 1,
+      Limit: records.limit,
+    };
+    if (records.searchInfo.UID != undefined) params.UID = records.searchInfo.UID;
+    if (records.searchInfo.LID != undefined) params.LID = records.searchInfo.LID;
+    if (records.searchInfo.PID != '') params.PID = records.searchInfo.PID;
+    if (records.searchInfo.Lang != 0) params.Lang = records.searchInfo.Lang;
+    if (records.searchInfo.Result != '') params.Result = records.searchInfo.Result;
+    _getRecords(params)
+      .then((data: any) => {
+        records.count = data.Count;
+        records.records = data.Data;
+        if (showInfo) {
+          push.success({
+            title: '获取成功',
+            message: `一共获取了 ${records.count} 条记录`,
+          })
+        }
+      })
+  },
+
+  changePage(page: number) {
+    if (1 <= page && page <= maxPage.value) records.page = page;
+  },
+
+  goToRecord(SID: string) {
+    if (SID == "") {
+      push.warning({
+        title: "无法跳转",
+        message: "未填写题号",
+      })
+      return;
+    };
+    router.push('/record/' + SID);
   }
 })
 
-function getRecords(showInfo: boolean = false) {
-  Get('api/submit/status', {
-    Page: records.page - 1,
-    Limit: records.limit,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        records.count = data.Count;
-        records.records = data.Data;
-      }
-    })
-    .then(() => {
-      if (showInfo) {
-        push.success({
-          title: '获取成功',
-          message: `一共获取了 ${records.count} 条记录`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function changePageTo(page: number) {
-  if (1 <= page && page <= Math.floor(records.count / records.limit) + 1) records.page = page;
-}
-
-function changePage(page: number) {
-  if (records.page + page >= 1 && records.page + page <= Math.floor(records.count / records.limit) + 1) records.page += page;
-}
-
 onMounted(() => {
-  getRecords(true);
+  records.get(true);
 })
 
 watch(() => records.page, () => {
-  getRecords();
+  records.get();
 })
 
-</script>@/utils/globalFunctions
+const maxPage = computed(() => Math.floor(records.count / records.limit) + 1);
+
+</script>

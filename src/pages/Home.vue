@@ -55,9 +55,10 @@ import { onMounted, reactive, ref } from 'vue';
 import { Remind, Cattle, Ranking, ToTop } from '@icon-park/vue-next';
 import { type HomeNoticeType, type UpdateLogsType, type BannersType } from '@/type/oj';
 import { ConvertTools } from '@/utils/globalFunctions';
-import { Get, Post } from '@/utils/axios/request';
 import { MdPreview, MdCatalog } from 'md-editor-v3';
 import { push } from 'notivue';
+
+import { _getBanners, _getUpdateLogs } from "@/api/oj";
 
 import 'md-editor-v3/lib/preview.css';
 
@@ -77,58 +78,30 @@ let notice = ref<HomeNoticeType>({
 let banners = reactive<BannersType>({
   banners: [],
   Count: 0,
+
+  get() {
+    _getBanners({})
+      .then((data: any) => {
+        banners.banners = data.Data;
+        banners.Count = data.Count;
+      })
+  }
 });
 
 function getUpdateLogs() {
-  Get('api/notice/notices', {})
-    .then((res: any) => {
-      let data = res.data;
-
-      if (data.Code == 0) {
-        updateLogs.updateLogs = data.Data;
-        updateLogs.count = data.Count;
-        notice.value = updateLogs.updateLogs.filter(item => item.ID == 0)[0];
-        updateLogs.updateLogs = updateLogs.updateLogs.filter(item => item.ID != 0);
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
+  _getUpdateLogs({})
+    .then((data: any) => {
+      updateLogs.updateLogs = data.Data;
+      updateLogs.count = data.Count;
+      notice.value = updateLogs.updateLogs.filter(item => item.ID == 0)[0];
+      updateLogs.updateLogs = updateLogs.updateLogs.filter(item => item.ID != 0);
     })
 }
 
-
-function getBanners() {
-  Get('api/notice/images', {})
-    .then((res: any) => {
-      let data = res.data;
-
-      if (data.Code == 0) {
-        banners.banners = data.Data;
-        banners.Count = data.Count;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
 
 onMounted(() => {
   getUpdateLogs();
-  getBanners();
+  banners.get();
 })
 
 </script>
-
-<style scoped></style>@/utils/globalFunctions

@@ -16,6 +16,24 @@ import {
   Bill,
   Code,
 } from "@icon-park/vue-next";
+import { compile } from "vue";
+
+export const problemTypeOptions = [
+  { label: "全部", value: "" },
+  { label: "Local", value: "LOCAL" },
+  { label: "LOJ", value: "LOJ" },
+  // { label: "Codeforces", value: "CODEFORCES" },
+  // { label: "Atcoder", value: "ATCODERTYPE" },
+];
+
+export const submitLanguageOptions = [
+  { value: "1", name: "C17", compiler: "gcc 12.2.0" },
+  // { label: "", value: "2" },
+  // { label: "C++11 (g++ 12.2.0)", value: "3" },
+  { value: "4", name: "C++17", compiler: "g++ 12.2.0" },
+  { value: "5", name: "Java17", compiler: "OpenJDK 17.0.10 64bit" },
+  { value: "6", name: "Python3", compiler: "3.10.13" },
+];
 
 export const navItems: Array<NavItemType> = [
   { title: "题库", icon: DocumentFolder, to: { name: "Problems" } },

@@ -1,6 +1,8 @@
 import { TimeType } from "@/type/common";
 import { Get } from "@/utils/axios/request";
 import { push } from "notivue";
+import { useConstValStore } from "@/store/ConstVal";
+import { ContestRankingProblemType } from "@/type/contest";
 
 // 转换工具
 export class ConvertTools {
@@ -112,4 +114,16 @@ export function getServerTime() {
       console.log(err);
     })
   })
+}
+
+export function getRankingBackgroundColor(item: ContestRankingProblemType): string {
+  const constValStore = useConstValStore();
+  let baseBackgroundColor = "background-color: ";
+  if (item.Status == "NULL") return "";
+  if (item.IsPioneer) {
+    return baseBackgroundColor + constValStore.RANKING_COLOR_FIRST_AC;
+  }
+  return item.Status == "AC" ?
+    baseBackgroundColor + constValStore.RANKING_COLOR_AC :
+    baseBackgroundColor + constValStore.RANKING_COLOR_NOT_AC;
 }

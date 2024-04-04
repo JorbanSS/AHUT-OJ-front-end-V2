@@ -1,7 +1,7 @@
 <template>
   <div class="card bg-white Border p-6 shadow-lg">
-    <div v-if="contest.description">
-      {{ contest.description }}
+    <div v-if="props.contest.Description">
+      {{ props.contest.Description }}
     </div>
     <div v-else>
       暂无比赛描述
@@ -10,23 +10,11 @@
 </template>
 
 <script lang="ts" setup name="ContestDescription">
-import { ref, reactive, onMounted, watch } from 'vue';
 import { ContestType } from '@/type/contest';
-import '@/utils/axios/request';
-import { Get, Post } from '@/utils/axios/request';
-import { push } from 'notivue';
-import { ConvertTools } from '@/utils/globalFunctions';
-import { useRoute, useRouter } from 'vue-router';
-import { } from '@icon-park/vue-next';
-
-const route = useRoute();
-const router = useRouter();
 
 interface propsType {
   contest?: ContestType;
 };
-
-// let problems = reactive<Array<problems>>([])
 
 let props = withDefaults(defineProps<propsType>(), {
   contest: () => ({
@@ -36,9 +24,9 @@ let props = withDefaults(defineProps<propsType>(), {
     IsPublic: 0,
     Size: 0,
     Title: '',
-    duration: 0,
-    description: '',
-    problems: '',
+    Duration: 0,
+    Description: '',
+    Problems: '',
     UID: '',
     Type: 0,
     Pass: '',
@@ -46,5 +34,3 @@ let props = withDefaults(defineProps<propsType>(), {
 });
 
 </script>
-
-<style scoped></style>@/utils/globalFunctions

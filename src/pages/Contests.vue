@@ -1,20 +1,11 @@
 <template>
-  <div class="card bg-white shadow-lg Border">
-    <div class="text-2xl mx-4 my-4">
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item" placeholder="Search" />
-          </div>
-        </div>
-        <select class="select select-bordered join-item">
-          <option disabled selected>Filter</option>
-          <option>Local</option>
-          <option>CodeForces</option>
-          <option>AtCoder</option>
-        </select>
-        <button class="btn join-item btn-neutral">搜索</button>
-      </div>
+  <div class="card bg-white shadow-lg Border p-6">
+    <div class="join w-fit">
+      <label class="input input-bordered flex items-center gap-2 join-item">
+        <span class="whitespace-nowrap">比赛号</span>
+        <input type="text" class="grow w-32" v-model="contests.searchInfo.CID" />
+      </label>
+      <button class="btn join-item btn-neutral" @click="contests.goToContest(contests.searchInfo.CID)">跳转</button>
     </div>
   </div>
   <div class="mt-6"></div>
@@ -28,7 +19,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in contests.contests" :key="item.CID" @click="router.push(`/contest/${item.CID}`)" class="cursor-pointer">
+        <tr v-for="item in contests.contests" :key="item.CID" @click="router.push(`/contest/${item.CID}`)"
+          class="cursor-pointer">
           <td class="font-bold talbe-lg">
             {{ item.status }}
           </td>
@@ -64,110 +56,75 @@
       </tbody>
     </table>
     <div class="mx-auto py-4 flex space-x-4">
-      <div class="join">
-        <button class="join-item btn" @click="changePageTo(1)">
-          <double-left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePage(-1)">
-          <left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn">
-          {{ contests.page }} / {{ Math.floor(contests.count / contests.limit + 1) }}
-        </button>
-        <button class="join-item btn" @click="changePage(1)">
-          <right theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePageTo(Math.floor(contests.count / contests.limit + 1))">
-          <double-right theme="outline" size="20" />
-        </button>
-      </div>
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1"
-              :max="Math.floor(contests.count / contests.limit + 1)" />
-          </div>
-        </div>
-        <button class="btn join-item" @click="changePageTo(toPage)">跳转页面</button>
-      </div>
+      <Pagination :page="contests.page" :maxPage="maxPage" :changePage="contests.changePage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup name="Contests">
-import { ref, reactive, onMounted, watch } from 'vue';
-import { type ContestsType, type ContestSimplifiedType } from '@/type/contest';
-import '@/utils/axios/request'
-import { Get } from '@/utils/axios/request'
-import { Left, Right, DoubleLeft, DoubleRight } from '@icon-park/vue-next';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRouter } from 'vue-router';
 
-const router = useRouter();
+import Pagination from "@/components/Main/Pagination.vue";
+import { type ContestsType, type ContestSimplifiedType } from '@/type/contest';
+import { _getContests } from '@/api/contest';
 
-let toPage = ref();
+const router = useRouter();
 
 let contests = reactive<ContestsType>({
   contests: Array<ContestSimplifiedType>(),
   count: 0,
   page: 1,
   limit: 20,
-  UID: undefined,
-  searchInfo: {},
-  init() {
-    contests.count = 0;
-    contests.page = 1;
-    contests.limit = 20;
-    contests.searchInfo = {
-      CID: undefined,
-      Title: undefined,
-      Source: undefined,
-      Label: undefined,
-    }
-  }
-})
+  UID: '',
+  searchInfo: {
+    CID: '',
+  },
 
-function getContests(showInfo: boolean = false) {
-  Get('api/contest/list', {
-    Page: contests.page - 1,
-    Limit: contests.limit,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+  get(showInfo = false) {
+    let params = {
+      Page: contests.page - 1,
+      Limit: contests.limit,
+    };
+    _getContests(params)
+      .then((data: any) => {
         contests.count = data.Size;
         contests.contests = data.Data;
-      }
-    })
-    .then(() => {
-      if (showInfo) {
-        push.success({
-          title: '获取成功',
-          message: `一共获取了 ${contests.count} 场比赛`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+        if (showInfo) {
+          push.success({
+            title: '获取成功',
+            message: `一共获取了 ${contests.count} 场比赛`,
+          })
+        }
+      })
+  },
 
-function changePageTo(page: number) {
-  if (1 <= page && page <= Math.floor(contests.count / contests.limit) + 1) contests.page = page;
-}
+  goToContest(CID: string) {
+    if (CID == "") {
+      push.warning({
+        title: "无法跳转",
+        message: "未填写比赛号",
+      })
+      return;
+    };
+    router.push('/contest/' + CID);
+  },
 
-function changePage(page: number) {
-  if (contests.page + page >= 1 && contests.page + page <= Math.floor(contests.count / contests.limit) + 1) contests.page += page;
-}
+  changePage(page: number) {
+    if (1 <= page && page <= maxPage.value) contests.page = page;
+  },
+})
 
 onMounted(() => {
-  getContests(true);
+  contests.get(true);
 })
 
 watch(() => contests.page, () => {
-  getContests();
+  contests.get(true);
 })
 
+const maxPage = computed(() => Math.floor(contests.count / contests.limit) + 1);
 
 </script>

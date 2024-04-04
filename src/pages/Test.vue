@@ -29,7 +29,6 @@
 <script lang="ts" setup name="Records">
 
 import { push } from 'notivue'
-import { Get, Post } from '@/utils/axios/request';
 import { OssUtils } from '@/utils/ossUtils';
 
 function test() {

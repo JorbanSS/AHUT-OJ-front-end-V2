@@ -9,11 +9,11 @@ export interface ProblemSimplifiedType {
 }
 
 export interface ProblemType extends ProblemSimplifiedType {
-  description: string,    // 描述, 需要改成 Markdown 格式
+  Description: string,    // 描述, 需要改成 Markdown 格式
   Origin: number,         // 来源
   OriginPID: string,      // 原始题目 PID
-  limitMemory: number,    // 限制内存
-  limitTime: number,      // 限制时间
+  LimitMemory: number,    // 限制内存
+  LimitTime: number,      // 限制时间
   SolutionNumber: number, // 题解数量
   ContentType: number,    // 题面类型
   Input: string,          // 输入格式
@@ -21,24 +21,28 @@ export interface ProblemType extends ProblemSimplifiedType {
   SampleInput: string,    // 样例输入
   SampleOutput: string,   // 样例输出
   Hit: string,            // 提示
+
+  get?: Function,         // 获取题目
+  submitCode?: Function,  // 提交代码
   [item: string]: any,    // 其他属性
 }
 
 export interface ProblemsType {
   problems: Array<ProblemSimplifiedType>,   // 题目列表
-  count: number,                  // 总数
-  page: number,                   // 页码
-  limit: number,                  // 每页数量
-  searchInfo: ProblemSearchType,  // 搜索信息
-  [item: string]: any,            // 其他属性
+  count: number,                            // 总数
+  page: number,                             // 页码
+  limit: number,                            // 每页数量
+  searchInfo: ProblemSearchType,            // 搜索信息
+  get: Function,                            // 获取题目
+  [item: string]: any,                      // 其他属性
 }
 
 export interface ProblemSearchType {
-  PID?: string,        // 题目 PID
-  Title?: string,      // 标题
-  Source?: string,     // 来源
-  Label?: string,      // 标签
-  [item: string]: any,          // 其他属性
+  PID?: string,              // 题目 PID
+  Title?: string,            // 标题
+  PType?: string,            // 来源
+  Label?: string,            // 标签
+  [item: string]: any,       // 其他属性
 }
 
 export interface JudgeFileType {

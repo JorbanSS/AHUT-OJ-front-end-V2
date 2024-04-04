@@ -20,11 +20,9 @@
     <table class="table table-zebra mb-4">
       <thead>
         <tr>
-          <th>通过状态</th>
-          <th>题号</th>
-          <th>题目名称</th>
-          <th>通过率</th>
-          <th>通过数/提交数</th>
+          <th v-for="(item, index) in ['通过状态', '题号', '题目名称', '通过率', '通过数/提交数']" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -64,6 +62,8 @@ import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 
+import { _getProblemList } from '@/api/problemList';
+
 const route = useRoute();
 const router = useRouter();
 
@@ -79,6 +79,53 @@ let problemList = reactive<ProblemListType>({
   problems: '',
   UID: '',
   Type: 0,
+
+  get(showInfo: boolean = false) {
+    let params = {
+
+    };
+    _getProblemList(params, problemList.LID)
+      .then((data: any) => {
+        problemList.Title = data.Title;
+        problemList.StartTime = data.StartTime;
+        problemList.LID = data.LID;
+        problemList.description = data.Description;
+        problems = data.Data;
+        if (showInfo) {
+          push.success({
+            title: '',
+            message: ``,
+          })
+        }
+      })
+
+    Get('api/training/user', {
+      LID: problemList.LID,
+    })
+      .then((res: any) => {
+        let data = res.data;
+        if (data.Code == 0) {
+          acceptedProblems = data.SolvedPID;
+        }
+        else {
+          push.error({
+            title: `Error: ${data.Code}`,
+            message: `${data.Msg}`,
+          })
+        }
+      })
+      .then(() => {
+        if (showInfo) {
+          push.success({
+            title: '获取成功',
+            message: ``,
+          })
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      })
+  },
 })
 
 type problems = {
@@ -93,37 +140,6 @@ let problems = reactive<Array<problems>>([])
 let acceptedProblems = reactive<Array<string>>([])
 
 function getproblemList(showInfo: boolean = false) {
-  Get('api/training/' + problemList.LID, {
-    // Pass='',
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        problemList.Title = data.Title;
-        problemList.StartTime = data.StartTime;
-        problemList.LID = data.LID;
-        problemList.description = data.Description;
-        problems = data.Data;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .then(() => {
-      if (showInfo) {
-        push.success({
-          title: '',
-          message: ``,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-
   Get('api/training/user', {
     LID: problemList.LID,
   })
@@ -152,10 +168,6 @@ function getproblemList(showInfo: boolean = false) {
     })
 }
 
-function syncUrl() {
-  problemList.LID = +route.params.LID;
-}
-
 function checkAccepted(PID: string) {
   for (let item in acceptedProblems) {
     if (item == PID) {
@@ -166,8 +178,8 @@ function checkAccepted(PID: string) {
 }
 
 onMounted(() => {
-  syncUrl();
-  getproblemList();
+  problemList.LID = +route.params.LID;
+  problemList.get();
 })
 
 </script>

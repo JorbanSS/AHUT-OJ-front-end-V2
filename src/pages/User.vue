@@ -15,9 +15,11 @@
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { type UserType } from '@/type/user';
-import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
+
 import { useConstValStore } from '@/store/ConstVal';
+import { _getUserInfo } from '@/api/user';
+
 const router = useRouter();
 const route = useRoute();
 const constValStore = useConstValStore();
@@ -41,50 +43,35 @@ let user = reactive<UserType>({
   AtcoderScore: 0,
   NowCoderUser: '',
   NowCoderScore: 0,
-  
+
   PermissionMap: 0,
 
-  init() {
-    this.getUserInfo();
-  },
-
-  getUserInfo() {
-    Get('api/user/info', {
+  get() {
+    let params = {
       UID: user.UID,
-    })
-      .then((res: any) => {
-        let data = res.data;
-        if (data.Code == 0) {
-          user.UID = data.UID;
-          user.UserName = data.UserName;
-          user.Email = data.Email;
-          user.School = data.School;
-          user.QQ = data.QQ;
-          user.RegisterTime = data.RegisterTime;
-          user.HeadURL = data.HeadURL;
+    };
+    _getUserInfo(params)
+      .then((data: any) => {
+        user.UID = data.UID;
+        user.UserName = data.UserName;
+        user.Email = data.Email;
+        user.School = data.School;
+        user.QQ = data.QQ;
+        user.RegisterTime = data.RegisterTime;
+        user.HeadURL = data.HeadURL;
 
-          user.Rating = data.Rating;
-          user.Submited = data.Submited;
-          user.Solved = data.Solved;
+        user.Rating = data.Rating;
+        user.Submited = data.Submited;
+        user.Solved = data.Solved;
 
-          user.CodeForceUser = data.CodeForceUser;
-          user.CodeforceScore = data.CodeforceScore;
-          user.AtcoderUser = data.AtcoderUser;
-          user.AtcoderScore = data.AtcoderScore;
-          user.NowCoderUser = data.NowCoderUser;
-          user.NowCoderScore = data.NowCoderScore;
+        user.CodeForceUser = data.CodeForceUser;
+        user.CodeforceScore = data.CodeforceScore;
+        user.AtcoderUser = data.AtcoderUser;
+        user.AtcoderScore = data.AtcoderScore;
+        user.NowCoderUser = data.NowCoderUser;
+        user.NowCoderScore = data.NowCoderScore;
 
-          user.PermissionMap = data.PermissionMap;
-
-        } else {
-          push.error({
-            title: `Error: ${data.Code}`,
-            message: `${data.Msg}`,
-          })
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
+        user.PermissionMap = data.PermissionMap;
       })
   },
   // getUserHead(){
@@ -96,15 +83,10 @@ let user = reactive<UserType>({
   //   )
   // }
 });
-function syncUrl() {
-  if (typeof route.params.UID == 'string') {
-    user.UID = route.params.UID;
-  }
-}
 
 onMounted(() => {
-  syncUrl();
-  user.init();
+  if (typeof route.params.UID == 'string') user.UID = route.params.UID;
+  user.get();
 })
 
 </script>

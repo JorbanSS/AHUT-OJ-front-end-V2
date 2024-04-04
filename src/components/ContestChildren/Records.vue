@@ -5,8 +5,6 @@
 <script lang="ts" setup name="ContestRecords">
 import { ref, reactive, onMounted, watch } from 'vue';
 import {  } from '@/type/user';
-import '@/utils/axios/request';
-import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';

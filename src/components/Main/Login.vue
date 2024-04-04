@@ -9,11 +9,13 @@
       </span>
       <label class="input input-bordered flex items-center gap-2">
         账号
-        <input type="text" class="grow" placeholder="" v-model="loginInfo.UID" name="username" autocomplete="username" />
+        <input type="text" class="grow" placeholder="" v-model="loginInfo.UID" name="username"
+          autocomplete="username" />
       </label>
       <label class="input input-bordered flex items-center gap-2">
         密码
-        <input type="password" class="grow" placeholder="" v-model="loginInfo.Pass" name="password" autocomplete="current-password"  />
+        <input type="password" class="grow" placeholder="" v-model="loginInfo.Pass" name="password"
+          autocomplete="current-password" />
       </label>
       <div class="form-control">
         <label class="label cursor-pointer">
@@ -39,6 +41,7 @@ import '@/utils/axios/request';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { useUserDataStore } from '@/store/UserData';
+import { _login } from '@/api/user';
 
 const userDataStore = useUserDataStore();
 
@@ -69,38 +72,21 @@ function login() {
     return;
   }
 
-  Post('api/auth/login/', {
+  let params = {
     UID: loginInfo.UID,
     Pass: loginInfo.Pass,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        localStorage.setItem("token", data.Token);
-        localStorage.setItem("UID", data.UID);
-        localStorage.setItem("saveLoginStatus", loginInfo.Save.toString());
-        sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
+  };
 
-        userDataStore.login(data);
-        userDataStore.updatePermissionMap(data.PermissionMap);
-
-        props.init();
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
+  _login(params)
+    .then((data: any) => {
+      localStorage.setItem("token", data.Token);
+      localStorage.setItem("UID", data.UID);
+      localStorage.setItem("saveLoginStatus", loginInfo.Save.toString());
+      sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
+      userDataStore.login(data);
+      userDataStore.updatePermissionMap(data.PermissionMap);
+      props.init();
     })
-    .catch((err: any) => {
-      console.log(err);
-    })
-
 }
 
-
-
 </script>
-
-<style scoped></style>

@@ -52,7 +52,7 @@
     </ul>
     <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto">
       <li>
-        <a @click="cloneToProblemList()">
+        <a @click="contest.cloneToProblemList()">
           <bill theme="outline" size="18" />
           克隆为题单
         </a>
@@ -79,13 +79,13 @@
 <script lang="ts" setup name="Contest">
 import { ref, reactive, onMounted, watch } from 'vue';
 import { type ContestType } from '@/type/contest';
-import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 import { Editor, PartyBalloon, Bill } from '@icon-park/vue-next';
 import { contestNavItems } from '@/config';
 import { useUserDataStore } from '@/store/UserData';
+import { _cloneToProblemList, _getContest } from '@/api/contest';
 
 const userDataStore = useUserDataStore();
 const router = useRouter();
@@ -98,12 +98,43 @@ let contest = reactive<ContestType>({
   IsPublic: 0,
   Size: 0,
   Title: '',
-  duration: 0,
-  description: '',
-  problems: '',
+  Duration: 0,
+  Description: '',
+  Problems: '',
   UID: '',
   Type: 0,
   Pass: '',
+
+  get() {
+    _getContest({}, contest.CID)
+    .then((data: any) => {
+      contest.Title = data.Title;
+        contest.BeginTime = data.BeginTime;
+        contest.EndTime = data.EndTime;
+        contest.Duration = ConvertTools.TimeInterval(contest.BeginTime, contest.EndTime);
+        contest.CID = data.CID;
+        contest.IsPublic = data.IsPublic;
+        contest.Description = data.Description;
+        contest.Problems = data.Data;
+        problems = data.Data;
+    })
+  },
+
+  cloneToProblemList() {
+    let params = {
+      CID: contest.CID,
+    UID: userDataStore.UID,
+    };
+    _cloneToProblemList(params)
+    .then((data: any) => {
+      let LID = data.LID;
+        push.success({
+          title: '克隆成功',
+          message: `已克隆比赛 ${contest.CID}`,
+        })
+        router.push(`/problemlist/${LID}`);
+    })
+  }
 })
 
 type problemsType = {
@@ -116,35 +147,6 @@ type problemsType = {
 
 let problems = reactive<Array<problemsType>>([])
 
-function getContest() {
-  Get('api/contest/' + contest.CID, {
-    // Pass='',
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        contest.Title = data.Title;
-        contest.BeginTime = data.BeginTime;
-        contest.EndTime = data.EndTime;
-        contest.duration = ConvertTools.TimeInterval(contest.BeginTime, contest.EndTime);
-        contest.CID = data.CID;
-        contest.IsPublic = data.IsPublic;
-        contest.description = data.Description;
-        contest.problems = data.Data;
-        problems = data.Data;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
 // type cloneType = {
 //   PID: string,
 //   Title: string,
@@ -153,36 +155,9 @@ function getContest() {
 //   Status: string,
 // }
 
-function cloneToProblemList() {
-  Post('api/contest/clone/', {
-    CID: contest.CID,
-    UID: userDataStore.UID,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        let LID = data.LID;
-        push.success({
-          title: '克隆成功',
-          message: `已克隆竞赛 ${contest.CID}`,
-        })
-        router.push(`/problemlist/${LID}`);
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
 onMounted(() => {
   contest.CID = +route.params.CID;
-  getContest();
+  contest.get();
 })
 
 </script>

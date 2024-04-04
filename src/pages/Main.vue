@@ -32,6 +32,8 @@ import { useUserDataStore } from '@/store/UserData';
 import { Get } from '@/utils/axios/request';
 import { push } from 'notivue';
 
+import { _getUserInfo, _getUserPermission } from '@/api/user';
+
 const userDataStore = useUserDataStore();
 const route = useRoute();
 
@@ -119,27 +121,18 @@ async function autoLogin() {
   }
 
   if (saveLoginStatus == "true" && token != null) {
-    Get('api/user/info', {})
-      .then((res: any) => {
-        let data = res.data;
-        if (data.Code == 0) {
-          getUserPermission(data.UID);
-          userDataStore.login(data);
-          showConfig.init();
-          push.success({
-            title: '登录成功',
-            message: `${data.UserName}，欢迎回来`,
-          })
-        }
-        else {
-          push.error({
-            title: `Error: ${data.Code}`,
-            message: `${data.Msg}`,
-          })
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
+    let params = {
+      // UID: userDataStore.UID,
+    };
+    _getUserInfo(params)
+      .then((data: any) => {
+        getUserPermission(data.UID);
+        userDataStore.login(data);
+        showConfig.init();
+        push.success({
+          title: '登录成功',
+          message: `${data.UserName}，欢迎回来`,
+        })
       })
   }
   else {
@@ -148,24 +141,11 @@ async function autoLogin() {
 }
 
 async function getUserPermission(UID: string) {
-  Get('api/admin/permission/' + UID, {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        let permissionMap = data.PermissionMap;
-        userDataStore.updatePermissionMap(permissionMap);
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
+  _getUserPermission({}, UID)
+    .then((data: any) => {
+      let permissionMap = data.PermissionMap;
+      userDataStore.updatePermissionMap(permissionMap);
     })
-    .catch((err: any) => {
-      console.log(err);
-    })
-
 }
 
 watch(() => route.path, () => {

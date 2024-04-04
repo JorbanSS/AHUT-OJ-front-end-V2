@@ -13,7 +13,7 @@
         <div class="grid grid-cols-5 gap-2">
           <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
             <button tabindex="0" role="button" class="btn w-full group-hover/dropdown"
-              :class="(item.PID == problem.PID ? 'btn-active' : '')" @click="goToProblem(item.PID)">
+              :class="(item.PID == problem.PID ? 'btn-active' : '')" @click="contest.goToProblem(item.PID)">
               {{ ConvertTools.Number2Alpha(index + 1) }}
             </button>
             <div tabindex="0"
@@ -52,11 +52,11 @@
         <div class="flex space-x-2">
           <div class="flex badge badge-neutral badge-lg text-sm">
             <stopwatch-start theme="outline" size="16" fill="#fff" />
-            &nbsp;{{ problem.limitTime }} ms
+            &nbsp;{{ problem.LimitTime }} ms
           </div>
           <div class="flex badge badge-neutral badge-lg text-sm">
             <disk theme="outline" size="16" fill="#fff" />
-            &nbsp;{{ problem.limitMemory }} MB
+            &nbsp;{{ problem.LimitMemory }} MB
           </div>
         </div>
         <div class="collapse bg-base-200 collapse-arrow rounded-lg">
@@ -107,7 +107,7 @@
       </div>
     </div>
     <div class="card shadow-lg bg-white Border container h-fit">
-      <div class="flex space-x-2 p-6">
+      <div class="flex space-x-2 p-6 pb-0">
         <button class="btn w-fit" @click="copyMarkdown()">
           <copy theme="outline" size="18" />
           复制 MarkDown
@@ -117,27 +117,23 @@
           下载 PDF
         </button>
       </div>
-      <MdPreview :editorId="id" :modelValue="problem.description" class="p-1 mb-4" />
+      <MdPreview :editorId="id" :modelValue="problem.Description" class="px-1 mb-4" />
     </div>
   </div>
   <dialog id="codeModal" class="modal">
     <div class="modal-box h-[600px]">
       <h3 class="font-bold text-lg pb-6">{{ problem.PID }} {{ problem.Title }}</h3>
       <select class="select select-bordered w-72 max-w-xs text-base" v-model="submit.Lang">
-        <option disabled selecte value="0">代码语言</option>
-        <option value="1">C17 (gcc 12.2.0)</option>
-        <!-- <option value="2"></option> -->
-        <!-- <option value="3">C++11 (g++ 12.2.0)</option> -->
-        <option value="4">C++17 (g++ 12.2.0)</option>
-        <option value="5">Java17 (OpenJDK 17.0.10 64bit)</option>
-        <option value="6">Python3 (3.10.13)</option>
+        <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
+        {{ item.name }} ({{item.compiler }})
+        </option>
       </select>
       <textarea class="textarea textarea-bordered w-full h-[340px] mt-4" placeholder=""
         v-model="submit.Source"></textarea>
       <div class="modal-action">
         <form method="dialog">
           <button class="btn mr-2">暂存并退出</button>
-          <button class="btn" @click="submitCode()">提交代码</button>
+          <button class="btn" @click="problem.submitCode != undefined ? problem.submitCode() : 0">提交代码</button>
         </form>
       </div>
     </div>
@@ -145,19 +141,21 @@
 </template>
 
 <script lang="ts" setup name="Problem">
-import { ref, reactive, onMounted, watch } from 'vue';
-import { type ProblemType } from '@/type/problem';
-import { type ContestType } from '@/type/contest';
-import { type SubmitCodeType } from '@/type/record';
-import '@/utils/axios/request';
-import { Get, Post } from '@/utils/axios/request';
+import { ref, reactive, onMounted } from 'vue';
 import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
-import { Check, Tips, Disk, StopwatchStart, Copy, FilePdf, Editor, Data as ICONdata } from '@icon-park/vue-next'
 import { MdPreview, MdCatalog } from 'md-editor-v3';
 import useClipboard from 'vue-clipboard3'
 import { useUserDataStore } from '@/store/UserData';
+import { submitLanguageOptions } from '@/config';
+
+import { type ProblemType } from '@/type/problem';
+import { type ContestType } from '@/type/contest';
+import { type SubmitCodeType } from '@/type/record';
+import { Check, Tips, Disk, StopwatchStart, Copy, FilePdf, Editor, Data as ICONdata } from '@icon-park/vue-next'
+import { _getProblem, _submitCode } from '@/api/problem';
+import { _getContest } from '@/api/contest';
 
 import 'md-editor-v3/lib/preview.css';
 
@@ -169,7 +167,7 @@ const scrollElement = document.documentElement;
 const { toClipboard } = useClipboard();
 
 let submit = ref<SubmitCodeType>({
-  Lang: 0,
+  Lang: 4,
   Source: '',
 });
 
@@ -180,12 +178,35 @@ let contest = reactive<ContestType>({
   IsPublic: 0,
   Size: 0,
   Title: '',
-  duration: 0,
-  description: '',
-  problems: '',
+  Duration: 0,
+  Description: '',
+  Problems: '',
   UID: '',
   Type: 0,
   Pass: '',
+
+  get() {
+    if (contest.CID == 0) return;
+    _getContest({}, contest.CID)
+      .then((data: any) => {
+        contest.Title = data.Title;
+        contest.BeginTime = data.BeginTime;
+        contest.EndTime = data.EndTime;
+        contest.duration = ConvertTools.TimeInterval(contest.BeginTime, contest.EndTime);
+        contest.CID = data.CID;
+        contest.IsPublic = data.IsPublic;
+        problems = data.Data;
+        push.success({
+          title: '同步成功',
+          message: `已同步竞赛 #${contest.CID}`,
+        })
+      })
+  },
+
+  goToProblem(PID: string) {
+    router.push(`/problem/${PID}/${contest.CID}`);
+    problem.PID = PID;
+  },
 })
 
 let problem = reactive<ProblemType>({
@@ -195,11 +216,11 @@ let problem = reactive<ProblemType>({
   Visible: 0,
   Submit: 0,
   Accepted: 0,
-  description: '',
+  Description: '',
   Origin: 0,
   OriginPID: '',
-  limitMemory: 0,
-  limitTime: 0,
+  LimitMemory: 0,
+  LimitTime: 0,
   SolutionNumber: 0,
   ContentType: 1,
   Input: '',
@@ -207,6 +228,45 @@ let problem = reactive<ProblemType>({
   SampleInput: '',
   SampleOutput: '',
   Hit: '',
+
+  get() {
+    _getProblem({}, problem.PID)
+      .then((data: any) => {
+        problem.Accepted = data.Accepted;
+        problem.ContestType = data.ContestType;
+        problem.Description = data.Description;
+        problem.Title = data.Title;
+        problem.Label = data.Label;
+        problem.LimitMemory = data.LimitMemory;
+        problem.LimitTime = data.LimitTime;
+        problem.ContentType = data.ContentType;
+        problem.SolutionNumber = data.SolutionNumber;
+      })
+  },
+
+  submitCode() {
+    if (submit.value.Source == "") {
+      push.warning({
+        title: '提交失败',
+        message: '代码不能为空',
+      })
+      return;
+    }
+    let params = {
+      PID: problem.PID,
+      UID: userDataStore.UID,
+      CID: contest.CID ? contest.CID : -1,
+      Source: submit.value.Source,
+      Lang: +submit.value.Lang,
+    }
+    _submitCode(params)
+      .then(() => {
+        push.success({
+          title: '提交成功',
+          message: '已提交代码',
+        })
+      })
+  },
 })
 
 type problems = {
@@ -218,46 +278,9 @@ type problems = {
 
 let problems = reactive<Array<problems>>([])
 
-function getProblem() {
-  Get('api/problem/' + problem.PID, {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        problem.Accepted = data.Accepted;
-        problem.ContestType = data.ContestType;
-        problem.description = data.Description;
-        problem.Title = data.Title;
-        problem.Label = data.Label;
-        problem.limitMemory = data.LimitMemory;
-        problem.limitTime = data.LimitTime;
-        problem.ContentType = data.ContentType;
-        problem.SolutionNumber = data.SolutionNumber;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function syncUrl() {
-  if (typeof route.params.PID == 'string') {
-    problem.PID = route.params.PID;
-  }
-  if (route.params.CID != undefined && typeof route.params.CID == 'string') {
-    contest.CID = +route.params.CID;
-    getContest();
-  }
-}
-
 async function copyMarkdown() {
   try {
-    await toClipboard(problem.description);
+    await toClipboard(problem.Description);
     push.success({
       title: '复制成功',
       message: '已复制题面 MarkDown 到剪贴板',
@@ -271,7 +294,7 @@ async function copyMarkdown() {
 
 async function downloadPdf() {
   try {
-    await toClipboard(problem.description);
+    await toClipboard(problem.Description);
     push.success({
       title: '下载成功',
       message: '已保存题面 PDF',
@@ -283,76 +306,19 @@ async function downloadPdf() {
   }
 }
 
-function submitCode() {
-  Post('api/submit/commit/', {
-    PID: problem.PID,
-    UID: userDataStore.UID,
-    CID: contest.CID ? contest.CID : -1,
-    Source: submit.value.Source,
-    Lang: +submit.value.Lang,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        push.success({
-          title: '提交成功',
-          message: '已提交代码',
-        })
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-}
-
-function getContest() {
-  if (contest.CID == 0) {
-    return;
+function syncUrl() {
+  if (typeof route.params.PID == 'string') {
+    problem.PID = route.params.PID;
   }
-  Get('api/contest/' + contest.CID, {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        contest.Title = data.Title;
-        contest.BeginTime = data.BeginTime;
-        contest.EndTime = data.EndTime;
-        contest.duration = ConvertTools.TimeInterval(contest.BeginTime, contest.EndTime);
-        contest.CID = data.CID;
-        contest.IsPublic = data.IsPublic;
-        problems = data.Data;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .then(() => {
-      push.success({
-        title: '同步成功',
-        message: `已同步竞赛 #${contest.CID}`,
-      })
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function goToProblem(PID: string) {
-  router.push(`/problem/${PID}/${contest.CID}`);
-  problem.PID = PID;
-  getProblem();
+  if (route.params.CID != undefined && typeof route.params.CID == 'string') {
+    contest.CID = +route.params.CID;
+    contest.get();
+  }
 }
 
 onMounted(() => {
   syncUrl();
-  getProblem();
+  if (problem.get != undefined) problem.get();
 })
 
 </script>
-
-<style scoped></style>@/utils/globalFunctions

@@ -10,9 +10,9 @@ export interface ContestSimplifiedType {
 }
 
 export interface ContestType extends ContestSimplifiedType {
-  duration: number,       // 时长
-  description: string,    // 描述, 需要改成 Markdown 格式
-  problems: string,       // 题目列表
+  Duration: number,       // 时长
+  Description: string,    // 描述, 需要改成 Markdown 格式
+  Problems: string,       // 题目列表
   Pass: string,           // 密码
   [item: string]: any,    // 其他属性
 }
@@ -31,7 +31,7 @@ export interface ContestRankingProblemType {
   Status: string,              // 状态
   SubmitNumber: number,        // 提交数量
   Time: number,                // 提交时间
-  isPioneer: boolean,          // 一血
+  IsPioneer: boolean,          // 一血
   [item: string]: any,         // 其他属性
 }
 
@@ -48,8 +48,8 @@ export interface ContestRankingUserType {
 
 // XCPC - 比赛排行榜
 export interface ContestRankingType {
-  count: number,                           // 比赛大小
-  ranking: Array<ContestRankingUserType>,  // 排行榜
+  Count: number,                           // 比赛大小
+  Ranking: Array<ContestRankingUserType>,  // 排行榜
   [item: string]: any,                     // 其他属性
 }
 
@@ -74,7 +74,7 @@ export interface IOIContestRankingUserType {
 
 // IOI - 比赛排行榜
 export interface IOIContestRankingType {
-  count: number,                           // 比赛大小
-  ranking: Array<IOIContestRankingUserType>,  // 排行榜
+  Count: number,                           // 比赛大小
+  Ranking: Array<IOIContestRankingUserType>,  // 排行榜
   [item: string]: any,                     // 其他属性
 }

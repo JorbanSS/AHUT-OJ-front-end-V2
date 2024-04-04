@@ -1,20 +1,24 @@
 <template>
-  <div class="card bg-white shadow-lg Border">
-    <div class="text-2xl mx-4 my-4">
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item" placeholder="Search" />
-          </div>
-        </div>
-        <select class="select select-bordered join-item">
-          <option disabled selected>Filter</option>
-          <option>Local</option>
-          <option>CodeForces</option>
-          <option>AtCoder</option>
-        </select>
-        <button class="btn join-item btn-neutral">搜索</button>
-      </div>
+  <div class="card bg-white shadow-lg Border p-6">
+    <div class="join w-fit">
+      <label class="input input-bordered flex items-center gap-2 join-item">
+        <span class="whitespace-nowrap">题号</span>
+        <input type="text" class="grow w-32" v-model="problems.searchInfo.PID" />
+      </label>
+      <button class="btn join-item btn-neutral" @click="problems.goToProblem(problems.searchInfo.PID)">跳转</button>
+    </div>
+    <div class="m-3"></div>
+    <div class="join w-fit">
+      <label class="input input-bordered flex items-center gap-2 join-item">
+        <span class="whitespace-nowrap">标签</span>
+        <input type="text" class="grow w-32" v-model="problems.searchInfo.Label" />
+      </label>
+      <select class="select select-bordered join-item" v-model="problems.searchInfo.PType">
+        <option v-for="item in problemTypeOptions" :value="item.value" :key="item.value">
+          {{ item.label }}
+        </option>
+      </select>
+      <button class="btn join-item btn-neutral" @click="problems.get(true)">搜索</button>
     </div>
   </div>
   <div class="mt-6"></div>
@@ -50,113 +54,82 @@
       </tbody>
     </table>
     <div class="mx-auto py-4 flex space-x-4">
-      <div class="join">
-        <button class="join-item btn" @click="changePageTo(1)">
-          <double-left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePage(-1)">
-          <left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn">
-          {{ problems.page }} / {{ Math.floor(problems.count / problems.limit + 1) }}
-        </button>
-        <button class="join-item btn" @click="changePage(1)">
-          <right theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePageTo(Math.floor(problems.count / problems.limit + 1))">
-          <double-right theme="outline" size="20" />
-        </button>
-      </div>
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1"
-              :max="Math.floor(problems.count / problems.limit + 1)" />
-          </div>
-        </div>
-        <button class="btn join-item" @click="changePageTo(toPage)">跳转页面</button>
-      </div>
+      <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup name="Problems">
-import { ref, reactive, onMounted, watch } from 'vue';
-import { type ProblemsType, type ProblemSimplifiedType } from '@/type/problem';
-import { Get } from '@/utils/axios/request';
-import { Left, Right, DoubleLeft, DoubleRight } from '@icon-park/vue-next';
-import { push } from 'notivue';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRouter } from 'vue-router';
+import { push } from "notivue";
+import { problemTypeOptions } from '@/config';
+
+import Pagination from "@/components/Main/Pagination.vue";
+
+import { type ProblemsType, type ProblemSimplifiedType } from '@/type/problem';
+import { _getProblem, _getProblems } from '@/api/problem';
 
 const router = useRouter();
-
-let toPage = ref();
 
 let problems = reactive<ProblemsType>({
   problems: Array<ProblemSimplifiedType>(),
   count: 0,
   page: 1,
   limit: 20,
-  searchInfo: {},
-  init() {
-    problems.count = 0;
-    problems.page = 1;
-    problems.limit = 20;
-    problems.searchInfo = {
-      PID: undefined,
-      Title: undefined,
-      Source: undefined,
-      Label: undefined,
-    }
-  }
-})
-
-
-function getProblems(showInfo: boolean = false) {
-  Get('api/problem/list', {
-    Page: problems.page - 1,
-    Limit: problems.limit,
+  searchInfo: {
+    PID: '',
+    Label: '',
     PType: '',
-    Label: problems.searchInfo.Label,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+  },
+
+  get(showInfo: boolean = false) {
+    let params = {
+      Page: problems.page - 1,
+      Limit: problems.limit,
+      PType: problems.searchInfo.PType,
+      Label: problems.searchInfo.Label,
+    }
+    _getProblems(params)
+      .then((data: any) => {
         problems.count = data.Count;
         problems.problems = data.Data;
-      }
-    })
-    .then(() => {
-      if (showInfo) {
-        push.success({
-          title: '获取成功',
-          message: `一共获取了 ${problems.count} 道题目`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+      })
+      .then(() => {
+        if (showInfo) {
+          push.success({
+            title: '获取成功',
+            message: `一共获取了 ${problems.count} 道题目`,
+          })
+        }
+      })
+  },
 
-function changePageTo(page: number) {
-  if (1 <= page && page <= Math.floor(problems.count / problems.limit) + 1) problems.page = page;
-}
+  goToProblem(PID: string) {
+    if (PID == "") {
+      push.warning({
+        title: "无法跳转",
+        message: "未填写题号",
+      })
+      return;
+    };
+    router.push('/problem/' + PID);
+  },
 
-function changePage(page: number) {
-  if (problems.page + page >= 1 && problems.page + page <= Math.floor(problems.count / problems.limit) + 1) problems.page += page;
-}
+  changePage(page: number) {
+    if (1 <= page && page <= maxPage.value) problems.page = page;
+  },
+})
 
 onMounted(() => {
-  getProblems(true);
+  problems.get(true);
 })
 
 watch(() => problems.page, () => {
-  getProblems();
+  problems.get();
 })
 
-</script>
+const maxPage = computed(() => Math.floor(problems.count / problems.limit) + 1);
 
-<style scoped></style>
-@/utils/globalFunctions
+</script>
