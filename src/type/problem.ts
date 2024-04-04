@@ -22,7 +22,6 @@ export interface ProblemType extends ProblemSimplifiedType {
   SampleOutput: string,   // 样例输出
   Hit: string,            // 提示
 
-  get?: Function,         // 获取题目
   submitCode?: Function,  // 提交代码
   [item: string]: any,    // 其他属性
 }
@@ -33,7 +32,7 @@ export interface ProblemsType {
   page: number,                             // 页码
   limit: number,                            // 每页数量
   searchInfo: ProblemSearchType,            // 搜索信息
-  get: Function,                            // 获取题目
+
   [item: string]: any,                      // 其他属性
 }
 

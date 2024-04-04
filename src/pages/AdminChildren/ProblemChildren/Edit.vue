@@ -22,13 +22,13 @@
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="editProblem()">
+        <div class="font-bold text-base" @click="problem.editProblem()">
           <edit-one theme="outline" size="18" />
           提交编辑
         </div>
       </li>
       <li>
-        <div class="font-bold text-base hover:text-red-500" @click="deleteProblem()">
+        <div class="font-bold text-base hover:text-red-500" @click="problem.deleteProblem()">
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除题目
         </div>
@@ -134,6 +134,7 @@ import { markdownToolbars } from '@/config';
 const router = useRouter();
 const route = useRoute();
 import 'md-editor-v3/lib/style.css';
+import { _getProblem, _editProblem, _deleteProblems } from '@/api/problem';
 
 let problem = reactive<ProblemType>({
   PID: '',
@@ -142,11 +143,11 @@ let problem = reactive<ProblemType>({
   Visible: 1,
   Submit: 0,
   Accepted: 0,
-  description: '',
+  Description: '',
   Origin: -1,
   OriginPID: '',
-  limitMemory: 128,
-  limitTime: 1000,
+  LimitMemory: 128,
+  LimitTime: 1000,
   SolutionNumber: 0,
   ContentType: 1,
   Input: '',
@@ -154,64 +155,10 @@ let problem = reactive<ProblemType>({
   SampleInput: '',
   SampleOutput: '',
   Hit: '',
-});
 
-function editProblem() {
-  if (problem.Title == '' || problem.description == '') {
-    push.error({
-      title: '信息错误',
-      message: '请填写完整信息',
-    })
-    return;
-  }
-  console.log(3);
-  Post('api/problem/edit/', {
-    ContentType: problem.ContentType,
-    Description: problem.description,
-    Hit: problem.Hit,
-    Label: problem.Label,
-    LimitMemory: problem.limitMemory,
-    LimitTime: problem.limitTime,
-    Origin: problem.Origin,
-    PID: problem.PID,
-    OriginPID: problem.OriginPID,
-    Output: problem.Output,
-    SampleInput: problem.Input,
-    SampleOutput: problem.SampleOutput,
-    Title: problem.Title,
-    Visible: problem.Visible,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        push.success({
-          title: '编辑成功',
-          message: `题目 ID 为 ${problem.PID}`,
-        });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function changeVisible() {
-  problem.Visible = 1 - problem.Visible;
-}
-
-function getProblem() {
-  Get('api/problem/' + problem.PID, {
-    // Pass='',
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+  get() {
+    _getProblem({}, problem.PID)
+      .then((data: any) => {
         problem.Accepted = data.Accepted;
         problem.ContestType = data.ContestType;
         problem.description = data.Description;
@@ -221,47 +168,64 @@ function getProblem() {
         problem.limitTime = data.LimitTime;
         problem.ContentType = data.ContentType;
         problem.SolutionNumber = data.SolutionNumber;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+      })
+  },
 
-function deleteProblem() {
-  Post('api/problem/delete/', {
-    PIDs: [problem.PID],
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+  edit() {
+    if (problem.Title == '' || problem.Description == '') {
+      push.error({
+        title: '信息错误',
+        message: '请填写完整信息',
+      })
+      return;
+    }
+    let params = {
+      ContentType: problem.ContentType,
+      Description: problem.Description,
+      Hit: problem.Hit,
+      Label: problem.Label,
+      LimitMemory: problem.LimitMemory,
+      LimitTime: problem.LimitTime,
+      Origin: problem.Origin,
+      PID: problem.PID,
+      OriginPID: problem.OriginPID,
+      Output: problem.Output,
+      SampleInput: problem.Input,
+      SampleOutput: problem.SampleOutput,
+      Title: problem.Title,
+      Visible: problem.Visible,
+    };
+    _editProblem(params, problem.PID)
+      .then(() => {
+        push.success({
+          title: '编辑成功',
+          message: `题目 ID 为 ${problem.PID}`,
+        });
+      })
+  },
+
+  delete() {
+    let params = {
+      PIDs: [problem.PID],
+    };
+    _deleteProblems(params)
+      .then(() => {
         router.push('/admin/problem');
         push.success({
           title: '删除成功',
           message: `一共删除了 1 个题目`,
         });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-};
+      })
+  },
+});
+
+function changeVisible() {
+  problem.Visible = 1 - problem.Visible;
+}
 
 onMounted(() => {
   problem.PID = route.params.PID as string;
-  getProblem();
+  problem.get();
 })
 
 </script>

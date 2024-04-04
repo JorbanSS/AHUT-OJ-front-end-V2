@@ -80,23 +80,23 @@
     <div v-else>
       <label class="form-control">
         <div class="label">题目描述</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Description"></textarea>
       </label>
       <label class="form-control">
         <div class="label">输入格式</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.input"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Input"></textarea>
       </label>
       <label class="form-control">
         <div class="label">输出格式</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Output"></textarea>
       </label>
       <label class="form-control">
         <div class="label">输入样例</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.SampleInput"></textarea>
       </label>
       <label class="form-control">
         <div class="label">输出样例</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.SampleOutput"></textarea>
       </label>
       <label class="form-control">
         <div class="label">提示</div>
@@ -131,11 +131,11 @@ let problem = reactive<ProblemType>({
   Visible: 1,
   Submit: 0,
   Accepted: 0,
-  description: '',
+  Description: '',
   Origin: -1,
   OriginPID: '',
-  limitMemory: 128,
-  limitTime: 1000,
+  LimitMemory: 128,
+  LimitTime: 1000,
   SolutionNumber: 0,
   ContentType: 1,
   Input: '',
@@ -282,5 +282,3 @@ function uploadProblemImage(files: any) {
 // }
 
 </script>
-
-<style scoped></style>

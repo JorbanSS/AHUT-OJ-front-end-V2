@@ -241,6 +241,9 @@ let problem = reactive<ProblemType>({
         problem.LimitTime = data.LimitTime;
         problem.ContentType = data.ContentType;
         problem.SolutionNumber = data.SolutionNumber;
+        problem.SampleInput = data.SampleInput;
+        problem.SampleOutput = data.SampleOutput;
+        problem.Hit = data.Hit;
       })
   },
 
