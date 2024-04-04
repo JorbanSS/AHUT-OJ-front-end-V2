@@ -129,3 +129,32 @@ export class FileConvertUtils {
     return blob;
   }
 }
+
+
+export class FileUtils {
+  public static uploadProblemData(file: File | Blob, PID: string) {
+    let formData = new FormData();
+    formData.append("file", file as Blob);
+    return new Promise((resolve, reject) => {
+      Post('api/file/' + PID, formData, 1)
+      .then((res: any) => {
+        let data = res.data;
+        if (data.Code == 0) {
+          push.success({
+            title: "上传成功",
+          });
+          resolve(data);
+        } else {
+          push.error({
+            title: `Error: ${data.Code}`,
+            message: `${data.Msg}`,
+          });
+          reject(data);
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+    })
+  }
+}

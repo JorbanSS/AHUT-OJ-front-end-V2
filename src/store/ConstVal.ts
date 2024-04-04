@@ -46,6 +46,11 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
 
       CONTEST_TYPE_ICPC: 1,
       CONTEST_TYPE_OI: 2,
+      
+      // OSS
+      OSS_OBJECT_PRESIGIN: 0,
+      OSS_OBJECT_BASE64: 1,
+      OSS_OBJECT_DOWNLOAD: 2,
 
       // 报错提示信息
       SUBMIT_RESULT_PE:

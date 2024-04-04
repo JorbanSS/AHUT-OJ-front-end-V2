@@ -62,8 +62,9 @@ export function Post(url: string, data: any, content = 0) {
   });
 }
 
-export function Del(url: string, content = 0) {
+export function Del(url: string, data: any, content = 0) {
   return instance.delete(url, {
+    data,
     headers: { "Content-Type": contentType[content] },
   });
 }

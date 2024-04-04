@@ -13,3 +13,16 @@ export interface ImageUploadType {
   blob: Blob | null,            // 图片 Blob
   [item: string]: any,          // 其他属性
 }
+
+// export interface FileUploadType {
+//   name: string,         // 文件名
+//   type: string,         // 文件类型
+//   size: number,         // 文件大小
+//   [item: string]: any,  // 其他属性
+// }
+
+// export interface FilesUploadType {
+//   files: FileUploadType[],  // 文件列表
+//   count: number,            // 文件数量
+//   [item: string]: any,      // 其他属性
+// }

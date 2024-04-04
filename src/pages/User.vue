@@ -17,9 +17,10 @@ import { useRouter, useRoute } from 'vue-router';
 import { type UserType } from '@/type/user';
 import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
-
+import { useConstValStore } from '@/store/ConstVal';
 const router = useRouter();
 const route = useRoute();
+const constValStore = useConstValStore();
 
 let user = reactive<UserType>({
   UID: '',
@@ -86,8 +87,15 @@ let user = reactive<UserType>({
         console.log(err);
       })
   },
+  // getUserHead(){
+  //   Post('api/oss/get',{
+  //     GetObjectType:constValStore.OSS_OBJECT_BASE64,
+  //     BucketName:"ahutoj",
+  //     ObjectName:"UID_"+user.UID+"_head.jpg"
+  //   }
+  //   )
+  // }
 });
-
 function syncUrl() {
   if (typeof route.params.UID == 'string') {
     user.UID = route.params.UID;

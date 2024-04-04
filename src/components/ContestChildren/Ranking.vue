@@ -7,8 +7,8 @@
           <th class="w-32">Name</th>
           <th class="w-32">UID</th>
           <th class="w-14">Solved</th>
-          <th class="w-16">Penalty</th>
-          <th v-for="(item, index1) in props.contest.problems" :key="index1">
+          <th class="w-20">Penalty</th>
+          <th v-for="(item, index1) in props.contest.problems" :key="index1" class="w-16" >
             {{ ConvertTools.Number2Alpha(index1 + 1) }}
           </th>
         </tr>
