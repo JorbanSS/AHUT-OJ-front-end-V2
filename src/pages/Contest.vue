@@ -108,8 +108,8 @@ let contest = reactive<ContestType>({
 
   get() {
     _getContest({}, contest.CID)
-    .then((data: any) => {
-      contest.Title = data.Title;
+      .then((data: any) => {
+        contest.Title = data.Title;
         contest.BeginTime = data.BeginTime;
         contest.EndTime = data.EndTime;
         contest.Duration = ConvertTools.TimeInterval(contest.BeginTime, contest.EndTime);
@@ -118,23 +118,23 @@ let contest = reactive<ContestType>({
         contest.Description = data.Description;
         contest.Problems = data.Data;
         problems = data.Data;
-    })
+      })
   },
 
   cloneToProblemList() {
     let params = {
       CID: contest.CID,
-    UID: userDataStore.UID,
+      UID: userDataStore.UID,
     };
     _cloneToProblemList(params)
-    .then((data: any) => {
-      let LID = data.LID;
+      .then((data: any) => {
+        let LID = data.LID;
         push.success({
           title: '克隆成功',
           message: `已克隆比赛 ${contest.CID}`,
         })
         router.push(`/problemlist/${LID}`);
-    })
+      })
   }
 })
 

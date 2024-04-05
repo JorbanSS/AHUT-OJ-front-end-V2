@@ -51,9 +51,11 @@ import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 import { problemListNavItems } from "@/config";
 import { Bill, Editor } from "@icon-park/vue-next";
+import { useUserDataStore } from '@/store/UserData';
 
-import { _getProblemList, _getProblemListUsersInfo } from '@/api/problemList';
+import { _getProblemList, _getProblemListUsersInfo, _cloneProblemList } from '@/api/problemList';
 
+const userDataStore = useUserDataStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -88,7 +90,19 @@ let problemList = reactive<ProblemListType>({
   },
 
   clone() {
-
+    let params = {
+      LID: problemList.LID,
+      UID: userDataStore.UID,
+    };
+    _cloneProblemList(params)
+    .then((data: any) => {
+        let LID = data.LID;
+        push.success({
+          title: '克隆成功',
+          message: `已克隆题单 ${problemList.LID}`,
+        })
+        router.push(`/problemlist/${LID}`);
+      })
   },
 })
 

@@ -31,3 +31,21 @@ export const _getProblemListUsersInfo = (params: any) => {
     params,
   })
 }
+
+export const _cloneProblemList = (data: any) => {
+  return Axios({
+    url: `training/clone/`,
+    method: "post",
+    data,
+  })
+}
+
+
+export const _deleteProblemLists = (data: any) => {
+  return Axios({
+    url: `training/delete/`,
+    method: "post",
+    data,
+  })
+}
+

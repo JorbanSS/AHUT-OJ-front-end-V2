@@ -78,12 +78,6 @@ const Admin = {
           component: () =>
             import("@/pages/AdminChildren/ProblemChildren/Import.vue"),
         },
-        {
-          name: "ExportProblem",
-          path: "export",
-          component: () =>
-            import("@/pages/AdminChildren/ProblemChildren/Export.vue"),
-        },
       ],
     },
     {

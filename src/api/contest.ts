@@ -16,7 +16,7 @@ export const _getContest = (params: any, CID: number) => {
   })
 }
 
-export const _deleteContest = (data: any) => {
+export const _deleteContests = (data: any) => {
   return Axios({
     url: `contest/delete/`,
     method: "post",

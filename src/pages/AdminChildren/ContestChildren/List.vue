@@ -23,7 +23,7 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base hover:text-red-500" @click="deleteContest()">
+        <div class="font-bold text-base hover:text-red-500" @click="contests.delete()">
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除比赛
         </div>

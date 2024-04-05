@@ -23,7 +23,7 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base hover:text-red-500" @click="deleteProblemList()">
+        <div class="font-bold text-base hover:text-red-500" @click="problemLists.delete()">
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除题单
         </div>
@@ -72,44 +72,20 @@
       </tbody>
     </table>
     <div class="mx-auto py-4 flex space-x-4">
-      <div class="join">
-        <button class="join-item btn" @click="changePageTo(1)">
-          <double-left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePage(-1)">
-          <left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn">
-          {{ problemLists.page }} / {{ Math.floor(problemLists.count / problemLists.limit + 1) }}
-        </button>
-        <button class="join-item btn" @click="changePage(1)">
-          <right theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePageTo(Math.floor(problemLists.count / problemLists.limit + 1))">
-          <double-right theme="outline" size="20" />
-        </button>
-      </div>
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1"
-              :max="Math.floor(problemLists.count / problemLists.limit + 1)" />
-          </div>
-        </div>
-        <button class="btn join-item" @click="toPage ? changePageTo(toPage) : 0">跳转页面</button>
-      </div>
+      <Pagination :page="problemLists.page" :maxPage="maxPage" :changePage="problemLists.changePage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup name="ProblemListsList">
-import { DeleteOne, EditOne, Left, Right, DoubleLeft, DoubleRight, Add, Bill } from '@icon-park/vue-next';
-import { ref, reactive, onMounted, watch } from 'vue';
+import { DeleteOne, EditOne, Add, Bill } from '@icon-park/vue-next';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { push } from 'notivue';
-import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
 import { type ProblemListsType, type ProblemListSimplifiedType } from '@/type/problemList';
 
+import Pagination from "@/components/Main/Pagination.vue";
+import { _getProblemLists, _deleteProblemLists } from '@/api/problemList';
 const router = useRouter();
 
 let toPage = ref<number>();
@@ -141,40 +117,6 @@ function getSelectedList() {
   return list;
 }
 
-function deleteProblemList() {
-  let list = getSelectedList();
-  if (list.length == 0) {
-    push.warning({
-      title: '操作不合法',
-      message: '尚未选择任何题目，无法删除',
-    })
-    return;
-  }
-  Post('training/delete/', {
-    LIDs: list,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        getProblemLists();
-        switchAllSelectedStatus(false);
-        push.success({
-          title: '删除成功',
-          message: `一共删除了 ${list.length} 个比赛`,
-        });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-};
-
 interface ProblemListsListType extends ProblemListSimplifiedType {
   Selected: boolean,
 };
@@ -186,64 +128,56 @@ let problemLists = reactive<ProblemListsType>({
   limit: 20,
   UID: '',
   searchInfo: {},
-  init() {
-    problemLists.count = 0;
-    problemLists.page = 1;
-    problemLists.limit = 20;
-    problemLists.searchInfo = {
-      CID: undefined,
-      Title: undefined,
-      Source: undefined,
-      Label: undefined,
-    }
-  }
-})
 
-
-function getProblemLists(showInfo: boolean = false) {
-  Get('training/list', {
-    Page: problemLists.page - 1,
-    Limit: problemLists.limit,
-    PType: '',
-    Label: problemLists.searchInfo.Label,
-  })
-    .then((res: any) => {
-      let data = res.data;
-
-      if (data.Code == 0) {
+  get(showInfo = false) {
+    let params = {
+      Page: problemLists.page - 1,
+      Limit: problemLists.limit,
+    };
+    _getProblemLists(params)
+      .then((data: any) => {
         problemLists.count = data.Size;
         problemLists.problemLists = data.Data;
         for (let index = 0; index < problemLists.problemLists.length; index++) {
           problemLists.problemLists[index].Selected = false;
         }
-        push.success({
-          title: '获取成功',
-          message: `一共获取了 ${problemLists.count} 个题单`,
-        })
-      }
-    })
-    .then(() => {
-      if (showInfo) {
-        push.success({
-          title: '获取成功',
-          message: `一共获取了 ${problemLists.count} 道题目`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+        if (showInfo) {
+          push.success({
+            title: '获取成功',
+            message: `一共获取了 ${problemLists.count} 个题单`,
+          })
+        }
+      })
+  },
 
-function changePageTo(page: number) {
-  if (1 <= page && page <= Math.floor(problemLists.count / problemLists.limit) + 1) problemLists.page = page;
-  // syncUrl();
-}
+  changePage(page: number) {
+    if (1 <= page && page <= maxPage.value) problemLists.page = page;
+  },
 
-function changePage(page: number) {
-  if (problemLists.page + page >= 1 && problemLists.page + page <= Math.floor(problemLists.count / problemLists.limit) + 1) problemLists.page += page;
-  // syncUrl();
-}
+  delete() {
+    let list = getSelectedList();
+  if (list.length == 0) {
+    push.warning({
+      title: '操作不合法',
+      message: '尚未选择任何题目，无法删除',
+    })
+    return;
+  }
+  let params = {
+    LIDs: list,
+  };
+  _deleteProblemLists(params)
+  .then(() => {
+    problemLists.get();
+        switchAllSelectedStatus(false);
+        push.success({
+          title: '删除成功',
+          message: `一共删除了 ${list.length} 个题单`,
+        });
+  })
+  }
+
+})
 
 function goToEditProblemList() {
   let list = getSelectedList();
@@ -259,15 +193,15 @@ function goToEditProblemList() {
 }
 
 onMounted(() => {
-  getProblemLists();
+  problemLists.get(true);
 })
 
 watch(() => problemLists.page, () => {
-  getProblemLists();
+  problemLists.get();
   allSelected.value = false;
 })
 
+const maxPage = computed(() => Math.floor(problemLists.count / problemLists.limit) + 1);
+
 
 </script>
-
-<style scoped></style>
