@@ -33,8 +33,8 @@ import { OssUtils } from '@/utils/ossUtils';
 
 function test() {
   push.success({
-    title: 'Message sent',
-    message: 'Your message has been successfully sent.'
+    title: '测试',
+    message: '这是一条测试信息'
   })
   OssUtils.getBucketList();
 }

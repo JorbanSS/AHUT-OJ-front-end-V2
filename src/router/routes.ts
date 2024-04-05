@@ -185,6 +185,12 @@ const routes = [
     meta: { title: BaseTitle + "用户" },
   },
   Admin,
+  {
+    name: "Error404",
+    path: '/:pathMatch(.*)',
+    component: () => import("@/pages/Error404.vue"),
+    meta: { title: BaseTitle + "404" },
+  },
 ];
 
 export default routes;
