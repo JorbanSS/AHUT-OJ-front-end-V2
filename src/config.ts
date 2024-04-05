@@ -61,6 +61,14 @@ export const contestNavItems: Array<NavItemType> = [
   { title: "题解 & 讨论", icon: Topic, to: { name: "ContestDiscussion" } },
 ];
 
+export const problemListNavItems: Array<NavItemType> = [
+  { title: "题单说明", icon: Info, to: { name: "ProblemListDescription" } },
+  { title: "题目", icon: DocumentFolder, to: { name: "ProblemListProblems" } },
+  { title: "排名", icon: RankingList, to: { name: "ProblemListRanking" } },
+  { title: "记录", icon: Data, to: { name: "ProblemListRecords" } },
+  { title: "题解 & 讨论", icon: Topic, to: { name: "ProblemListDiscussion" } },
+];
+
 export const adminNavItems: Array<NavItemType> = [
   { title: "题库", icon: DocumentFolder, to: { name: "AdminProblem" } },
   { title: "题单", icon: Bill, to: { name: "AdminProblemList" } },

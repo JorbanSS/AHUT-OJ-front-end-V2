@@ -28,8 +28,36 @@ const routes = [
   {
     name: "ProblemList",
     path: "/problemlist/:LID",
+    redirect: { name: "ProblemListDescription" },
     component: () => import("@/pages/ProblemList.vue"),
     meta: { title: BaseTitle + "题单" },
+    children: [
+      {
+        name: "ProblemListDescription",
+        path: "description",
+        component: () => import("@/components/ProblemListChildren/Description.vue"),
+      },
+      {
+        name: "ProblemListProblems",
+        path: "problems",
+        component: () => import("@/components/ProblemListChildren/Problems.vue"),
+      },
+      {
+        name: "ProblemListRanking",
+        path: "ranking",
+        component: () => import("@/components/ProblemListChildren/Ranking.vue"),
+      },
+      {
+        name: "ProblemListRecords",
+        path: "records",
+        component: () => import("@/components/ProblemListChildren/Records.vue"),
+      },
+      {
+        name: "ProblemListDiscussion",
+        path: "discussion",
+        component: () => import("@/components/ProblemListChildren/Discussion.vue"),
+      },
+    ],
   },
   {
     name: "ProblemLists",

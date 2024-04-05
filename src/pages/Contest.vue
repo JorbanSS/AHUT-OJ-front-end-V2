@@ -12,6 +12,7 @@
       </div>
     </div>
     <div>
+      比赛时间：
       {{ ConvertTools.PrintTime(contest.BeginTime, 1) }}
       ~
       {{ ConvertTools.PrintTime(contest.EndTime, 0) }}

@@ -9,60 +9,50 @@
       </div>
     </div>
     <div>
-      {{ problemList.description }}
-    </div>
-    <div>
       创建于：{{ ConvertTools.PrintTime(problemList.StartTime, 1) }}
     </div>
   </div>
   <div class="m-6"></div>
-  <div class="card shadow-lg Border bg-white">
-    <table class="table table-zebra mb-4">
-      <thead>
-        <tr>
-          <th v-for="(item, index) in ['通过状态', '题号', '题目名称', '通过率', '通过数/提交数']" :key="index">
-            {{ item }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in problems" :key="item.PID" @click="router.push(`/problem/${item.PID}`);"
-          class="cursor-pointer">
-          <td class="font-bold talbe-lg">
-            <div v-if="checkAccepted(item.PID)">
-
-            </div>
-          </td>
-          <th>
-            {{ ConvertTools.Number2Alpha(index + 1) }}
-          </th>
-          <td class="font-bold talbe-lg">
-            <div>{{ item.Ptitle }}</div>
-          </td>
-          <td>
-            <!-- <progress class="progress progress-success w-20" :value="ConvertTools.Percentage(item.ACNum, item.SubmitNum)" max="100"></progress> -->
-          </td>
-          <td>
-            <!-- {{ item.ACNum }}
-            /
-            {{ item.SubmitNum }} -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="flex space-x-2">
+    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
+      <li v-for="item in problemListNavItems" :key="item.title">
+        <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'"
+          :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(11).toLowerCase() }">
+          <component :is="item.icon" theme="outline" size="18" />
+          {{ item.title }}
+        </RouterLink>
+      </li>
+    </ul>
+    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto">
+      <li>
+        <a @click="problemList.clone()">
+          <bill theme="outline" size="18" />
+          克隆
+        </a>
+      </li>
+      <li>
+        <a @click="router.push('/admin/problemlist/edit/' + problemList.LID)">
+          <editor theme="outline" size="18" />
+          题单编辑
+        </a>
+      </li>
+    </ul>
   </div>
+  <div class="m-6"></div>
+  <RouterView :problemList="problemList" :problems="problems">
+  </RouterView>
 </template>
 
 <script lang="ts" setup name="problemList">
 import { ref, reactive, onMounted, watch } from 'vue';
 import { type ProblemListType } from '@/type/problemList';
-import '@/utils/axios/request';
-import { Get } from '@/utils/axios/request';
 import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
+import { problemListNavItems } from "@/config";
+import { Bill, Editor } from "@icon-park/vue-next";
 
-import { _getProblemList,_getProblemUserInfo } from '@/api/problemList';
+import { _getProblemList, _getProblemListUsersInfo } from '@/api/problemList';
 
 const route = useRoute();
 const router = useRouter();
@@ -74,22 +64,19 @@ let problemList = reactive<ProblemListType>({
   IsPublic: 0,
   Size: 0,
   Title: '',
-  duration: 0,
-  description: '',
-  problems: '',
+  Duration: 0,
+  Description: '',
+  Problems: '',
   UID: '',
   Type: 0,
 
   get(showInfo: boolean = false) {
-    let params = {
-      LID: problemList.LID,
-    };
-    _getProblemList(params, problemList.LID)
+    _getProblemList({}, problemList.LID)
       .then((data: any) => {
         problemList.Title = data.Title;
         problemList.StartTime = data.StartTime;
         problemList.LID = data.LID;
-        problemList.description = data.Description;
+        problemList.Description = data.Description;
         problems = data.Data;
         if (showInfo) {
           push.success({
@@ -98,30 +85,10 @@ let problemList = reactive<ProblemListType>({
           })
         }
       })
+  },
 
-      _getProblemUserInfo(params)
-      .then((data: any) => {
-        if (data.Code == 0) {
-          acceptedProblems = data.SolvedPID;
-        }
-        else {
-          push.error({
-            title: `Error: ${data.Code}`,
-            message: `${data.Msg}`,
-          })
-        }
-      })
-      .then(() => {
-        if (showInfo) {
-          push.success({
-            title: '获取成功',
-            message: ``,
-          })
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-      })
+  clone() {
+
   },
 })
 
@@ -136,14 +103,13 @@ let problems = reactive<Array<problems>>([])
 
 let acceptedProblems = reactive<Array<string>>([])
 
-function getproblemList(showInfo: boolean = false) {
-  Get('training/user', {
-    LID: problemList.LID,
-  })
+function getProblemListUsersInfo(showInfo: boolean = false) {
+  let params = {
+    lid: problemList.LID,
+  }
+  _getProblemListUsersInfo(params)
     .then((data: any) => {
       acceptedProblems = data.SolvedPID;
-    })
-    .then(() => {
       if (showInfo) {
         push.success({
           title: '获取成功',
@@ -151,16 +117,11 @@ function getproblemList(showInfo: boolean = false) {
         })
       }
     })
-    .catch((err: any) => {
-      console.log(err);
-    })
 }
 
 function checkAccepted(PID: string) {
   for (let item in acceptedProblems) {
-    if (item == PID) {
-      return true;
-    }
+    if (item == PID) return true;
   }
   return false;
 }
@@ -168,6 +129,9 @@ function checkAccepted(PID: string) {
 onMounted(() => {
   problemList.LID = +route.params.LID;
   problemList.get();
+  getProblemListUsersInfo();
+  console.log(route.path.split('/')[3].toLowerCase());
+  
 })
 
 </script>

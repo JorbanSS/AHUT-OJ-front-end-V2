@@ -59,12 +59,11 @@
 <script lang="ts" setup name="Code">
 import { ref, reactive, onMounted, watch } from 'vue';
 import { type RecordType } from '@/type/record';
-import '@/utils/axios/request'
-import { Get } from '@/utils/axios/request'
-import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useConstValStore } from '@/store/ConstVal';
 import { useRoute } from 'vue-router';
+
+import { _getRecord } from '@/api/record'
 
 const constValStore = useConstValStore();
 const route = useRoute();
@@ -82,32 +81,18 @@ let record = ref<RecordType>({
   CeInfo: '',
   SampleNumber: 0,
   PassSample: 0,
-})
 
-function getRecord() {
-  Get('api/submit/' + record.value.SID, {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+  get() {
+    _getRecord({}, record.value.SID)
+      .then((data: any) => {
         record.value = data;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+      })
+  },
+})
 
 onMounted(() => {
   record.value.SID = +route.params.SID;
-  getRecord();
+  record.value.get();
 })
 
 </script>
-
-<style scoped></style>@/utils/globalFunctions

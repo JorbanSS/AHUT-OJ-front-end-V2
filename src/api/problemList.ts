@@ -24,7 +24,7 @@ export const _getProblemListRanking = (params: any, LID: number) => {
   })
 }
 
-export const _getProblemUserInfo = (params: any) => {
+export const _getProblemListUsersInfo = (params: any) => {
   return Axios({
     url: `training/user`,
     method: "get",
