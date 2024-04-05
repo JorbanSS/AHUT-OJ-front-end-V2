@@ -5,7 +5,7 @@ import VueSetupExtend from 'vite-plugin-vue-setup-extend';
 export default defineConfig({
   plugins: [
     vue(),
-    VueSetupExtend()
+    VueSetupExtend(),
   ],
   server: {
     // host: '0.0.0.0',
