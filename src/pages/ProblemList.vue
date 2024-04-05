@@ -62,7 +62,7 @@ import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 
-import { _getProblemList } from '@/api/problemList';
+import { _getProblemList,_getProblemUserInfo } from '@/api/problemList';
 
 const route = useRoute();
 const router = useRouter();
@@ -82,7 +82,7 @@ let problemList = reactive<ProblemListType>({
 
   get(showInfo: boolean = false) {
     let params = {
-
+      LID: problemList.LID,
     };
     _getProblemList(params, problemList.LID)
       .then((data: any) => {
@@ -99,11 +99,8 @@ let problemList = reactive<ProblemListType>({
         }
       })
 
-    Get('api/training/user', {
-      LID: problemList.LID,
-    })
-      .then((res: any) => {
-        let data = res.data;
+      _getProblemUserInfo(params)
+      .then((data: any) => {
         if (data.Code == 0) {
           acceptedProblems = data.SolvedPID;
         }
@@ -140,20 +137,11 @@ let problems = reactive<Array<problems>>([])
 let acceptedProblems = reactive<Array<string>>([])
 
 function getproblemList(showInfo: boolean = false) {
-  Get('api/training/user', {
+  Get('training/user', {
     LID: problemList.LID,
   })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        acceptedProblems = data.SolvedPID;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
+    .then((data: any) => {
+      acceptedProblems = data.SolvedPID;
     })
     .then(() => {
       if (showInfo) {
