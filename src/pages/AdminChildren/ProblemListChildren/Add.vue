@@ -16,7 +16,7 @@
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="addContest()">
+        <div class="font-bold text-base" @click="problemList.add()">
           <add theme="outline" size="18" />
           确认新增
         </div>
@@ -26,7 +26,7 @@
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
     <label class="input input-bordered flex items-center gap-2 w-[584px]">
       标题
-      <input type="text" class="grow" placeholder="" v-model="problemList.Title">
+      <input type="text" class="grow" v-model="problemList.Title">
     </label>
     <!-- <div class="form-control w-72" @change="changePublic()">
       <label class="label cursor-pointer">
@@ -39,8 +39,8 @@
   <div class="card bg-white shadow-lg Border max-w-5xl mx-auto pb-6">
     <div class="text-2xl px-6 pt-6">
       <div class="join">
-        <input class="input input-bordered join-item" placeholder="题号" v-model="PID" />
-        <button class="btn join-item btn-neutral" @click="addProblem()">添加题目</button>
+        <input class="input input-bordered join-item" placeholder="题号" v-model="problem.PID" />
+        <button class="btn join-item btn-neutral" @click="problem.add()">添加题目</button>
       </div>
     </div>
     <div class="mb-4"></div>
@@ -65,7 +65,7 @@
               {{ item.Title }}
             </td>
             <td class="w-96">
-              <button class="btn btn-neutral btn-sm" @click="deleteProblem(index)">
+              <button class="btn btn-neutral btn-sm" @click="problem.delete(index)">
                 <delete-one theme="outline" size="16" />
                 删除
               </button>
@@ -78,7 +78,7 @@
   <div class="mt-6"></div>
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
     <span class="text-base">题单描述（含题单简介、题目说明、每题的出题人）</span>
-    <MdEditor v-model="problemList.description" :height="500" />
+    <MdEditor v-model="problemList.Description" :height="500" />
   </div>
 </template>
 
@@ -88,140 +88,108 @@ import { type ProblemListType } from '@/type/problemList';
 import { reactive, ref } from 'vue';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';
-import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
 import { useUserDataStore } from '@/store/UserData';
 import { VueDraggable } from 'vue-draggable-plus'
 import 'md-editor-v3/lib/style.css';
 import { ConvertTools } from '@/utils/globalFunctions';
 
+import { _addProblemList } from "@/api/problemList";
+import { _getProblem } from '@/api/problem';
 const userDataStore = useUserDataStore();
 const router = useRouter();
 
-let PID = ref<string>();
-
-interface List {
+interface ProblemType {
   PID: string,
   Title: string,
+  [item: string]: any,
 };
 
-const list = ref<Array<List>>([]);
-
-let problemList = reactive<ProblemListType>({
-  problems: '',
-  LID: 0,
-  // IsPublic: 1,
-  Size: 0,
+let problem = reactive<ProblemType>({
+  PID: '',
   Title: '',
-  description: '',
-  UID: '',
-  Type: 1,
-  // Pass: '',
-})
 
-function addProblem() {
-  if (PID.value == null) {
-    push.warning({
-      title: '信息错误',
-      message: '未输入题号',
-    });
-    return;
-  }
-  for (let item in list.value) {
-    if (list.value[item].PID == PID.value) {
+  add() {
+    if (this.PID == '') {
       push.warning({
         title: '信息错误',
-        message: '该题目已添加，不可重复添加',
+        message: '未输入题号',
       });
       return;
     }
-  }
-  Get('problem/' + PID.value, {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        list.value.push({
-          PID: data.PID,
-          Title: data.Title,
-        })
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
+    for (let item in list.value) {
+      if (list.value[item].PID == this.PID) {
+        push.warning({
+          title: '信息错误',
+          message: '该题目已添加，不可重复添加',
         });
+        return;
       }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+    }
+    _getProblem({}, this.PID)
+      .then((data: any) => {
+        this.Title = data.Title;
+        list.value.push({
+          PID: this.PID,
+          Title: this.Title,
+        });
+      })
+  },
 
-function deleteProblem(index: number) {
-  push.success({
-    title: '删除成功',
-    message: `已成功删除题目 ${list.value[index].PID}`,
-  });
-  list.value.splice(index, 1);
-}
-
-function addContest() {
-  if (problemList.Title == '' || problemList.description == '') {
-    push.error({
-      title: '信息错误',
-      message: '请填写完整信息',
+  delete(index: number) {
+    push.success({
+      title: '删除成功',
+      message: `已成功删除题目 ${list.value[index].PID}`,
     });
-    return;
-  }
-  console.log(list.value.length);
-  
-  if (list.value.length == 0) {
-    push.error({
-      title: '信息错误',
-      message: '还未添加题目',
-    });
-    return;
-  }
+    list.value.splice(index, 1);
+  },
+})
 
-  let listStr = '';
-  for (let i = 0; i < list.value.length; i++) {
-    if (i) listStr += ',';
-    listStr += list.value[i].PID;
-  }
-  Post('training/add/', {
-    IsPublic: problemList.IsPublic,
-    Description: problemList.description,
-    Title: problemList.Title,
-    // Pass: problemList.Pass,
-    Problems: listStr,
-    // Type: +problemList.Type,
-    UID: userDataStore.UID,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+let list = ref<Array<ProblemType>>([]);
+
+let problemList = reactive<ProblemListType>({
+  Problems: '',
+  LID: 0,
+  Size: 0,
+  Title: '',
+  Description: '',
+  UID: '',
+  Type: 1,
+
+  add() {
+    if (problemList.Title == '' || problemList.Description == '') {
+      push.error({
+        title: '信息错误',
+        message: '请填写完整信息',
+      });
+      return;
+    }
+    if (list.value.length == 0) {
+      push.error({
+        title: '信息错误',
+        message: '还未添加题目',
+      });
+      return;
+    }
+    let listStr = '';
+    for (let i = 0; i < list.value.length; i++) {
+      if (i) listStr += ',';
+      listStr += list.value[i].PID;
+    }
+    let params = {
+      Description: problemList.description,
+      Title: problemList.Title,
+      Problems: listStr,
+    }
+    _addProblemList(params)
+      .then((data: any) => {
         problemList.LID = data.LID;
         push.success({
           title: '新增成功',
-          message: `题单 ID 为 ${data.LID}`,
+          message: `题单号为 ${data.LID}`,
         });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function changePublic() {
-  problemList.IsPublic = 1 - problemList.IsPublic;
-}
+      })
+  },
+})
 
 </script>
-
-<style scoped></style>@/utils/globalFunctions

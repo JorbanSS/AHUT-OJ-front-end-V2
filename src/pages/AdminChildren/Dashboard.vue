@@ -124,6 +124,7 @@ import { ImageUtils } from '@/utils/fileUtils';
 
 import 'md-editor-v3/lib/style.css';
 import { _editHomeNotice, _getOjStastics, _getUpdateLogs, _getHomeNotice } from '@/api/oj';
+import { _rejudge } from '@/api/record';
 
 const bannerImageInput = ref<File | null>(null);
 
@@ -146,24 +147,12 @@ let rejudgeInfo = reactive<RejudgeInfoType>({
     if (rejudgeInfo.UID) params.UID = rejudgeInfo.UID;
     if (rejudgeInfo.PID) params.PID = rejudgeInfo.PID;
     if (rejudgeInfo.CID) params.CID = rejudgeInfo.CID;
-    Post('submit/rejudge/', params)
-      .then((res: any) => {
-        let data = res.data;
-        if (data.Code == 0) {
-          push.success({
-            title: '操作成功',
-            message: '已开始重新判题',
-          });
-        }
-        else {
-          push.error({
-            title: `Error: ${data.Code}`,
-            message: `${data.Msg}`,
-          })
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
+    _rejudge(params)
+      .then(() => {
+        push.success({
+          title: '操作成功',
+          message: '已开始重新判题',
+        });
       })
   },
 });
@@ -262,7 +251,6 @@ let ojStastics = reactive<OjStasticsType>({
   TotalSubmit: 0,
   TodaySubmit: 0,
   ProblemNumber: 0,
-
   get() {
     _getOjStastics({})
       .then((data: any) => {
@@ -283,5 +271,3 @@ onMounted(() => {
 })
 
 </script>
-
-<style scoped></style>

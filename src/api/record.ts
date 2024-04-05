@@ -7,6 +7,7 @@ export const _getRecords = (params: any) => {
     params,
   });
 };
+
 export const _getRecord = (params: any, SID: number) => {
   return Axios({
     url: `submit/${SID}`,
@@ -14,3 +15,12 @@ export const _getRecord = (params: any, SID: number) => {
     params,
   });
 };
+
+export const _rejudge = (data: any) => {
+  return Axios({
+    url: `submit/rejudge/`,
+    method: "post",
+    data,
+  });
+};
+

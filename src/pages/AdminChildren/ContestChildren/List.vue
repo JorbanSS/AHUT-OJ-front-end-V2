@@ -146,7 +146,7 @@ let contests = reactive<ContestsType>({
       return;
     }
     let params = {
-      LIDs: list,
+      CIDs: list,
     };
     _deleteContests(params)
       .then(() => {

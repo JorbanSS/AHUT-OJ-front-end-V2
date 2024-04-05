@@ -24,6 +24,22 @@ export const _deleteContests = (data: any) => {
   })
 }
 
+export const _addContest = (data: any) => {
+  return Axios({
+    url: `contest/add/`,
+    method: "post",
+    data,
+  })
+}
+
+export const _editContest = (data: any) => {
+  return Axios({
+    url: `contest/edit/`,
+    method: "post",
+    data,
+  })
+}
+
 export const _getContestRanking = (params: any, CID: number) => {
   return Axios({
     url: `contest/${CID}/rank`,

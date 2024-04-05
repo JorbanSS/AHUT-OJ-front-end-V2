@@ -22,7 +22,7 @@
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="editContest()">
+        <div class="font-bold text-base" @click="contest.edit()">
           <edit-one theme="outline" size="18" />
           提交编辑
         </div>
@@ -49,7 +49,7 @@
       <!-- <option value="2">AtCoder</option>
         <option value="3">Virtual Judge</option> -->
     </select>
-    <div class="form-control w-72" @change="changePublic()">
+    <div class="form-control w-72" @change="contest.changePublic()">
       <label class="label cursor-pointer">
         <span class="label-text text-base">可见性</span>
         <input type="checkbox" :checked="contest.IsPublic == 1" class="checkbox" />
@@ -60,8 +60,8 @@
   <div class="card bg-white shadow-lg Border max-w-5xl mx-auto pb-6">
     <div class="text-2xl px-6 pt-6">
       <div class="join">
-        <input class="input input-bordered join-item" placeholder="题号" v-model="PID" />
-        <button class="btn join-item btn-neutral" @click="addProblem()">添加题目</button>
+        <input class="input input-bordered join-item" placeholder="题号" v-model="problem.PID" />
+        <button class="btn join-item btn-neutral" @click="problem.add()">添加题目</button>
       </div>
     </div>
     <div class="mb-4"></div>
@@ -86,7 +86,7 @@
               {{ item.Title }}
             </td>
             <td class="w-96">
-              <button class="btn btn-neutral btn-sm" @click="deleteProblem(index)">
+              <button class="btn btn-neutral btn-sm" @click="problem.delete(index)">
                 <delete-one theme="outline" size="16" />
                 删除
               </button>
@@ -99,7 +99,7 @@
   <div class="mt-6"></div>
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
     <span class="text-base">比赛描述（含比赛简介、题目说明、每题的出题人）</span>
-    <MdEditor v-model="contest.description" :height="500" />
+    <MdEditor v-model="contest.Description" :height="500" />
   </div>
 </template>
 
@@ -116,152 +116,87 @@ import { VueDraggable } from 'vue-draggable-plus'
 import 'md-editor-v3/lib/style.css';
 import { ConvertTools } from '@/utils/globalFunctions';
 
+import { _getProblem } from "@/api/problem";
+import { _getContest, _editContest } from "@/api/contest";
+
 const userDataStore = useUserDataStore();
 const router = useRouter();
 const route = useRoute();
 
 let beginTime = ref<string>();
 let endTime = ref<string>();
-let PID = ref<string>();
 
-interface List {
+interface ProblemType {
   PID: string,
   Title: string,
+  [item: string]: any,
 };
 
-const list = ref<Array<List>>([]);
+let problem = reactive<ProblemType>({
+  PID: '',
+  Title: '',
+
+  add() {
+    if (this.PID == '') {
+      push.warning({
+        title: '信息错误',
+        message: '未输入题号',
+      });
+      return;
+    }
+    for (let item in list.value) {
+      if (list.value[item].PID == this.PID) {
+        push.warning({
+          title: '信息错误',
+          message: '该题目已添加，不可重复添加',
+        });
+        return;
+      }
+    }
+    _getProblem({}, this.PID)
+      .then((data: any) => {
+        this.Title = data.Title;
+        list.value.push({
+          PID: this.PID,
+          Title: this.Title,
+        });
+      })
+  },
+
+  delete(index: number) {
+    push.success({
+      title: '删除成功',
+      message: `已成功删除题目 ${list.value[index].PID}`,
+    });
+    list.value.splice(index, 1);
+  },
+})
+
+let list = ref<Array<ProblemType>>([]);
 
 let contest = reactive<ContestType>({
-  problems: '',
+  Problems: '',
   CID: 0,
   BeginTime: 0,
   EndTime: 0,
   IsPublic: 1,
   Size: 0,
   Title: '',
-  duration: 0,
-  description: '',
+  Duration: 0,
+  Description: '',
   contests: '',
   UID: '',
   Type: 1,
   Pass: '',
-})
 
-function addProblem() {
-  if (PID.value == null) {
-    push.warning({
-      title: '信息错误',
-      message: '未输入题号',
-    });
-    return;
-  }
-  for (let item in list.value) {
-    if (list.value[item].PID == PID.value) {
-      push.warning({
-        title: '信息错误',
-        message: '该题目已添加，不可重复添加',
-      });
-      return;
-    }
-  }
-  Get('problem/' + PID.value, {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        list.value.push({
-          PID: data.PID,
-          Title: data.Title,
-        })
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        });
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function deleteProblem(index: number) {
-  push.success({
-    title: '删除成功',
-    message: `已成功删除题目 ${list.value[index].PID}`,
-  });
-  list.value.splice(index, 1);
-}
-
-function editContest() {
-  if (contest.Title == '' || contest.description == '' || beginTime.value == undefined || endTime.value == undefined) {
-    push.error({
-      title: '信息错误',
-      message: '请填写完整信息',
-    });
-    return;
-  }
-  contest.BeginTime = new Date(beginTime.value).getTime();
-  contest.EndTime = new Date(endTime.value).getTime();
-  if (contest.BeginTime >= contest.EndTime) {
-    push.error({
-      title: '信息错误',
-      message: '终止时间不能早于或等于起始时间',
-    });
-    return;
-  }
-  let listStr = '';
-  for (let i = 0; i < list.value.length; i++) {
-    if (i) listStr += ',';
-    listStr += list.value[i].PID;
-  }
-  Post('contest/edit/', {
-    BeginTime: contest.BeginTime,
-    EndTime: contest.EndTime,
-    IsPublic: contest.IsPublic,
-    Desciption: contest.description,
-    Title: contest.Title,
-    Pass: contest.Pass,
-    Problems: listStr,
-    Type: +contest.Type,
-    UID: userDataStore.UID,
-    CID: contest.CID,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        // contest.CID = data.CID;
-        push.success({
-          title: '编辑成功',
-          message: `比赛 ID 为 ${contest.CID}`,
-        });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function changePublic() {
-  contest.IsPublic = 1 - contest.IsPublic;
-}
-
-function getContest() {
-  Get('contest/' + contest.CID, {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+  get() {
+    _getContest({}, contest.CID)
+      .then((data: any) => {
         contest.BeginTime = data.BeginTime;
         contest.EndTime = data.EndTime;
         contest.IsPublic = data.IsPublic;
         contest.Title = data.Title;
-        contest.description = data.Description;
+        contest.Description = data.Description;
         contest.CID = data.CID;
         contest.UID = data.UID;
         contest.Type = data.Type;
@@ -276,25 +211,56 @@ function getContest() {
             Title: data.Data[i].Title,
           });
         }
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
+      })
+  },
+
+  edit() {
+    if (contest.Title == '' || contest.Description == '' || beginTime.value == undefined || endTime.value == undefined) {
+      push.error({
+        title: '信息错误',
+        message: '请填写完整信息',
+      });
+      return;
+    }
+    contest.BeginTime = new Date(beginTime.value).getTime();
+    contest.EndTime = new Date(endTime.value).getTime();
+    if (contest.BeginTime >= contest.EndTime) {
+      push.error({
+        title: '信息错误',
+        message: '终止时间不能早于或等于起始时间',
+      });
+      return;
+    }
+    let listStr = '';
+    for (let i = 0; i < list.value.length; i++) {
+      if (i) listStr += ',';
+      listStr += list.value[i].PID;
+    }
+    let params = {
+      BeginTime: contest.BeginTime,
+      EndTime: contest.EndTime,
+      IsPublic: contest.IsPublic,
+      Desciption: contest.Description,
+      Title: contest.Title,
+      Pass: contest.Pass,
+      Problems: listStr,
+      Type: +contest.Type,
+      UID: userDataStore.UID,
+      CID: contest.CID,
+    };
+    _editContest(params)
+      .then(() => {
+        push.success({
+          title: '编辑成功',
+          message: `比赛 ID 为 ${contest.CID}`,
         });
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+      })
+  }
+})
 
 onMounted(() => {
   contest.CID = +route.params.CID;
-  getContest();
+  contest.get();
 })
 
-
 </script>
-
-<style scoped></style>@/utils/globalFunctions

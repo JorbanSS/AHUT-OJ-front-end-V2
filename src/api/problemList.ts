@@ -49,3 +49,18 @@ export const _deleteProblemLists = (data: any) => {
   })
 }
 
+export const _addProblemList = (data: any) => {
+  return Axios({
+    url: `training/add/`,
+    method: "post",
+    data,
+  })
+}
+
+export const _editProblemList = (data: any) => {
+  return Axios({
+    url: `training/edit/`,
+    method: "post",
+    data,
+  })
+}

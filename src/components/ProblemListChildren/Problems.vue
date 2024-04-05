@@ -75,7 +75,7 @@ let props = withDefaults(defineProps<propsType>(), {
 });
 
 function goToProblem(PID: string) {
-  router.push(`/problem/${PID}/${props.problemList.LID}`);
+  router.push(`/problem/${PID}`);
 }
 
 </script>
