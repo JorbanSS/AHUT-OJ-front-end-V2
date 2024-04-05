@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-white Border shadow-lg overflow-x-auto" style="height: calc(100vh - 124px - 48px)">
+  <div class="card bg-white Border shadow-lg overflow-x-auto" style="max-height: calc(100vh - 124px - 48px)">
     <table class="table table-zebra table-pin-rows table-pin-cols table-fixed text-center">
       <thead>
         <tr>

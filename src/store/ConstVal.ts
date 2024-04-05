@@ -17,13 +17,13 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
       ListAdminBit: 0b0100_0000,
       SuperAdminBit: 0b1000_0000,
 
+      // 代码语言
       SUBMIT_LANG_C: 1,
       // SUBMIT_LANG_CPP: 2,
       // SUBMIT_LANG_CPP11: 3,
       SUBMIT_LANG_CPP17: 4,
       SUBMIT_LANG_JAVA: 5,
       SUBMIT_LANG_PYTHON3: 6,
-
       SUBMIT_LANG: ["", "C", "C++", "C++11", "C++17", "Java", "Python3"],
 
       // 题目来源
@@ -40,10 +40,14 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
       PROBLEM_VISIBLE: 1,
       PROBLEM_UNVISIBLE: -1,
 
-      // 竞赛
+      // 题面类型
+      PROBLEM_TYPE_PLAIN_TEXT: -1,
+      PROBLEM_TYPE_MARKDOWN: 1,
+
+      // 比赛 - 是否公开
       CONTEST_PUBLIC: 1,
       CONTEST_NOTPUBLIC: -1,
-
+      // 比赛 - 赛制
       CONTEST_TYPE_ICPC: 1,
       CONTEST_TYPE_OI: 2,
       
@@ -52,15 +56,21 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
       OSS_OBJECT_BASE64: 1,
       OSS_OBJECT_DOWNLOAD: 2,
 
+      // OSS 浏览模式
+      OSS_BROWSER_MODE_FOLDER: 0,
+      OSS_BROWSER_MODE_FILE: 1,
+
+      // 排行榜背景色
+      RANKING_COLOR_NOT_AC: "#FFD0D0",
+      RANKING_COLOR_AC: "#E1FFB5",
+      RANKING_COLOR_FIRST_AC: "#3DB03D",
+
       // 报错提示信息
       SUBMIT_RESULT_PE:
         "你的输出结果也许是正确的，但是格式存在问题，请检查输出结果的换行情况\n\n例如 C++: cout << a; 和 cout << a << endl;\n\n或者检查输出结果的空个间隔情况、中英文格式等",
       SUBMIT_RESULT_FAILED:
         "判题出现了问题，也许你的代码最终运行结果是正确的，请尝试单击下方重判按钮，尝试重新判题。",
 
-      RANKING_COLOR_NOT_AC: "#FFD0D0",
-      RANKING_COLOR_AC: "#E1FFB5",
-      RANKING_COLOR_FIRST_AC: "#3DB03D",
     };
   },
   getters: {},

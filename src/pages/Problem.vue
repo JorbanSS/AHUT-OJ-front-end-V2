@@ -1,7 +1,7 @@
 <template>
   <div class="flex space-x-6">
     <div class="space-y-6">
-      <div class="card shadow-lg Border bg-white p-6 space-y-2" v-if="contest.CID">
+      <div class="card shadow-lg Border bg-white p-6 space-y-2 w-72" v-if="contest.CID">
         <div class="text-lg space-x-2">
           <span>
             #{{ contest.CID }}
@@ -10,7 +10,7 @@
             {{ contest.Title }}
           </span>
         </div>
-        <div class="grid grid-cols-5 gap-2">
+        <div class="grid grid-cols-5 gap-2 w-60">
           <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
             <button tabindex="0" role="button" class="btn w-full group-hover/dropdown"
               :class="(item.PID == problem.PID ? 'btn-active' : '')" @click="contest.goToProblem(item.PID)">
@@ -40,7 +40,7 @@
           </div>
         </div>
       </div>
-      <div class="card shadow-lg bg-white Border p-6 container w-80 h-fit flex space-y-2">
+      <div class="card shadow-lg bg-white Border p-6 container w-72 h-fit flex space-y-2">
         <div class="text-lg space-x-2">
           <span>
             {{ problem.PID }}
@@ -49,12 +49,12 @@
             {{ problem.Title }}
           </span>
         </div>
-        <div class="flex space-x-2">
-          <div class="flex badge badge-neutral badge-lg text-sm">
+        <div class="grid grid-cols-2 gap-2">
+          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-7">
             <stopwatch-start theme="outline" size="16" fill="#fff" />
             &nbsp;{{ problem.LimitTime }} ms
           </div>
-          <div class="flex badge badge-neutral badge-lg text-sm">
+          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-7">
             <disk theme="outline" size="16" fill="#fff" />
             &nbsp;{{ problem.LimitMemory }} MB
           </div>
@@ -73,13 +73,13 @@
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button class="btn" @click="router.push('/admin/problem/edit/' + problem.PID)">
-            <editor theme="outline" size="18" />
+            <!-- <editor theme="outline" size="18" /> -->
             <div class="text-base">
               题目编辑
             </div>
           </button>
           <button class="btn" @click="router.push('/admin/problem/data/' + problem.PID)">
-            <ICONdata theme="outline" size="18" />
+            <!-- <ICONdata theme="outline" size="18" /> -->
             <div class="text-base">
               数据编辑
             </div>
@@ -99,7 +99,7 @@
           </div>
         </button>
       </div>
-      <div class="card shadow-lg bg-white Border p-6">
+      <div class="card shadow-lg bg-white Border p-6 w-72" v-if="problem.ContentType == constValStore.PROBLEM_TYPE_MARKDOWN" >
         <div class="font-bold text-lg pb-2">
           大纲
         </div>
@@ -117,7 +117,24 @@
           下载 PDF
         </button>
       </div>
-      <MdPreview :editorId="id" :modelValue="problem.Description" class="px-1 mb-4" />
+      <p class="text-xl font-bold mt-6 p-6" v-if="problem.ContentType == constValStore.PROBLEM_TYPE_PLAIN_TEXT" >题目描述</p>
+      <div>
+        <MdPreview :editorId="id" :modelValue="problem.Description" class="px-1 mb-4" />
+      </div>
+      <div v-if="problem.ContentType == constValStore.PROBLEM_TYPE_PLAIN_TEXT" class="px-6 pb-6" >
+        <p class="text-xl font-bold mb-2">输入描述</p>
+        <p class="">{{ problem.Input }}</p>
+        <p class="text-xl font-bold mt-6 mb-2">输出描述</p>
+        <p class="">{{ problem.Output }}</p>
+        <p class="text-xl font-bold mt-6 mb-2">输入样例</p>
+        <div class="mockup-code px-6">
+          <pre><code><br />{{ problem.SampleInput }}</code></pre>
+        </div>
+        <p class="text-xl font-bold mt-6 mb-2">输出样例</p>
+        <div class="mockup-code px-6">
+          <pre><code><br />{{ problem.SampleOutput }}</code></pre>
+        </div>
+      </div>
     </div>
   </div>
   <dialog id="codeModal" class="modal">
@@ -125,7 +142,7 @@
       <h3 class="font-bold text-lg pb-6">{{ problem.PID }} {{ problem.Title }}</h3>
       <select class="select select-bordered w-72 max-w-xs text-base" v-model="submit.Lang">
         <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
-        {{ item.name }} ({{item.compiler }})
+          {{ item.name }} ({{ item.compiler }})
         </option>
       </select>
       <textarea class="textarea textarea-bordered w-full h-[340px] mt-4" placeholder=""
@@ -149,6 +166,7 @@ import { MdPreview, MdCatalog } from 'md-editor-v3';
 import useClipboard from 'vue-clipboard3'
 import { useUserDataStore } from '@/store/UserData';
 import { submitLanguageOptions } from '@/config';
+import { useConstValStore } from '@/store/ConstVal';
 
 import { type ProblemType } from '@/type/problem';
 import { type ContestType } from '@/type/contest';
@@ -160,6 +178,7 @@ import { _getContest } from '@/api/contest';
 import 'md-editor-v3/lib/preview.css';
 
 const userDataStore = useUserDataStore();
+const constValStore = useConstValStore();
 const router = useRouter();
 const route = useRoute();
 const id = 'preview-only';
@@ -192,7 +211,7 @@ let contest = reactive<ContestType>({
         contest.Title = data.Title;
         contest.BeginTime = data.BeginTime;
         contest.EndTime = data.EndTime;
-        contest.duration = ConvertTools.TimeInterval(contest.BeginTime, contest.EndTime);
+        contest.Duration = ConvertTools.TimeInterval(contest.BeginTime, contest.EndTime);
         contest.CID = data.CID;
         contest.IsPublic = data.IsPublic;
         problems = data.Data;
@@ -243,6 +262,8 @@ let problem = reactive<ProblemType>({
         problem.SolutionNumber = data.SolutionNumber;
         problem.SampleInput = data.SampleInput;
         problem.SampleOutput = data.SampleOutput;
+        problem.Input = data.Input;
+        problem.Output = data.Output;
         problem.Hit = data.Hit;
       })
   },
