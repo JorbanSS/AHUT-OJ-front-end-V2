@@ -16,7 +16,7 @@
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="addProblem()">
+        <div class="font-bold text-base" @click="problem.add()">
           <add theme="outline" size="18" />
           确认新增
         </div>
@@ -31,13 +31,13 @@
     <div class="flex space-x-2">
       <label class="input input-bordered flex items-center gap-2 w-72">
         <stopwatch-start theme="outline" size="22" />
-        <input type="number" class="grow" placeholder="1000" v-model="problem.limitTime" min="500" max="10000"
+        <input type="number" class="grow" placeholder="1000" v-model="problem.LimitTime" min="500" max="10000"
           step="500" />
         <span>ms</span>
       </label>
       <label class="input input-bordered flex items-center gap-2 w-72">
         <disk theme="outline" size="19" class="ml-0.5 :mr-1.5" />
-        <input type="number" class="grow" placeholder="128" v-model="problem.limitMemory" min="64" max="1024"
+        <input type="number" class="grow" placeholder="128" v-model="problem.LimitMemory" min="64" max="1024"
           step="64" />
         <span>MB</span>
       </label>
@@ -74,7 +74,7 @@
       <option value="1">MarkDown</option>
     </select>
     <div v-if="problem.ContentType == 1">
-      <MdEditor v-model="problem.description" :height="500" :toolbars="markdownToolbars"
+      <MdEditor v-model="problem.Description" :height="500" :toolbars="markdownToolbars"
         @onUploadImg="uploadProblemImage" />
     </div>
     <div v-else>
@@ -100,7 +100,7 @@
       </label>
       <label class="form-control">
         <div class="label">提示</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Hit"></textarea>
       </label>
     </div>
   </div>
@@ -113,12 +113,11 @@ import { type ImageUploadType } from '@/type/common';
 import { ref, reactive } from 'vue';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';
-import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
 import { markdownToolbars } from '@/config';
 import { ImageUtils } from '@/utils/fileUtils';
-import { host } from '@/utils/axios/request';
 
+import { _addProblem } from "@/api/problem"
 import 'md-editor-v3/lib/style.css';
 
 const problemImageInput = ref<File | null>(null);
@@ -143,34 +142,33 @@ let problem = reactive<ProblemType>({
   SampleInput: '',
   SampleOutput: '',
   Hit: '',
-});
 
-function addProblem() {
-  if (problem.Title == '' || problem.description == '') {
-    push.error({
-      title: '信息错误',
-      message: '请填写完整信息',
-    })
-    return;
-  }
-  Post('api/problem/add/', {
-    ContentType: problem.ContentType,
-    Description: problem.description,
-    Hit: problem.Hit,
-    Label: problem.Label,
-    LimitMemory: problem.limitMemory,
-    LimitTime: problem.limitTime,
-    Origin: problem.Origin,
-    OriginPID: problem.OriginPID,
-    Output: problem.Output,
-    SampleInput: problem.Input,
-    SampleOutput: problem.SampleOutput,
-    Title: problem.Title,
-    Visible: problem.Visible,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+  add() {
+    if (problem.Title == '' || problem.Description == '') {
+      push.error({
+        title: '信息错误',
+        message: '请填写完整信息',
+      })
+      return;
+    }
+    let params = {
+      ContentType: +problem.ContentType,
+      Description: problem.Description,
+      Hit: problem.Hit,
+      Label: problem.Label,
+      LimitMemory: problem.LimitMemory,
+      LimitTime: problem.LimitTime,
+      Origin: problem.Origin,
+      OriginPID: problem.OriginPID,
+      Input: problem.Input,
+      Output: problem.Output,
+      Sample_input: problem.Input,
+      Sample_output: problem.SampleOutput,
+      Title: problem.Title,
+      Visible: problem.Visible,
+    }
+    _addProblem(params)
+      .then((data: any) => {
         problem.PID = data.PID;
         push.success({
           title: '新增成功',
@@ -185,18 +183,9 @@ function addProblem() {
             },
           });
         }
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+      })
+  }
+});
 
 function changeVisible() {
   problem.Visible = 1 - problem.Visible;

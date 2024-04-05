@@ -365,7 +365,7 @@ let user = reactive<UserSimplifiedType>({
       message: '该功能尚未完成',
     });
     return;
-    Post('api/admin/permission/edit/', {
+    Post('admin/permission/edit/', {
       UID: user.UID,
       Password: user.PassWord,
     })

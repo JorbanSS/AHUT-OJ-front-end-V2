@@ -16,6 +16,14 @@ export const _getContest = (params: any, CID: number) => {
   })
 }
 
+export const _deleteContest = (data: any) => {
+  return Axios({
+    url: `contest/delete/`,
+    method: "post",
+    data,
+  })
+}
+
 export const _getContestRanking = (params: any, CID: number) => {
   return Axios({
     url: `contest/${CID}/rank`,

@@ -74,7 +74,7 @@ const buckets = reactive<BucketsType>({
   buckets: [],
 
   getBuckets() {
-    Get('api/oss/bucket', {})
+    Get('oss/bucket', {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {

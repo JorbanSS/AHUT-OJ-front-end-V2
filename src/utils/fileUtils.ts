@@ -40,7 +40,7 @@ export class ImageUtils {
     let fromData = new FormData();
     fromData.append("file", image, name);
     return new Promise((resolve, reject) => {
-      Post("api/file/image/", fromData, 1)
+      Post("file/image/", fromData, 1)
         .then((res: any) => {
           let data = res.data;
           if (data.Code == 0) {
@@ -67,7 +67,7 @@ export class ImageUtils {
     let file = new FormData();
     file.append("image", image, name);
     return new Promise((resolve, reject) => {
-      Post("api/user/editHead/", file, 1)
+      Post("user/editHead/", file, 1)
         .then((res: any) => {
           let data = res.data;
           if (data.Code == 0) {
@@ -94,7 +94,7 @@ export class ImageUtils {
     let fromData = new FormData();
     fromData.append("file", image, name);
     return new Promise((resolve, reject) => {
-      Post("api/notice/images/", fromData, 1)
+      Post("notice/images/", fromData, 1)
         .then((res: any) => {
           let data = res.data;
           if (data.Code == 0) {
@@ -136,7 +136,7 @@ export class FileUtils {
     let formData = new FormData();
     formData.append("file", file as Blob);
     return new Promise((resolve, reject) => {
-      Post('api/file/' + PID, formData, 1)
+      Post('file/' + PID, formData, 1)
       .then((res: any) => {
         let data = res.data;
         if (data.Code == 0) {

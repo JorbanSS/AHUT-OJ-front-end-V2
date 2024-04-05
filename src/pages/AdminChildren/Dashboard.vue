@@ -76,7 +76,7 @@
           比赛号
           <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.CID">
         </label>
-        <button class="btn btn-neutral" @click="rejudge()">重判</button>
+        <button class="btn btn-neutral" @click="rejudgeInfo.rejudge()">重判</button>
       </div>
     </div>
     <div class="space-y-6 col-span-4">
@@ -103,7 +103,7 @@
       <div class="modal-action">
         <form method="dialog">
           <button class="btn mr-2">取消修改</button>
-          <button class="btn btn-neutral" @click="editHomeNotice()">提交修改</button>
+          <button class="btn btn-neutral" @click="homeNotice.edit()">提交修改</button>
         </form>
       </div>
     </div>
@@ -123,6 +123,7 @@ import { markdownToolbars } from '@/config';
 import { ImageUtils } from '@/utils/fileUtils';
 
 import 'md-editor-v3/lib/style.css';
+import { _editHomeNotice, _getOjStastics, _getUpdateLogs, _getHomeNotice } from '@/api/oj';
 
 const bannerImageInput = ref<File | null>(null);
 
@@ -131,41 +132,41 @@ let rejudgeInfo = reactive<RejudgeInfoType>({
   UID: '',
   PID: '',
   CID: 0,
-});
 
-function rejudge() {
-  let params: RejudgeInfoType = {};
-  if (rejudgeInfo.SID == 0 && rejudgeInfo.CID == 0 && rejudgeInfo.UID == '' && rejudgeInfo.PID == '') {
-    push.warning({
-      title: '信息错误',
-      message: '请填写至少一项信息',
-    });
-    return;
-  }
-  if (rejudgeInfo.SID) params.SID = rejudgeInfo.SID;
-  if (rejudgeInfo.UID) params.UID = rejudgeInfo.UID;
-  if (rejudgeInfo.PID) params.PID = rejudgeInfo.PID;
-  if (rejudgeInfo.CID) params.CID = rejudgeInfo.CID;
-  Post('api/submit/rejudge/', params)
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        push.success({
-          title: '操作成功',
-          message: '已开始重新判题',
-        });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+  rejudge() {
+    let params: RejudgeInfoType = {};
+    if (rejudgeInfo.SID == 0 && rejudgeInfo.CID == 0 && rejudgeInfo.UID == '' && rejudgeInfo.PID == '') {
+      push.warning({
+        title: '信息错误',
+        message: '请填写至少一项信息',
+      });
+      return;
+    }
+    if (rejudgeInfo.SID) params.SID = rejudgeInfo.SID;
+    if (rejudgeInfo.UID) params.UID = rejudgeInfo.UID;
+    if (rejudgeInfo.PID) params.PID = rejudgeInfo.PID;
+    if (rejudgeInfo.CID) params.CID = rejudgeInfo.CID;
+    Post('submit/rejudge/', params)
+      .then((res: any) => {
+        let data = res.data;
+        if (data.Code == 0) {
+          push.success({
+            title: '操作成功',
+            message: '已开始重新判题',
+          });
+        }
+        else {
+          push.error({
+            title: `Error: ${data.Code}`,
+            message: `${data.Msg}`,
+          })
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      })
+  },
+});
 
 let banner = reactive<ImageUploadType>({
   image: null,
@@ -223,29 +224,35 @@ let homeNotice = reactive<HomeNoticeType>({
   UpdatedTime: 0,
   CreatedTime: 0,
   UID: '',
-})
 
-function showEditHomeNoticeModal() {
-  Get('api/notice/0', {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+  get() {
+    _getHomeNotice({})
+      .then((data: any) => {
         homeNotice.Content = data.Content;
         homeNotice.CreatedTime = data.CreatedTime;
         homeNotice.Title = data.Title;
         homeNotice.UpdatedTime = data.UpdatedTime;
         homeNotice.UID = data.UID;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
+      })
+  },
+
+  edit() {
+    let params = {
+      Content: homeNotice.Content,
+      Title: homeNotice.Title,
+    };
+    _editHomeNotice(params)
+      .then(() => {
+        push.success({
+          title: '修改成功',
+          message: '修改主页公告成功',
         })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
+      })
+  },
+})
+
+function showEditHomeNoticeModal() {
+  homeNotice.get();
   // @ts-ignore
   mdEditor.showModal();
 }
@@ -255,60 +262,24 @@ let ojStastics = reactive<OjStasticsType>({
   TotalSubmit: 0,
   TodaySubmit: 0,
   ProblemNumber: 0,
-})
-function showOjStastics() {
-  Get('api/notice/data', {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
+
+  get() {
+    _getOjStastics({})
+      .then((data: any) => {
         ojStastics.UserNumber = data.UserNumber;
         ojStastics.TotalSubmit = data.TotalSubmit;
         ojStastics.TodaySubmit = data.TodaySubmit;
         ojStastics.ProblemNumber = data.ProblemNumber;
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
-
-function editHomeNotice() {
-  Put('api/notice/0', {
-    Content: homeNotice.Content,
-    Title: homeNotice.Title,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        push.success({
-          title: '修改成功',
-          message: '修改主页公告成功',
-        })
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+      })
+  },
+})
 
 function editUpdateLogs() {
 
 }
 
 onMounted(() => {
-  showOjStastics();
+  ojStastics.get();
 })
 
 </script>

@@ -22,13 +22,13 @@
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="problem.editProblem()">
+        <div class="font-bold text-base" @click="problem.edit()">
           <edit-one theme="outline" size="18" />
           提交编辑
         </div>
       </li>
       <li>
-        <div class="font-bold text-base hover:text-red-500" @click="problem.deleteProblem()">
+        <div class="font-bold text-base hover:text-red-500" @click="problem.delete()">
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除题目
         </div>
@@ -47,13 +47,13 @@
     <div class="flex space-x-2">
       <label class="input input-bordered flex items-center gap-2 w-72">
         <stopwatch-start theme="outline" size="22" />
-        <input type="number" class="grow" placeholder="1000" v-model="problem.limitTime" min="500" max="10000"
+        <input type="number" class="grow" placeholder="1000" v-model="problem.LimitTime" min="500" max="10000"
           step="500" />
         <span>ms</span>
       </label>
       <label class="input input-bordered flex items-center gap-2 w-72">
         <disk theme="outline" size="19" class="ml-0.5 :mr-1.5" />
-        <input type="number" class="grow" placeholder="128" v-model="problem.limitMemory" min="64" max="1024"
+        <input type="number" class="grow" placeholder="128" v-model="problem.LimitMemory" min="64" max="1024"
           step="64" />
         <span>MB</span>
       </label>
@@ -90,32 +90,32 @@
       <option value="1">MarkDown</option>
     </select>
     <div v-if="problem.ContentType == 1">
-      <MdEditor v-model="problem.description" :height="500" :toolbars="markdownToolbars" />
+      <MdEditor v-model="problem.Description" :height="500" :toolbars="markdownToolbars" />
     </div>
     <div v-else>
       <label class="form-control">
         <div class="label">题目描述</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Description"></textarea>
       </label>
       <label class="form-control">
         <div class="label">输入格式</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.input"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Input"></textarea>
       </label>
       <label class="form-control">
         <div class="label">输出格式</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Output"></textarea>
       </label>
       <label class="form-control">
         <div class="label">输入样例</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.SampleInput"></textarea>
       </label>
       <label class="form-control">
         <div class="label">输出样例</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.SampleOutput"></textarea>
       </label>
       <label class="form-control">
         <div class="label">提示</div>
-        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.description"></textarea>
+        <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Hit"></textarea>
       </label>
     </div>
   </div>
@@ -159,15 +159,21 @@ let problem = reactive<ProblemType>({
   get() {
     _getProblem({}, problem.PID)
       .then((data: any) => {
-        problem.Accepted = data.Accepted;
-        problem.ContestType = data.ContestType;
-        problem.description = data.Description;
+        problem.ContentType = data.ContentType;
+        problem.Description = data.Description;
         problem.Title = data.Title;
         problem.Label = data.Label;
-        problem.limitMemory = data.LimitMemory;
-        problem.limitTime = data.LimitTime;
-        problem.ContentType = data.ContentType;
+        problem.LimitMemory = data.LimitMemory;
+        problem.LimitTime = data.LimitTime;
         problem.SolutionNumber = data.SolutionNumber;
+        problem.Input = data.Input;
+        problem.Output = data.Output;
+        problem.SampleInput = data.SampleInput;
+        problem.SampleOutput = data.SampleOutput;
+        problem.Hit = data.Hit;
+        problem.Origin = data.Origin;
+        problem.OriginPID = data.OriginPID;
+        problem.PType = data.PType;
       })
   },
 
@@ -180,22 +186,24 @@ let problem = reactive<ProblemType>({
       return;
     }
     let params = {
-      ContentType: problem.ContentType,
+      PID: problem.PID,
+      ContentType: +problem.ContentType,
       Description: problem.Description,
       Hit: problem.Hit,
       Label: problem.Label,
       LimitMemory: problem.LimitMemory,
       LimitTime: problem.LimitTime,
       Origin: problem.Origin,
-      PID: problem.PID,
       OriginPID: problem.OriginPID,
+      Input: problem.Input,
       Output: problem.Output,
-      SampleInput: problem.Input,
-      SampleOutput: problem.SampleOutput,
+      Sample_input: problem.SampleInput,
+      Sample_output: problem.SampleOutput,
       Title: problem.Title,
       Visible: problem.Visible,
+      PType: problem.PType,
     };
-    _editProblem(params, problem.PID)
+    _editProblem(params)
       .then(() => {
         push.success({
           title: '编辑成功',

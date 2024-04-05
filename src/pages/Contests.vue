@@ -122,7 +122,7 @@ onMounted(() => {
 })
 
 watch(() => contests.page, () => {
-  contests.get(true);
+  contests.get();
 })
 
 const maxPage = computed(() => Math.floor(contests.count / contests.limit) + 1);

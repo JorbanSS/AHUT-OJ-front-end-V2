@@ -150,7 +150,7 @@ function deleteProblemList() {
     })
     return;
   }
-  Post('api/training/delete/', {
+  Post('training/delete/', {
     LIDs: list,
   })
     .then((res: any) => {
@@ -201,7 +201,7 @@ let problemLists = reactive<ProblemListsType>({
 
 
 function getProblemLists(showInfo: boolean = false) {
-  Get('api/training/list', {
+  Get('training/list', {
     Page: problemLists.page - 1,
     Limit: problemLists.limit,
     PType: '',

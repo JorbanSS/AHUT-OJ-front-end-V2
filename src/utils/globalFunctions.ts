@@ -94,7 +94,7 @@ export class Validator {
 // 获取服务器时间
 export function getServerTime() {
   return new Promise((resolve, reject) => {
-    Get('api/now', {})
+    Get('now', {})
     .then((res: any) => {
       let data = res.data;
       if (data.code == 0) {

@@ -164,7 +164,7 @@ function addProblem() {
       return;
     }
   }
-  Get('api/problem/' + PID.value, {})
+  Get('problem/' + PID.value, {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {
@@ -215,7 +215,7 @@ function editContest() {
     if (i) listStr += ',';
     listStr += list.value[i].PID;
   }
-  Post('api/contest/edit/', {
+  Post('contest/edit/', {
     BeginTime: contest.BeginTime,
     EndTime: contest.EndTime,
     IsPublic: contest.IsPublic,
@@ -253,7 +253,7 @@ function changePublic() {
 }
 
 function getContest() {
-  Get('api/contest/' + contest.CID, {})
+  Get('contest/' + contest.CID, {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {

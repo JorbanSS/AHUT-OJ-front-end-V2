@@ -30,24 +30,6 @@
       </li>
     </ul>
   </div>
-  <div class="card bg-white shadow-lg Border mx-auto max-w-5xl">
-    <div class="text-2xl p-6">
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item" placeholder="Search" />
-          </div>
-        </div>
-        <select class="select select-bordered join-item">
-          <option disabled selected>Filter</option>
-          <option>Local</option>
-          <option>CodeForces</option>
-          <option>AtCoder</option>
-        </select>
-        <button class="btn join-item btn-neutral">搜索</button>
-      </div>
-    </div>
-  </div>
   <div class="m-6"></div>
   <div class="bg-white card shadow-lg Border mx-auto max-w-5xl">
     <table class="table table-zebra">
@@ -72,43 +54,21 @@
       </tbody>
     </table>
     <div class="mx-auto py-4 flex space-x-4">
-      <div class="join">
-        <button class="join-item btn" @click="changePageTo(1)">
-          <double-left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePage(-1)">
-          <left theme="outline" size="20" />
-        </button>
-        <button class="join-item btn">
-          {{ contests.page }} / {{ Math.floor(contests.count / contests.limit + 1) }}
-        </button>
-        <button class="join-item btn" @click="changePage(1)">
-          <right theme="outline" size="20" />
-        </button>
-        <button class="join-item btn" @click="changePageTo(Math.floor(contests.count / contests.limit + 1))">
-          <double-right theme="outline" size="20" />
-        </button>
-      </div>
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item w-20" placeholder="" v-model="toPage" type="number" min="1"
-              :max="Math.floor(contests.count / contests.limit + 1)" />
-          </div>
-        </div>
-        <button class="btn join-item" @click="toPage ? changePageTo(toPage) : 0">跳转页面</button>
-      </div>
+      <Pagination :page="contests.page" :maxPage="maxPage" :changePage="contests.changePage" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup name="ContestsList">
-import { DeleteOne, EditOne, Left, Right, DoubleLeft, DoubleRight, Add, Trophy } from '@icon-park/vue-next';
-import { ref, reactive, onMounted, watch } from 'vue';
+import { DeleteOne, EditOne, Add, Trophy } from '@icon-park/vue-next';
+import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { push } from 'notivue';
 import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
+
+import Pagination from "@/components/Main/Pagination.vue";
 import { type ContestsType, type ContestSimplifiedType } from '@/type/contest';
+import { _getContests, _deleteContests } from '@/api/contest';
 
 const router = useRouter();
 
@@ -141,39 +101,6 @@ function getSelectedList() {
   return list;
 }
 
-function deleteContest() {
-  let list = getSelectedList();
-  if (list.length == 0) {
-    push.warning({
-      title: '操作不合法',
-      message: '尚未选择任何题目，无法删除',
-    })
-    return;
-  }
-  Post('api/contest/delete/', {
-    CIDs: list,
-  })
-    .then((res: any) => {
-      let data = res.data;
-      if (data.Code == 0) {
-        getContests();
-        switchAllSelectedStatus(false);
-        push.success({
-          title: '删除成功',
-          message: `一共删除了 ${list.length} 个比赛`,
-        });
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-};
 
 interface ContestListType extends ContestSimplifiedType {
   Selected: boolean,
@@ -186,64 +113,52 @@ let contests = reactive<ContestsType>({
   limit: 20,
   UID: '',
   searchInfo: {},
-  init() {
-    contests.count = 0;
-    contests.page = 1;
-    contests.limit = 20;
-    contests.searchInfo = {
-      CID: undefined,
-      Title: undefined,
-      Source: undefined,
-      Label: undefined,
-    }
-  }
-})
 
+  changePage(page: number) {
+    if (1 <= page && page <= maxPage.value) contests.page = page;
+  },
 
-function getContests(showInfo: boolean = false) {
-  Get('api/contest/list', {
-    Page: contests.page - 1,
-    Limit: contests.limit,
-    PType: '',
-    Label: contests.searchInfo.Label,
-  })
-    .then((res: any) => {
-      let data = res.data;
-
-      if (data.Code == 0) {
+  get(showInfo = false) {
+    let params = {
+      Page: contests.page - 1,
+      Limit: contests.limit,
+    };
+    _getContests(params)
+      .then((data: any) => {
         contests.count = data.Size;
         contests.contests = data.Data;
-        for (let index = 0; index < contests.contests.length; index++) {
-          contests.contests[index].Selected = false;
-        }
         if (showInfo == true) {
           push.success({
             title: '获取成功',
             message: `一共获取了 ${contests.count} 场比赛`,
           })
         }
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-}
+      })
+  },
 
-function changePageTo(page: number) {
-  if (1 <= page && page <= Math.floor(contests.count / contests.limit) + 1) contests.page = page;
-  // syncUrl();
-}
-
-function changePage(page: number) {
-  if (contests.page + page >= 1 && contests.page + page <= Math.floor(contests.count / contests.limit) + 1) contests.page += page;
-  // syncUrl();
-}
+  delete() {
+    let list = getSelectedList();
+    if (list.length == 0) {
+      push.warning({
+        title: '操作不合法',
+        message: '尚未选择任何题目，无法删除',
+      })
+      return;
+    }
+    let params = {
+      LIDs: list,
+    };
+    _deleteContests(params)
+      .then(() => {
+        contests.get();
+        switchAllSelectedStatus(false);
+        push.success({
+          title: '删除成功',
+          message: `一共删除了 ${list.length} 个比赛`,
+        });
+      })
+  }
+})
 
 function goToEditContest() {
   let list = getSelectedList();
@@ -259,15 +174,14 @@ function goToEditContest() {
 }
 
 onMounted(() => {
-  getContests();
+  contests.get(true);
 })
 
 watch(() => contests.page, () => {
-  getContests();
+  contests.get();
   allSelected.value = false;
 })
 
+const maxPage = computed(() => Math.floor(contests.count / contests.limit) + 1);
 
 </script>
-
-<style scoped></style>

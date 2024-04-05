@@ -11,7 +11,7 @@ export class OssUtils {
   // 获取桶列表
   public static getBucketList() {
     return new Promise((resolve, reject) => {
-      Get("api/oss/bucket", {})
+      Get("oss/bucket", {})
         .then((res: any) => {
           let data = res.data;
           console.log(data);

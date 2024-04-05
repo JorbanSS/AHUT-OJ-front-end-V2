@@ -145,7 +145,7 @@ function addProblem() {
       return;
     }
   }
-  Get('api/problem/' + PID.value, {})
+  Get('problem/' + PID.value, {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {
@@ -188,7 +188,7 @@ function editProblemList() {
     if (i) listStr += ',';
     listStr += list.value[i].PID;
   }
-  Post('api/training/edit/', {
+  Post('training/edit/', {
     // IsPublic: problemList.IsPublic,
     Description: problemList.description,
     Title: problemList.Title,
@@ -223,7 +223,7 @@ function changePublic() {
 }
 
 function getProblemList() {
-  Get('api/training/' + problemList.LID, {})
+  Get('training/' + problemList.LID, {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {

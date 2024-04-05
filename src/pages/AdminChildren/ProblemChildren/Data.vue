@@ -176,7 +176,7 @@ function uploadJudgeFile() {
 }
 
 function getJudgeFiles() {
-  Get('api/file/' + judgeFiles.PID, {})
+  Get('file/' + judgeFiles.PID, {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {
@@ -203,7 +203,7 @@ function deleteJudgeFile(index: number) {
   let fileName = judgeFiles.judgeFiles[index].FileName;
   let formData = new FormData();
   formData.append('file', fileName);
-  Del('api/file/' + judgeFiles.PID, formData, 1)
+  Del('file/' + judgeFiles.PID, formData, 1)
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {

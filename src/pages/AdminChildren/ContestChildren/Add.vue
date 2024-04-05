@@ -157,7 +157,7 @@ function addProblem() {
       return;
     }
   }
-  Get('api/problem/' + PID.value, {})
+  Get('problem/' + PID.value, {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {
@@ -217,7 +217,7 @@ function addContest() {
     if (i) listStr += ',';
     listStr += list.value[i].PID;
   }
-  Post('api/contest/add/', {
+  Post('contest/add/', {
     BeginTime: contest.BeginTime,
     EndTime: contest.EndTime,
     IsPublic: contest.IsPublic,
@@ -228,8 +228,7 @@ function addContest() {
     Type: +contest.Type,
     UID: userDataStore.UID,
   })
-    .then((res: any) => {
-      let data = res.data;
+    .then((data: any) => {
       if (data.Code == 0) {
         contest.CID = data.CID;
         push.success({

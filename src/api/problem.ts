@@ -16,9 +16,17 @@ export const _getProblem = (params: any, PID: string) => {
   })
 }
 
-export const _editProblem = (data: any, PID: string) => {
+export const _addProblem = (data: any) => {
   return Axios({
-    url: `problem/edit/${PID}`,
+    url: `problem/add/`,
+    method: "post",
+    data,
+  })
+}
+
+export const _editProblem = (data: any) => {
+  return Axios({
+    url: `problem/edit/`,
     method: "post",
     data,
   })

@@ -75,7 +75,7 @@ let user = reactive<UserType>({
       })
   },
   // getUserHead(){
-  //   Post('api/oss/get',{
+  //   Post('oss/get',{
   //     GetObjectType:constValStore.OSS_OBJECT_BASE64,
   //     BucketName:"ahutoj",
   //     ObjectName:"UID_"+user.UID+"_head.jpg"

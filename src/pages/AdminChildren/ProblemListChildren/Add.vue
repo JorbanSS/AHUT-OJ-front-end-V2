@@ -136,7 +136,7 @@ function addProblem() {
       return;
     }
   }
-  Get('api/problem/' + PID.value, {})
+  Get('problem/' + PID.value, {})
     .then((res: any) => {
       let data = res.data;
       if (data.Code == 0) {
@@ -188,7 +188,7 @@ function addContest() {
     if (i) listStr += ',';
     listStr += list.value[i].PID;
   }
-  Post('api/training/add/', {
+  Post('training/add/', {
     IsPublic: problemList.IsPublic,
     Description: problemList.description,
     Title: problemList.Title,
