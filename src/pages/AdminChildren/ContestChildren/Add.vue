@@ -125,16 +125,16 @@ interface List {
 const list = ref<Array<List>>([]);
 
 let contest = reactive<ContestType>({
-  problems: '',
+  Problems: '',
   CID: 0,
   BeginTime: 0,
   EndTime: 0,
   IsPublic: 1,
   Size: 0,
   Title: '',
-  duration: 0,
-  description: '',
-  contests: '',
+  Duration: 0,
+  Description: '',
+  Contests: '',
   UID: '',
   Type: 1,
   Pass: '',
