@@ -176,12 +176,7 @@ let problem = reactive<ProblemType>({
         });
         if (problem.Origin == -1) {
           let PID = problem.PID;
-          router.push({
-            path: '/admin/problem/problemdata',
-            query: {
-              PID,
-            },
-          });
+          router.push('/admin/problem/data/' + PID);
         }
       })
   }

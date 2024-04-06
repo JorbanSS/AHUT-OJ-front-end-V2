@@ -16,7 +16,7 @@
         </div>
       </li>
       <li v-else>
-        <div class="font-bold text-base" @click="">
+        <div class="font-bold text-base" @click="uploadObjectsInput.upload()">
           <file-addition theme="outline" size="18" />
           上传文件
         </div>
@@ -37,6 +37,9 @@
         </select>
         <button class="btn join-item btn-neutral" @click="objects.get(objects.bucket, objects.prefix, true)">搜索</button>
       </div>
+      <div class="m-3"></div>
+      <input type="file" class="file-input file-input-bordered w-full max-w-xs" multiple
+        ref="ObjectInput" @change="ObjectInputChangeHandle" />
     </div>
     <div class="mt-6"></div>
   </div>
@@ -52,7 +55,7 @@
             <th class="w-60">
               修改日期
             </th>
-            <th class="w-20">
+            <th class="w-32">
               类型
             </th>
             <th class="w-28">
@@ -86,7 +89,7 @@
             <th class="w-60">
               修改日期
             </th>
-            <th class="w-20">
+            <th class="w-32">
               类型
             </th>
             <th class="w-28">
@@ -153,15 +156,16 @@
 </template>
 
 <script lang="ts" setup name="AdminUser">
-import { FolderOpen, MemoryOne, FolderMinus, FolderPlus, FileAddition, FileFailed, FileQuestion, PictureOne } from '@icon-park/vue-next';
+import { FolderOpen, MemoryOne, FolderPlus, FileAddition, FileQuestion, PictureOne } from '@icon-park/vue-next';
 import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
 import { useRoute, useRouter } from 'vue-router';
-import { type ObjectsType, type BucketsType } from '@/type/oss';
 import { useConstValStore } from '@/store/ConstVal';
 import { objectTypeOptions } from "@/config";
 
+import { type ObjectsType, type BucketsType, type uploadObjectType } from '@/type/oss';
 import { _getBuckets, _getObjects, _addBuckets, _deleteBucket, _deleteObject } from '@/api/oss';
+import { OssUtils } from '@/utils/ossUtils';
 
 const constValStore = useConstValStore();
 const router = useRouter();
@@ -169,6 +173,7 @@ const route = useRoute();
 
 let BucketName = ref<string>('');
 let ObjectName = ref<string>('');
+let ObjectInput = ref<File | null>(null);
 
 function clearBucketName() {
   BucketName.value = '';
@@ -177,6 +182,74 @@ function clearBucketName() {
 function clearObjectName() {
   ObjectName.value = '';
 }
+
+interface UploadFilesInputType {
+  files: FileList | null,
+  [item: string]: any,
+}
+
+let uploadObjectsInput = reactive<UploadFilesInputType>({
+  files: null,
+
+  select(files: FileList) {
+    Array.from(files).forEach((file: any) => {
+      objects.objects.forEach((file2: any) => {
+        if (file.name == file2.FileName) {
+          push.warning({
+            title: '文件名重复',
+            message: `${file.name} 已存在，上传将会覆盖原文件`,
+          })
+        }
+      })
+    })
+    uploadObjectsInput.files = files;
+    push.success({
+      title: '选择成功',
+    })
+  },
+
+  upload() {
+    if (uploadObjectsInput.files == null || uploadObjectsInput.files.length == 0) {
+      push.warning({
+        title: '未选择文件',
+      })
+      return;
+    }
+    Array.from(uploadObjectsInput.files).forEach((file: any) => {
+      OssUtils.uploadFile(file, objects.bucket, file.name)
+        .then(() => {
+          push.success({
+            title: '上传成功',
+            message: `${file.name}`,
+          })
+        })
+        .then(() => {
+          if (uploadObjectsInput.files && file.name == uploadObjectsInput.files[uploadObjectsInput.files.length - 1].name) {
+            objects.get(objects.bucket);
+          }
+        })
+    })
+    push.success({
+      title: '上传成功',
+      message: `上传了 ${uploadObjectsInput.files.length} 个文件`,
+    });
+  },
+});
+
+const ObjectInputChangeHandle = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    uploadObjectsInput.select(target.files);
+  }
+};
+
+// const ObjectInputChangeHandle = (event: Event) => {
+//   const target = event.target as HTMLInputElement;
+//   if (target.files && target.files.length > 0) {
+//     ObjectInput.value = target.files[0];
+//     uploadObject.select(target.files[0]);
+//   }
+// };
 
 let browserMode = ref<number>(constValStore.OSS_BROWSER_MODE_FOLDER);
 

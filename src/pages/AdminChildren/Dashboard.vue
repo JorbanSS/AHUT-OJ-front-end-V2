@@ -52,7 +52,7 @@
             <span class="">新增首页图片</span>
           </div>
           <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept=".jpg,.jpeg,.png"
-            ref="bannerImageInput" @change="bannerImageChangeHandle" />
+            @change="bannerImageChangeHandle" />
         </label>
         <div class="m-1"></div>
         <button class="btn btn-neutral" @click="uploadBanner()">上传图片</button>
@@ -62,7 +62,7 @@
       <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
         <label class="input input-bordered flex items-center gap-2">
           记录号
-          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.SID">
+          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.SID" min="0">
         </label>
         <label class="input input-bordered flex items-center gap-2">
           用户号
@@ -74,7 +74,7 @@
         </label>
         <label class="input input-bordered flex items-center gap-2">
           比赛号
-          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.CID">
+          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.CID" min="1000">
         </label>
         <button class="btn btn-neutral" @click="rejudgeInfo.rejudge()">重判</button>
       </div>
@@ -114,25 +114,25 @@
 import { Peoples, UploadLogs, PreviewOpen, History, DocumentFolder, Google } from '@icon-park/vue-next'
 import { push } from 'notivue';
 import { reactive, ref, onMounted } from 'vue';
-import { Post, Get, Put } from '@/utils/axios/request';
 import { type ImageUploadType } from '@/type/common';
 import { type HomeNoticeType, type OjStasticsType } from '@/type/oj';
 import { type RejudgeInfoType } from '@/type/record';
 import { MdEditor } from 'md-editor-v3';
 import { markdownToolbars } from '@/config';
 import { ImageUtils } from '@/utils/fileUtils';
+import { OssUtils } from "@/utils/ossUtils";
 
 import 'md-editor-v3/lib/style.css';
 import { _editHomeNotice, _getOjStastics, _getUpdateLogs, _getHomeNotice } from '@/api/oj';
 import { _rejudge } from '@/api/record';
 
-const bannerImageInput = ref<File | null>(null);
+let bannerImageInput = ref<File | null>(null);
 
 let rejudgeInfo = reactive<RejudgeInfoType>({
   SID: 0,
   UID: '',
   PID: '',
-  CID: 0,
+  CID: 1000,
 
   rejudge() {
     let params: RejudgeInfoType = {};
@@ -162,7 +162,7 @@ let banner = reactive<ImageUploadType>({
   blob: new Blob,
   selectImage(image: File) {
     const allowedBannerTypes = ["image/jpg", "image/jpeg", "image/png"];
-    banner.image = image;
+    this.image = image;
     if (allowedBannerTypes.includes(image.type) == false) {
       push.error({
         title: '图片格式错误',
@@ -180,16 +180,15 @@ let banner = reactive<ImageUploadType>({
 const bannerImageChangeHandle = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
-    bannerImageInput.value = target.files[0];
+    // bannerImageInput.value = target.files[0];
     banner.selectImage(target.files[0]);
   }
 };
 
 function uploadBanner() {
   if (banner.image == null) {
-    push.error({
+    push.warning({
       title: '请选择图片',
-      message: '请选择一张图片',
     })
     return;
   }
@@ -200,7 +199,7 @@ function uploadBanner() {
     then((res: any) => {
       banner.blob = res;
       // @ts-ignore
-      ImageUtils.uploadBannerImage(res, banner.image.name);
+      OssUtils.uploadBannerImage(res, banner.image.name);
     })
     .catch((err: any) => {
       console.log(err);

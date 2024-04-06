@@ -19,6 +19,12 @@
           编辑题目
         </label>
       </li>
+      <li>
+        <div class="font-bold text-base" @click="router.push('/admin/problem/data/' + problem.PID)">
+          <ICONdata theme="outline" size="18" />
+          编辑数据
+        </div>
+      </li>
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
@@ -122,7 +128,7 @@
 </template>
 
 <script lang="ts" setup name="AddProblem">
-import { DeleteOne, EditOne, DocumentFolder, StopwatchStart, Disk, Add } from '@icon-park/vue-next';
+import { DeleteOne, EditOne, DocumentFolder, StopwatchStart, Disk, Add, Data as ICONdata } from '@icon-park/vue-next';
 import { type ProblemType, type ProblemsType, type ProblemSimplifiedType } from '@/type/problem';
 import { ref, reactive, onMounted } from 'vue';
 import { push } from 'notivue';

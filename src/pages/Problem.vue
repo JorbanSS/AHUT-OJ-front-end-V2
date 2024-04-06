@@ -71,7 +71,7 @@
             </span>
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-2" v-if="userDataStore.PermissionMap & constValStore.ProblemAdminBit" >
+        <div class="grid grid-cols-2 gap-2" v-if="userDataStore.PermissionMap & constValStore.ProblemAdminBit">
           <button class="btn" @click="router.push('/admin/problem/edit/' + problem.PID)">
             <!-- <editor theme="outline" size="18" /> -->
             <div class="text-base">
@@ -99,7 +99,7 @@
           </div>
         </button>
       </div>
-      <div class="card shadow-lg bg-white Border p-6 w-72" v-if="problem.ContentType == constValStore.PROBLEM_TYPE_MARKDOWN" >
+      <div class="card shadow-lg bg-white Border p-6 w-72">
         <div class="font-bold text-lg pb-2">
           大纲
         </div>
@@ -117,24 +117,7 @@
           下载 PDF
         </button>
       </div>
-      <p class="text-xl font-bold mt-6 p-6" v-if="problem.ContentType == constValStore.PROBLEM_TYPE_PLAIN_TEXT" >题目描述</p>
-      <div>
-        <MdPreview :editorId="id" :modelValue="problem.Description" class="px-1 mb-4" />
-      </div>
-      <div v-if="problem.ContentType == constValStore.PROBLEM_TYPE_PLAIN_TEXT" class="px-6 pb-6" >
-        <p class="text-xl font-bold mb-2">输入描述</p>
-        <p class="">{{ problem.Input }}</p>
-        <p class="text-xl font-bold mt-6 mb-2">输出描述</p>
-        <p class="">{{ problem.Output }}</p>
-        <p class="text-xl font-bold mt-6 mb-2">输入样例</p>
-        <div class="mockup-code px-6">
-          <pre><code><br />{{ problem.SampleInput }}</code></pre>
-        </div>
-        <p class="text-xl font-bold mt-6 mb-2">输出样例</p>
-        <div class="mockup-code px-6">
-          <pre><code><br />{{ problem.SampleOutput }}</code></pre>
-        </div>
-      </div>
+      <MdPreview :editorId="id" :modelValue="problem.content" class="px-1 mb-4" />
     </div>
   </div>
   <dialog id="codeModal" class="modal">
@@ -163,7 +146,7 @@ import { push } from 'notivue';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 import { MdPreview, MdCatalog } from 'md-editor-v3';
-import useClipboard from 'vue-clipboard3'
+import useClipboard from 'vue-clipboard3';
 import { useUserDataStore } from '@/store/UserData';
 import { submitLanguageOptions } from '@/config';
 import { useConstValStore } from '@/store/ConstVal';
@@ -171,7 +154,7 @@ import { useConstValStore } from '@/store/ConstVal';
 import { type ProblemType } from '@/type/problem';
 import { type ContestType } from '@/type/contest';
 import { type SubmitCodeType } from '@/type/record';
-import { Check, Tips, Disk, StopwatchStart, Copy, FilePdf, Editor, Data as ICONdata } from '@icon-park/vue-next'
+import { Check, Tips, Disk, StopwatchStart, Copy, FilePdf, Editor, Data as ICONdata } from '@icon-park/vue-next';
 import { _getProblem, _submitCode } from '@/api/problem';
 import { _getContest } from '@/api/contest';
 
@@ -203,6 +186,7 @@ let contest = reactive<ContestType>({
   UID: '',
   Type: 0,
   Pass: '',
+  content: '',
 
   get() {
     if (contest.CID == 0) return;
@@ -251,20 +235,25 @@ let problem = reactive<ProblemType>({
   get() {
     _getProblem({}, problem.PID)
       .then((data: any) => {
-        problem.Accepted = data.Accepted;
-        problem.ContestType = data.ContestType;
-        problem.Description = data.Description;
-        problem.Title = data.Title;
-        problem.Label = data.Label;
-        problem.LimitMemory = data.LimitMemory;
-        problem.LimitTime = data.LimitTime;
-        problem.ContentType = data.ContentType;
-        problem.SolutionNumber = data.SolutionNumber;
-        problem.SampleInput = data.SampleInput;
-        problem.SampleOutput = data.SampleOutput;
-        problem.Input = data.Input;
-        problem.Output = data.Output;
-        problem.Hit = data.Hit;
+        this.Accepted = data.Accepted;
+        this.ContestType = data.ContestType;
+        this.Description = data.Description;
+        this.Title = data.Title;
+        this.Label = data.Label;
+        this.LimitMemory = data.LimitMemory;
+        this.LimitTime = data.LimitTime;
+        this.ContentType = data.ContentType;
+        this.SolutionNumber = data.SolutionNumber;
+        this.SampleInput = data.SampleInput;
+        this.SampleOutput = data.SampleOutput;
+        this.Input = data.Input;
+        this.Output = data.Output;
+        this.Hit = data.Hit;
+        if (this.ContentType == constValStore.PROBLEM_TYPE_PLAIN_TEXT) {
+          this.content = this.convertToMarkdown();
+        } else {
+          this.content = this.Description;
+        }
       })
   },
 
@@ -291,6 +280,21 @@ let problem = reactive<ProblemType>({
         })
       })
   },
+
+  convertToMarkdown(): string {
+    let res = "";
+    res += "## 题目描述\n\n";
+    res += problem.Description;
+    res += "\n\n## 输入格式\n\n";
+    res += problem.Input;
+    res += "\n\n## 输出格式\n\n";
+    res += problem.Output;
+    res += "\n\n## 样例输入\n\n";
+    res += "```\n\n" + problem.SampleInput + "\n\n```";
+    res += "\n\n## 样例输出\n\n";
+    res += "```\n\n" + problem.SampleOutput + "\n\n```";
+    return res;
+  }
 })
 
 type problems = {
@@ -304,7 +308,7 @@ let problems = reactive<Array<problems>>([])
 
 async function copyMarkdown() {
   try {
-    await toClipboard(problem.Description);
+    await toClipboard(problem.content);
     push.success({
       title: '复制成功',
       message: '已复制题面 MarkDown 到剪贴板',

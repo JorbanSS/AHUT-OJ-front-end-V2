@@ -2,6 +2,8 @@ import { push } from "notivue";
 import { Post } from "@/utils/axios/request";
 import * as imageConversion from "image-conversion";
 
+import { _uploadBannerImage, _uploadObject, _getObject } from "@/api/oss";
+
 export class ImageUtils {
   public static check(image: File): boolean {
     if (image.type != "image/jpeg" && image.type != "image/png") {
@@ -37,10 +39,10 @@ export class ImageUtils {
   }
 
   public static uploadProblemImage(image: Blob, name: string) {
-    let fromData = new FormData();
-    fromData.append("file", image, name);
+    let formData = new FormData();
+    formData.append("file", image, name);
     return new Promise((resolve, reject) => {
-      Post("file/image/", fromData, 1)
+      Post("file/image/", formData, 1)
         .then((res: any) => {
           let data = res.data;
           if (data.Code == 0) {
@@ -89,33 +91,6 @@ export class ImageUtils {
         });
     });
   }
-
-  public static uploadBannerImage(image: Blob, name: string) {
-    let fromData = new FormData();
-    fromData.append("file", image, name);
-    return new Promise((resolve, reject) => {
-      Post("notice/images/", fromData, 1)
-        .then((res: any) => {
-          let data = res.data;
-          if (data.Code == 0) {
-            push.success({
-              title: "上传成功",
-              message: `图片压缩后为 ${Math.round(image.size / 1024)} KB`,
-            });
-            resolve(data);
-          } else {
-            push.error({
-              title: `Error: ${data.Code}`,
-              message: `${data.Msg}`,
-            });
-            reject(data);
-          }
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
-    });
-  }
 }
 
 export class FileConvertUtils {
@@ -127,34 +102,5 @@ export class FileConvertUtils {
       blob = window.webkitURL.createObjectURL(file);
     }
     return blob;
-  }
-}
-
-
-export class FileUtils {
-  public static uploadProblemData(file: File | Blob, PID: string) {
-    let formData = new FormData();
-    formData.append("file", file as Blob);
-    return new Promise((resolve, reject) => {
-      Post('file/' + PID, formData, 1)
-      .then((res: any) => {
-        let data = res.data;
-        if (data.Code == 0) {
-          push.success({
-            title: "上传成功",
-          });
-          resolve(data);
-        } else {
-          push.error({
-            title: `Error: ${data.Code}`,
-            message: `${data.Msg}`,
-          });
-          reject(data);
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
-    })
   }
 }

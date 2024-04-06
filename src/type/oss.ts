@@ -26,3 +26,9 @@ export interface ObjectsType {
   prefix: string,               // 前缀
   [item: string]: any,          // 其他属性
 }
+
+// 上传对象
+export interface uploadObjectType {
+  object: null | File,           // 对象
+  [item: string]: any,           // 其他属性
+}

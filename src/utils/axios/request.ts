@@ -18,7 +18,7 @@ if (import.meta.env.MODE == "production") {
 }
 
 // 请求头
-const contentType = [
+export const contentType = [
   "application/json; charset=UTF-8",
   "application/x-www-form-urlencoded; charset=UTF-8",
   "multipart/form-data; charset=UTF-8",

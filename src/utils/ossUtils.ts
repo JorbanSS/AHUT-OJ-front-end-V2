@@ -2,12 +2,9 @@ import { push } from "notivue";
 import { Get, Post } from "@/utils/axios/request";
 import { type BucketType, type BucketsType } from "@/type/oss";
 
+import { _uploadBannerImage, _getObject, _uploadObject } from "@/api/oss";
+
 export class OssUtils {
-  // 删除对象
-  // public static deleteObject(bucketName: string, objectName: string) {
-
-  // }
-
   // 获取桶列表
   public static getBucketList() {
     return new Promise((resolve, reject) => {
@@ -34,5 +31,69 @@ export class OssUtils {
           console.log(err);
         });
     });
+  }
+
+  public static uploadBannerImage(image: Blob, name: string) {
+    let formData = new FormData();
+    formData.append("file", image, name);
+    return new Promise((resolve) => {
+      _uploadBannerImage(formData)
+        .then((data: any) => {
+          push.success({
+            title: "上传成功",
+            message: `图片压缩后为 ${Math.round(image.size / 1024)} KB`,
+          });
+          resolve(data);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    });
+  }
+
+  public static uploadFile(file: File | Blob, bucketName: string, objectName: string) {
+    let formData = new FormData();
+    formData.append("File", file as Blob);
+    formData.append("BucketName", bucketName);
+    formData.append("ObjectName", objectName);
+    return new Promise((resolve) => {
+      _uploadObject(formData)
+        .then((data: any) => {
+          resolve(data);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    });
+  }
+
+  public static getObject(bucketName: string, objectName: string, getObjectType: number) {
+    return new Promise((resolve) => {
+      let params = {
+        BucketName: bucketName,
+        ObjectName: objectName,
+        GetObjectType: getObjectType,
+        ExpireTime: 0, // 永久
+      }
+      _getObject(params)
+        .then((data: any) => {
+          resolve(data);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    });
+  }
+
+  public static getUrl(bucketName: string, objectName: string) {
+    return this.getObject(bucketName, objectName, 1); // 链接
+  }
+
+  public static getBase64(bucketName: string, objectName: string) {
+    return this.getObject(bucketName, objectName, 2); // 图片 Base64
+  }
+
+  public static getFile(bucketName: string, objectName: string) {
+    return this.getObject(bucketName, objectName, 3); // 文件下载
   }
 }

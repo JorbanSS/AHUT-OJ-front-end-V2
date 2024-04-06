@@ -1,4 +1,4 @@
-import Axios from "@/utils/axios/request";
+import Axios, { contentType } from "@/utils/axios/request";
 
 export const _getProblems = (params: any) => {
   return Axios({
@@ -53,5 +53,35 @@ export const _exportProblems = (params: any) => {
     url: `file/json/download`,
     method: "get",
     params,
+  })
+}
+
+export const _getJudgeFiles = (params: any, PID: string) => {
+  return Axios({
+    url: `file/${PID}`,
+    method: "get",
+    params,
+  })
+}
+
+export const _uploadJudgeFiles = (data: any, PID: string) => {
+  return Axios({
+    url: `file/${PID}`,
+    method: "post",
+    data,
+    headers: {
+      'Content-Type': contentType[2],
+    },
+  })
+}
+
+export const _deleteJudgeFiles = (data: any, PID: string) => {
+  return Axios({
+    url: `file/${PID}`,
+    method: "delete",
+    data,
+    headers: {
+      'Content-Type': contentType[2],
+    },
   })
 }
