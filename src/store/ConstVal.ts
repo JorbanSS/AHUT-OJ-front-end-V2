@@ -14,7 +14,7 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
       ProblemAdminBit: 0b0000_1000,
       ContestAdminBit: 0b0001_0000,
       SourceBorwserBit: 0b0010_0000,
-      ListAdminBit: 0b0100_0000,
+      ProblemListAdminBit: 0b0100_0000,
       SuperAdminBit: 0b1000_0000,
 
       // 代码语言

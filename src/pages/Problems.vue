@@ -38,11 +38,11 @@
             {{ item.PID }}
           </th>
           <td>
-            <div class="font-bold talbe-lg">{{ item.Title }}</div>
+            <span class="font-bold talbe-lg Nowarp">{{ item.Title }}</span>
           </td>
           <td class="space-x-1 space-y-0.5">
-            <span class="badge badge-neutral badge-md" v-for="(label, index) in item.Label.split(/;| /)" :key="index"
-              v-if="item.label != ''">
+            <span class="badge badge-neutral badge-md"
+              v-for="(label, index) in item.Label.split(/;| /).filter(item => item != '' && item != '/')" :key="index">
               {{ label }}
             </span>
           </td>

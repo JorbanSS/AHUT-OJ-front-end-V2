@@ -13,7 +13,7 @@
       <div class="carousel w-full h-full rounded-2xl shadow-lg Border">
         <div class="carousel-item relative w-full" v-for="(item, index) in banners.banners" :key="index"
           :id="`slide${index}`">
-          <img :src="'data:image/*;base64,' + item.ObjectData" class="w-full" />
+          <img :src="'data:image/*;base64,' + item.ObjectData" class="w-full" alt="首页横幅" />
           <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
             <a :href="`#slide${(index - 1 + banners.Count) % banners.Count}`" class="btn btn-circle">❮</a>
             <a :href="`#slide${(index + 1) % banners.Count}`" class="btn btn-circle">❯</a>

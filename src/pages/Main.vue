@@ -117,6 +117,7 @@ async function autoLogin() {
       return;
     }
     showConfig.init();
+    getUserPermission(userDataStore.UID);
     return;
   }
 

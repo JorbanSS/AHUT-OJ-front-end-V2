@@ -26,7 +26,7 @@ export const _getObjects = (params: any, bucket: string) => {
 
 export const _deleteObject = (data: any) => {
   return Axios({
-    url: `oss/`,
+    url: `oss/object/delete/`,
     method: "post",
     data,
   })
@@ -35,6 +35,14 @@ export const _deleteObject = (data: any) => {
 export const _deleteBucket = (data: any) => {
   return Axios({
     url: `oss/bucket/delete/`,
+    method: "post",
+    data,
+  })
+}
+
+export const _addObject = (data: any) => {
+  return Axios({
+    url: `oss/object/put/`,
     method: "post",
     data,
   })

@@ -21,6 +21,8 @@ export interface ObjectType {
 
 // 对象列表
 export interface ObjectsType {
+  bucket: string,               // 当前桶
   objects: Array<ObjectType>,   // 对象列表
+  prefix: string,               // 前缀
   [item: string]: any,          // 其他属性
 }

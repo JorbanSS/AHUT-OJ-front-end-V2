@@ -23,7 +23,7 @@
         </RouterLink>
       </li>
     </ul>
-    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto">
+    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto" v-if="userDataStore.PermissionMap & constValStore.ProblemListAdminBit" >
       <li>
         <a @click="problemList.clone()">
           <bill theme="outline" size="18" />
@@ -52,9 +52,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { problemListNavItems } from "@/config";
 import { Bill, Editor } from "@icon-park/vue-next";
 import { useUserDataStore } from '@/store/UserData';
+import { useConstValStore } from '@/store/ConstVal';
 
 import { _getProblemList, _getProblemListUsersInfo, _cloneProblemList } from '@/api/problemList';
 
+const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
 const route = useRoute();
 const router = useRouter();

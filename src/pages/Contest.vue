@@ -51,7 +51,7 @@
         </RouterLink>
       </li>
     </ul>
-    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto">
+    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto" v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit" >
       <li>
         <a @click="contest.cloneToProblemList()">
           <bill theme="outline" size="18" />
@@ -87,7 +87,9 @@ import { Editor, PartyBalloon, Bill } from '@icon-park/vue-next';
 import { contestNavItems } from '@/config';
 import { useUserDataStore } from '@/store/UserData';
 import { _cloneToProblemList, _getContest } from '@/api/contest';
+import { useConstValStore } from '@/store/ConstVal';
 
+const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
 const router = useRouter();
 const route = useRoute();

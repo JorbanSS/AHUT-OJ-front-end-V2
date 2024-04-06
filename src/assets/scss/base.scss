@@ -44,3 +44,9 @@ select {
     background-repeat: no-repeat;
   }
 }
+
+.Nowarp {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

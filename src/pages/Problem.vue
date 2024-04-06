@@ -71,7 +71,7 @@
             </span>
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-2 gap-2" v-if="userDataStore.PermissionMap & constValStore.ProblemAdminBit" >
           <button class="btn" @click="router.push('/admin/problem/edit/' + problem.PID)">
             <!-- <editor theme="outline" size="18" /> -->
             <div class="text-base">

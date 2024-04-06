@@ -54,6 +54,5 @@ export interface PermissionType {
   resource: boolean,        // 资源
   contest: boolean,         // 比赛
   problem: boolean,         // 题目
-  admin: boolean,           // 管理员
   [item: string]: any,      // 其他属性
 }

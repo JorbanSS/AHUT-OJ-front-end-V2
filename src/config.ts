@@ -16,7 +16,6 @@ import {
   Bill,
   Code,
 } from "@icon-park/vue-next";
-import { compile } from "vue";
 
 export const problemTypeOptions = [
   { label: "全部", value: "" },
@@ -24,6 +23,11 @@ export const problemTypeOptions = [
   { label: "LOJ", value: "LOJ" },
   // { label: "Codeforces", value: "CODEFORCES" },
   // { label: "Atcoder", value: "ATCODERTYPE" },
+];
+
+export const objectTypeOptions = [
+  { label: "全部", value: "" },
+  { label: "首页横幅", value: "notice_images_" },
 ];
 
 export const submitLanguageOptions = [

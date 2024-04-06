@@ -1,4 +1,5 @@
 import { useUserDataStore } from "@/store/UserData.ts";
+import { useConstValStore } from "@/store/ConstVal";
 import { push } from "notivue";
 
 export function needLoginCertificate(): boolean {
@@ -27,6 +28,7 @@ export function needLoginCertificate(): boolean {
 
 export function needAdminCertificate(): boolean {
   const userDataStore = useUserDataStore();
+  const constValStore = useConstValStore();
   if (needLoginCertificate()) {
     if (userDataStore.PermissionMap > 3) {
       return true;
@@ -44,10 +46,11 @@ export function needAdminCertificate(): boolean {
 
 export function needProblemAdminCertificate(): boolean {
   const userDataStore = useUserDataStore();
+  const constValStore = useConstValStore();
   if (needAdminCertificate()) {
     if (
-      userDataStore.PermissionMap & 0x08 ||
-      userDataStore.PermissionMap & 0x80
+      userDataStore.PermissionMap & constValStore.ProblemAdminBit ||
+      userDataStore.PermissionMap & constValStore.SuperAdminBit
     ) {
       return true;
     } else {
@@ -64,10 +67,11 @@ export function needProblemAdminCertificate(): boolean {
 
 export function needContestAdminCertificate(): boolean {
   const userDataStore = useUserDataStore();
+  const constValStore = useConstValStore();
   if (needAdminCertificate()) {
     if (
-      userDataStore.PermissionMap & 0x10 ||
-      userDataStore.PermissionMap & 0x80
+      userDataStore.PermissionMap & constValStore.ContestAdminBit ||
+      userDataStore.PermissionMap & constValStore.SuperAdminBit
     ) {
       return true;
     } else {
@@ -84,10 +88,11 @@ export function needContestAdminCertificate(): boolean {
 
 export function needSourceBorwserAdminCertificate(): boolean {
   const userDataStore = useUserDataStore();
+  const constValStore = useConstValStore();
   if (needAdminCertificate()) {
     if (
-      userDataStore.PermissionMap & 0x20 ||
-      userDataStore.PermissionMap & 0x80
+      userDataStore.PermissionMap & constValStore.SourceBorwserBit ||
+      userDataStore.PermissionMap & constValStore.SuperAdminBit
     ) {
       return true;
     } else {
@@ -104,10 +109,11 @@ export function needSourceBorwserAdminCertificate(): boolean {
 
 export function needProblemListAdminCertificate(): boolean {
   const userDataStore = useUserDataStore();
+  const constValStore = useConstValStore();
   if (needAdminCertificate()) {
     if (
-      userDataStore.PermissionMap & 0x40 ||
-      userDataStore.PermissionMap & 0x80
+      userDataStore.PermissionMap & constValStore.ProblemListAdminBit ||
+      userDataStore.PermissionMap & constValStore.SuperAdminBit
     ) {
       return true;
     } else {
@@ -124,17 +130,17 @@ export function needProblemListAdminCertificate(): boolean {
 
 export function needSuperAdminCertificate(): boolean {
   const userDataStore = useUserDataStore();
+  const constValStore = useConstValStore();
   if (needAdminCertificate()) {
-    if (userDataStore.PermissionMap & 0x80) {
+    if (userDataStore.PermissionMap & constValStore.SuperAdminBit) {
       return true;
     } else {
       push.error({
         title: "权限不足",
         message: "非超管无权访问",
       });
-      
+      return false;
     }
-    return true;
   } else {
     return false;
   }

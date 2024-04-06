@@ -47,7 +47,7 @@
       <thead>
         <tr>
           <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>
-          <th v-for="(item, index) in ['用户 ID', '用户名称']" :key="index">
+          <th v-for="(item, index) in ['用户 ID', '用户名称', '超管', '题单', '资源', '比赛', '题目']" :key="index">
             {{ item }}
           </th>
         </tr>
@@ -61,6 +61,21 @@
           <th>{{ item.UID }}</th>
           <td>
             <div class="font-bold talbe-lg">{{ item.UserName }}</div>
+          </td>
+          <td>
+            <input type="checkbox" class="checkbox" v-model="item.super" disabled>
+          </td>
+          <td>
+            <input type="checkbox" class="checkbox" v-model="item.problemList" disabled />
+          </td>
+          <td>
+            <input type="checkbox" class="checkbox" v-model="item.resource" disabled />
+          </td>
+          <td>
+            <input type="checkbox" class="checkbox" v-model="item.contest" disabled />
+          </td>
+          <td>
+            <input type="checkbox" class="checkbox" v-model="item.problem" disabled />
           </td>
         </tr>
       </tbody>
@@ -125,7 +140,7 @@
         <table class="table table-zebra">
           <thead>
             <tr>
-              <th v-for="(item, index) in ['超管', '资源', '比赛', '题单', '题目', '管理员']" :key="index">
+              <th v-for="(item, index) in ['超管', '题单', '资源', '比赛', '题目']" :key="index">
                 {{ item }}
               </th>
             </tr>
@@ -133,22 +148,19 @@
           <tbody>
             <tr>
               <td>
-                <input type="checkbox" class="checkbox" />
+                <input type="checkbox" class="checkbox" v-model="permission.super" />
               </td>
               <td>
-                <input type="checkbox" class="checkbox" />
+                <input type="checkbox" class="checkbox" v-model="permission.problemList" />
               </td>
               <td>
-                <input type="checkbox" class="checkbox" />
+                <input type="checkbox" class="checkbox" v-model="permission.resource" />
               </td>
               <td>
-                <input type="checkbox" class="checkbox" />
+                <input type="checkbox" class="checkbox" v-model="permission.contest" />
               </td>
               <td>
-                <input type="checkbox" class="checkbox" />
-              </td>
-              <td>
-                <input type="checkbox" class="checkbox" />
+                <input type="checkbox" class="checkbox" v-model="permission.problem" />
               </td>
             </tr>
           </tbody>
@@ -173,11 +185,13 @@ import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
 import { type UserSimplifiedType, type PermissionType, type UserType } from '@/type/user';
 import { list } from 'postcss';
+import { useConstValStore } from '@/store/ConstVal';
 
-import { _deleteUsers, _getAdmins, _changePassword, _getUserPermission, _addUser } from "@/api/user";
+import { _deleteUsers, _getAdmins, _changePassword, _getUserPermission, _addUser, _editUserPermission } from "@/api/user";
 import Pagination from "@/components/Main/Pagination.vue";
-const router = useRouter();
 
+const router = useRouter();
+const constValStore = useConstValStore();
 
 let toPage = ref<number>();
 let allSelected = ref<boolean>(false);
@@ -193,7 +207,16 @@ let permission = reactive<PermissionType>({
   contest: false,
   problem: false,
   problemList: false,
-  admin: false,
+
+  set(permissionMap: number) {
+    this.map = permissionMap;
+    this.super = (this.map & constValStore.SuperAdminBit) != 0;
+    this.resource = (this.map & constValStore.SourceBorwserBit) != 0;
+    this.contest = (this.map & constValStore.ContestAdminBit) != 0;
+    this.problemList = (this.map & constValStore.ProblemListAdminBit) != 0;
+    this.problem = (this.map & constValStore.ProblemAdminBit) != 0;
+    this.admin = (this.map & constValStore.AdminBit) != 0;
+  },
 });
 
 function switchAllSelectedStatus(status?: boolean) {
@@ -223,7 +246,7 @@ function deleteUsers() {
   if (list.length == 0) {
     push.warning({
       title: '操作不合法',
-      message: '尚未选择任何题目，无法删除',
+      message: '尚未选择任何用户，无法删除',
     })
     return;
   }
@@ -243,6 +266,11 @@ function deleteUsers() {
 
 interface UserListType extends UserType {
   Selected: boolean,
+  super: boolean,
+  resource: boolean,
+  contest: boolean,
+  problem: boolean,
+  problemList: boolean,
 };
 
 let users = reactive({
@@ -267,7 +295,17 @@ let users = reactive({
         for (let index = 0; index < users.users.length; index++) {
           users.users[index].Selected = false;
           users.users[index].UserName = data.Data[index].Uname;
+          users.users[index].PermissionMap = data.Data[index].PermissionMap;
+          users.users[index].super = (users.users[index].PermissionMap & constValStore.SuperAdminBit) != 0;
+          users.users[index].problemList = (users.users[index].PermissionMap & constValStore.ProblemListAdminBit) != 0;
+          users.users[index].resource = (users.users[index].PermissionMap & constValStore.SourceBorwserBit) != 0;
+          users.users[index].contest = (users.users[index].PermissionMap & constValStore.ContestAdminBit) != 0;
+          users.users[index].problem = (users.users[index].PermissionMap & constValStore.ProblemAdminBit) != 0;
         }
+        users.users.forEach(user => {
+          user.super = (user.PermissionMap & constValStore.SuperAdminBit) != 0;
+          user.problemList = (user.PermissionMap & constValStore.ProblemListAdminBit) != 0;
+        });
         if (showInfo) {
           push.success({
             title: '获取成功',
@@ -283,6 +321,11 @@ let user = reactive<UserSimplifiedType>({
   UserName: '',
   PermissionMap: 0,
   Password: '',
+  super: false,
+  resource: false,
+  contest: false,
+  problem: false,
+  problemList: false,
 
   changePassword() {
     let params = {
@@ -350,8 +393,7 @@ let user = reactive<UserSimplifiedType>({
     _getUserPermission({}, user.UID)
       .then((data: any) => {
         user.PermissionMap = data.PermissionMap;
-        console.log(user);
-        
+        permission.set(user.PermissionMap);
         push.success({
           title: '查询成功',
           message: `查询到了用户 UID 为 ${user.UID} 的权限列表`,
@@ -360,32 +402,27 @@ let user = reactive<UserSimplifiedType>({
   },
 
   changePermission() {
-    push.error({
-      title: '操作失败',
-      message: '该功能尚未完成',
-    });
-    return;
-    Post('admin/permission/edit/', {
+    if (user.UID == '') {
+      push.warning({
+        title: '操作不合法',
+        message: `输入的用户 UID 为空`,
+      });
+      return;
+    }
+    let params = {
+      ContestAdmin: permission.contest,
+      ListAdmin: permission.problemList,
+      ProbelmAdmin: permission.problem,
+      SourceAdmin: permission.resource,
+      SuperAdmin: permission.super,
       UID: user.UID,
-      Password: user.PassWord,
-    })
-      .then((res: any) => {
-        let data = res.data;
-        if (data.Code == 0) {
-          push.success({
-            title: '修改成功',
-            message: `成功修改了 ${user.UID} 的密码`,
-          });
-        }
-        else {
-          push.error({
-            title: `Error: ${data.Code}`,
-            message: `${data.Msg}`,
-          })
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
+    };
+    _editUserPermission(params)
+      .then(() => {
+        push.success({
+          title: '修改成功',
+          message: `成功修改了 ${user.UID} 的权限`,
+        });
       })
     users.getAdministrators();
     switchAllSelectedStatus(false);
@@ -444,5 +481,12 @@ watch(() => users.page, () => {
 })
 
 const maxPage = computed(() => Math.floor(users.count / users.limit) + 1);
+
+watch(() => permission.super, () => {
+  if (permission.super == true) {
+    permission.set(185);
+    permission.resource = permission.contest = permission.problem = permission.problemList = true;
+  }
+})
 
 </script>

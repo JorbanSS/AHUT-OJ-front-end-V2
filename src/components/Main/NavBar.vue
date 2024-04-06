@@ -29,7 +29,7 @@
       <div v-if="userDataStore.isLogin">
         <div class="dropdown dropdown-bottom dropdown-end">
           <div tabindex="0" role="button" class="btn">
-            <div class="badge badge-neutral" :v-if="userDataStore.PermissionMap > 3">OP</div>
+            <div class="badge badge-neutral" v-if="userDataStore.PermissionMap > 3">OP</div>
             {{ userDataStore.UserName }}
           </div>
           <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-white rounded-box w-36 Border font-bold">
@@ -37,7 +37,7 @@
                 <people theme="outline" size="18" />
                 个人中心
               </a></li>
-            <li :v-if="userDataStore.PermissionMap > 3"><a @click="router.replace('/admin')">
+            <li v-if="userDataStore.PermissionMap > 3"><a @click="router.replace('/admin')">
                 <setting-config theme="outline" size="18" />
                 管理平台
               </a></li>
@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useThemeSwitchStore } from '@/store/ThemeSwitch';
 import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue'
@@ -79,5 +79,3 @@ let props = withDefaults(defineProps<propsType>(), {
 });
 
 </script>
-
-<style scoped></style>

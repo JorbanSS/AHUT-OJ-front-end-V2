@@ -154,6 +154,15 @@ const Admin = {
       name: "AdminTraining",
       path: "training",
       component: () => import("@/pages/AdminChildren/Training.vue"),
+      beforeEnter: (
+        // @ts-ignore
+        to: RouteLocationNormalized,
+        // @ts-ignore
+        from: RouteLocationNormalized,
+        next: NavigationGuardNext
+      ) => {
+        if (needProblemListAdminCertificate()) next();
+      },
     },
     {
       name: "AdminUser",
@@ -174,6 +183,15 @@ const Admin = {
       path: "other",
       component: () => import("@/pages/AdminChildren/Other.vue"),
       redirect: { name: "AdminOss" },
+      beforeEnter: (
+        // @ts-ignore
+        to: RouteLocationNormalized,
+        // @ts-ignore
+        from: RouteLocationNormalized,
+        next: NavigationGuardNext
+      ) => {
+        if (needSuperAdminCertificate()) next();
+      },
       children: [
         {
           name: "AdminOss",

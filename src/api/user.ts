@@ -57,6 +57,14 @@ export const _getUserPermission = (params: any, UID: string) => {
   })
 }
 
+export const _editUserPermission = (data: any) => {
+  return Axios({
+    url: `admin/permission/edit/`,
+    method: "post",
+    data,
+  })
+}
+
 export const _deleteUsers = (data: any) => {
   return Axios({
     url: `user/delete/`,
@@ -75,7 +83,7 @@ export const _getAdmins = (params: any) => {
 
 export const _changePassword = (data: any) => {
   return Axios({
-    url: `admin/user/edit/password/`,
+    url: `user/edit/`,
     method: "post",
     data,
   })
