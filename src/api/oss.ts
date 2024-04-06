@@ -1,71 +1,41 @@
-import Axios, { contentType } from "@/utils/axios/request";
+import { Get, Post } from "@/utils/axios/request";
 
+// 获取桶列表
 export const _getBuckets = (params: any) => {
-  return Axios({
-    url: "oss/bucket",
-    method: "get",
-    params,
-  })
-}
+  return Get("oss/bucket", params);
+};
 
+// 新增桶
 export const _addBuckets = (data: any) => {
-  return Axios({
-    url: "oss/bucket/add/",
-    method: "post",
-    data,
-  })
-}
+  return Post("oss/bucket/add/", data);
+};
 
+// 获取对象列表
 export const _getObjects = (params: any, bucket: string) => {
-  return Axios({
-    url: `oss/object/${bucket}`,
-    method: "get",
-    params,
-  })
-}
+  return Get(`oss/object/${bucket}`, params);
+};
 
+// 删除对象
 export const _deleteObject = (data: any) => {
-  return Axios({
-    url: `oss/object/delete/`,
-    method: "post",
-    data,
-  })
-}
+  return Post("oss/object/delete/", data);
+};
 
+// 删除桶
 export const _deleteBucket = (data: any) => {
-  return Axios({
-    url: `oss/bucket/delete/`,
-    method: "post",
-    data,
-  })
-}
+  return Post("oss/bucket/delete/", data);
+};
 
+// 上传对象
 export const _uploadObject = (data: any) => {
-  return Axios({
-    url: `oss/object/put/`,
-    method: "post",
-    data,
-    headers: {
-      'Content-Type': contentType[2],
-    },
-  })
-}
+  return Post("oss/object/put/", data, 2);
+};
 
+// 上传首页横幅
 export const _uploadBannerImage = (data: any) => {
-  return Axios({
-    url: "notice/images/",
-    method: "post",
-    data,
-    headers: {
-      'Content-Type': contentType[2],
-    },
-  })
-}
+  return Post("notice/images/", data, 2);
+};
 
+// 获取对象
 export const _getObject = (data: any) => {
-  return Axios({
-    url: `oss/object/get/`,
-    method: "post",
-    data,
-  })
-}
+  return Post("oss/object/get/", data);
+};

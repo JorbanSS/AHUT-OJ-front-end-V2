@@ -181,7 +181,6 @@
 import { DeleteOne, EditOne, AfferentThree, Permissions, Add, Peoples, AddUser, Youtobe } from '@icon-park/vue-next';
 import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { push } from 'notivue';
-import { Get, Post } from '@/utils/axios/request';
 import { useRouter } from 'vue-router';
 import { type UserSimplifiedType, type PermissionType, type UserType } from '@/type/user';
 import { list } from 'postcss';
@@ -290,6 +289,7 @@ let users = reactive({
     }
     _getAdmins(params)
       .then((data: any) => {
+        
         users.count = data.Count;
         users.users = data.Data;
         for (let index = 0; index < users.users.length; index++) {
@@ -306,6 +306,8 @@ let users = reactive({
           user.super = (user.PermissionMap & constValStore.SuperAdminBit) != 0;
           user.problemList = (user.PermissionMap & constValStore.ProblemListAdminBit) != 0;
         });
+        console.log(maxPage.value);
+        console.log(this.count);
         if (showInfo) {
           push.success({
             title: '获取成功',
@@ -480,7 +482,6 @@ watch(() => users.page, () => {
   allSelected.value = false;
 })
 
-const maxPage = computed(() => Math.floor(users.count / users.limit) + 1);
 
 watch(() => permission.super, () => {
   if (permission.super == true) {
@@ -488,5 +489,7 @@ watch(() => permission.super, () => {
     permission.resource = permission.contest = permission.problem = permission.problemList = true;
   }
 })
+
+const maxPage = computed(() => Math.floor(users.count / users.limit) + 1);
 
 </script>

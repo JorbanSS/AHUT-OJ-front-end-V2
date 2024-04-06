@@ -38,8 +38,8 @@
         <button class="btn join-item btn-neutral" @click="objects.get(objects.bucket, objects.prefix, true)">搜索</button>
       </div>
       <div class="m-3"></div>
-      <input type="file" class="file-input file-input-bordered w-full max-w-xs" multiple
-        ref="ObjectInput" @change="ObjectInputChangeHandle" />
+      <input type="file" class="file-input file-input-bordered w-full max-w-xs" multiple ref="ObjectInput"
+        @change="ObjectInputChangeHandle" />
     </div>
     <div class="mt-6"></div>
   </div>
@@ -193,14 +193,16 @@ let uploadObjectsInput = reactive<UploadFilesInputType>({
 
   select(files: FileList) {
     Array.from(files).forEach((file: any) => {
-      objects.objects.forEach((file2: any) => {
-        if (file.name == file2.FileName) {
-          push.warning({
-            title: '文件名重复',
-            message: `${file.name} 已存在，上传将会覆盖原文件`,
-          })
-        }
-      })
+      if (objects.objects) {
+        objects.objects.forEach((file2: any) => {
+          if (file.name == file2.FileName) {
+            push.warning({
+              title: '文件名重复',
+              message: `${file.name} 已存在，上传将会覆盖原文件`,
+            })
+          }
+        })
+      }
     })
     uploadObjectsInput.files = files;
     push.success({
@@ -216,7 +218,7 @@ let uploadObjectsInput = reactive<UploadFilesInputType>({
       return;
     }
     Array.from(uploadObjectsInput.files).forEach((file: any) => {
-      OssUtils.uploadFile(file, objects.bucket, file.name)
+      OssUtils.uploadObject(file, objects.bucket, file.name)
         .then(() => {
           push.success({
             title: '上传成功',
@@ -332,6 +334,14 @@ let objects = reactive<ObjectsType>({
     _getObjects(params, bucket)
       .then((data: any) => {
         this.objects = data.ObjectInfo;
+        if (data.ObjectInfo == null) {
+          push.success({
+            title: "获取成功",
+            message: `文件夹下为空`,
+          });
+          browserMode.value = constValStore.OSS_BROWSER_MODE_FILE;
+          return;
+        }
         for (let i = 0; i < this.objects.length; i++) {
           this.objects[i].lastModified = simplifyTime(this.objects[i].lastModified);
         }

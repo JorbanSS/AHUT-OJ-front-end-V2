@@ -23,7 +23,8 @@
         </RouterLink>
       </li>
     </ul>
-    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto" v-if="userDataStore.PermissionMap & constValStore.ProblemListAdminBit" >
+    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto"
+      v-if="userDataStore.PermissionMap & constValStore.ProblemListAdminBit">
       <li>
         <a @click="problemList.clone()">
           <bill theme="outline" size="18" />
@@ -97,7 +98,7 @@ let problemList = reactive<ProblemListType>({
       UID: userDataStore.UID,
     };
     _cloneProblemList(params)
-    .then((data: any) => {
+      .then((data: any) => {
         let LID = data.LID;
         push.success({
           title: '克隆成功',
@@ -147,7 +148,6 @@ onMounted(() => {
   problemList.get();
   getProblemListUsersInfo();
   console.log(route.path.split('/')[3].toLowerCase());
-  
 })
 
 </script>

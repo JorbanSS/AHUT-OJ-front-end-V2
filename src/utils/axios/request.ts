@@ -67,7 +67,7 @@ Axios.interceptors.response.use(
         message: msg,
       });
     })
-    return Promise.reject();
+    return Promise.reject(err);
   }
 );
 

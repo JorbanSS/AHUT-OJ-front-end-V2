@@ -116,8 +116,9 @@ import { MdEditor } from 'md-editor-v3';
 import { useRouter } from 'vue-router';
 import { markdownToolbars } from '@/config';
 import { ImageUtils } from '@/utils/fileUtils';
+import { OssUtils } from "@/utils/ossUtils"
 
-import { _addProblem } from "@/api/problem"
+import { _addProblem } from "@/api/problem";
 import 'md-editor-v3/lib/style.css';
 
 const problemImageInput = ref<File | null>(null);
@@ -233,24 +234,18 @@ function uploadProblemImage(files: any) {
   if (ImageUtils.check(imageUpload.image) == false) {
     return;
   }
-  ImageUtils.compress(imageUpload.image).
-    then((res: any) => {
+  ImageUtils.compress(imageUpload.image)
+    .then((res: any) => {
       imageUpload.blob = res;
-      // @ts-ignore
-      ImageUtils.uploadProblemImage(res, imageUpload.image.name)
-        .then((res: any) => {
-          let data = res;
-          if (data.Code == 0) {
-            let imageURL = data.ImageURL;
-            problem.description += `\n\n![](/${imageURL})\n\n`;
-            push.success({
-              title: '插入成功',
-              message: '插入图片成功',
-            })
-          }
-        })
-        .catch((err: any) => {
-          console.log(err);
+      OssUtils.uploadProblemImage(res, files[0].name)
+        .then((data: any) => {
+          console.log(10101, data);
+          let imageURL = data.ImageURL;
+          problem.description += `\n\n![](/${imageURL})\n\n`;
+          push.success({
+            title: '插入成功',
+            message: '插入图片成功',
+          })
         })
     })
 }

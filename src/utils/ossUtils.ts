@@ -1,35 +1,20 @@
 import { push } from "notivue";
-import { Get, Post } from "@/utils/axios/request";
 import { type BucketType, type BucketsType } from "@/type/oss";
 
 import { _uploadBannerImage, _getObject, _uploadObject } from "@/api/oss";
 
 export class OssUtils {
-  // 获取桶列表
-  public static getBucketList() {
-    return new Promise((resolve, reject) => {
-      Get("oss/bucket", {})
-        .then((res: any) => {
-          let data = res.data;
-          console.log(data);
-          
-          if (data.Code == 0) {
-            push.success({
-              title: "获取成功",
-              message: ``,
-            });
-            resolve(data);
-          } else {
-            push.error({
-              title: `Error: ${data.Code}`,
-              message: `${data.Msg}`,
-            });
-            reject(data);
-          }
-        })
-        .catch((err: any) => {
-          console.log(err);
+  public static uploadProblemImage(file: File | Blob, fileName: string) {
+    return new Promise((resolve) => {
+      this.uploadObject(file, "problem-images", fileName)
+      .then((data: any) => {
+        console.log(12, data.UpInfo.Key);
+        this.getUrl("problem-images", data.UpInfo.Key).then((data: any) => {
+          console.log(222, data);
+          // resolve(data);
+
         });
+      });
     });
   }
 
@@ -51,7 +36,11 @@ export class OssUtils {
     });
   }
 
-  public static uploadFile(file: File | Blob, bucketName: string, objectName: string) {
+  public static uploadObject(
+    file: File | Blob,
+    bucketName: string,
+    objectName: string
+  ) {
     let formData = new FormData();
     formData.append("File", file as Blob);
     formData.append("BucketName", bucketName);
@@ -67,14 +56,18 @@ export class OssUtils {
     });
   }
 
-  public static getObject(bucketName: string, objectName: string, getObjectType: number) {
+  public static getObject(
+    bucketName: string,
+    objectName: string,
+    getObjectType: number
+  ) {
     return new Promise((resolve) => {
       let params = {
         BucketName: bucketName,
         ObjectName: objectName,
         GetObjectType: getObjectType,
-        ExpireTime: 0, // 永久
-      }
+        ExpireTime: 100 * 365 * 24, // 永久
+      };
       _getObject(params)
         .then((data: any) => {
           resolve(data);
@@ -86,14 +79,14 @@ export class OssUtils {
   }
 
   public static getUrl(bucketName: string, objectName: string) {
-    return this.getObject(bucketName, objectName, 1); // 链接
+    return this.getObject(bucketName, objectName, 0); // 链接
   }
 
   public static getBase64(bucketName: string, objectName: string) {
-    return this.getObject(bucketName, objectName, 2); // 图片 Base64
+    return this.getObject(bucketName, objectName, 1); // 图片 Base64
   }
 
   public static getFile(bucketName: string, objectName: string) {
-    return this.getObject(bucketName, objectName, 3); // 文件下载
+    return this.getObject(bucketName, objectName, 2); // 文件下载
   }
 }

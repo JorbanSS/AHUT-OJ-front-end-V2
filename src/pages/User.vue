@@ -1,21 +1,85 @@
 <template>
-  <div class="flex space-x-6">
-    <div class="shadow-lg bg-white p-6 Border card h-fit w-80">
-      <div>
-        <img :src="'/resource' + user.HeadURL.slice(6)" class="" />
+  <div class="max-w-6xl">
+    <div class="hero bg-base-200">
+      <div class="hero-content flex-col lg:flex-row">
+        <div class="avatar">
+          <div class="w-24 rounded-xl">
+            <img src="https://daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg" />
+          </div>
+        </div>
       </div>
     </div>
-    <div class="shadow-lg bg-white p-6 Border card h-fit">
-
+  </div>
+  <div class="Boder bg-white max-w-6xl p-4 flex rounded-2xl shadow-lg">
+    <div class="avatar">
+      <div class="w-36 rounded-xl">
+        <img src="https://daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg" />
+      </div>
     </div>
   </div>
+  <div class="py-6 flex justify-center space-x-2">
+    <ul class="menu rounded-box bg-white Border w-fit lg:menu-horizontal ">
+      <li>
+        <div class="font-bold text-base" onclick="bindCodeforcesModal.showModal()">
+          <ranking theme="outline" size="18" />
+          绑定 Codeforces
+        </div>
+      </li>
+      <li>
+        <div class="font-bold text-base">
+          <cattle theme="outline" size="18" />
+          绑定 Nowcoder
+        </div>
+      </li>
+      <li>
+        <div class="font-bold text-base">
+          <horse-zodiac theme="outline" size="18" />
+          绑定 Atcoder
+        </div>
+      </li>
+      <li>
+        <div class="font-bold text-base">
+          <emotion-happy theme="outline" size="18" />
+          绑定 Virtual Judge
+        </div>
+      </li>
+    </ul>
+    <!-- <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
+      <li>
+        <div class="font-bold text-base" @click="">
+          <add theme="outline" size="18" />
+          确认新增
+        </div>
+      </li>
+    </ul> -->
+  </div>
+  <dialog id="bindCodeforcesModal" class="modal">
+    <div class="modal-box space-y-2 w-96">
+      <h3 class="font-bold text-lg mb-4">绑定 Codeforces</h3>
+      <label class="input input-bordered flex items-center gap-2">
+        账号
+        <input type="text" class="grow" v-model="codeforces.ID" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        密码
+        <input type="text" class="grow" placeholder="" v-model="codeforces.Pass" />
+      </label>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn mr-2">取消</button>
+          <button class="btn btn-neutral" @click="codeforces.bind()">绑定</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
 </template>
 
 <script lang="ts" setup name="User">
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { type UserType } from '@/type/user';
+import { type UserType, type BindType } from '@/type/user';
 import { push } from 'notivue';
+import { Ranking, Cattle, HorseZodiac, EmotionHappy } from "@icon-park/vue-next";
 
 import { useConstValStore } from '@/store/ConstVal';
 import { _getUserInfo } from '@/api/user';
@@ -23,6 +87,91 @@ import { _getUserInfo } from '@/api/user';
 const router = useRouter();
 const route = useRoute();
 const constValStore = useConstValStore();
+
+let codeforces = reactive<BindType>({
+  ID: '',
+  Pass: '',
+
+  bind() {
+    if (this.ID == '' || this.Pass == '') {
+      push.warning({
+        title: "信息错误",
+        message: "请输入账号和密码",
+      })
+      this.ID = this.Pass = '';
+      return;
+    }
+    let params = {
+      CodeForceUser: this.ID,
+      CodeForcePass: this.Pass,
+    };
+    this.ID = this.Pass = '';
+    
+  }
+});
+
+let nowcoder = reactive({
+  ID: '',
+  Pass: '',
+
+  bind() {
+    if (this.ID == '' || this.Pass == '') {
+      push.warning({
+        title: "信息错误",
+        message: "请输入账号和密码",
+      })
+      this.ID = this.Pass = '';
+      return;
+    }
+    let params = {
+      CodeForceUser: this.ID,
+      CodeForcePass: this.Pass,
+    };
+    this.ID = this.Pass = '';
+  }
+});
+
+let atcoder = reactive({
+  ID: '',
+  Pass: '',
+
+  bind() {
+    if (this.ID == '' || this.Pass == '') {
+      push.warning({
+        title: "信息错误",
+        message: "请输入账号和密码",
+      })
+      this.ID = this.Pass = '';
+      return;
+    }
+    let params = {
+      CodeForceUser: this.ID,
+      CodeForcePass: this.Pass,
+    };
+    this.ID = this.Pass = '';
+  }
+});
+
+let virtualJudge = reactive({
+  ID: '',
+  Pass: '',
+
+  bind() {
+    if (this.ID == '' || this.Pass == '') {
+      push.warning({
+        title: "信息错误",
+        message: "请输入账号和密码",
+      })
+      this.ID = this.Pass = '';
+      return;
+    }
+    let params = {
+      CodeForceUser: this.ID,
+      CodeForcePass: this.Pass,
+    };
+    this.ID = this.Pass = '';
+  }
+});
 
 let user = reactive<UserType>({
   UID: '',

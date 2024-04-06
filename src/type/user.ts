@@ -56,3 +56,11 @@ export interface PermissionType {
   problem: boolean,         // 题目
   [item: string]: any,      // 其他属性
 }
+
+export interface BindType {
+  ID: string,                 // 第三方 ID
+  Pass: string,               // 第三方密码
+
+  bind: Function,             // 绑定
+  [item: string]: any,        // 其他属性
+}
