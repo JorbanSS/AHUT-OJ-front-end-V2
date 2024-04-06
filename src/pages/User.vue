@@ -3,20 +3,20 @@
     <div class="hero bg-base-200">
       <div class="hero-content flex-col lg:flex-row">
         <div class="avatar">
-          <div class="w-24 rounded-xl">
+          <div class="w-36 rounded-xl">
             <img src="https://daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg" />
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="Boder bg-white max-w-6xl p-4 flex rounded-2xl shadow-lg">
+  <!-- <div class="Boder bg-white max-w-6xl p-4 flex rounded-2xl shadow-lg">
     <div class="avatar">
       <div class="w-36 rounded-xl">
         <img src="https://daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg" />
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="py-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white Border w-fit lg:menu-horizontal ">
       <li>
