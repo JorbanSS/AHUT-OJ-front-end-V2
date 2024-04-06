@@ -41,7 +41,7 @@
   </div>
   <dialog id="homeNotice" class="modal">
     <div class="modal-box">
-      <h3 class="font-bold text-lg">{{ notice.Title }}</h3>
+      <h3 class="font-bold text-lg">公告：{{ notice.Title }}</h3>
       <MdPreview editorId="homeNoticeContent" :modelValue="notice.Content" class="-mx-5" preview-only />
     </div>
     <form method="dialog" class="modal-backdrop">
@@ -58,7 +58,7 @@ import { ConvertTools } from '@/utils/globalFunctions';
 import { MdPreview, MdCatalog } from 'md-editor-v3';
 import { push } from 'notivue';
 
-import { _getBanners, _getUpdateLogs } from "@/api/oj";
+import { _getBanners, _getHomeNotice, _getUpdateLogs } from "@/api/oj";
 
 import 'md-editor-v3/lib/preview.css';
 
@@ -101,6 +101,8 @@ function getUpdateLogs() {
 
 onMounted(() => {
   getUpdateLogs();
+  // @ts-ignore
+  homeNotice.showModal();
   banners.get();
 })
 

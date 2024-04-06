@@ -148,6 +148,12 @@ const Admin = {
           component: () =>
             import("@/pages/AdminChildren/ContestChildren/Edit.vue"),
         },
+        {
+          name: "EditBalloon",
+          path: "balloon/:CID",
+          component: () =>
+            import("@/pages/AdminChildren/ContestChildren/Balloon.vue"),
+        },
       ],
     },
     {

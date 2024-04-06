@@ -19,26 +19,21 @@
     </div>
   </div> -->
   <div class="bg-white p-6 card shandow-lg Border">
-    <button class="btn btn-neutral w-fit" @click="test()" >
+    <button class="btn btn-neutral w-fit" @click="test()">
       测试运行
     </button>
   </div>
 </template>
 
-
 <script lang="ts" setup name="Records">
 
 import { push } from 'notivue'
-import { OssUtils } from '@/utils/ossUtils';
 
 function test() {
   push.success({
     title: '测试',
     message: '这是一条测试信息'
   })
-  OssUtils.getBucketList();
 }
 
 </script>
-
-<style scoped></style>

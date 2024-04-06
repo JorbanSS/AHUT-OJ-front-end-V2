@@ -5,7 +5,7 @@ import { _uploadBannerImage, _getObject, _uploadObject } from "@/api/oss";
 
 export class OssUtils {
   public static uploadProblemImage(file: File | Blob, fileName: string) {
-    return new Promise((resolve) => {
+    return new Promise(() => {
       this.uploadObject(file, "problem-images", fileName)
       .then((data: any) => {
         console.log(12, data.UpInfo.Key);

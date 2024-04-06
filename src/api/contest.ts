@@ -34,3 +34,8 @@ export const _getContestRanking = (params: any, CID: number) => {
 export const _cloneToProblemList = (data: any) => {
   return Post('contest/clone/', data);
 }
+
+// 编辑气球颜色
+export const _editBalloonColor = (data: any) => {
+  return Post('contest/color/', data);
+}

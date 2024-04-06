@@ -32,12 +32,13 @@
   </div>
   <div class="m-6"></div>
   <div class="bg-white card shadow-lg Border mx-auto max-w-5xl">
-    <table class="table table-zebra">
+    <table class="table table-zebra text-center">
       <thead>
         <tr>
           <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>
           <th>比赛号</th>
           <th>比赛名称</th>
+          <th>操作</th>
         </tr>
       </thead>
       <tbody>
@@ -49,6 +50,9 @@
           <th>{{ item.CID }}</th>
           <td>
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/contest/balloon/' + item.CID)">编辑气球颜色</button>
           </td>
         </tr>
       </tbody>

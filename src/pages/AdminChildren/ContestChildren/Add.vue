@@ -59,13 +59,15 @@
       </div>
     </div>
     <div class="mb-4"></div>
+    <div class="px-6 pb-2">拖拽题目可以排序</div>
     <VueDraggable ref="el" v-model="list" target=".sort-target" :animation="200" class="select-none">
-      <table class="table table-zebra">
+      <table class="table table-zebra text-center">
         <thead>
           <tr>
-            <th>题号（拖拽表格行可以排序）</th>
-            <!-- <th>题目名称</th>
-          <th>标签</th> -->
+            <th>题号</th>
+            <th>题目名称</th>
+            <th>标签</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody class="sort-target">
@@ -221,13 +223,13 @@ let contest = reactive<ContestType>({
       UID: userDataStore.UID,
     }
     _addContest(params)
-    .then((data: any) => {
-      contest.CID = data.CID;
+      .then((data: any) => {
+        contest.CID = data.CID;
         push.success({
           title: '新增成功',
           message: `比赛 ID 为 ${data.CID}`,
         });
-    })
+      })
   },
 
   changePublic() {

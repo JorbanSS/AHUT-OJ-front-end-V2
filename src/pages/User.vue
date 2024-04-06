@@ -44,14 +44,14 @@
         </div>
       </li>
     </ul>
-    <!-- <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
+    <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
         <div class="font-bold text-base" @click="">
-          <add theme="outline" size="18" />
-          确认新增
+          <key theme="outline" size="18" />
+          修改密码
         </div>
       </li>
-    </ul> -->
+    </ul>
   </div>
   <dialog id="bindCodeforcesModal" class="modal">
     <div class="modal-box space-y-2 w-96">
@@ -79,8 +79,9 @@ import { ref, reactive, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { type UserType, type BindType } from '@/type/user';
 import { push } from 'notivue';
-import { Ranking, Cattle, HorseZodiac, EmotionHappy } from "@icon-park/vue-next";
+import { Ranking, Cattle, HorseZodiac, EmotionHappy, Key } from "@icon-park/vue-next";
 
+import { _bindCodeforces } from "@/api/user";
 import { useConstValStore } from '@/store/ConstVal';
 import { _getUserInfo } from '@/api/user';
 
@@ -106,7 +107,12 @@ let codeforces = reactive<BindType>({
       CodeForcePass: this.Pass,
     };
     this.ID = this.Pass = '';
-    
+    _bindCodeforces(params)
+    .then(() => {
+      push.success({
+        title: "绑定成功",
+      })
+    })
   }
 });
 

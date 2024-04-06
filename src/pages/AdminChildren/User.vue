@@ -43,7 +43,7 @@
     </ul>
   </div>
   <div class="bg-white card shadow-lg Border mx-auto max-w-5xl">
-    <table class="table table-zebra">
+    <table class="table table-zebra text-center">
       <thead>
         <tr>
           <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>

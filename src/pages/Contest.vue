@@ -140,23 +140,16 @@ let contest = reactive<ContestType>({
   }
 })
 
-type problemsType = {
+interface problemsType {
   PID: string,
   Title: string,
   SubmitNum: number,
   ACNum: number,
   Status: string,
+  BalloonColor: string,
 }
 
 let problems = reactive<Array<problemsType>>([])
-
-// type cloneType = {
-//   PID: string,
-//   Title: string,
-//   SubmitNum: number,
-//   ACNum: number,
-//   Status: string,
-// }
 
 onMounted(() => {
   contest.CID = +route.params.CID;

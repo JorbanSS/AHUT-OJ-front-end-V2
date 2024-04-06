@@ -8,25 +8,28 @@
           <th class="w-32">UID</th>
           <th class="w-14">Solved</th>
           <th class="w-20">Penalty</th>
-          <th v-for="(item, index1) in props.contest.Problems" :key="index1" class="w-16">
-            {{ ConvertTools.Number2Alpha(index1 + 1) }}
+          <th v-for="(item, index1) in  props.problems " :key="index1" class="w-16"
+            :style="'background-color: ' + item.BalloonColor + '; color: ' + item.BalloonColor" style="mix-blend-mode: difference; ">
+            <span style="filter: grayscale(1) contrast(999) invert(1)">
+              {{ ConvertTools.Number2Alpha(index1 + 1) }}
+            </span>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item1, index) in ranking.Ranking" :key="index">
+        <tr v-for="( item1, index ) in  ranking.Ranking " :key=" index ">
           <th>{{ index + 1 }}</th>
           <td>{{ item1.Uname }}</td>
           <td>{{ item1.UserID }}</td>
           <td>{{ item1.ACNumber }}</td>
           <td>{{ Math.round(item1.Penalty / 60 / 1000) }}</td>
-          <td v-for="(item2, index2) in item1.Problems" :key="index2" class="px-0 pb-1 pt-0"
-            :style="`${getRankingBackgroundColor(item2)};`">
+          <td v-for="( item2, index2 ) in  item1.Problems " :key=" index2 " class="px-0 pb-1 pt-0"
+            :style=" `${getRankingBackgroundColor(item2)};` ">
             <div class="font-bold">
               <div class="font-bold">
                 {{ item2.Status == "NULL" ? "" : item2.Status == "AC" ? "+" : "-" }}
               </div>
-              <div class="text-xs" v-if="item2.SubmitNumber">
+              <div class="text-xs" v-if=" item2.SubmitNumber ">
                 {{ item2.SubmitNumber }}/{{ Math.round(item2.Time / 60 / 1000) }}
               </div>
             </div>
@@ -64,6 +67,7 @@ type problemsType = {
   SubmitNum: number,
   ACNum: number,
   Status: string,
+  BalloonColor: string,
 }
 
 interface propsType {

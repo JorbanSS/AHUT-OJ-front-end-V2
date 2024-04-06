@@ -19,6 +19,12 @@
           编辑比赛
         </div>
       </li>
+      <li>
+        <div class="font-bold text-base" @click="router.push('/admin/contest/balloon/' + contest.CID)">
+          <party-balloon theme="outline" size="18" />
+          编辑气球颜色
+        </div>
+      </li>
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
@@ -66,12 +72,13 @@
     </div>
     <div class="mb-4"></div>
     <VueDraggable ref="el" v-model="list" target=".sort-target" :animation="200" class="select-none">
-      <table class="table table-zebra">
+      <table class="table table-zebra text-center">
         <thead>
           <tr>
-            <th>题号（拖拽表格行可以排序）</th>
-            <!-- <th>题目名称</th>
-          <th>标签</th> -->
+            <th>题号</th>
+            <th>题目名称</th>
+            <th>标签</th>
+            <th>操作</th>
           </tr>
         </thead>
         <tbody class="sort-target">
@@ -104,7 +111,7 @@
 </template>
 
 <script lang="ts" setup name="addcontest">
-import { Add, Trophy, ArrowRight, DeleteOne, EditOne } from '@icon-park/vue-next';
+import { Add, Trophy, ArrowRight, DeleteOne, EditOne, PartyBalloon } from '@icon-park/vue-next';
 import { type ContestType } from '@/type/contest';
 import { reactive, ref, onMounted } from 'vue';
 import { push } from 'notivue';
