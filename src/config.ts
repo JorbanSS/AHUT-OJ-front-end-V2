@@ -30,6 +30,24 @@ export const objectTypeOptions = [
   { label: "首页横幅", value: "notice_images_" },
 ];
 
+export const editorLanguageOptions = [
+  { label: "C++", value: "cpp" },
+  { label: "C", value: "c" },
+  { label: "HTML", value: "html" },
+  { label: "CSS", value: "css" },
+  { label: "JavaScript", value: "javascript" },
+  { label: "Python", value: "python" },
+  { label: "Java", value: "java" },
+  { label: "Go", value: "go" },
+  { label: "Swift", value: "swift" },
+  { label: "SQL", value: "sql" },
+  { label: "JSON", value: "json" },
+  { label: "XML", value: "xml" },
+  { label: "YAML", value: "yaml" },
+  { label: "INI", value: "ini" },
+  { label: "MarkDown", value: "markdown" },
+];
+
 export const submitLanguageOptions = [
   { value: "1", name: "C17", compiler: "gcc 12.2.0" },
   // { label: "", value: "2" },

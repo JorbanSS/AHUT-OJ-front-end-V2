@@ -1,6 +1,7 @@
 import { push } from "notivue";
 import { Post } from "@/utils/axios/request";
 import * as imageConversion from "image-conversion";
+import SparkMD5 from 'spark-md5';
 
 import { _uploadBannerImage, _uploadObject, _getObject } from "@/api/oss";
 
@@ -93,7 +94,7 @@ export class ImageUtils {
   }
 }
 
-export class FileConvertUtils {
+export class FileUtils {
   public static file2Blob(file: File): string {
     let blob = "";
     if (window.URL != undefined) {
@@ -102,5 +103,20 @@ export class FileConvertUtils {
       blob = window.webkitURL.createObjectURL(file);
     }
     return blob;
+  }
+
+  public static getFileMD5(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const spark = new SparkMD5.ArrayBuffer();
+      const fileReader = new FileReader();
+      fileReader.onload = (e: ProgressEvent<FileReader>):void => {
+        spark.append(e.target?.result as ArrayBuffer)
+        resolve(spark.end())
+      }
+      fileReader.onerror = () => {
+        reject("");
+      };
+      fileReader.readAsArrayBuffer(file)
+    });
   }
 }

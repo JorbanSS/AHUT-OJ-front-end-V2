@@ -65,6 +65,21 @@ export const _bindCodeforces = (data: any) => {
   return Post('user/codeforceBind/', data);
 }
 
+// 绑定 Atcoder
+export const _bindAtcoder = (data: any) => {
+  return Post('user/atcoderBind/', data);
+}
+
+// 绑定 Nowcoder
+export const _bindNowcoder = (data: any) => {
+  return Post('user/nowcoderBind/', data);
+}
+
+// 绑定 Virtual Judge
+export const _bindVirtualJudge = (data: any) => {
+  return Post('user/vjudgeBind', data);
+}
+
 // 忘记密码
 export const _forgetPassword = (data: any) => {
   return Post('admin/user/forget/pass', data);
@@ -75,3 +90,7 @@ export const _getUsersOnline = (data: any) => {
   return Post('admin/user/forget/pass', data);
 }
 
+// 修改密码
+export const _editPassword = (data: any) => {
+  return Post('user/edit/pass/', data);
+}

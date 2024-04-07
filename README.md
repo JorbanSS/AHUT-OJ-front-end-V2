@@ -172,6 +172,10 @@ pnpm i @guolao/vue-monaco-editor
 pnpm install --save vue-clipboard3
 
 pnpm install --save canvas-confetti  # 五彩纸屑
+
+pnpm install spark-md5
+
+pnpm install @types/spark-md5 -D
 ```
 
 `main.ts` 中添加

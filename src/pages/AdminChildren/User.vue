@@ -17,15 +17,9 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="showChangePasswordModal()">
-          <edit-one theme="outline" size="18" />
-          编辑用户
-        </div>
-      </li>
-      <li>
         <div class="font-bold text-base" @click="showEditPermissionModal()">
           <permissions theme="outline" size="18" />
-          编辑权限
+          修改权限
         </div>
       </li>
       <li>
@@ -47,7 +41,7 @@
       <thead>
         <tr>
           <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>
-          <th v-for="(item, index) in ['用户 ID', '用户名称', '超管', '题单', '资源', '比赛', '题目']" :key="index">
+          <th v-for="(item, index) in ['用户 ID', '用户名称', '超管', '题单', '资源', '比赛', '题目', '操作']" :key="index">
             {{ item }}
           </th>
         </tr>
@@ -77,12 +71,10 @@
           <td>
             <input type="checkbox" class="checkbox" v-model="item.problem" disabled />
           </td>
-          <!-- <td>
-            <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/contest/edit/' + item.CID)">修改密码</button>
-            <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/contest/edit/' + item.CID)">修改权限</button>
-          </td> -->
+          <td class="space-x-2">
+            <button class="btn btn-sm btn-neutral" @click.stop="showChangePasswordModal(item.UID)">编辑用户</button>
+            <button class="btn btn-sm btn-neutral" @click.stop="showEditPermissionModal(item.UID)">修改权限</button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -438,18 +430,20 @@ let user = reactive<UserSimplifiedType>({
 
 });
 
-function showEditPermissionModal() {
-  user.UID = '';
-  let list = getSelectedList();
-  if (list.length > 1) {
-    push.warning({
-      title: '操作不合法',
-      message: '不选择或仅选择一位用户进行编辑',
-    })
-    return;
-  }
-  else if (list.length == 1) {
-    user.UID = list[0];
+function showEditPermissionModal(UID: string = '') {
+  user.UID = UID;
+  if (UID == '') {
+    let list = getSelectedList();
+    if (list.length > 1) {
+      push.warning({
+        title: '操作不合法',
+        message: '不选择或仅选择一位用户进行编辑',
+      })
+      return;
+    }
+    else if (list.length == 1) {
+      user.UID = list[0];
+    }
   }
   user.getPermission();
   // @ts-ignore
@@ -462,18 +456,21 @@ function showAddUserModal() {
   addUserModal.showModal();
 }
 
-function showChangePasswordModal() {
-  user.UID = user.UserName = user.Password = '';
-  let list = getSelectedList();
-  if (list.length > 1) {
-    push.warning({
-      title: '操作不合法',
-      message: '不选择或仅选择一位用户进行编辑',
-    })
-    return;
-  }
-  else if (list.length == 1) {
-    user.UID = list[0];
+function showChangePasswordModal(UID: string = '') {
+  user.UID = UID;
+  user.UserName = user.Password = '';
+  if (UID == '') {
+    let list = getSelectedList();
+    if (list.length > 1) {
+      push.warning({
+        title: '操作不合法',
+        message: '不选择或仅选择一位用户进行编辑',
+      })
+      return;
+    }
+    else if (list.length == 1) {
+      user.UID = list[0];
+    }
   }
   // @ts-ignore
   changePasswordModal.showModal();

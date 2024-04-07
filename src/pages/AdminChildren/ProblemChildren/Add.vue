@@ -200,20 +200,16 @@ let imageUpload = reactive<ImageUploadType>({
       })
       return;
     }
-    push.success({
-      title: '选择成功',
-      message: '已选择',
-    })
   }
 })
 
-const problemImageChangeHandle = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  if (target.files && target.files.length > 0) {
-    problemImageInput.value = target.files[0];
-    imageUpload.selectImage(target.files[0]);
-  }
-};
+// const problemImageChangeHandle = (event: Event) => {
+//   const target = event.target as HTMLInputElement;
+//   if (target.files && target.files.length > 0) {
+//     problemImageInput.value = target.files[0];
+//     imageUpload.selectImage(target.files[0]);
+//   }
+// };
 
 function uploadProblemImage(files: any) {
   if (files.length == 0) {
@@ -237,27 +233,15 @@ function uploadProblemImage(files: any) {
   ImageUtils.compress(imageUpload.image)
     .then((res: any) => {
       imageUpload.blob = res;
-      OssUtils.uploadProblemImage(res, files[0].name)
+      OssUtils.uploadProblemImage(res)
         .then((data: any) => {
-          console.log(10101, data);
-          let imageURL = data.ImageURL;
-          problem.description += `\n\n![](/${imageURL})\n\n`;
+          problem.Description += `\n\n![](/oss/problem-images/${data})\n\n`;
           push.success({
             title: '插入成功',
-            message: '插入图片成功',
+            message: `压缩后为 ${Math.round(res.size / 1024)} KB`,
           })
         })
     })
 }
-
-// const onUploadImg = async (files: any, callback: any) => {
-//   console.log(1122);
-//   const res = await Promise.all(
-//     files.map((file: any) => {
-
-//     })
-//   );
-//   callback(res.map((item) => item.data.url));
-// }
 
 </script>

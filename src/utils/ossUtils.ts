@@ -1,19 +1,36 @@
 import { push } from "notivue";
 import { type BucketType, type BucketsType } from "@/type/oss";
+import { FileUtils } from "./fileUtils";
 
 import { _uploadBannerImage, _getObject, _uploadObject } from "@/api/oss";
 
 export class OssUtils {
-  public static uploadProblemImage(file: File | Blob, fileName: string) {
-    return new Promise(() => {
-      this.uploadObject(file, "problem-images", fileName)
-      .then((data: any) => {
-        console.log(12, data.UpInfo.Key);
-        this.getUrl("problem-images", data.UpInfo.Key).then((data: any) => {
-          console.log(222, data);
-          // resolve(data);
+  public static uploadProblemImage(file: File) {
+    return new Promise((resolve) => {
+      let fileMD5 = "";
+      FileUtils.getFileMD5(file as File).then((data: any) => {
+        fileMD5 = data;
+        let objectName = `${fileMD5}.${
+          file.type.split("/")[file.type.split("/").length - 1]
+        }`;
+        this.uploadObject(file, "problem-images", objectName).then(
+          (data: any) => {
+            resolve(data.UpInfo.Key);
+          }
+        );
+      });
+    });
+  }
 
+  public static uploadHeadImage(file: File, UID: string) {
+    return new Promise((resolve) => {
+      let objectName = `UID-${UID}.${file.type.split("/")[file.type.split("/").length - 1]}`;
+      this.uploadObject(file, "head-images", objectName).then((data: any) => {
+        push.success({
+          title: "上传成功",
+          message: `图片压缩后为 ${Math.round(file.size / 1024)} KB`,
         });
+        resolve(data.UpInfo.Key);
       });
     });
   }
@@ -44,7 +61,7 @@ export class OssUtils {
     let formData = new FormData();
     formData.append("File", file as Blob);
     formData.append("BucketName", bucketName);
-    formData.append("ObjectName", objectName);
+    if (objectName != "") formData.append("ObjectName", objectName);
     return new Promise((resolve) => {
       _uploadObject(formData)
         .then((data: any) => {

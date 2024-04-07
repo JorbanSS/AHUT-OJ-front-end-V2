@@ -35,20 +35,25 @@ const Axios = axios.create({
 
 // 全局 http request 拦截
 Axios.interceptors.request.use(
-  (config) => {
+  config => {
     let token = localStorage.getItem("token");
     if (token && config.headers) config.headers.Authorization = token;
     config.url = requestBaseURL + config.url;
     return config;
   },
-  (err) => {
-    return Promise.reject(err);
+  err => {
+    console.log(1, err);
+    push.error({
+      title: `Error: ${err.response.data.Code}`,
+      message: err.response.data.Msg,
+    })
+    return Promise.reject(err.response);
   }
 );
 
 // 全局 http response 拦截
 Axios.interceptors.response.use(
-  (res) => {
+  res => {
     let data = res.data;
     if (data.Code == 0) {
       return data;
@@ -60,14 +65,19 @@ Axios.interceptors.response.use(
       return Promise.reject(data);
     }
   },
-  (err) => {
+  err => {
+    console.log(2, err);
+    push.error({
+      title: `Error: ${err.name}`,
+      message: err.message,
+    })
     httpErrorHandler(err).then((msg) => {
       push.error({
         title: "请求错误",
         message: msg,
       });
     })
-    return Promise.reject(err);
+    return Promise.reject(err.response);
   }
 );
 

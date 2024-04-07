@@ -38,6 +38,9 @@ dependencies:
   sass:
     specifier: ^1.72.0
     version: 1.72.0
+  spark-md5:
+    specifier: ^3.0.2
+    version: 3.0.2
   v-calendar:
     specifier: ^3.1.2
     version: 3.1.2(@popperjs/core@2.11.8)(vue@3.4.21)
@@ -61,6 +64,9 @@ dependencies:
     version: 4.1.0(vue@3.4.21)
 
 devDependencies:
+  '@types/spark-md5':
+    specifier: ^3.0.4
+    version: 3.0.4
   '@vitejs/plugin-vue':
     specifier: ^5.0.4
     version: 5.0.4(vite@5.1.5)(vue@3.4.21)
@@ -1036,6 +1042,10 @@ packages:
   /@types/sortablejs@1.15.8:
     resolution: {integrity: sha512-b79830lW+RZfwaztgs1aVPgbasJ8e7AXtZYHTELNXZPsERt4ymJdjV4OccDbHQAvHrCcFpbF78jkm0R6h/pZVg==}
     dev: false
+
+  /@types/spark-md5@3.0.4:
+    resolution: {integrity: sha512-qtOaDz+IXiNndPgYb6t1YoutnGvFRtWSNzpVjkAPCfB2UzTyybuD4Tjgs7VgRawum3JnJNRwNQd4N//SvrHg1Q==}
+    dev: true
 
   /@vavt/util@1.5.0:
     resolution: {integrity: sha512-GJ3q7yJp4mjVVjT1PgbyayJu8q6dYpS0H2ojIcd3k7fEyG4sZhjepjmtA12J1n8Cs5HtkHtqdewCH4U5owytQw==}
@@ -2147,6 +2157,10 @@ packages:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
     deprecated: Please use @jridgewell/sourcemap-codec instead
     dev: true
+
+  /spark-md5@3.0.2:
+    resolution: {integrity: sha512-wcFzz9cDfbuqe0FZzfi2or1sgyIrsDwmPwfZC4hiNidPdPINjeUwNfv5kldczoEAcjl9Y1L3SM7Uz2PUEQzxQw==}
+    dev: false
 
   /state-local@1.0.7:
     resolution: {integrity: sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==}

@@ -9,7 +9,7 @@
           <th class="w-14">Solved</th>
           <th class="w-20">Penalty</th>
           <th v-for="(item, index1) in  props.problems " :key="index1" class="w-16"
-            :style="'background-color: ' + item.BalloonColor + '; color: ' + item.BalloonColor" style="mix-blend-mode: difference; ">
+            :style="'background-color: ' + item.BalloonColor + '; color: ' + item.BalloonColor">
             <span style="filter: grayscale(1) contrast(999) invert(1)">
               {{ ConvertTools.Number2Alpha(index1 + 1) }}
             </span>

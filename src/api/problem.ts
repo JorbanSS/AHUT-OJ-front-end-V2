@@ -49,3 +49,8 @@ export const _uploadJudgeFiles = (data: any, PID: string) => {
 export const _deleteJudgeFiles = (data: any, PID: string) => {
   return Del(`file/${PID}`, data, 2);
 }
+
+// 判题文件预览
+export const _getJudgeFile = (params: any, PID: string, fileName: string) => {
+  return Get(`file/${PID}/${fileName}`, params);
+}

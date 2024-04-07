@@ -64,9 +64,9 @@
       <table class="table table-zebra text-center">
         <thead>
           <tr>
+            <th>序号</th>
             <th>题号</th>
             <th>题目名称</th>
-            <th>标签</th>
             <th>操作</th>
           </tr>
         </thead>

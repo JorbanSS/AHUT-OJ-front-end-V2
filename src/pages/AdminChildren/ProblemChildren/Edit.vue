@@ -96,7 +96,7 @@
       <option value="1">MarkDown</option>
     </select>
     <div v-if="problem.ContentType == 1">
-      <MdEditor v-model="problem.Description" :height="500" :toolbars="markdownToolbars" />
+      <MdEditor v-model="problem.Description" :height="500" :toolbars="markdownToolbars" @onUploadImg="uploadProblemImage" />
     </div>
     <div v-else>
       <label class="form-control">
@@ -133,7 +133,6 @@ import { type ProblemType, type ProblemsType, type ProblemSimplifiedType } from 
 import { ref, reactive, onMounted } from 'vue';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';
-import { Get, Post } from '@/utils/axios/request';
 import { useRouter, useRoute } from 'vue-router';
 import { markdownToolbars } from '@/config';
 
@@ -141,6 +140,9 @@ const router = useRouter();
 const route = useRoute();
 import 'md-editor-v3/lib/style.css';
 import { _getProblem, _editProblem, _deleteProblems } from '@/api/problem';
+import { ImageUploadType } from '@/type/common';
+import { ImageUtils } from '@/utils/fileUtils';
+import { OssUtils } from '@/utils/ossUtils';
 
 let problem = reactive<ProblemType>({
   PID: '',
@@ -237,11 +239,58 @@ function changeVisible() {
   problem.Visible = 1 - problem.Visible;
 }
 
+let imageUpload = reactive<ImageUploadType>({
+  image: null,
+  blob: new Blob,
+  selectImage(image: File) {
+    const allowedImageTypes = ["image/jpg", "image/jpeg", "image/png"];
+    imageUpload.image = image;
+    if (allowedImageTypes.includes(image.type) == false) {
+      push.error({
+        title: '图片格式错误',
+        message: '请选择 jpg 或 png 格式的图片',
+      })
+      return;
+    }
+  }
+})
+
+function uploadProblemImage(files: any) {
+  if (files.length == 0) {
+    push.error({
+      title: '请选择图片',
+      message: '请选择一张图片',
+    })
+    return;
+  }
+  imageUpload.selectImage(files[0]);
+  if (imageUpload.image == null) {
+    push.error({
+      title: '请选择图片',
+      message: '请选择一张图片',
+    })
+    return;
+  }
+  if (ImageUtils.check(imageUpload.image) == false) {
+    return;
+  }
+  ImageUtils.compress(imageUpload.image)
+    .then((res: any) => {
+      imageUpload.blob = res;
+      OssUtils.uploadProblemImage(res)
+        .then((data: any) => {
+          problem.Description += `\n\n![](/oss/problem-images/${data})\n\n`;
+          push.success({
+            title: '插入成功',
+            message: `压缩后为 ${Math.round(res.size / 1024)} KB`,
+          })
+        })
+    })
+}
+
 onMounted(() => {
   problem.PID = route.params.PID as string;
   problem.get();
 })
 
 </script>
-
-<style scoped></style>
