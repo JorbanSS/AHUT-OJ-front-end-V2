@@ -84,7 +84,7 @@
         <div class="flex">
           <google theme="outline" size="22" />
           <a class="ml-3 font-bold link link-hover"
-            href="https://analytics.google.com/analytics/web/?authuser=0#/p434271978/realtime/overview"
+            href="https://analytics.google.com/analytics/web/?authuser=0#/p435571736/realtime/overview"
             target="_blank">已接入
             Google Analytics</a>
         </div>

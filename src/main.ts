@@ -34,7 +34,7 @@ app.use(VCalendar, {})
 if (import.meta.env.MODE == "production") {
   app.use(VueGtag, {
     property: {
-      id: "G-WGSSB1C5MD"
+      id: "G-9T4V1HQNSN"
     },
   });
 };
