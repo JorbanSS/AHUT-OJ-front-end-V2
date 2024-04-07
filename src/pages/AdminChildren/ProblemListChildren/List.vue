@@ -17,12 +17,6 @@
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="goToEditProblemList()">
-          <edit-one theme="outline" size="18" />
-          编辑题单
-        </div>
-      </li>
-      <li>
         <div class="font-bold text-base hover:text-red-500" @click="problemLists.delete()">
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除题单
@@ -56,6 +50,7 @@
           <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>
           <th>题单号</th>
           <th>题单名称</th>
+          <th>操作</th>
         </tr>
       </thead>
       <tbody>
@@ -67,6 +62,9 @@
           <th>{{ item.LID }}</th>
           <td>
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/problemlist/edit/' + item.LID)">编辑题单</button>
           </td>
         </tr>
       </tbody>
@@ -178,19 +176,6 @@ let problemLists = reactive<ProblemListsType>({
   }
 
 })
-
-function goToEditProblemList() {
-  let list = getSelectedList();
-  if (list.length != 1) {
-    push.warning({
-      title: '操作不合法',
-      message: '请选择且仅选择一道比赛进行编辑',
-    })
-    return;
-  }
-  let LID = list[0];
-  router.push('/admin/problemlist/edit/' + LID);
-}
 
 onMounted(() => {
   problemLists.get(true);

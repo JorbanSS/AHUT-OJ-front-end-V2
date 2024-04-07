@@ -77,6 +77,12 @@
           <td>
             <input type="checkbox" class="checkbox" v-model="item.problem" disabled />
           </td>
+          <!-- <td>
+            <button class="btn btn-sm btn-neutral"
+              @click.stop="router.push('/admin/contest/edit/' + item.CID)">修改密码</button>
+            <button class="btn btn-sm btn-neutral"
+              @click.stop="router.push('/admin/contest/edit/' + item.CID)">修改权限</button>
+          </td> -->
         </tr>
       </tbody>
     </table>
@@ -289,7 +295,7 @@ let users = reactive({
     }
     _getAdmins(params)
       .then((data: any) => {
-        
+
         users.count = data.Count;
         users.users = data.Data;
         for (let index = 0; index < users.users.length; index++) {

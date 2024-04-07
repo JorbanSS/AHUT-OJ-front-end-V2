@@ -17,18 +17,6 @@
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="goToEditProblem()">
-          <edit-one theme="outline" size="18" />
-          编辑题目
-        </div>
-      </li>
-      <li>
-        <div class="font-bold text-base" @click="goToProblemData()">
-          <ICONdata theme="outline" size="18" />
-          编辑数据
-        </div>
-      </li>
-      <li>
         <div class="font-bold text-base hover:text-red-500" @click="problems.delete()">
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除题目
@@ -68,7 +56,7 @@
       <thead>
         <tr>
           <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>
-          <th v-for="(item, index) in ['题号', '题目名称']" :key="index">
+          <th v-for="(item, index) in ['题号', '题目名称', '操作']" :key="index">
             {{ item }}
           </th>
         </tr>
@@ -82,6 +70,10 @@
           <th>{{ item.PID }}</th>
           <td>
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
+          </td>
+          <td class="space-x-2">
+            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/problem/edit/' + item.PID)">编辑题目</button>
+            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/problem/data/' + item.PID)">编辑数据</button>
           </td>
         </tr>
       </tbody>
@@ -224,32 +216,6 @@ let problems = reactive<ProblemsType>({
       })
   },
 })
-
-function goToEditProblem() {
-  let list = getSelectedList();
-  if (list.length != 1) {
-    push.warning({
-      title: '操作不合法',
-      message: '请选择且仅选择一道题目进行编辑',
-    })
-    return;
-  }
-  let PID = list[0];
-  router.push('/admin/problem/edit/' + PID);
-}
-
-function goToProblemData() {
-  let list = getSelectedList();
-  if (list.length != 1) {
-    push.warning({
-      title: '操作不合法',
-      message: '请选择且仅选择一道题目进行编辑',
-    })
-    return;
-  }
-  let PID = list[0];
-  router.push('/admin/problem/data/' + PID);
-}
 
 onMounted(() => {
   problems.get(true);

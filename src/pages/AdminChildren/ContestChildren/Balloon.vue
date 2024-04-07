@@ -35,7 +35,7 @@
       </li>
     </ul>
   </div>
-  <div class="card bg-white shadow-lg Border max-w-5xl mx-auto pb-6">
+  <div class="card bg-white shadow-lg Border max-w-5xl mx-auto pb-4">
     <div class="px-6 pt-6 text-lg font-bold">{{ contest.Title }}</div>
     <div class="mb-4"></div>
     <table class="table table-zebra text-center">
@@ -48,7 +48,7 @@
         </tr>
       </thead>
       <tbody class="sort-target">
-        <tr v-for="(item, index) in contest.Problems" :key="item.PID" class="cursor-pointer" v-auto-animate>
+        <tr v-for="(item, index) in contest.Problems" :key="item.PID">
           <th class="w-32">
             {{ ConvertTools.Number2Alpha(index + 1) }}
           </th>
@@ -89,8 +89,6 @@ interface ProblemsWithBalloonType {
 
   [item: string]: any,
 };
-
-let list = ref<ProblemsWithBalloonType[]>([]);
 
 let contest = reactive({
   Problems: new Array<ProblemsWithBalloonType>,

@@ -17,12 +17,6 @@
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="goToEditContest()">
-          <edit-one theme="outline" size="18" />
-          编辑比赛
-        </div>
-      </li>
-      <li>
         <div class="font-bold text-base hover:text-red-500" @click="contests.delete()">
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除比赛
@@ -51,7 +45,8 @@
           <td>
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
-          <td>
+          <td class="space-x-2">
+            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/contest/edit/' + item.CID)">编辑比赛</button>
             <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/contest/balloon/' + item.CID)">编辑气球颜色</button>
           </td>
         </tr>
@@ -163,19 +158,6 @@ let contests = reactive<ContestsType>({
       })
   }
 })
-
-function goToEditContest() {
-  let list = getSelectedList();
-  if (list.length != 1) {
-    push.warning({
-      title: '操作不合法',
-      message: '请选择且仅选择一道比赛进行编辑',
-    })
-    return;
-  }
-  let CID = list[0];
-  router.push('/admin/contest/edit/' + CID);
-}
 
 onMounted(() => {
   contests.get(true);

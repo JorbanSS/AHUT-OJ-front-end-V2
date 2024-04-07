@@ -17,7 +17,7 @@
       </div>
     </div>
   </div> -->
-  <div class="py-6 flex justify-center space-x-2">
+  <div class="py-6 flex justify-center space-x-2" v-if="userDataStore.UID == user.UID" >
     <ul class="menu rounded-box bg-white Border w-fit lg:menu-horizontal ">
       <li>
         <div class="font-bold text-base" onclick="bindCodeforcesModal.showModal()">
@@ -85,6 +85,9 @@ import { _bindCodeforces } from "@/api/user";
 import { useConstValStore } from '@/store/ConstVal';
 import { _getUserInfo } from '@/api/user';
 
+import { useUserDataStore } from '@/store/UserData';
+
+const userDataStore = useUserDataStore();
 const router = useRouter();
 const route = useRoute();
 const constValStore = useConstValStore();
