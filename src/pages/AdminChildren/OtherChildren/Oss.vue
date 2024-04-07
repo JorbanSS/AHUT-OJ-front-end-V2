@@ -272,6 +272,13 @@ let buckets = reactive<BucketsType>({
     _getBuckets({})
       .then((data: any) => {
         this.buckets = data.Buckets;
+        if (data.Buckets == null) {
+          push.success({
+            title: "获取成功",
+            message: `当前目录下为空`,
+          });
+          return;
+        }
         for (let i = 0; i < this.buckets.length; i++) {
           this.buckets[i].creationDate = simplifyTime(this.buckets[i].creationDate);
         }
@@ -337,7 +344,7 @@ let objects = reactive<ObjectsType>({
         if (data.ObjectInfo == null) {
           push.success({
             title: "获取成功",
-            message: `文件夹下为空`,
+            message: `当前目录下为空`,
           });
           browserMode.value = constValStore.OSS_BROWSER_MODE_FILE;
           return;
