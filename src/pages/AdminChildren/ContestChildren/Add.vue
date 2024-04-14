@@ -181,6 +181,7 @@ let contest = reactive<ContestType>({
   UID: '',
   Type: 1,
   Pass: '',
+  Status: 0,
 
   add() {
     if (contest.Title == '' || contest.Description == '' || beginTime.value == undefined || endTime.value == undefined) {
