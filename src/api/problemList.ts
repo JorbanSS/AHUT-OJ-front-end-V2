@@ -39,3 +39,8 @@ export const _addProblemList = (data: any) => {
 export const _editProblemList = (data: any) => {
   return Post('training/edit/', data);
 }
+
+// 加入题单
+export const _joinProblemList = (data: any) => {
+  return Post('training/user/', data);
+}

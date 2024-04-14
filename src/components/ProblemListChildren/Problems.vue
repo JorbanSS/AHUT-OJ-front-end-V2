@@ -18,16 +18,16 @@
             {{ ConvertTools.Number2Alpha(index + 1) }}
           </th>
           <td class="font-bold talbe-lg">
-            <div>{{ item.Ptitle }}</div>
+            <div>{{ item.Title }}</div>
           </td>
           <td>
             <progress class="progress progress-success w-20"
-              :value="ConvertTools.Percentage(item.Solved, item.Submited)" max="100"></progress>
+              :value="ConvertTools.Percentage(item.ACNum, item.SubmitNum)" max="100"></progress>
           </td>
           <td>
-            {{ item.Solved }}
+            {{ item.ACNum }}
             /
-            {{ item.Submited }}
+            {{ item.SubmitNum }}
           </td>
         </tr>
       </tbody>
@@ -44,9 +44,9 @@ const router = useRouter();
 
 type problemsType = {
   PID: string,
-  Ptitle: string,
-  Submited: number,
-  Solved: number,
+  Title: string,
+  ACNum: number,
+  SubmitNum: number,
   Status: string,
 }
 
@@ -75,7 +75,7 @@ let props = withDefaults(defineProps<propsType>(), {
 });
 
 function goToProblem(PID: string) {
-  router.push(`/problem/${PID}`);
+  router.push(`/problem/${PID}/L${props.problemList.LID}`);
 }
 
 </script>

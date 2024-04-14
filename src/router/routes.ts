@@ -168,7 +168,7 @@ const routes = [
   },
   {
     name: "Problem",
-    path: "/problem/:PID/:CID?",
+    path: "/problem/:PID/:BindID?",
     component: () => import("@/pages/Problem.vue"),
     meta: { title: BaseTitle + "题目" },
   },

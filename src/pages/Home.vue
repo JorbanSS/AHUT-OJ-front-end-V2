@@ -68,7 +68,7 @@ let updateLogs = reactive<UpdateLogsType>({
 });
 
 let notice = ref<HomeNoticeType>({
-  Title: '',
+  Title: '暂无公告',
   Content: '',
   UpdatedTime: 0,
   CreatedTime: 0,
@@ -93,7 +93,7 @@ function getUpdateLogs() {
     .then((data: any) => {
       updateLogs.updateLogs = data.Data;
       updateLogs.count = data.Count;
-      notice.value = updateLogs.updateLogs.filter(item => item.ID == 0)[0];
+      if (updateLogs.updateLogs.filter(item => item.ID == 0).length) notice.value = updateLogs.updateLogs.filter(item => item.ID == 0)[0];
       updateLogs.updateLogs = updateLogs.updateLogs.filter(item => item.ID != 0);
     })
 }
@@ -102,7 +102,7 @@ function getUpdateLogs() {
 onMounted(() => {
   getUpdateLogs();
   // @ts-ignore
-  homeNotice.showModal();
+  if (updateLogs.updateLogs.filter(item => item.ID == 0).length) homeNotice.showModal();
   banners.get();
 })
 

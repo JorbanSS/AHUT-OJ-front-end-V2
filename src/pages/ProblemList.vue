@@ -55,7 +55,7 @@ import { Bill, Editor } from "@icon-park/vue-next";
 import { useUserDataStore } from '@/store/UserData';
 import { useConstValStore } from '@/store/ConstVal';
 
-import { _getProblemList, _getProblemListUsersInfo, _cloneProblemList } from '@/api/problemList';
+import { _getProblemList, _getProblemListUsersInfo, _cloneProblemList, _joinProblemList } from '@/api/problemList';
 
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
@@ -111,9 +111,9 @@ let problemList = reactive<ProblemListType>({
 
 type problems = {
   PID: string,
-  Ptitle: string,
-  // SubmitNum: number,
-  // ACNum: number,
+  Title: string,
+  SubmitNum: number,
+  ACNum: number,
 }
 
 let problems = reactive<Array<problems>>([])
@@ -134,6 +134,22 @@ function getProblemListUsersInfo(showInfo: boolean = false) {
         })
       }
     })
+    .catch(() => {
+      if (userDataStore.UID) {
+        let params = {
+          LID: problemList.LID,
+          UID: userDataStore.UID,
+        };
+        _joinProblemList(params)
+        .then(() => {
+          push.success({
+            title: '加入成功',
+            message: '已自动加入题单',
+          })
+        })
+        // getProblemListUsersInfo();
+      }
+    })
 }
 
 function checkAccepted(PID: string) {
@@ -147,7 +163,6 @@ onMounted(() => {
   problemList.LID = +route.params.LID;
   problemList.get();
   getProblemListUsersInfo();
-  console.log(route.path.split('/')[3].toLowerCase());
 })
 
 </script>

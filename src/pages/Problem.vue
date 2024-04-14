@@ -1,8 +1,8 @@
 <template>
   <div class="flex space-x-6">
     <div class="space-y-6">
-      <div class="card shadow-lg Border bg-white p-6 space-y-2 w-72" v-if="contest.CID">
-        <div class="text-lg space-x-2">
+      <div class="card shadow-lg Border bg-white p-6 w-72" v-if="contest.CID || problemList.LID">
+        <div class="text-lg space-x-2 space-y-2" v-if="contest.CID">
           <span>
             #{{ contest.CID }}
           </span>
@@ -10,10 +10,25 @@
             {{ contest.Title }}
           </span>
         </div>
-        <div class="grid grid-cols-5 gap-2 w-60">
+        <div>
+          <progress class="progress w-full"
+            :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
+            max="100" v-if="contest.CID">
+          </progress>
+        </div>
+        <div class="text-lg space-x-2" v-if="problemList.LID">
+          <span>
+            #{{ problemList.LID }}
+          </span>
+          <span class="font-bold ">
+            {{ problemList.Title }}
+          </span>
+        </div>
+        <div class="grid grid-cols-5 gap-2 w-60 pt-2">
           <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
             <button tabindex="0" role="button" class="btn w-full group-hover/dropdown"
-              :class="(item.PID == problem.PID ? 'btn-active' : '')" @click="contest.goToProblem(item.PID)">
+              :class="(item.PID == problem.PID ? 'btn-active' : '')"
+              @click="contest.CID ? contest.goToProblem(item.PID) : problemList.goToProblem(item.PID)">
               {{ ConvertTools.Number2Alpha(index + 1) }}
             </button>
             <div tabindex="0"
@@ -141,9 +156,9 @@
 </template>
 
 <script lang="ts" setup name="Problem">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
-import { ConvertTools } from '@/utils/globalFunctions';
+import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 import { MdPreview, MdCatalog } from 'md-editor-v3';
 import useClipboard from 'vue-clipboard3';
@@ -159,6 +174,8 @@ import { _getProblem, _submitCode } from '@/api/problem';
 import { _getContest } from '@/api/contest';
 
 import 'md-editor-v3/lib/preview.css';
+import { ProblemListType } from '@/type/problemList';
+import { _getProblemList } from '@/api/problemList';
 
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
@@ -187,27 +204,65 @@ let contest = reactive<ContestType>({
   Type: 0,
   Pass: '',
   content: '',
+  TimeNow: 0,
+  Status: 0,
 
   get() {
-    if (contest.CID == 0) return;
-    _getContest({}, contest.CID)
+    if (this.CID == 0) return;
+    _getContest({}, this.CID)
       .then((data: any) => {
-        contest.Title = data.Title;
-        contest.BeginTime = data.BeginTime;
-        contest.EndTime = data.EndTime;
-        contest.Duration = ConvertTools.TimeInterval(contest.BeginTime, contest.EndTime);
-        contest.CID = data.CID;
-        contest.IsPublic = data.IsPublic;
+        this.Title = data.Title;
+        this.BeginTime = data.BeginTime;
+        this.EndTime = data.EndTime;
+        this.Duration = ConvertTools.TimeInterval(this.BeginTime, this.EndTime);
+        this.CID = data.CID;
+        this.IsPublic = data.IsPublic;
         problems = data.Data;
         push.success({
           title: '同步成功',
-          message: `已同步竞赛 #${contest.CID}`,
+          message: `已同步竞赛 #${this.CID}`,
         })
       })
   },
 
   goToProblem(PID: string) {
-    router.push(`/problem/${PID}/${contest.CID}`);
+    router.push(`/problem/${PID}/C${this.CID}`);
+    problem.PID = PID;
+  },
+})
+
+let problemList = reactive<ProblemListType>({
+  CID: 0,
+  IsPublic: 0,
+  Size: 0,
+  Title: '',
+  Description: '',
+  Problems: '',
+  UID: '',
+  Type: 0,
+  Pass: '',
+  content: '',
+
+  get() {
+    if (this.LID == 0) return;
+    _getProblemList({}, this.LID)
+      .then((data: any) => {
+        this.Title = data.Title;
+        this.BeginTime = data.BeginTime;
+        this.EndTime = data.EndTime;
+        this.Duration = ConvertTools.TimeInterval(this.BeginTime, this.EndTime);
+        this.LID = data.LID;
+        this.IsPublic = data.IsPublic;
+        problems = data.Data;
+        push.success({
+          title: '同步成功',
+          message: `已同步题单 #${this.LID}`,
+        })
+      })
+  },
+
+  goToProblem(PID: string) {
+    router.push(`/problem/${PID}/L${this.LID}`);
     problem.PID = PID;
   },
 })
@@ -338,15 +393,29 @@ function syncUrl() {
   if (typeof route.params.PID == 'string') {
     problem.PID = route.params.PID;
   }
-  if (route.params.CID != undefined && typeof route.params.CID == 'string') {
-    contest.CID = +route.params.CID;
-    contest.get();
+  if (route.params.BindID != undefined && typeof route.params.BindID == 'string') {
+    let bindID: string = route.params.BindID;
+    if (bindID[0] == "C") {
+      contest.CID = +bindID.substring(1);
+      contest.get();
+      getServerTime()
+        .then((res: any) => {
+          contest.TimeNow = res;
+        })
+    } else if (bindID[0] == "L") {
+      problemList.LID = +bindID.substring(1);
+      problemList.get();
+    }
   }
 }
 
 onMounted(() => {
   syncUrl();
   if (problem.get != undefined) problem.get();
+})
+
+watch(() => problem.PID, () => {
+  problem.get();
 })
 
 </script>

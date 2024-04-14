@@ -196,6 +196,7 @@ let contest = reactive<ContestType>({
   UID: '',
   Type: 1,
   Pass: '',
+  Status: 0,
 
   get() {
     _getContest({}, contest.CID)

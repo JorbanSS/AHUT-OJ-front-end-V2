@@ -1,6 +1,6 @@
 export interface ProblemListSimplifiedType {
   LID: number,            // 题单唯一 LID, 服务器分配
-  Ptitle: string,          // 标题
+  Title: string,          // 标题
   UID: string,            // 创建人
   StartTime: number,      // 创建时间
   [item: string]: any,    // 其他属性

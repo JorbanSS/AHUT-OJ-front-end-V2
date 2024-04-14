@@ -94,3 +94,8 @@ export const _getUsersOnline = (data: any) => {
 export const _editPassword = (data: any) => {
   return Post('user/edit/pass/', data);
 }
+
+// 修改用户头像 URL
+export const _editHeadUrl = (data: any) => {
+  return Post('user/editHead/', data);
+}

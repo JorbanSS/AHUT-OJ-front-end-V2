@@ -4,7 +4,7 @@
       <div class="hero-content flex-col lg:flex-row">
         <div class="avatar">
           <div class="w-36 rounded-xl">
-            <img :src="'/oss/head-images/UID-' + user.UID + '.png'" />
+            <img :src="'/oss/head-images/' + user.HeadURL" />
           </div>
         </div>
       </div>
@@ -178,7 +178,7 @@ import { type UserType, type BindType } from '@/type/user';
 import { push } from 'notivue';
 import { Ranking, Cattle, HorseZodiac, EmotionHappy, Key, Avatar } from "@icon-park/vue-next";
 
-import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editPassword } from "@/api/user";
+import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword } from "@/api/user";
 import { useConstValStore } from '@/store/ConstVal';
 import { _getUserInfo } from '@/api/user';
 
@@ -413,14 +413,26 @@ let headImage = reactive<ImageUploadType>({
       })
       return;
     }
-    if (ImageUtils.check(headImage.image) == false) {
-      return;
-    }
+    if (ImageUtils.check(headImage.image) == false) return;
     ImageUtils.compress(headImage.image).
       then((res: any) => {
         headImage.blob = res;
         // @ts-ignore
-        OssUtils.uploadHeadImage(res, user.UID);
+        OssUtils.uploadHeadImage(res, user.UID)
+          .then((res: any) => {
+            let headUrl = res;
+            let params = {
+              HeadPath: headUrl,
+            }
+            _editHeadUrl(params)
+              .then(() => {
+                user.get();
+                push.success({
+                  title: '上传成功',
+                  message: '头像已上传',
+                })
+              })
+          })
       })
   }
 })

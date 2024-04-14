@@ -19,10 +19,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in contests.contests" :key="item.CID" @click="router.push(`/contest/${item.CID}`)"
-          class="cursor-pointer">
+        <tr v-for="item in contests.contests" :key="item.CID" @click="item.Status ? router.push(`/contest/${item.CID}`) : 0"
+          :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': item.Status == 0 }">
           <td class="font-bold talbe-lg">
-            {{ item.status }}
+            {{ ContestStatus[item.Status] }}
           </td>
           <th>
             {{ item.CID }}
@@ -64,7 +64,7 @@
 <script lang="ts" setup name="Contests">
 import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { push } from 'notivue';
-import { ConvertTools } from '@/utils/globalFunctions';
+import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 import { useRouter } from 'vue-router';
 
 import Pagination from "@/components/Main/Pagination.vue";
@@ -72,6 +72,14 @@ import { type ContestsType, type ContestSimplifiedType } from '@/type/contest';
 import { _getContests } from '@/api/contest';
 
 const router = useRouter();
+
+let TimeNow = ref(0);
+
+let ContestStatus = [
+  '未开始',
+  '进行中',
+  '已结束',
+];
 
 let contests = reactive<ContestsType>({
   contests: Array<ContestSimplifiedType>(),
@@ -98,6 +106,11 @@ let contests = reactive<ContestsType>({
             message: `一共获取了 ${contests.count} 场比赛`,
           })
         }
+        contests.contests.forEach((item) => {
+          if (item.EndTime < TimeNow.value) item.Status = 2;
+          else if (item.BeginTime > TimeNow.value) item.Status = 0;
+          else item.Status = 1;
+        })
       })
   },
 
@@ -118,10 +131,18 @@ let contests = reactive<ContestsType>({
 })
 
 onMounted(() => {
+  getServerTime()
+    .then((res: any) => {
+      TimeNow.value = res;
+    })
   contests.get(true);
 })
 
 watch(() => contests.page, () => {
+  getServerTime()
+    .then((res: any) => {
+      TimeNow.value = res;
+    })
   contests.get();
 })
 

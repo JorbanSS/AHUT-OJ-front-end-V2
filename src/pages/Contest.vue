@@ -38,7 +38,9 @@
         sec
       </div>
     </div> -->
-    <progress class="progress w-full" :value="82" max="100"></progress>
+    <progress class="progress w-full"
+      :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
+      max="100"></progress>
   </div>
   <div class="m-6"></div>
   <div class="flex space-x-2">
@@ -51,7 +53,8 @@
         </RouterLink>
       </li>
     </ul>
-    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto" v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit" >
+    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto"
+      v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
       <li>
         <a @click="contest.cloneToProblemList()">
           <bill theme="outline" size="18" />
@@ -81,7 +84,7 @@
 import { ref, reactive, onMounted, watch } from 'vue';
 import { type ContestType } from '@/type/contest';
 import { push } from 'notivue';
-import { ConvertTools } from '@/utils/globalFunctions';
+import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
 import { Editor, PartyBalloon, Bill } from '@icon-park/vue-next';
 import { contestNavItems } from '@/config';
@@ -93,6 +96,8 @@ const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
 const router = useRouter();
 const route = useRoute();
+
+let TimeNow = ref(0);
 
 let contest = reactive<ContestType>({
   CID: 0,
@@ -107,6 +112,7 @@ let contest = reactive<ContestType>({
   UID: '',
   Type: 0,
   Pass: '',
+  Status: 0,
 
   get() {
     _getContest({}, contest.CID)
@@ -154,6 +160,10 @@ let problems = reactive<Array<problemsType>>([])
 onMounted(() => {
   contest.CID = +route.params.CID;
   contest.get();
+  getServerTime()
+    .then((res: any) => {
+      TimeNow.value = res;
+    })
 })
 
 </script>

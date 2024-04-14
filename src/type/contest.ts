@@ -6,6 +6,7 @@ export interface ContestSimplifiedType {
   IsPublic: number,       // 是否为私有比赛
   Type: number,           // 类型, 0: oi, 1: icpc, 2: codeforces
   UID: string,            // 馔题人
+  Status: number,         // 比赛状态, 0: 未开始, 1: 进行中, 2: 已结束
   [item: string]: any,    // 其他属性
 }
 

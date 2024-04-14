@@ -24,13 +24,21 @@ export class OssUtils {
 
   public static uploadHeadImage(file: File, UID: string) {
     return new Promise((resolve) => {
-      let objectName = `UID-${UID}.${file.type.split("/")[file.type.split("/").length - 1]}`;
-      this.uploadObject(file, "head-images", objectName).then((data: any) => {
-        push.success({
-          title: "上传成功",
-          message: `图片压缩后为 ${Math.round(file.size / 1024)} KB`,
-        });
-        resolve(data.UpInfo.Key);
+      let fileMD5 = "";
+      FileUtils.getFileMD5(file as File).then((data: any) => {
+        fileMD5 = data;
+        let objectName = `${UID}-${fileMD5}.${
+          file.type.split("/")[file.type.split("/").length - 1]
+        }`;
+        this.uploadObject(file, "head-images", objectName).then(
+          (data: any) => {
+            push.success({
+              title: "上传成功",
+              message: `图片压缩后为 ${Math.round(file.size / 1024)} KB`,
+            });
+            resolve(data.UpInfo.Key);
+          }
+        );
       });
     });
   }

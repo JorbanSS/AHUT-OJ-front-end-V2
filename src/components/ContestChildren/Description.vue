@@ -30,6 +30,7 @@ let props = withDefaults(defineProps<propsType>(), {
     UID: '',
     Type: 0,
     Pass: '',
+    Status: 0,
   }),
 });
 

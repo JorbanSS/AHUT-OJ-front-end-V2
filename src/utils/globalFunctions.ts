@@ -3,6 +3,7 @@ import { Get } from "@/utils/axios/request";
 import { push } from "notivue";
 import { useConstValStore } from "@/store/ConstVal";
 import { ContestRankingProblemType } from "@/type/contest";
+import { _getServerTime } from "@/api/common";
 
 // 转换工具
 export class ConvertTools {
@@ -93,25 +94,10 @@ export class Validator {
 
 // 获取服务器时间
 export function getServerTime() {
-  return new Promise((resolve, reject) => {
-    Get('now', {})
-    .then((res: any) => {
-      let data = res.data;
-      if (data.code == 0) {
-        let serverTime = data.time;
-        if (serverTime < 1e10) serverTime *= 1000;
-        resolve(serverTime);
-      }
-      else {
-        push.error({
-          title: `Error: ${data.Code}`,
-          message: `${data.Msg}`,
-        })
-        reject(data);
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
+  return new Promise((resolve) => {
+    _getServerTime({})
+    .then((data: any) => {
+      resolve(data.time);
     })
   })
 }

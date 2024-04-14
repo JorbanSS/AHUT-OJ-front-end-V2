@@ -69,13 +69,14 @@ let props = withDefaults(defineProps<propsType>(), {
     UID: '',
     Type: 0,
     Pass: '',
+    Status: 0,
   }),
   
   problems: () => [],
 });
 
 function goToProblem(PID: string) {
-  router.push(`/problem/${PID}/${props.contest.CID}`);
+  router.push(`/problem/${PID}/C${props.contest.CID}`);
 }
 
 </script>
