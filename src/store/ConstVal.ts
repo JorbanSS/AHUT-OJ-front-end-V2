@@ -65,22 +65,6 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
       RANKING_COLOR_AC: "#E1FFB5",
       RANKING_COLOR_FIRST_AC: "#3DB03D",
 
-      // 提交的通过状态颜色
-			SUBMIT_STATUS_COLOR_WA: "#ED3F14",
-			SUBMIT_STATUS_COLOR_AC: "#19BE6B",
-			SUBMIT_STATUS_COLOR_TLE: "#8A2BE2",
-			SUBMIT_STATUS_COLOR_MLE: "#A61E4D",
-			SUBMIT_STATUS_COLOR_RE: "#BDB76B",
-			SUBMIT_STATUS_COLOR_PE: "#5f9EA0",
-			SUBMIT_STATUS_COLOR_OLE: "#212121",
-			SUBMIT_STATUS_COLOR_CE: "#8C8C8C",
-			SUBMIT_STATUS_COLOR_REJUDGING: "#D9933",
-			SUBMIT_STATUS_COLOR_JUDGING: "#DD9933",
-			SUBMIT_STATUS_COLOR_PENDING: "#EBCB8B",
-			SUBMIT_STATUS_COLOR_DENIAL_JUDGE: "#9E1030",
-			SUBMIT_STATUS_COLOR_JUDGE_TIMEOUT: "#BDBDBD",
-			SUBMIT_STATUS_COLOR_FAILED: "#4D1700",
-
       // 报错提示信息
       SUBMIT_RESULT_PE:
         "你的输出结果也许是正确的，但是格式存在问题，请检查输出结果的换行情况\n\n例如 C++: cout << a; 和 cout << a << endl;\n\n或者检查输出结果的空个间隔情况、中英文格式等",

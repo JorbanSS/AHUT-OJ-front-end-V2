@@ -328,11 +328,12 @@ let problem = reactive<ProblemType>({
       Lang: +submit.value.Lang,
     }
     _submitCode(params)
-      .then(() => {
+      .then((data: any) => {
         push.success({
           title: '提交成功',
           message: '已提交代码',
         })
+        router.push(`/record/${data.SID}`);
       })
   },
 

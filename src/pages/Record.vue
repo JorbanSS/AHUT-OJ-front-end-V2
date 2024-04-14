@@ -1,4 +1,10 @@
 <template>
+  <div role="alert" class="alert text-white shadow-lg font-bold border-0"
+    :style="'background-color: ' + submitStatusColor[record.Result]" v-if="record.Result != ''">
+    <component :is="submitInfo[record.Result].icon" theme="outline" size="24" />
+    <span class="text-lg">{{ submitInfo[record.Result].label }}</span>
+  </div>
+  <div class="m-6"></div>
   <div class="card bg-white shadow-lg Border">
     <table class="table table-zebra">
       <thead>
@@ -62,8 +68,10 @@ import { type RecordType } from '@/type/record';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useConstValStore } from '@/store/ConstVal';
 import { useRoute } from 'vue-router';
+import { submitInfo, submitStatusColor } from '@/config';
+import confetti from 'canvas-confetti';
 
-import { _getRecord } from '@/api/record'
+import { _getRecord } from '@/api/record';
 
 const constValStore = useConstValStore();
 const route = useRoute();
@@ -87,8 +95,39 @@ let record = ref<RecordType>({
       .then((data: any) => {
         record.value = data;
       })
+      .then(() => {
+        if (record.value.Result === 'AC') startConfetti();
+      })
   },
 })
+
+function startConfetti() {
+  let end = Date.now() + (1.3 * 1000); // 时间为2秒
+  let colors = ['#bb0000', '#ffffff']; // 颜色数组
+
+  function frame() {
+    confetti({
+      particleCount: 2,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: colors
+    });
+    confetti({
+      particleCount: 2,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: colors
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  }
+
+  frame();
+}
 
 onMounted(() => {
   record.value.SID = +route.params.SID;

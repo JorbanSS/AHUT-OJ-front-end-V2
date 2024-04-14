@@ -1,5 +1,6 @@
 import { type NavItemType } from "@/type/oj";
 import { ToolbarNames } from "md-editor-v3";
+import { SubmitInfoType } from "./type/record";
 
 import {
   DocumentFolder,
@@ -15,7 +16,53 @@ import {
   MoreTwo,
   Bill,
   Code,
+  Check,
+  Close,
+  Caution,
+  Time,
+  LoadingOne,
+  HardDisk,
 } from "@icon-park/vue-next";
+
+export const submitStatusColor: Record<string, string> = {
+  AC: "#19BE6B",
+  WA: "#ED3F14",
+  TLE: "#8A2BE2",
+  MLE: "#A61E4D",
+  RE: "#BDB76B",
+  PE: "#5F9EA0",
+  OLE: "#212121",
+  CE: "#8C8C8C",
+  REJUDGING: "#D9933",
+  JUDGING: "#DD9933",
+  PENDING: "#EBCB8B",
+  DENIAL_JUDGE: "#9E1030",
+  JUDGE_TIMEOUT: "#BDBDBD",
+  FAILED: "#4D1700",
+};
+
+export const submitInfo: SubmitInfoType = {
+  'AC': { label: "Accepted", icon: Check },
+  'WA': { label: "Wrong Answer", icon: Close },
+  'TLE': { label: "Time Limit Exceeded", icon: Time },
+  'MLE': { label: "Memory Limit Exceeded", icon: HardDisk },
+  'PENDING': { label: "Pending", icon: LoadingOne },
+  'JUDGING': { label: "Judging", icon: LoadingOne },
+  'REJUDGING': { label: "Rejudging", icon: Caution },
+  'RE': { label: "Runtime Error", icon: Caution },
+  'PE': { label: "Presentation Error", icon: Caution },
+  'OLE': { label: "Output Limit Exceeded", icon: Caution },
+  'CE': { label: "Compile Error", icon: Caution },
+  'JUDGE_TIMEOUT': { label: "Judge Timeout", icon: Caution },
+  'DENIAL_JUDGE': { label: "Denial Judge", icon: Caution },
+  'FAILED': { label: "Failed", icon: Caution },
+};
+
+export const aboutNavItems = [
+  { label: "提示信息", value: 0 },
+  { label: "出题/比赛 规范", value: 1 },
+  { label: "关于 OJ", value: 2 },
+];
 
 export const problemTypeOptions = [
   { label: "全部", value: "" },

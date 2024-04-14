@@ -62,7 +62,7 @@
       <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
         <label class="input input-bordered flex items-center gap-2">
           记录号
-          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.SID" min="0">
+          <input type="text" class="grow" placeholder="" v-model="rejudgeInfo.SID">
         </label>
         <label class="input input-bordered flex items-center gap-2">
           用户号
@@ -74,7 +74,7 @@
         </label>
         <label class="input input-bordered flex items-center gap-2">
           比赛号
-          <input type="number" class="grow" placeholder="" v-model="rejudgeInfo.CID" min="1000">
+          <input type="text" class="grow" placeholder="" v-model="rejudgeInfo.CID">
         </label>
         <button class="btn btn-neutral" @click="rejudgeInfo.rejudge()">重判</button>
       </div>
@@ -132,7 +132,7 @@ let rejudgeInfo = reactive<RejudgeInfoType>({
   SID: 0,
   UID: '',
   PID: '',
-  CID: 1000,
+  CID: 0,
 
   rejudge() {
     let params: RejudgeInfoType = {};
@@ -143,10 +143,10 @@ let rejudgeInfo = reactive<RejudgeInfoType>({
       });
       return;
     }
-    if (rejudgeInfo.SID) params.SID = rejudgeInfo.SID;
+    if (rejudgeInfo.SID) params.SID = +rejudgeInfo.SID;
     if (rejudgeInfo.UID) params.UID = rejudgeInfo.UID;
     if (rejudgeInfo.PID) params.PID = rejudgeInfo.PID;
-    if (rejudgeInfo.CID) params.CID = rejudgeInfo.CID;
+    if (rejudgeInfo.CID) params.CID = +rejudgeInfo.CID;
     _rejudge(params)
       .then(() => {
         push.success({

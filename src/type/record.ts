@@ -35,3 +35,11 @@ export interface RejudgeInfoType {
   CID?: number,           // 比赛 CID
   [item: string]: any,    // 其他属性
 }
+
+export interface SubmitInfoType {
+  [key: string]: {
+    label: string,        // 显示名
+    icon: any,            // 图标名
+    // color: string,        // 背景颜色
+  }
+}
