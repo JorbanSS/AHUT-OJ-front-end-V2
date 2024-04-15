@@ -27,6 +27,11 @@
       </select>
       <button class="btn join-item btn-neutral" @click="records.get(true)">搜索</button>
     </div>
+    <div class="m-3"></div>
+    <div class="flex">
+      <span class="my-auto mr-4">快捷方式</span>
+      <button class="btn join-item btn-neutral w-fit btn-sm" @click="records.onlyMine()">仅看自己</button>
+    </div>
   </div>
   <div class="mt-6"></div>
   <div class="bg-white card shadow-lg Border">
@@ -87,12 +92,16 @@ import { ConvertTools } from '@/utils/globalFunctions';
 import { useConstValStore } from '@/store/ConstVal';
 import { useRouter } from 'vue-router';
 import { submitLanguageOptions } from '@/config';
+import { useRoute } from 'vue-router';
 
 import Pagination from "@/components/Main/Pagination.vue";
 import { _getRecords } from '@/api/record';
+import { useUserDataStore } from '@/store/UserData';
 
+const route = useRoute();
 const constValStore = useConstValStore();
 const router = useRouter();
+const userDataStore = useUserDataStore();
 
 let toPage = ref();
 
@@ -113,16 +122,21 @@ let records = reactive<RecordsType>({
     Result: '',
   },
 
+  onlyMine() {
+    this.searchInfo.UID = userDataStore.UID;
+    this.get(true);
+  },
+
   get(showInfo: boolean = false) {
     let params: any = {
-      Page: records.page - 1,
-      Limit: records.limit,
+      Page: this.page - 1,
+      Limit: this.limit,
     };
-    if (records.searchInfo.UID != undefined) params.UID = records.searchInfo.UID;
-    if (records.searchInfo.LID != undefined) params.LID = records.searchInfo.LID;
-    if (records.searchInfo.PID != '') params.PID = records.searchInfo.PID;
-    if (records.searchInfo.Lang != 0) params.Lang = records.searchInfo.Lang;
-    if (records.searchInfo.Result != '') params.Result = records.searchInfo.Result;
+    if (this.searchInfo.UID != undefined) params.UID = this.searchInfo.UID;
+    if (this.searchInfo.LID != undefined) params.LID = this.searchInfo.LID;
+    if (this.searchInfo.PID != '') params.PID = this.searchInfo.PID;
+    if (this.searchInfo.Lang != 0) params.Lang = this.searchInfo.Lang;
+    if (this.searchInfo.Result != '') params.Result = this.searchInfo.Result;
     _getRecords(params)
       .then((data: any) => {
         records.count = data.Count;
@@ -152,7 +166,15 @@ let records = reactive<RecordsType>({
   }
 })
 
+function syncUrl() {
+  if (typeof route.query.PID != 'undefined') records.searchInfo.PID = route.query.PID;
+  if (typeof route.query.UID != 'undefined') records.searchInfo.UID = route.query.UID;
+  if (typeof route.query.Lang != 'undefined') records.searchInfo.Lang = route.query.Lang;
+  if (typeof route.query.Result != 'undefined') records.searchInfo.Result = route.query.Result;
+}
+
 onMounted(() => {
+  syncUrl();
   records.get(true);
 })
 

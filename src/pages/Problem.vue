@@ -65,11 +65,11 @@
           </span>
         </div>
         <div class="grid grid-cols-2 gap-2">
-          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-7">
-            <stopwatch-start theme="outline" size="16" fill="#fff" />
+          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8">
+            <stopwatch-start theme="outline" size="17" fill="#fff" />
             &nbsp;{{ problem.LimitTime }} ms
           </div>
-          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-7">
+          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8">
             <disk theme="outline" size="16" fill="#fff" />
             &nbsp;{{ problem.LimitMemory }} MB
           </div>
@@ -100,13 +100,21 @@
             </div>
           </button>
         </div>
-        <button class="btn btn-info">
-          <tips theme="outline" size="20" />
-          <div class="text-base">
-            题 解
-          </div>
-          <div class="badge" v-if="problem.SolutionNumber">{{ problem.SolutionNumber }}</div>
-        </button>
+        <div class="grid grid-cols-2 gap-2">
+          <button class="btn" @click="$router.push(`/records?PID=${problem.PID}`)">
+            <ICONdata theme="outline" size="18" />
+            <div class="text-base">
+              记 录
+            </div>
+          </button>
+          <button class="btn">
+            <tips theme="outline" size="20" />
+            <div class="text-base">
+              题 解
+            </div>
+            <div class="badge" v-if="problem.SolutionNumber">{{ problem.SolutionNumber }}</div>
+          </button>
+        </div>
         <button class="btn btn-success" onclick="codeModal.showModal()">
           <check theme="outline" size="20" />
           <div class="text-base">
@@ -121,17 +129,18 @@
         <MdCatalog :editorId="id" :scrollElement="scrollElement" class="text-sm" />
       </div>
     </div>
-    <div class="card shadow-lg bg-white Border container h-fit">
-      <div class="flex space-x-2 p-6 pb-0">
-        <button class="btn w-fit" @click="copyMarkdown()">
-          <copy theme="outline" size="18" />
-          复制 MarkDown
-        </button>
-        <button class="btn w-fit" @click="downloadPdf()">
-          <file-pdf theme="outline" size="18" />
-          下载 PDF
-        </button>
-      </div>
+    <div class="card shadow-lg bg-white Border container h-fit"
+      v-if="problem.ContentType == constValStore.PROBLEM_CONTENTTYPE_PDF">
+      <button class="btn w-fit ml-6 my-6" @click="downloadPdf()">
+        <file-pdf theme="outline" size="18" />
+        下载 PDF
+      </button>
+    </div>
+    <div class="card shadow-lg bg-white Border container h-fit" v-else>
+      <button class="btn w-fit ml-6 mt-6" @click="copyMarkdown()">
+        <copy theme="outline" size="18" />
+        复制 MarkDown
+      </button>
       <MdPreview :editorId="id" :modelValue="problem.content" class="px-1 mb-4" />
     </div>
   </div>
@@ -156,7 +165,7 @@
 </template>
 
 <script lang="ts" setup name="Problem">
-import { ref, reactive, onMounted, watch } from 'vue';
+import { ref, reactive, onMounted, watch, nextTick } from 'vue';
 import { push } from 'notivue';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
@@ -310,6 +319,14 @@ let problem = reactive<ProblemType>({
           this.content = this.Description;
         }
       })
+      .then(() => {
+        if (this.ContentType == constValStore.PROBLEM_CONTENTTYPE_PDF) {
+          push.info({
+            title: '提示',
+            message: '题面为 PDF 格式，请点击下载按钮下载',
+          })
+        }
+      })
   },
 
   submitCode() {
@@ -377,17 +394,17 @@ async function copyMarkdown() {
 }
 
 async function downloadPdf() {
-  try {
-    await toClipboard(problem.Description);
-    push.success({
-      title: '下载成功',
-      message: '已保存题面 PDF',
-    })
-  } catch (e) {
-    push.error({
-      title: '下载失败',
-    })
-  }
+  const link = document.createElement('a');
+  link.href = '/oss/problem-pdfs/' + problem.Description;
+  console.log(link.href);
+  link.setAttribute('download', problem.PID + '-' + problem.Title + '.pdf');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  push.success({
+    title: '下载成功',
+    message: '已保存题面 PDF',
+  })
 }
 
 function syncUrl() {
@@ -412,7 +429,6 @@ function syncUrl() {
 
 onMounted(() => {
   syncUrl();
-  if (problem.get != undefined) problem.get();
 })
 
 watch(() => problem.PID, () => {

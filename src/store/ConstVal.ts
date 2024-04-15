@@ -35,6 +35,7 @@ export const useConstValStore = defineStore(StoreNameSpace.ConstVal, {
       // 题目描述文本类型
       PROBLEM_CONTENTTYPE_NORMAL: -1,
       PROBLEM_CONTENTTYPE_MARKDOWN: 1,
+      PROBLEM_CONTENTTYPE_PDF: 2,
 
       // 题目是否可见
       PROBLEM_VISIBLE: 1,

@@ -107,7 +107,6 @@ async function autoLogin() {
         userDataStore.init();
         return;
       }
-
       data.PermissionMap = userInfo.PermissionMap;
       userDataStore.loginSimplified(data);
       userDataStore.updatePermissionMap(data.PermissionMap);
@@ -117,7 +116,7 @@ async function autoLogin() {
       return;
     }
     showConfig.init();
-    getUserPermission(userDataStore.UID);
+    // getUserPermission(userDataStore.UID);
     return;
   }
 

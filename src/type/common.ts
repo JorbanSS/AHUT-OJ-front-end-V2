@@ -14,6 +14,11 @@ export interface ImageUploadType {
   [item: string]: any,          // 其他属性
 }
 
+export interface FileUploadType {
+  file: File | null,           // 图片
+  [item: string]: any,          // 其他属性
+}
+
 // export interface FileUploadType {
 //   name: string,         // 文件名
 //   type: string,         // 文件类型

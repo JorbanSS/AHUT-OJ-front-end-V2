@@ -9,7 +9,7 @@
     <table class="table table-zebra">
       <thead>
         <tr>
-          <th v-for="(item, index) in ['状态', '分数', '提交号', '题号', '提交者', '用时', '内存', '语言', '提交时间']" :key="index">
+          <th v-for="(item, index) in ['分数', '提交号', '题号', '提交者', '用时', '内存', '语言', '提交时间']" :key="index">
             {{ item }}
           </th>
         </tr>
@@ -17,18 +17,17 @@
       <tbody>
         <tr>
           <td>
-            {{ record.Result }}
-          </td>
-          <td>
-            100
+            {{ ConvertTools.Percentage(record.PassSample, record.SampleNumber) }}
           </td>
           <th class="font-bold talbe-lg">
             {{ record.SID }}
           </th>
-          <td>
+          <td @click="$router.push(`/problem/${record.PID}`)"
+            class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目">
             {{ record.PID }}
           </td>
-          <td>
+          <td @click="$router.push(`/user/${record.UID}`)"
+            class="font-bold text-blue-500 hover:text-blue-400 cursor-pointer">
             {{ record.UID }}
           </td>
           <td>

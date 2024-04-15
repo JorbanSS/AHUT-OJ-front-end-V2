@@ -58,6 +58,25 @@ export const submitInfo: SubmitInfoType = {
   'FAILED': { label: "Failed", icon: Caution },
 };
 
+export const verifyModeOptions = [
+  { label: "账号密码", value: 0 },
+  { label: "邮箱密码", value: 1 },
+  // { label: "邮箱验证", value: 2 },
+];
+
+export const problemOriginOptions = [
+  { label: "Local", value: -1 },
+  { label: "Codeforces", value: 1 },
+  { label: "Atcoder", value: 2 },
+  { label: "Virtual Judge", value: 3 },
+];
+
+export const problemContentOptions = [
+  { label: "PlainText", value: -1 },
+  { label: "MarkDown", value: 1 },
+  { label: "PDF", value: 2 },
+];
+
 export const aboutNavItems = [
   { label: "提示信息", value: 0 },
   { label: "出题/比赛 规范", value: 1 },

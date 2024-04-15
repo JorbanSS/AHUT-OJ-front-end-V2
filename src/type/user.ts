@@ -35,6 +35,8 @@ export interface UserType extends UserSimplifiedType {
 export interface LoginInfoType {
   UID: string,             // UID
   Pass: string,            // 密码
+  Email: string,           // 邮箱
+  Code: string,            // 验证码
   Save: boolean,           // 是否保存 3 天
   [item: string]: any,     // 其他属性
 }

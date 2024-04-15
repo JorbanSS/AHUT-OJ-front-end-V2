@@ -49,10 +49,7 @@
     <div class="flex space-x-2">
       <select class="select select-bordered w-72 max-w-xs text-base" v-model="problem.Origin">
         <option disabled selecte value="0">题目来源</option>
-        <option value="-1">Local</option>
-        <option value="1">Codeforces</option>
-        <!-- <option value="2">AtCoder</option>
-        <option value="3">Virtual Judge</option> -->
+        <option v-for="item in problemOriginOptions" :key="item.value" :value="item.value">{{ item.label }}</option>
       </select>
       <label class="input input-bordered flex items-center gap-2 w-72" v-if="problem.Origin != -1">
         题号
@@ -70,14 +67,13 @@
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
     <select class="select select-bordered w-72 max-w-xs text-base" v-model="problem.ContentType">
       <option disabled selecte value="0">题面类型</option>
-      <option value="-1">PlainText</option>
-      <option value="1">MarkDown</option>
+      <option v-for="item in problemContentOptions" :key="item.value" :value="item.value">{{ item.label }}</option>
     </select>
     <div v-if="problem.ContentType == 1">
       <MdEditor v-model="problem.Description" :height="500" :toolbars="markdownToolbars"
         @onUploadImg="uploadProblemImage" />
     </div>
-    <div v-else>
+    <div v-else-if="problem.ContentType == -1">
       <label class="form-control">
         <div class="label">题目描述</div>
         <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Description"></textarea>
@@ -103,25 +99,35 @@
         <textarea class="textarea textarea-bordered h-24" placeholder="" v-model="problem.Hit"></textarea>
       </label>
     </div>
+    <div v-else-if="problem.ContentType == 2" class="space-x-4">
+      <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept=".pdf"
+        @change="problemPdfChangeHandle" />
+      <button class="btn btn-neutral" @click="problemPdf.uploadProblemPdf()">上传题面 PDF</button>
+      <p class="mt-2">请与 PDF 加密配套使用，建议对打印和复制同时加密，密码请使用强密码</p>
+      <p class="mt-2">例如：
+        <a href="https://www.cleverpdf.com/cn/encrypt-pdf" target="_blank"
+          class="text-blue-500">https://www.cleverpdf.com/cn/encrypt-pdf
+        </a>
+      </p>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup name="AddProblem">
 import { Add, StopwatchStart, Disk, DocumentFolder } from '@icon-park/vue-next';
 import { type ProblemType } from '@/type/problem';
-import { type ImageUploadType } from '@/type/common';
+import { FileUploadType, type ImageUploadType } from '@/type/common';
 import { ref, reactive } from 'vue';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';
 import { useRouter } from 'vue-router';
-import { markdownToolbars } from '@/config';
+import { markdownToolbars, problemContentOptions, problemOriginOptions } from '@/config';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils"
 
 import { _addProblem } from "@/api/problem";
 import 'md-editor-v3/lib/style.css';
 
-const problemImageInput = ref<File | null>(null);
 const router = useRouter();
 
 let problem = reactive<ProblemType>({
@@ -243,5 +249,49 @@ function uploadProblemImage(files: any) {
         })
     })
 }
+
+let problemPdf = reactive<FileUploadType>({
+  file: null,
+  selectFile(file: File) {
+    const allowedFileTypes = ["application/pdf"];
+    this.file = file;
+    if (allowedFileTypes.includes(file.type) == false) {
+      push.error({
+        title: '文件格式错误',
+        message: '请选择 PDF 格式的文件',
+      })
+      return;
+    }
+    push.success({
+      title: '选择成功',
+      message: '已选择',
+    })
+  },
+
+  uploadProblemPdf() {
+    if (this.file == null) {
+      push.warning({
+        title: '请选择文件',
+      })
+      return;
+    }
+    OssUtils.uploadObject(this.file, "problem-pdfs", "")
+      .then((data: any) => {
+        if (this.file == null) return;
+        push.success({
+          title: '上传成功',
+          message: `文件 ${this.file.name} 大小为 ${Math.round(this.file.size / 1024)} KB`,
+        })
+        problem.Description = data.UpInfo.Key;
+      })
+  }
+})
+
+const problemPdfChangeHandle = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    problemPdf.selectFile(target.files[0]);
+  }
+};
 
 </script>
