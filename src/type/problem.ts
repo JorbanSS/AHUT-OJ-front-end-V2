@@ -51,6 +51,12 @@ export interface JudgeFileType {
   [item: string]: any,    // 其他属性
 }
 
+export interface JudgeFileDetailType {
+  FileName: string,       // 文件名
+  FileContent: string,    // 文件内容
+  [item: string]: any,    // 其他属性
+}
+
 export interface JudgeFilesType {
   PID: string,                       // 题目 PID
   judgeFiles: Array<JudgeFileType>,  // 文件列表

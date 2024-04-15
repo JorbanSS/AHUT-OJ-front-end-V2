@@ -53,24 +53,30 @@
     </div>
   </div>
   <div class="m-6"></div>
+  <button class="btn w-fit btn-sm btn-neutral" @click="copyData()">
+    <copy theme="outline" size="18" />
+    复制内容
+  </button>
+  <div class="m-2"></div>
   <div class="mockup-code card shadow-lg px-6">
-    <pre data-prefix="">
-      <div></div>
-      <code>{{ record.Source }}</code>
-    </pre>
+    <pre v-for="(item, index) in record.Source.split('\n')" :data-prefix="index + 1"><code>{{ item }}</code></pre>
   </div>
 </template>
 
 <script lang="ts" setup name="Code">
-import { ref, reactive, onMounted, watch } from 'vue';
+import { ref, reactive, onMounted, watch, onUnmounted } from 'vue';
 import { type RecordType } from '@/type/record';
 import { ConvertTools } from '@/utils/globalFunctions';
 import { useConstValStore } from '@/store/ConstVal';
 import { useRoute } from 'vue-router';
 import { submitInfo, submitStatusColor } from '@/config';
 import confetti from 'canvas-confetti';
+import useClipboard from 'vue-clipboard3';
+import { Copy } from '@icon-park/vue-next';
 
 import { _getRecord } from '@/api/record';
+import { push } from 'notivue';
+const { toClipboard } = useClipboard();
 
 const constValStore = useConstValStore();
 const route = useRoute();
@@ -88,16 +94,46 @@ let record = ref<RecordType>({
   CeInfo: '',
   SampleNumber: 0,
   PassSample: 0,
+  UpdateNumber: 0,
+  autoUpdateTimeout: null,
 
   get() {
     _getRecord({}, record.value.SID)
       .then((data: any) => {
-        record.value = data;
+        record.value.PID = data.PID;
+        record.value.UID = data.UID;
+        record.value.Result = data.Result;
+        record.value.UseTime = data.UseTime;
+        record.value.UseMemory = data.UseMemory;
+        record.value.Lang = data.Lang;
+        record.value.SubmitTime = data.SubmitTime;
+        record.value.Source = data.Source;
+        record.value.CeInfo = data.CeInfo;
+        record.value.SampleNumber = data.SampleNumber;
+        record.value.PassSample = data.PassSample;
       })
       .then(() => {
-        if (record.value.Result === 'AC') startConfetti();
+        if (record.value.Result == 'AC') startConfetti();
+        if (record.value.Result === 'JUDGING' || record.value.Result == 'REJUDGING' || record.value.Result == 'PENDING') {
+          if (record.value.UpdateNumber <= 10) {
+            this.autoUpdate();
+          } else {
+            push.error({
+              title: '获取失败',
+              message: '获取记录状态超时，请尝试刷新页面',
+            });
+          }
+        }
       })
   },
+
+  autoUpdate() {
+    console.log("autoUpdate");
+    this.autoUpdateTimeout = setTimeout(() => {
+      this.UpdateNumber++;
+      this.get();
+    }, this.UpdateNumber / 3 * 1000 + 500);
+  }
 })
 
 function startConfetti() {
@@ -124,13 +160,31 @@ function startConfetti() {
       requestAnimationFrame(frame);
     }
   }
-
   frame();
 }
 
+async function copyData() {
+  try {
+    await toClipboard(record.value.Source);
+    push.success({
+      title: '复制成功',
+      message: '已复制文件内容到剪贴板',
+    })
+  } catch (e) {
+    push.error({
+      title: '复制失败',
+    })
+  }
+}
+
 onMounted(() => {
+  clearTimeout(record.value.Source);
   record.value.SID = +route.params.SID;
   record.value.get();
 })
+
+onUnmounted(() => {
+  clearTimeout(record.value.autoUpdate);
+});
 
 </script>

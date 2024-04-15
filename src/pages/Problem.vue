@@ -165,7 +165,7 @@
 </template>
 
 <script lang="ts" setup name="Problem">
-import { ref, reactive, onMounted, watch, nextTick } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import { push } from 'notivue';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 import { useRoute, useRouter } from 'vue-router';
@@ -186,13 +186,13 @@ import 'md-editor-v3/lib/preview.css';
 import { ProblemListType } from '@/type/problemList';
 import { _getProblemList } from '@/api/problemList';
 
+const { toClipboard } = useClipboard();
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
 const router = useRouter();
 const route = useRoute();
 const id = 'preview-only';
 const scrollElement = document.documentElement;
-const { toClipboard } = useClipboard();
 
 let submit = ref<SubmitCodeType>({
   Lang: 4,
@@ -341,6 +341,7 @@ let problem = reactive<ProblemType>({
       PID: problem.PID,
       UID: userDataStore.UID,
       CID: contest.CID ? contest.CID : -1,
+      LID: problemList.LID ? problemList.LID : -1,
       Source: submit.value.Source,
       Lang: +submit.value.Lang,
     }

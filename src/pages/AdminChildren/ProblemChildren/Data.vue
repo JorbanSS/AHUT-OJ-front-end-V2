@@ -59,8 +59,8 @@
             {{ item.FileSize }} MB
           </td>
           <td class="space-x-2">
-            <button class="btn btn-neutral btn-sm">
-              <eyes theme="outline" size="18" @click="" />
+            <button class="btn btn-neutral btn-sm" @click="judgeFileDetail.get(item.FileName)">
+              <eyes theme="outline" size="18" />
               查看
             </button>
             <button class="btn btn-neutral btn-sm" @click="judgeFiles.delete(item.FileName)">
@@ -72,20 +72,40 @@
       </tbody>
     </table>
   </div>
+  <dialog id="judgeFileDetailModal" class="modal">
+    <div class="modal-box space-y-2 w-[500px]">
+      <h3 class="font-bold text-lg">
+        文件预览：{{ judgeFileDetail.FileName }}
+      </h3>
+      <!-- <button class="btn w-fit btn-sm btn-neutral" @click="copyData()">
+        <copy theme="outline" size="18" />
+        复制内容
+      </button> -->
+      <div class="mockup-code card shadow-lg px-6">
+        <pre v-for="(item, index) in judgeFileDetail.FileContent.split('\n')"
+          :data-prefix="index + 1"><code>{{ item }}</code></pre>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
 </template>
 
 <script lang="ts" setup name="AddProblem">
-import { Upload, Add, DocumentFolder, Data as ICONdata, Delete, Eyes, EditOne } from '@icon-park/vue-next';
+import { Upload, Add, DocumentFolder, Data as ICONdata, Delete, Eyes, EditOne, Copy } from '@icon-park/vue-next';
 import { ref, reactive, onMounted } from 'vue';
 import { push } from 'notivue';
 import { useRouter, useRoute } from 'vue-router';
-import { type JudgeFilesType } from '@/type/problem';
+import { JudgeFileDetailType, JudgeFileType, type JudgeFilesType } from '@/type/problem';
 import { OssUtils } from '@/utils/ossUtils';
+import useClipboard from 'vue-clipboard3';
 
-import { _getJudgeFiles, _uploadJudgeFiles, _deleteJudgeFiles } from "@/api/problem";
+import { _getJudgeFiles, _uploadJudgeFiles, _deleteJudgeFiles, _getJudgeFile } from "@/api/problem";
 
 const router = useRouter();
 const route = useRoute();
+const { toClipboard } = useClipboard();
 
 interface UploadFilesInputType {
   files: FileList | null,
@@ -193,6 +213,34 @@ let judgeFiles = reactive<JudgeFilesType>({
       })
   }
 })
+
+let judgeFileDetail = reactive<JudgeFileDetailType>({
+  FileName: '',
+  FileContent: '',
+  get(fileName: string) {
+    _getJudgeFile({}, judgeFiles.PID, fileName)
+      .then((data: any) => {
+        this.FileName = fileName;
+        this.FileContent = data.FileContent;
+        // @ts-ignore
+        judgeFileDetailModal.showModal();
+      })
+  },
+});
+
+async function copyData() {
+  try {
+    await toClipboard(judgeFileDetail.FileContent);
+    push.success({
+      title: '复制成功',
+      message: '已复制文件内容到剪贴板',
+    })
+  } catch (e) {
+    push.error({
+      title: '复制失败',
+    })
+  }
+}
 
 onMounted(() => {
   judgeFiles.PID = route.params.PID as string;
