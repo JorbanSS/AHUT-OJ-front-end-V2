@@ -45,17 +45,18 @@
 </template>
 
 <script lang="ts" setup name="problemList">
-import { ref, reactive, onMounted, watch } from 'vue';
-import { type ProblemListType } from '@/type/problemList';
-import { push } from 'notivue';
-import { ConvertTools } from '@/utils/globalFunctions';
+import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { problemListNavItems } from "@/config";
-import { Bill, Editor } from "@icon-park/vue-next";
-import { useUserDataStore } from '@/store/UserData';
-import { useConstValStore } from '@/store/ConstVal';
 
-import { _getProblemList, _getProblemListUsersInfo, _cloneProblemList, _joinProblemList } from '@/api/problemList';
+import { Bill, Editor } from "@icon-park/vue-next";
+import { push } from 'notivue';
+
+import { _cloneProblemList, _getProblemList, _getProblemListUsersInfo, _joinProblemList } from '@/api/problemList';
+import { problemListNavItems } from "@/config";
+import { useConstValStore } from '@/store/ConstVal';
+import { useUserDataStore } from '@/store/UserData';
+import { type ProblemListType } from '@/type/problemList';
+import { ConvertTools } from '@/utils/globalFunctions';
 
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();

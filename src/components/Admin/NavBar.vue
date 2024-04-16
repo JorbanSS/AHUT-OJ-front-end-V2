@@ -34,13 +34,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { reactive } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+
+import { Moon, SunOne } from '@icon-park/vue-next';
+
 import { useThemeSwitchStore } from '@/store/ThemeSwitch';
-import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue'
-import { Moon, SunOne, People, SettingConfig, Logout } from '@icon-park/vue-next'
 import { useUserDataStore } from '@/store/UserData';
-import { useRouter } from 'vue-router';
+import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue';
 
 const router = useRouter();
 

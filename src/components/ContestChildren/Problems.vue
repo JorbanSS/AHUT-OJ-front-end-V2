@@ -36,9 +36,12 @@
 </template>
 
 <script lang="ts" setup name="ContestProblems">
+
+
+import { useRouter } from 'vue-router';
+
 import { ContestType } from '@/type/contest';
 import { ConvertTools } from '@/utils/globalFunctions';
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
 

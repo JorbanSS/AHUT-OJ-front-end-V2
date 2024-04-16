@@ -100,19 +100,21 @@
 </template>
 
 <script lang="ts" setup name="addcontest">
-import { Add, Trophy, ArrowRight, DeleteOne } from '@icon-park/vue-next';
-import { type ContestType } from '@/type/contest';
 import { reactive, ref } from 'vue';
-import { push } from 'notivue';
-import { MdEditor } from 'md-editor-v3';
 import { useRouter } from 'vue-router';
-import { useUserDataStore } from '@/store/UserData';
-import { VueDraggable } from 'vue-draggable-plus'
+
+import { Add, ArrowRight, DeleteOne, Trophy } from '@icon-park/vue-next';
+import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
+import { push } from 'notivue';
+import { VueDraggable } from 'vue-draggable-plus';
+
+import { _addContest } from '@/api/contest';
+import { _getProblem } from '@/api/problem';
+import { useUserDataStore } from '@/store/UserData';
+import { type ContestType } from '@/type/contest';
 import { ConvertTools } from '@/utils/globalFunctions';
 
-import { _getProblem } from '@/api/problem';
-import { _addContest } from '@/api/contest';
 const userDataStore = useUserDataStore();
 const router = useRouter();
 

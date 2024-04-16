@@ -136,21 +136,23 @@
 </template>
 
 <script lang="ts" setup name="AddProblem">
-import { DeleteOne, EditOne, DocumentFolder, StopwatchStart, Disk, Add, Data as ICONdata } from '@icon-park/vue-next';
-import { type ProblemType, type ProblemsType, type ProblemSimplifiedType } from '@/type/problem';
-import { ref, reactive, onMounted } from 'vue';
-import { push } from 'notivue';
+import { onMounted, reactive } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+import { Add, DeleteOne, Disk, DocumentFolder, EditOne, Data as ICONdata, StopwatchStart } from '@icon-park/vue-next';
 import { MdEditor } from 'md-editor-v3';
-import { useRouter, useRoute } from 'vue-router';
+import 'md-editor-v3/lib/style.css';
+import { push } from 'notivue';
+
+import { _deleteProblems, _editProblem, _getProblem } from '@/api/problem';
 import { markdownToolbars, problemContentOptions, problemOriginOptions } from '@/config';
+import { FileUploadType, ImageUploadType } from '@/type/common';
+import { type ProblemType } from '@/type/problem';
+import { ImageUtils } from '@/utils/fileUtils';
+import { OssUtils } from '@/utils/ossUtils';
 
 const router = useRouter();
 const route = useRoute();
-import 'md-editor-v3/lib/style.css';
-import { _getProblem, _editProblem, _deleteProblems } from '@/api/problem';
-import { FileUploadType, ImageUploadType } from '@/type/common';
-import { ImageUtils } from '@/utils/fileUtils';
-import { OssUtils } from '@/utils/ossUtils';
 
 let problem = reactive<ProblemType>({
   PID: '',

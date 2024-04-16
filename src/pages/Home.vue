@@ -52,15 +52,15 @@
 
 <script lang="ts" setup name="Home">
 import { onMounted, reactive, ref } from 'vue';
-import { Remind, Cattle, Ranking, ToTop } from '@icon-park/vue-next';
-import { type HomeNoticeType, type UpdateLogsType, type BannersType } from '@/type/oj';
-import { ConvertTools } from '@/utils/globalFunctions';
-import { MdPreview, MdCatalog } from 'md-editor-v3';
-import { push } from 'notivue';
 
-import { _getBanners, _getHomeNotice, _getUpdateLogs } from "@/api/oj";
-
+import { Remind } from '@icon-park/vue-next';
+import { MdPreview } from 'md-editor-v3';
 import 'md-editor-v3/lib/preview.css';
+
+import { _getBanners, _getUpdateLogs } from "@/api/oj";
+import { type BannersType, type HomeNoticeType, type UpdateLogsType } from '@/type/oj';
+import { ConvertTools } from '@/utils/globalFunctions';
+
 
 let updateLogs = reactive<UpdateLogsType>({
   updateLogs: [],

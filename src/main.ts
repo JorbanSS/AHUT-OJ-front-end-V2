@@ -1,17 +1,19 @@
-import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import { createApp } from 'vue';
+
+import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
+import { install as VueMonacoEditorPlugin } from '@guolao/vue-monaco-editor';
 import { createNotivue } from 'notivue';
-import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
-import { install as VueMonacoEditorPlugin } from '@guolao/vue-monaco-editor'
-import App from './App.vue';
-import router from './router';
 import VCalendar from 'v-calendar';
 import VueGtag from "vue-gtag-next";
 
-import "./assets/scss/tailwind.scss";
-import 'notivue/notifications.css';
+import App from './App.vue';
+import router from './router';
+
 import 'notivue/animations.css';
+import 'notivue/notifications.css';
 import 'v-calendar/style.css';
+import "./assets/scss/tailwind.scss";
 
 const app = createApp(App);
 const store = createPinia();

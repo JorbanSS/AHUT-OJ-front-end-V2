@@ -1,8 +1,7 @@
 import { push } from "notivue";
-import { type BucketType, type BucketsType } from "@/type/oss";
-import { FileUtils } from "./fileUtils";
 
-import { _uploadBannerImage, _getObject, _uploadObject } from "@/api/oss";
+import { _getObject, _uploadBannerImage, _uploadObject } from "@/api/oss";
+import { FileUtils } from "./fileUtils";
 
 export class OssUtils {
   public static uploadProblemImage(file: File) {

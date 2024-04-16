@@ -36,9 +36,10 @@
 </template>
 
 <script lang="ts" setup name="ProblemListProblems">
+import { useRouter } from 'vue-router';
+
 import { ProblemListType } from '@/type/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
 

@@ -24,9 +24,11 @@
 
 <script lang="ts" setup>
 import { RouterLink, useRoute } from 'vue-router';
+
+import { Toolkit } from '@icon-park/vue-next';
+
+import { adminNavItems } from '@/config';
 import { useThemeSwitchStore } from '@/store/ThemeSwitch';
-import { adminNavItems } from '@/config'
-import { Toolkit } from '@icon-park/vue-next'
 
 const route = useRoute();
 const ThemeSwitchStore = useThemeSwitchStore();

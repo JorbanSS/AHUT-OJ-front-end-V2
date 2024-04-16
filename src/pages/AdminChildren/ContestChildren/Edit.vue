@@ -112,20 +112,20 @@
 </template>
 
 <script lang="ts" setup name="addcontest">
-import { Add, Trophy, ArrowRight, DeleteOne, EditOne, PartyBalloon } from '@icon-park/vue-next';
-import { type ContestType } from '@/type/contest';
-import { reactive, ref, onMounted } from 'vue';
-import { push } from 'notivue';
-import { MdEditor } from 'md-editor-v3';
-import { Get, Post } from '@/utils/axios/request';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useUserDataStore } from '@/store/UserData';
-import { VueDraggable } from 'vue-draggable-plus'
-import 'md-editor-v3/lib/style.css';
-import { ConvertTools } from '@/utils/globalFunctions';
 
+import { Add, ArrowRight, DeleteOne, EditOne, PartyBalloon, Trophy } from '@icon-park/vue-next';
+import { MdEditor } from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
+import { push } from 'notivue';
+import { VueDraggable } from 'vue-draggable-plus';
+
+import { _editContest, _getContest } from "@/api/contest";
 import { _getProblem } from "@/api/problem";
-import { _getContest, _editContest } from "@/api/contest";
+import { useUserDataStore } from '@/store/UserData';
+import { type ContestType } from '@/type/contest';
+import { ConvertTools } from '@/utils/globalFunctions';
 
 const userDataStore = useUserDataStore();
 const router = useRouter();

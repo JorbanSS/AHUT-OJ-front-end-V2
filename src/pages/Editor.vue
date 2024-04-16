@@ -26,9 +26,11 @@
 </template>
 
 <script lang="ts" setup name="Editor">
-import { onMounted, reactive, ref, shallowRef, watch } from 'vue';
-import * as monaco from "monaco-editor";
+import { reactive, ref, shallowRef, watch } from 'vue';
+
 import { loader } from "@guolao/vue-monaco-editor";
+import * as monaco from "monaco-editor";
+
 import { editorLanguageOptions } from "@/config";
 
 loader.config({ monaco });

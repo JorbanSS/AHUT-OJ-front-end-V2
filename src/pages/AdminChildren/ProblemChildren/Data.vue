@@ -93,15 +93,15 @@
 </template>
 
 <script lang="ts" setup name="AddProblem">
-import { Upload, Add, DocumentFolder, Data as ICONdata, Delete, Eyes, EditOne, Copy } from '@icon-park/vue-next';
-import { ref, reactive, onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+import { Add, Delete, DocumentFolder, EditOne, Eyes, Data as ICONdata, Upload } from '@icon-park/vue-next';
 import { push } from 'notivue';
-import { useRouter, useRoute } from 'vue-router';
-import { JudgeFileDetailType, JudgeFileType, type JudgeFilesType } from '@/type/problem';
-import { OssUtils } from '@/utils/ossUtils';
 import useClipboard from 'vue-clipboard3';
 
-import { _getJudgeFiles, _uploadJudgeFiles, _deleteJudgeFiles, _getJudgeFile } from "@/api/problem";
+import { _deleteJudgeFiles, _getJudgeFile, _getJudgeFiles, _uploadJudgeFiles } from "@/api/problem";
+import { JudgeFileDetailType, type JudgeFilesType } from '@/type/problem';
 
 const router = useRouter();
 const route = useRoute();

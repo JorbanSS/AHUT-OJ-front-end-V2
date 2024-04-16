@@ -14,15 +14,15 @@
 </template>
 
 <script lang="ts" setup name="About">
-import { ref, reactive, onMounted, watch } from 'vue';
-import { MdPreview, MdCatalog } from 'md-editor-v3';
-import { push } from 'notivue';
-import 'md-editor-v3/lib/preview.css';
-import { aboutNavItems } from '@/config';
+import { reactive } from 'vue';
 
+import { MdPreview } from 'md-editor-v3';
+import 'md-editor-v3/lib/preview.css';
+
+import MD_AboutOJ from '@/assets/ts/About/AboutOJ';
 import MD_OJInfo from '@/assets/ts/About/OJInfo';
 import MD_Requirements from '@/assets/ts/About/Requirements';
-import MD_AboutOJ from '@/assets/ts/About/AboutOJ';
+import { aboutNavItems } from '@/config';
 
 let tabInfo = reactive({
   activeTab: 0,

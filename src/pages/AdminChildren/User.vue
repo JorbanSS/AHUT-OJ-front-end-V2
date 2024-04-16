@@ -176,16 +176,16 @@
 </template>
 
 <script lang="ts" setup name="AdminUser">
-import { DeleteOne, EditOne, AfferentThree, Permissions, Add, Peoples, AddUser, Youtobe } from '@icon-park/vue-next';
-import { ref, reactive, onMounted, watch, computed } from 'vue';
-import { push } from 'notivue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { type UserSimplifiedType, type PermissionType, type UserType } from '@/type/user';
-import { list } from 'postcss';
-import { useConstValStore } from '@/store/ConstVal';
 
-import { _deleteUsers, _getAdmins, _changePassword, _getUserPermission, _addUser, _editUserPermission } from "@/api/user";
+import { Add, AfferentThree, DeleteOne, Peoples, Permissions } from '@icon-park/vue-next';
+import { push } from 'notivue';
+
+import { _addUser, _changePassword, _deleteUsers, _editUserPermission, _getAdmins, _getUserPermission } from "@/api/user";
 import Pagination from "@/components/Main/Pagination.vue";
+import { useConstValStore } from '@/store/ConstVal';
+import { type PermissionType, type UserSimplifiedType, type UserType } from '@/type/user';
 
 const router = useRouter();
 const constValStore = useConstValStore();

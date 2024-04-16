@@ -41,19 +41,13 @@
 </template>
 
 <script lang="ts" setup name="ContestRank">
-import { ref, reactive, onMounted, watch } from 'vue';
-import { type ContestType, type ContestRankingType, type ContestRankingProblemType } from '@/type/contest';
-import '@/utils/axios/request';
-import { Get, Post } from '@/utils/axios/request';
-import { push } from 'notivue';
-import { ConvertTools } from '@/utils/globalFunctions';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Pin, Server } from '@icon-park/vue-next';
-import { useConstValStore } from '@/store/ConstVal';
-import { getServerTime } from '@/utils/globalFunctions';
-import { _getContestRanking } from '@/api/contest';
 
-import { getRankingBackgroundColor } from "@/utils/globalFunctions";
+import { _getContestRanking } from '@/api/contest';
+import { useConstValStore } from '@/store/ConstVal';
+import { type ContestRankingType, type ContestType } from '@/type/contest';
+import { ConvertTools, getRankingBackgroundColor } from '@/utils/globalFunctions';
 
 const route = useRoute();
 const router = useRouter();

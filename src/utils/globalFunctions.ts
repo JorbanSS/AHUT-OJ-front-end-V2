@@ -1,9 +1,7 @@
-import { TimeType } from "@/type/common";
-import { Get } from "@/utils/axios/request";
-import { push } from "notivue";
-import { useConstValStore } from "@/store/ConstVal";
-import { ContestRankingProblemType } from "@/type/contest";
 import { _getServerTime } from "@/api/common";
+import { useConstValStore } from "@/store/ConstVal";
+import { TimeType } from "@/type/common";
+import { ContestRankingProblemType } from "@/type/contest";
 
 // 转换工具
 export class ConvertTools {

@@ -1,9 +1,10 @@
+import {
+  NavigationGuardNext,
+  RouteLocationNormalized
+} from 'vue-router';
+
 import Admin from "./admin";
 import { needLoginCertificate } from "./guard";
-import {
-  RouteLocationNormalized,
-  NavigationGuardNext
-} from 'vue-router';
 
 const BaseTitle = "AHUT OJ | ";
 

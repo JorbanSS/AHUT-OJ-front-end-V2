@@ -1,28 +1,26 @@
-import { type NavItemType } from "@/type/oj";
-import { ToolbarNames } from "md-editor-v3";
-import { SubmitInfoType } from "./type/record";
-
 import {
-  DocumentFolder,
-  Toolkit,
-  Data,
-  Info,
-  Trophy,
-  Muscle,
-  RankingList,
-  ListOne,
-  Topic,
-  Peoples,
-  MoreTwo,
   Bill,
-  Code,
+  Caution,
   Check,
   Close,
-  Caution,
-  Time,
-  LoadingOne,
+  Code,
+  Data,
+  DocumentFolder,
   HardDisk,
+  Info,
+  LoadingOne,
+  MoreTwo,
+  Muscle,
+  Peoples,
+  RankingList,
+  Time,
+  Topic,
+  Trophy
 } from "@icon-park/vue-next";
+import { ToolbarNames } from "md-editor-v3";
+
+import { type NavItemType } from "@/type/oj";
+import { SubmitInfoType } from "./type/record";
 
 export const submitStatusColor: Record<string, string> = {
   AC: "#19BE6B",

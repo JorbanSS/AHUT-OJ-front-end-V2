@@ -1,10 +1,9 @@
 import { defineStore } from "pinia";
-import { StoreNameSpace } from "./StoreNameSpace";
+
 import { type UserSimplifiedType, type UserType } from "@/type/user";
-
-import { UserDataSessionStorage } from "@/utils/buffer/sessionStorage";
 import { UserDataLocalStorage } from "@/utils/buffer/localStorage";
-
+import { UserDataSessionStorage } from "@/utils/buffer/sessionStorage";
+import { StoreNameSpace } from "./StoreNameSpace";
 
 export const useUserDataStore = defineStore(StoreNameSpace.UserData, {
   state: () => {

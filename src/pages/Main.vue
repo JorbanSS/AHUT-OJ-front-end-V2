@@ -20,19 +20,19 @@
 </template>
 
 <script lang="ts" setup name="Main">
-import { onMounted, ref, reactive, watch } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
-import NavBar from '@/components/Main/NavBar.vue';
-import Footer from '@/components/Main/Footer.vue';
-import Login from '@/components/Main/Login.vue';
-import Register from '@/components/Main/Register.vue';
-import { type UserSimplifiedType } from '@/type/user';
-import { type ShowConfigType } from '@/type/oj';
-import { useUserDataStore } from '@/store/UserData';
-import { Get } from '@/utils/axios/request';
+
 import { push } from 'notivue';
 
 import { _getUserInfo, _getUserPermission } from '@/api/user';
+import Footer from '@/components/Main/Footer.vue';
+import Login from '@/components/Main/Login.vue';
+import NavBar from '@/components/Main/NavBar.vue';
+import Register from '@/components/Main/Register.vue';
+import { useUserDataStore } from '@/store/UserData';
+import { type ShowConfigType } from '@/type/oj';
+import { type UserSimplifiedType } from '@/type/user';
 
 const userDataStore = useUserDataStore();
 const route = useRoute();

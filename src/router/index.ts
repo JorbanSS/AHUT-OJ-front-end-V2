@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+
 import { trackRouter } from "vue-gtag-next";
+
 import routes from "./routes";
 
 const router = createRouter({

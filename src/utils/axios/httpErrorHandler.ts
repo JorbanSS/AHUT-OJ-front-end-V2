@@ -1,5 +1,3 @@
-import { push } from "notivue";
-
 export default function httpErrorHandler(res: any) {
   let msg = "";
   switch (res.status) {

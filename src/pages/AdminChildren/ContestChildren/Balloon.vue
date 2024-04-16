@@ -68,15 +68,15 @@
 </template>
 
 <script lang="ts" setup name="EditBalloon">
-import { Add, Trophy, EditOne, PartyBalloon } from '@icon-park/vue-next';
-import { type ContestType } from '@/type/contest';
-import { reactive, ref, onMounted } from 'vue';
-import { push } from 'notivue';
+import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
+import { Add, EditOne, PartyBalloon, Trophy } from '@icon-park/vue-next';
+import { push } from 'notivue';
+
+import { _editBalloonColor, _getContest } from "@/api/contest";
 import { useUserDataStore } from '@/store/UserData';
 import { ConvertTools } from '@/utils/globalFunctions';
-
-import { _getContest, _editBalloonColor } from "@/api/contest";
 
 const userDataStore = useUserDataStore();
 const router = useRouter();

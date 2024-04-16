@@ -1,9 +1,8 @@
-import { push } from "notivue";
-import { Post } from "@/utils/axios/request";
 import * as imageConversion from "image-conversion";
+import { push } from "notivue";
 import SparkMD5 from 'spark-md5';
 
-import { _uploadBannerImage, _uploadObject, _getObject } from "@/api/oss";
+import { Post } from "@/utils/axios/request";
 
 export class ImageUtils {
   public static check(image: File): boolean {

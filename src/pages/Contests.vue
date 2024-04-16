@@ -62,14 +62,15 @@
 </template>
 
 <script lang="ts" setup name="Contests">
-import { ref, reactive, onMounted, watch, computed } from 'vue';
-import { push } from 'notivue';
-import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import Pagination from "@/components/Main/Pagination.vue";
-import { type ContestsType, type ContestSimplifiedType } from '@/type/contest';
+import { push } from 'notivue';
+
 import { _getContests } from '@/api/contest';
+import Pagination from "@/components/Main/Pagination.vue";
+import { type ContestSimplifiedType, type ContestsType } from '@/type/contest';
+import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 
 const router = useRouter();
 

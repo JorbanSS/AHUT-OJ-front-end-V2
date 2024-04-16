@@ -76,14 +76,16 @@
 </template>
 
 <script lang="ts" setup name="ProblemListsList">
-import { DeleteOne, EditOne, Add, Bill } from '@icon-park/vue-next';
-import { ref, reactive, onMounted, watch, computed } from 'vue';
-import { push } from 'notivue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { type ProblemListsType, type ProblemListSimplifiedType } from '@/type/problemList';
 
+import { Add, Bill, DeleteOne } from '@icon-park/vue-next';
+import { push } from 'notivue';
+
+import { _deleteProblemLists, _getProblemLists } from '@/api/problemList';
 import Pagination from "@/components/Main/Pagination.vue";
-import { _getProblemLists, _deleteProblemLists } from '@/api/problemList';
+import { type ProblemListSimplifiedType, type ProblemListsType } from '@/type/problemList';
+
 const router = useRouter();
 
 let toPage = ref<number>();

@@ -156,15 +156,16 @@
 </template>
 
 <script lang="ts" setup name="AdminUser">
-import { FolderOpen, MemoryOne, FolderPlus, FileAddition, FileQuestion, PictureOne } from '@icon-park/vue-next';
-import { ref, reactive, onMounted, watch } from 'vue';
-import { push } from 'notivue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useConstValStore } from '@/store/ConstVal';
-import { objectTypeOptions } from "@/config";
 
-import { type ObjectsType, type BucketsType, type uploadObjectType } from '@/type/oss';
-import { _getBuckets, _getObjects, _addBuckets, _deleteBucket, _deleteObject } from '@/api/oss';
+import { FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, PictureOne } from '@icon-park/vue-next';
+import { push } from 'notivue';
+
+import { _addBuckets, _deleteBucket, _deleteObject, _getBuckets, _getObjects } from '@/api/oss';
+import { objectTypeOptions } from "@/config";
+import { useConstValStore } from '@/store/ConstVal';
+import { type BucketsType, type ObjectsType } from '@/type/oss';
 import { OssUtils } from '@/utils/ossUtils';
 
 const constValStore = useConstValStore();

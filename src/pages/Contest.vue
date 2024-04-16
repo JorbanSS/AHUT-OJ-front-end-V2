@@ -81,16 +81,18 @@
 </template>
 
 <script lang="ts" setup name="Contest">
-import { ref, reactive, onMounted, watch } from 'vue';
-import { type ContestType } from '@/type/contest';
-import { push } from 'notivue';
-import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Editor, PartyBalloon, Bill } from '@icon-park/vue-next';
-import { contestNavItems } from '@/config';
-import { useUserDataStore } from '@/store/UserData';
+
+import { Bill, Editor, PartyBalloon } from '@icon-park/vue-next';
+import { push } from 'notivue';
+
 import { _cloneToProblemList, _getContest } from '@/api/contest';
+import { contestNavItems } from '@/config';
 import { useConstValStore } from '@/store/ConstVal';
+import { useUserDataStore } from '@/store/UserData';
+import { type ContestType } from '@/type/contest';
+import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();

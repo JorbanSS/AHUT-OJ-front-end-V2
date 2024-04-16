@@ -59,15 +59,15 @@
 </template>
 
 <script lang="ts" setup name="ContestsList">
-import { DeleteOne, EditOne, Add, Trophy } from '@icon-park/vue-next';
-import { ref, reactive, onMounted, watch, computed } from 'vue';
-import { push } from 'notivue';
-import { Get, Post } from '@/utils/axios/request';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { Add, DeleteOne, Trophy } from '@icon-park/vue-next';
+import { push } from 'notivue';
+
+import { _deleteContests, _getContests } from '@/api/contest';
 import Pagination from "@/components/Main/Pagination.vue";
-import { type ContestsType, type ContestSimplifiedType } from '@/type/contest';
-import { _getContests, _deleteContests } from '@/api/contest';
+import { type ContestSimplifiedType, type ContestsType } from '@/type/contest';
 
 const router = useRouter();
 

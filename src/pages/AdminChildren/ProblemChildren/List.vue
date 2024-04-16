@@ -85,16 +85,17 @@
 </template>
 
 <script lang="ts" setup name="AddProblem">
-import { DeleteOne, EditOne, AfferentThree, EfferentThree, Data as ICONdata, Add, DocumentFolder } from '@icon-park/vue-next';
-import { ref, reactive, onMounted, watch, computed } from 'vue';
-import { push } from 'notivue';
-import { Get, Post } from '@/utils/axios/request';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { type ProblemsType, type ProblemSimplifiedType } from '@/type/problem';
 
-import { _getProblems, _exportProblems, _deleteProblems } from "@/api/problem";
-import { problemTypeOptions } from '@/config';
+import { Add, AfferentThree, DeleteOne, DocumentFolder, EfferentThree } from '@icon-park/vue-next';
+import { push } from 'notivue';
+
+import { _deleteProblems, _exportProblems, _getProblems } from "@/api/problem";
 import Pagination from "@/components/Main/Pagination.vue";
+import { problemTypeOptions } from '@/config';
+import { type ProblemSimplifiedType, type ProblemsType } from '@/type/problem';
+
 const router = useRouter();
 
 let allSelected = ref<boolean>(false);

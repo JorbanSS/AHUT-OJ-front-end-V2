@@ -172,18 +172,17 @@
 </template>
 
 <script lang="ts" setup name="User">
-import { ref, reactive, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { type UserType, type BindType } from '@/type/user';
+import { onMounted, reactive } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+import { Avatar, Cattle, EmotionHappy, HorseZodiac, Key, Ranking } from "@icon-park/vue-next";
 import { push } from 'notivue';
-import { Ranking, Cattle, HorseZodiac, EmotionHappy, Key, Avatar } from "@icon-park/vue-next";
 
-import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword } from "@/api/user";
+import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword, _getUserInfo } from "@/api/user";
 import { useConstValStore } from '@/store/ConstVal';
-import { _getUserInfo } from '@/api/user';
-
 import { useUserDataStore } from '@/store/UserData';
 import { ImageUploadType } from '@/type/common';
+import { type BindType, type UserType } from '@/type/user';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from '@/utils/ossUtils';
 

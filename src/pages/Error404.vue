@@ -14,5 +14,7 @@
 
 <script lang="ts" setup name="Error404">
 import { useRouter } from "vue-router";
+
 const router = useRouter();
+
 </script>

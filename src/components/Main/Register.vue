@@ -50,12 +50,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { reactive, ref } from 'vue';
+
 import { Close } from '@icon-park/vue-next';
-import { type RegisterInfoType } from '@/type/user';
-import '@/utils/axios/request';
-import { Get, Post } from '@/utils/axios/request';
 import { push } from 'notivue';
+
+import { type RegisterInfoType } from '@/type/user';
 import { Validator } from '@/utils/globalFunctions';
 
 import { _codeVerify, _register, _verifyEmail } from "@/api/user";

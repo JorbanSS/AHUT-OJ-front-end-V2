@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts" setup name="App">
+import { Notification, Notivue, NotivueSwipe, pastelTheme } from 'notivue';
+
 import Main from '@/pages/Main.vue';
-import { Notivue, Notification, NotivueSwipe } from 'notivue';
-import { pastelTheme } from 'notivue';
 
 </script>

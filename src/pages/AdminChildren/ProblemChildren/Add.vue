@@ -114,19 +114,20 @@
 </template>
 
 <script lang="ts" setup name="AddProblem">
-import { Add, StopwatchStart, Disk, DocumentFolder } from '@icon-park/vue-next';
-import { type ProblemType } from '@/type/problem';
-import { FileUploadType, type ImageUploadType } from '@/type/common';
-import { ref, reactive } from 'vue';
-import { push } from 'notivue';
-import { MdEditor } from 'md-editor-v3';
+import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { markdownToolbars, problemContentOptions, problemOriginOptions } from '@/config';
-import { ImageUtils } from '@/utils/fileUtils';
-import { OssUtils } from "@/utils/ossUtils"
+
+import { Add, Disk, DocumentFolder, StopwatchStart } from '@icon-park/vue-next';
+import { MdEditor } from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
+import { push } from 'notivue';
 
 import { _addProblem } from "@/api/problem";
-import 'md-editor-v3/lib/style.css';
+import { markdownToolbars, problemContentOptions, problemOriginOptions } from '@/config';
+import { FileUploadType, type ImageUploadType } from '@/type/common';
+import { type ProblemType } from '@/type/problem';
+import { ImageUtils } from '@/utils/fileUtils';
+import { OssUtils } from "@/utils/ossUtils";
 
 const router = useRouter();
 

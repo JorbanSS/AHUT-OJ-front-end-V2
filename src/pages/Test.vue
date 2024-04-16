@@ -27,7 +27,7 @@
 
 <script lang="ts" setup name="Records">
 
-import { push } from 'notivue'
+import { push } from 'notivue';
 
 function test() {
   push.success({

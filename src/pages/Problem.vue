@@ -165,26 +165,26 @@
 </template>
 
 <script lang="ts" setup name="Problem">
-import { ref, reactive, onMounted, watch } from 'vue';
-import { push } from 'notivue';
-import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
+import { onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { MdPreview, MdCatalog } from 'md-editor-v3';
+
+import { Check, Copy, Disk, FilePdf, Data as ICONdata, StopwatchStart, Tips } from '@icon-park/vue-next';
+import { MdCatalog, MdPreview } from 'md-editor-v3';
+import 'md-editor-v3/lib/preview.css';
+import { push } from 'notivue';
 import useClipboard from 'vue-clipboard3';
-import { useUserDataStore } from '@/store/UserData';
+
+import { _getContest } from '@/api/contest';
+import { _getProblem, _submitCode } from '@/api/problem';
+import { _getProblemList } from '@/api/problemList';
 import { submitLanguageOptions } from '@/config';
 import { useConstValStore } from '@/store/ConstVal';
-
-import { type ProblemType } from '@/type/problem';
+import { useUserDataStore } from '@/store/UserData';
 import { type ContestType } from '@/type/contest';
-import { type SubmitCodeType } from '@/type/record';
-import { Check, Tips, Disk, StopwatchStart, Copy, FilePdf, Editor, Data as ICONdata } from '@icon-park/vue-next';
-import { _getProblem, _submitCode } from '@/api/problem';
-import { _getContest } from '@/api/contest';
-
-import 'md-editor-v3/lib/preview.css';
+import { type ProblemType } from '@/type/problem';
 import { ProblemListType } from '@/type/problemList';
-import { _getProblemList } from '@/api/problemList';
+import { type SubmitCodeType } from '@/type/record';
+import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 
 const { toClipboard } = useClipboard();
 const userDataStore = useUserDataStore();

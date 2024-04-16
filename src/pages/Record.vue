@@ -64,20 +64,21 @@
 </template>
 
 <script lang="ts" setup name="Code">
-import { ref, reactive, onMounted, watch, onUnmounted } from 'vue';
-import { type RecordType } from '@/type/record';
-import { ConvertTools } from '@/utils/globalFunctions';
-import { useConstValStore } from '@/store/ConstVal';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { submitInfo, submitStatusColor } from '@/config';
-import confetti from 'canvas-confetti';
-import useClipboard from 'vue-clipboard3';
+
 import { Copy } from '@icon-park/vue-next';
+import confetti from 'canvas-confetti';
+import { push } from 'notivue';
+import useClipboard from 'vue-clipboard3';
 
 import { _getRecord } from '@/api/record';
-import { push } from 'notivue';
-const { toClipboard } = useClipboard();
+import { submitInfo, submitStatusColor } from '@/config';
+import { useConstValStore } from '@/store/ConstVal';
+import { type RecordType } from '@/type/record';
+import { ConvertTools } from '@/utils/globalFunctions';
 
+const { toClipboard } = useClipboard();
 const constValStore = useConstValStore();
 const route = useRoute();
 

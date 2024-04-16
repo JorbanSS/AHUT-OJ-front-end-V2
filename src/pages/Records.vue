@@ -85,18 +85,18 @@
 </template>
 
 <script lang="ts" setup name="Records">
-import { ref, reactive, onMounted, watch, computed } from 'vue';
-import { type RecordsType, type RecordType } from '@/type/record';
-import { push } from 'notivue';
-import { ConvertTools } from '@/utils/globalFunctions';
-import { useConstValStore } from '@/store/ConstVal';
-import { useRouter } from 'vue-router';
-import { submitLanguageOptions } from '@/config';
-import { useRoute } from 'vue-router';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import Pagination from "@/components/Main/Pagination.vue";
+import { push } from 'notivue';
+
 import { _getRecords } from '@/api/record';
+import Pagination from "@/components/Main/Pagination.vue";
+import { submitLanguageOptions } from '@/config';
+import { useConstValStore } from '@/store/ConstVal';
 import { useUserDataStore } from '@/store/UserData';
+import { type RecordsType, type RecordType } from '@/type/record';
+import { ConvertTools } from '@/utils/globalFunctions';
 
 const route = useRoute();
 const constValStore = useConstValStore();

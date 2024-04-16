@@ -111,20 +111,21 @@
 </template>
 
 <script lang="ts" setup name="Training">
-import { Peoples, UploadLogs, PreviewOpen, History, DocumentFolder, Google } from '@icon-park/vue-next'
+import { onMounted, reactive, ref } from 'vue';
+
+import { DocumentFolder, Google, History, Peoples, PreviewOpen, UploadLogs } from '@icon-park/vue-next';
+import { MdEditor } from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
-import { reactive, ref, onMounted } from 'vue';
+
+import { _editHomeNotice, _getHomeNotice, _getOjStastics } from '@/api/oj';
+import { _rejudge } from '@/api/record';
+import { markdownToolbars } from '@/config';
 import { type ImageUploadType } from '@/type/common';
 import { type HomeNoticeType, type OjStasticsType } from '@/type/oj';
 import { type RejudgeInfoType } from '@/type/record';
-import { MdEditor } from 'md-editor-v3';
-import { markdownToolbars } from '@/config';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils";
-
-import 'md-editor-v3/lib/style.css';
-import { _editHomeNotice, _getOjStastics, _getUpdateLogs, _getHomeNotice } from '@/api/oj';
-import { _rejudge } from '@/api/record';
 
 let bannerImageInput = ref<File | null>(null);
 

@@ -1,14 +1,14 @@
 import {
-  needLoginCertificate,
   needAdminCertificate,
   needContestAdminCertificate,
-  needProblemListAdminCertificate,
+  needLoginCertificate,
   needProblemAdminCertificate,
+  needProblemListAdminCertificate,
   needSourceBorwserAdminCertificate,
   needSuperAdminCertificate,
 } from "./guard.ts";
 
-import { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
+import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 const BaseTitle = "AHUT OJ | ";
 

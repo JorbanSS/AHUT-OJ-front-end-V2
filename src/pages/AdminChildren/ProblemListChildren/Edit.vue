@@ -91,20 +91,20 @@
 </template>
 
 <script lang="ts" setup name="AddProblemList">
-import { Add, Bill, DeleteOne, EditOne } from '@icon-park/vue-next';
-import { type ProblemListType } from '@/type/problemList';
-import { reactive, ref, onMounted } from 'vue';
-import { push } from 'notivue';
-import { MdEditor } from 'md-editor-v3';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useUserDataStore } from '@/store/UserData';
-import { VueDraggable } from 'vue-draggable-plus'
-import 'md-editor-v3/lib/style.css';
-import { ConvertTools } from '@/utils/globalFunctions';
 
-import { _addProblemList, _editProblemList } from "@/api/problemList";
+import { Add, Bill, DeleteOne, EditOne } from '@icon-park/vue-next';
+import { MdEditor } from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
+import { push } from 'notivue';
+import { VueDraggable } from 'vue-draggable-plus';
+
 import { _getProblem } from '@/api/problem';
-import { _getProblemList } from '@/api/problemList';
+import { _editProblemList, _getProblemList } from "@/api/problemList";
+import { useUserDataStore } from '@/store/UserData';
+import { type ProblemListType } from '@/type/problemList';
+import { ConvertTools } from '@/utils/globalFunctions';
 const userDataStore = useUserDataStore();
 const router = useRouter();
 const route = useRoute();

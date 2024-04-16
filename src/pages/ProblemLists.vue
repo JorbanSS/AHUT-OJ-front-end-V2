@@ -49,20 +49,17 @@
 </template>
 
 <script lang="ts" setup name="ProblemLists">
-import { ref, reactive, onMounted, watch, computed } from 'vue';
-import { type ProblemListsType, type ProblemListSimplifiedType } from '@/type/problemList';
-import '@/utils/axios/request'
-import { Get } from '@/utils/axios/request'
-import { push } from 'notivue';
-import { ConvertTools } from '@/utils/globalFunctions';
+import { computed, onMounted, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import Pagination from "@/components/Main/Pagination.vue";
+import { push } from 'notivue';
+
 import { _getProblemLists } from '@/api/problemList';
+import Pagination from "@/components/Main/Pagination.vue";
+import { type ProblemListSimplifiedType, type ProblemListsType } from '@/type/problemList';
+import { ConvertTools } from '@/utils/globalFunctions';
 
 const router = useRouter();
-
-let toPage = ref();
 
 let problemLists = reactive<ProblemListsType>({
   problemLists: Array<ProblemListSimplifiedType>(),

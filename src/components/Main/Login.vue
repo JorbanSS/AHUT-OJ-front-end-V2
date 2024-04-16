@@ -57,13 +57,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { reactive } from 'vue';
+
 import { Close } from '@icon-park/vue-next';
-import { type LoginInfoType } from '@/type/user';
 import { push } from 'notivue';
-import { useUserDataStore } from '@/store/UserData';
+
 import { _login } from '@/api/user';
 import { verifyModeOptions } from '@/config';
+import { useUserDataStore } from '@/store/UserData';
+import { type LoginInfoType } from '@/type/user';
 
 const userDataStore = useUserDataStore();
 

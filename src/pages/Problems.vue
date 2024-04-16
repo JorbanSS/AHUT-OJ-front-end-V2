@@ -60,16 +60,16 @@
 </template>
 
 <script lang="ts" setup name="Problems">
-import { ref, reactive, onMounted, watch, computed } from 'vue';
-import { ConvertTools } from '@/utils/globalFunctions';
-import { useRouter } from 'vue-router';
+import { computed, onMounted, reactive, watch } from 'vue';
+
 import { push } from "notivue";
-import { problemTypeOptions } from '@/config';
+import { useRouter } from 'vue-router';
 
+import { _getProblems } from '@/api/problem';
 import Pagination from "@/components/Main/Pagination.vue";
-
-import { type ProblemsType, type ProblemSimplifiedType } from '@/type/problem';
-import { _getProblem, _getProblems } from '@/api/problem';
+import { problemTypeOptions } from '@/config';
+import { type ProblemSimplifiedType, type ProblemsType } from '@/type/problem';
+import { ConvertTools } from '@/utils/globalFunctions';
 
 const router = useRouter();
 
