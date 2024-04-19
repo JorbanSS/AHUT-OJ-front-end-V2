@@ -180,10 +180,10 @@ import { _getProblemList } from '@/api/problemList';
 import { submitLanguageOptions } from '@/config';
 import { useConstValStore } from '@/store/ConstVal';
 import { useUserDataStore } from '@/store/UserData';
-import { type ContestType } from '@/type/contest';
-import { type ProblemType } from '@/type/problem';
-import { ProblemListType } from '@/type/problemList';
-import { type SubmitCodeType } from '@/type/record';
+import { type ContestType } from '@/interface/contest';
+import { type ProblemType } from '@/interface/problem';
+import { ProblemListType } from '@/interface/problemList';
+import { type SubmitCodeType } from '@/interface/record';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 
 const { toClipboard } = useClipboard();

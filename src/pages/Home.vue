@@ -58,7 +58,7 @@ import { MdPreview } from 'md-editor-v3';
 import 'md-editor-v3/lib/preview.css';
 
 import { _getBanners, _getUpdateLogs } from "@/api/oj";
-import { type BannersType, type HomeNoticeType, type UpdateLogsType } from '@/type/oj';
+import { type BannersType, type HomeNoticeType, type UpdateLogsType } from '@/interface/oj';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 

@@ -95,7 +95,7 @@ import Pagination from "@/components/Main/Pagination.vue";
 import { submitLanguageOptions } from '@/config';
 import { useConstValStore } from '@/store/ConstVal';
 import { useUserDataStore } from '@/store/UserData';
-import { type RecordsType, type RecordType } from '@/type/record';
+import { type RecordsType, type RecordType } from '@/interface/record';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const route = useRoute();

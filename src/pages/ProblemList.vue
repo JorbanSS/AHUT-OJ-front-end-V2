@@ -55,7 +55,7 @@ import { _cloneProblemList, _getProblemList, _getProblemListUsersInfo, _joinProb
 import { problemListNavItems } from "@/config";
 import { useConstValStore } from '@/store/ConstVal';
 import { useUserDataStore } from '@/store/UserData';
-import { type ProblemListType } from '@/type/problemList';
+import { type ProblemListType } from '@/interface/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const constValStore = useConstValStore();

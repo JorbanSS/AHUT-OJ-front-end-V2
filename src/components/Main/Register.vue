@@ -55,7 +55,7 @@ import { reactive, ref } from 'vue';
 import { Close } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { type RegisterInfoType } from '@/type/user';
+import { type RegisterInfoType } from '@/interface/user';
 import { Validator } from '@/utils/globalFunctions';
 
 import { _codeVerify, _register, _verifyEmail } from "@/api/user";

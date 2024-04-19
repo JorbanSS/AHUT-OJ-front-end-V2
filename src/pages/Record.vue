@@ -75,7 +75,7 @@ import useClipboard from 'vue-clipboard3';
 import { _getRecord } from '@/api/record';
 import { submitInfo, submitStatusColor } from '@/config';
 import { useConstValStore } from '@/store/ConstVal';
-import { type RecordType } from '@/type/record';
+import { type RecordType } from '@/interface/record';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const { toClipboard } = useClipboard();

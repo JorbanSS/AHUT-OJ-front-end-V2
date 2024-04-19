@@ -146,8 +146,8 @@ import { push } from 'notivue';
 
 import { _deleteProblems, _editProblem, _getProblem } from '@/api/problem';
 import { markdownToolbars, problemContentOptions, problemOriginOptions } from '@/config';
-import { FileUploadType, ImageUploadType } from '@/type/common';
-import { type ProblemType } from '@/type/problem';
+import { FileUploadType, ImageUploadType } from '@/interface/common';
+import { type ProblemType } from '@/interface/problem';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from '@/utils/ossUtils';
 

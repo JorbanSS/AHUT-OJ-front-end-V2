@@ -121,9 +121,9 @@ import { push } from 'notivue';
 import { _editHomeNotice, _getHomeNotice, _getOjStastics } from '@/api/oj';
 import { _rejudge } from '@/api/record';
 import { markdownToolbars } from '@/config';
-import { type ImageUploadType } from '@/type/common';
-import { type HomeNoticeType, type OjStasticsType } from '@/type/oj';
-import { type RejudgeInfoType } from '@/type/record';
+import { type ImageUploadType } from '@/interface/common';
+import { type HomeNoticeType, type OjStasticsType } from '@/interface/oj';
+import { type RejudgeInfoType } from '@/interface/record';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils";
 

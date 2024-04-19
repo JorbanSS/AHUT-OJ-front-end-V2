@@ -46,7 +46,7 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { _getContestRanking } from '@/api/contest';
 import { useConstValStore } from '@/store/ConstVal';
-import { type ContestRankingType, type ContestType } from '@/type/contest';
+import { type ContestRankingType, type ContestType } from '@/interface/contest';
 import { ConvertTools, getRankingBackgroundColor } from '@/utils/globalFunctions';
 
 const route = useRoute();

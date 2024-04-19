@@ -69,7 +69,7 @@ import { push } from 'notivue';
 
 import { _getContests } from '@/api/contest';
 import Pagination from "@/components/Main/Pagination.vue";
-import { type ContestSimplifiedType, type ContestsType } from '@/type/contest';
+import { type ContestSimplifiedType, type ContestsType } from '@/interface/contest';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 
 const router = useRouter();

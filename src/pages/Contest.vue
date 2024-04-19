@@ -91,7 +91,7 @@ import { _cloneToProblemList, _getContest } from '@/api/contest';
 import { contestNavItems } from '@/config';
 import { useConstValStore } from '@/store/ConstVal';
 import { useUserDataStore } from '@/store/UserData';
-import { type ContestType } from '@/type/contest';
+import { type ContestType } from '@/interface/contest';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 
 const constValStore = useConstValStore();

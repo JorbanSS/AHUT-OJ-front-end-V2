@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup name="ContestDescription">
-import { ContestType } from '@/type/contest';
+import { ContestType } from '@/interface/contest';
 
 interface propsType {
   contest?: ContestType;

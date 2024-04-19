@@ -112,7 +112,7 @@ import { VueDraggable } from 'vue-draggable-plus';
 import { _addContest } from '@/api/contest';
 import { _getProblem } from '@/api/problem';
 import { useUserDataStore } from '@/store/UserData';
-import { type ContestType } from '@/type/contest';
+import { type ContestType } from '@/interface/contest';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const userDataStore = useUserDataStore();

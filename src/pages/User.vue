@@ -181,8 +181,8 @@ import { push } from 'notivue';
 import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword, _getUserInfo } from "@/api/user";
 import { useConstValStore } from '@/store/ConstVal';
 import { useUserDataStore } from '@/store/UserData';
-import { ImageUploadType } from '@/type/common';
-import { type BindType, type UserType } from '@/type/user';
+import { ImageUploadType } from '@/interface/common';
+import { type BindType, type UserType } from '@/interface/user';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from '@/utils/ossUtils';
 

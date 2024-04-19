@@ -165,7 +165,7 @@ import { push } from 'notivue';
 import { _addBuckets, _deleteBucket, _deleteObject, _getBuckets, _getObjects } from '@/api/oss';
 import { objectTypeOptions } from "@/config";
 import { useConstValStore } from '@/store/ConstVal';
-import { type BucketsType, type ObjectsType } from '@/type/oss';
+import { type BucketsType, type ObjectsType } from '@/interface/oss';
 import { OssUtils } from '@/utils/ossUtils';
 
 const constValStore = useConstValStore();

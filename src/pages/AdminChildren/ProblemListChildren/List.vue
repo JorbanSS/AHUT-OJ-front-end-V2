@@ -84,7 +84,7 @@ import { push } from 'notivue';
 
 import { _deleteProblemLists, _getProblemLists } from '@/api/problemList';
 import Pagination from "@/components/Main/Pagination.vue";
-import { type ProblemListSimplifiedType, type ProblemListsType } from '@/type/problemList';
+import { type ProblemListSimplifiedType, type ProblemListsType } from '@/interface/problemList';
 
 const router = useRouter();
 

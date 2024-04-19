@@ -101,7 +101,7 @@ import { push } from 'notivue';
 import useClipboard from 'vue-clipboard3';
 
 import { _deleteJudgeFiles, _getJudgeFile, _getJudgeFiles, _uploadJudgeFiles } from "@/api/problem";
-import { JudgeFileDetailType, type JudgeFilesType } from '@/type/problem';
+import { JudgeFileDetailType, type JudgeFilesType } from '@/interface/problem';
 
 const router = useRouter();
 const route = useRoute();

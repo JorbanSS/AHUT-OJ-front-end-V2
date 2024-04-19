@@ -31,8 +31,8 @@ import Login from '@/components/Main/Login.vue';
 import NavBar from '@/components/Main/NavBar.vue';
 import Register from '@/components/Main/Register.vue';
 import { useUserDataStore } from '@/store/UserData';
-import { type ShowConfigType } from '@/type/oj';
-import { type UserSimplifiedType } from '@/type/user';
+import { type ShowConfigType } from '@/interface/oj';
+import { type UserSimplifiedType } from '@/interface/user';
 
 const userDataStore = useUserDataStore();
 const route = useRoute();

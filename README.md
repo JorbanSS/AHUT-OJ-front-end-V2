@@ -47,7 +47,7 @@ nvm version  # 查看当前使用的 Node.js 版本
 3. 安装 pnpm
 
 ```sh
-npm install -g pnpm
+npm install pnpm
 ```
 
 在根目录下创建 `.npmrc` 的文件

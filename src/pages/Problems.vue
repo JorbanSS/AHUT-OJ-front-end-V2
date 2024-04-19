@@ -68,7 +68,7 @@ import { useRouter } from 'vue-router';
 import { _getProblems } from '@/api/problem';
 import Pagination from "@/components/Main/Pagination.vue";
 import { problemTypeOptions } from '@/config';
-import { type ProblemSimplifiedType, type ProblemsType } from '@/type/problem';
+import { type ProblemSimplifiedType, type ProblemsType } from '@/interface/problem';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const router = useRouter();

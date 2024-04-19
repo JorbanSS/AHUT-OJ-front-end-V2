@@ -124,8 +124,8 @@ import { push } from 'notivue';
 
 import { _addProblem } from "@/api/problem";
 import { markdownToolbars, problemContentOptions, problemOriginOptions } from '@/config';
-import { FileUploadType, type ImageUploadType } from '@/type/common';
-import { type ProblemType } from '@/type/problem';
+import { FileUploadType, type ImageUploadType } from '@/interface/common';
+import { type ProblemType } from '@/interface/problem';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils";
 
