@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts" setup name="Training">
-import { useUserDataStore } from '@/store/UserData';
+import { useUserDataStore } from '@/stores/UserData';
 
 const userDataStore = useUserDataStore();
 

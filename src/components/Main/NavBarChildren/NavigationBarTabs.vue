@@ -28,7 +28,7 @@ import { RouterLink, useRoute } from 'vue-router';
 import { Toolkit } from '@icon-park/vue-next';
 
 import { navItems } from '@/config';
-import { useThemeSwitchStore } from '@/store/ThemeSwitch';
+import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
 
 const route = useRoute();
 const ThemeSwitchStore = useThemeSwitchStore();

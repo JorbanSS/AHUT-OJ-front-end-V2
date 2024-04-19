@@ -43,7 +43,7 @@ import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { _getProblemListRanking } from '@/api/problemList';
-import { useConstValStore } from '@/store/ConstVal';
+import { useConstValStore } from '@/stores/ConstVal';
 import { type ContestRankingType } from '@/interface/contest';
 import { type ProblemListType } from '@/interface/problemList';
 import { ConvertTools, getRankingBackgroundColor } from '@/utils/globalFunctions';

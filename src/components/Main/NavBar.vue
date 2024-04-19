@@ -59,8 +59,8 @@ import { RouterLink, useRouter } from 'vue-router';
 
 import { Logout, Moon, People, SettingConfig, SunOne } from '@icon-park/vue-next';
 
-import { useThemeSwitchStore } from '@/store/ThemeSwitch';
-import { useUserDataStore } from '@/store/UserData';
+import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
+import { useUserDataStore } from '@/stores/UserData';
 import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue';
 
 const router = useRouter();

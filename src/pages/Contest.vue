@@ -89,8 +89,8 @@ import { push } from 'notivue';
 
 import { _cloneToProblemList, _getContest } from '@/api/contest';
 import { contestNavItems } from '@/config';
-import { useConstValStore } from '@/store/ConstVal';
-import { useUserDataStore } from '@/store/UserData';
+import { useConstValStore } from '@/stores/ConstVal';
+import { useUserDataStore } from '@/stores/UserData';
 import { type ContestType } from '@/interface/contest';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 

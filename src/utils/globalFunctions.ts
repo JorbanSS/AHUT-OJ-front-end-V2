@@ -1,5 +1,5 @@
 import { _getServerTime } from "@/api/common";
-import { useConstValStore } from "@/store/ConstVal";
+import { useConstValStore } from "@/stores/ConstVal";
 import { TimeType } from "@/interface/common";
 import { ContestRankingProblemType } from "@/interface/contest";
 

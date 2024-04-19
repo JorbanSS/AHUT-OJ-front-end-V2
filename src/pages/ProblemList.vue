@@ -53,8 +53,8 @@ import { push } from 'notivue';
 
 import { _cloneProblemList, _getProblemList, _getProblemListUsersInfo, _joinProblemList } from '@/api/problemList';
 import { problemListNavItems } from "@/config";
-import { useConstValStore } from '@/store/ConstVal';
-import { useUserDataStore } from '@/store/UserData';
+import { useConstValStore } from '@/stores/ConstVal';
+import { useUserDataStore } from '@/stores/UserData';
 import { type ProblemListType } from '@/interface/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
 

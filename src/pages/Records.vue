@@ -93,8 +93,8 @@ import { push } from 'notivue';
 import { _getRecords } from '@/api/record';
 import Pagination from "@/components/Main/Pagination.vue";
 import { submitLanguageOptions } from '@/config';
-import { useConstValStore } from '@/store/ConstVal';
-import { useUserDataStore } from '@/store/UserData';
+import { useConstValStore } from '@/stores/ConstVal';
+import { useUserDataStore } from '@/stores/UserData';
 import { type RecordsType, type RecordType } from '@/interface/record';
 import { ConvertTools } from '@/utils/globalFunctions';
 

@@ -123,7 +123,7 @@ import { VueDraggable } from 'vue-draggable-plus';
 
 import { _editContest, _getContest } from "@/api/contest";
 import { _getProblem } from "@/api/problem";
-import { useUserDataStore } from '@/store/UserData';
+import { useUserDataStore } from '@/stores/UserData';
 import { type ContestType } from '@/interface/contest';
 import { ConvertTools } from '@/utils/globalFunctions';
 

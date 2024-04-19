@@ -30,7 +30,7 @@ import Footer from '@/components/Main/Footer.vue';
 import Login from '@/components/Main/Login.vue';
 import NavBar from '@/components/Main/NavBar.vue';
 import Register from '@/components/Main/Register.vue';
-import { useUserDataStore } from '@/store/UserData';
+import { useUserDataStore } from '@/stores/UserData';
 import { type ShowConfigType } from '@/interface/oj';
 import { type UserSimplifiedType } from '@/interface/user';
 

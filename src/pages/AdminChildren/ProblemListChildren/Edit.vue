@@ -102,7 +102,7 @@ import { VueDraggable } from 'vue-draggable-plus';
 
 import { _getProblem } from '@/api/problem';
 import { _editProblemList, _getProblemList } from "@/api/problemList";
-import { useUserDataStore } from '@/store/UserData';
+import { useUserDataStore } from '@/stores/UserData';
 import { type ProblemListType } from '@/interface/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
 const userDataStore = useUserDataStore();
