@@ -109,10 +109,10 @@ import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
 import { VueDraggable } from 'vue-draggable-plus';
 
-import { _addContest } from '@/api/contest';
-import { _getProblem } from '@/api/problem';
+import { _addContest } from '@/apis/contest';
+import { _getProblem } from '@/apis/problem';
 import { useUserDataStore } from '@/stores/UserData';
-import { type ContestType } from '@/interface/contest';
+import { type ContestType } from '@/interfaces/contest';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const userDataStore = useUserDataStore();

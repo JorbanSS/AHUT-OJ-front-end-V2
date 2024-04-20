@@ -94,10 +94,10 @@ import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
 import { VueDraggable } from 'vue-draggable-plus';
 
-import { _getProblem } from '@/api/problem';
-import { _addProblemList } from "@/api/problemList";
+import { _getProblem } from '@/apis/problem';
+import { _addProblemList } from "@/apis/problemList";
 import { useUserDataStore } from '@/stores/UserData';
-import { type ProblemListType } from '@/interface/problemList';
+import { type ProblemListType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
 const userDataStore = useUserDataStore();
 const router = useRouter();

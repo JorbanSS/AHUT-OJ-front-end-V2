@@ -1,6 +1,6 @@
 import { push } from "notivue";
 
-import { _getObject, _uploadBannerImage, _uploadObject } from "@/api/oss";
+import { _getObject, _uploadBannerImage, _uploadObject } from "@/apis/oss";
 import { FileUtils } from "./fileUtils";
 
 export class OssUtils {

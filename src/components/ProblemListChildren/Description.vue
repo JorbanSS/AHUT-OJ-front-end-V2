@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup name="ProblemListDescription">
-import { ProblemListType } from '@/interface/problemList';
+import { ProblemListType } from '@/interfaces/problemList';
 
 interface propsType {
   problemList?: ProblemListType;

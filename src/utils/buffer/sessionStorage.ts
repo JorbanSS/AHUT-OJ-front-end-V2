@@ -1,4 +1,4 @@
-import { UserSimplifiedType, type UserType } from '@/interface/user';
+import { UserSimplifiedType, type UserType } from '@/interfaces/user';
 
 export class UserDataSessionStorage {
   public static init() {

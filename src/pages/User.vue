@@ -178,11 +178,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { Avatar, Cattle, EmotionHappy, HorseZodiac, Key, Ranking } from "@icon-park/vue-next";
 import { push } from 'notivue';
 
-import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword, _getUserInfo } from "@/api/user";
+import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword, _getUserInfo } from "@/apis/user";
 import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
-import { ImageUploadType } from '@/interface/common';
-import { type BindType, type UserType } from '@/interface/user';
+import { ImageUploadType } from '@/interfaces/common';
+import { type BindType, type UserType } from '@/interfaces/user';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from '@/utils/ossUtils';
 

@@ -182,10 +182,10 @@ import { useRouter } from 'vue-router';
 import { Add, AfferentThree, DeleteOne, Peoples, Permissions } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _addUser, _changePassword, _deleteUsers, _editUserPermission, _getAdmins, _getUserPermission } from "@/api/user";
+import { _addUser, _changePassword, _deleteUsers, _editUserPermission, _getAdmins, _getUserPermission } from "@/apis/user";
 import Pagination from "@/components/Main/Pagination.vue";
 import { useConstValStore } from '@/stores/ConstVal';
-import { type PermissionType, type UserSimplifiedType, type UserType } from '@/interface/user';
+import { type PermissionType, type UserSimplifiedType, type UserType } from '@/interfaces/user';
 
 const router = useRouter();
 const constValStore = useConstValStore();

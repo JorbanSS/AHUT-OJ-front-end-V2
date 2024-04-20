@@ -25,14 +25,14 @@ import { RouterView, useRoute } from 'vue-router';
 
 import { push } from 'notivue';
 
-import { _getUserInfo, _getUserPermission } from '@/api/user';
+import { _getUserInfo, _getUserPermission } from '@/apis/user';
 import Footer from '@/components/Main/Footer.vue';
 import Login from '@/components/Main/Login.vue';
 import NavBar from '@/components/Main/NavBar.vue';
 import Register from '@/components/Main/Register.vue';
 import { useUserDataStore } from '@/stores/UserData';
-import { type ShowConfigType } from '@/interface/oj';
-import { type UserSimplifiedType } from '@/interface/user';
+import { type ShowConfigType } from '@/interfaces/oj';
+import { type UserSimplifiedType } from '@/interfaces/user';
 
 const userDataStore = useUserDataStore();
 const route = useRoute();

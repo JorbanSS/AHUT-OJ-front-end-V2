@@ -82,9 +82,9 @@ import { useRouter } from 'vue-router';
 import { Add, Bill, DeleteOne } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _deleteProblemLists, _getProblemLists } from '@/api/problemList';
+import { _deleteProblemLists, _getProblemLists } from '@/apis/problemList';
 import Pagination from "@/components/Main/Pagination.vue";
-import { type ProblemListSimplifiedType, type ProblemListsType } from '@/interface/problemList';
+import { type ProblemListSimplifiedType, type ProblemListsType } from '@/interfaces/problemList';
 
 const router = useRouter();
 

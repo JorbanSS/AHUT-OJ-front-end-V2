@@ -65,9 +65,9 @@ import { useRouter } from 'vue-router';
 import { Add, DeleteOne, Trophy } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _deleteContests, _getContests } from '@/api/contest';
+import { _deleteContests, _getContests } from '@/apis/contest';
 import Pagination from "@/components/Main/Pagination.vue";
-import { type ContestSimplifiedType, type ContestsType } from '@/interface/contest';
+import { type ContestSimplifiedType, type ContestsType } from '@/interfaces/contest';
 
 const router = useRouter();
 

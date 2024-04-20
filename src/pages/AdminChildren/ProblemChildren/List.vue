@@ -91,10 +91,10 @@ import { useRouter } from 'vue-router';
 import { Add, AfferentThree, DeleteOne, DocumentFolder, EfferentThree } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _deleteProblems, _exportProblems, _getProblems } from "@/api/problem";
+import { _deleteProblems, _exportProblems, _getProblems } from "@/apis/problem";
 import Pagination from "@/components/Main/Pagination.vue";
 import { problemTypeOptions } from '@/config';
-import { type ProblemSimplifiedType, type ProblemsType } from '@/interface/problem';
+import { type ProblemSimplifiedType, type ProblemsType } from '@/interfaces/problem';
 
 const router = useRouter();
 

@@ -19,8 +19,8 @@ import {
 } from "@icon-park/vue-next";
 import { ToolbarNames } from "md-editor-v3";
 
-import { type NavItemType } from "@/interface/oj";
-import { SubmitInfoType } from "./interface/record";
+import { type NavItemType } from "@/interfaces/oj";
+import { SubmitInfoType } from "./interfaces/record";
 
 export const submitStatusColor: Record<string, string> = {
   AC: "#19BE6B",

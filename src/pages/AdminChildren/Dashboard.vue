@@ -118,12 +118,12 @@ import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
 
-import { _editHomeNotice, _getHomeNotice, _getOjStastics } from '@/api/oj';
-import { _rejudge } from '@/api/record';
+import { _editHomeNotice, _getHomeNotice, _getOjStastics } from '@/apis/oj';
+import { _rejudge } from '@/apis/record';
 import { markdownToolbars } from '@/config';
-import { type ImageUploadType } from '@/interface/common';
-import { type HomeNoticeType, type OjStasticsType } from '@/interface/oj';
-import { type RejudgeInfoType } from '@/interface/record';
+import { type ImageUploadType } from '@/interfaces/common';
+import { type HomeNoticeType, type OjStasticsType } from '@/interfaces/oj';
+import { type RejudgeInfoType } from '@/interfaces/record';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils";
 

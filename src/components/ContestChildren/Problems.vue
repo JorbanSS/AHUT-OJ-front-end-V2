@@ -40,7 +40,7 @@
 
 import { useRouter } from 'vue-router';
 
-import { ContestType } from '@/interface/contest';
+import { ContestType } from '@/interfaces/contest';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const router = useRouter();

@@ -87,11 +87,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { Bill, Editor, PartyBalloon } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _cloneToProblemList, _getContest } from '@/api/contest';
+import { _cloneToProblemList, _getContest } from '@/apis/contest';
 import { contestNavItems } from '@/config';
 import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
-import { type ContestType } from '@/interface/contest';
+import { type ContestType } from '@/interfaces/contest';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 
 const constValStore = useConstValStore();

@@ -72,10 +72,10 @@ import confetti from 'canvas-confetti';
 import { push } from 'notivue';
 import useClipboard from 'vue-clipboard3';
 
-import { _getRecord } from '@/api/record';
+import { _getRecord } from '@/apis/record';
 import { submitInfo, submitStatusColor } from '@/config';
 import { useConstValStore } from '@/stores/ConstVal';
-import { type RecordType } from '@/interface/record';
+import { type RecordType } from '@/interfaces/record';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const { toClipboard } = useClipboard();

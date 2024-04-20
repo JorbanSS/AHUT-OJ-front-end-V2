@@ -65,10 +65,10 @@ import { computed, onMounted, reactive, watch } from 'vue';
 import { push } from "notivue";
 import { useRouter } from 'vue-router';
 
-import { _getProblems } from '@/api/problem';
+import { _getProblems } from '@/apis/problem';
 import Pagination from "@/components/Main/Pagination.vue";
 import { problemTypeOptions } from '@/config';
-import { type ProblemSimplifiedType, type ProblemsType } from '@/interface/problem';
+import { type ProblemSimplifiedType, type ProblemsType } from '@/interfaces/problem';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const router = useRouter();

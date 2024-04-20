@@ -55,10 +55,10 @@ import { reactive, ref } from 'vue';
 import { Close } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { type RegisterInfoType } from '@/interface/user';
+import { type RegisterInfoType } from '@/interfaces/user';
 import { Validator } from '@/utils/globalFunctions';
 
-import { _codeVerify, _register, _verifyEmail } from "@/api/user";
+import { _codeVerify, _register, _verifyEmail } from "@/apis/user";
 
 interface propsType {
   init?: Function;

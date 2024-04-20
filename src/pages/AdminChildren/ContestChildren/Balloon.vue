@@ -74,7 +74,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Add, EditOne, PartyBalloon, Trophy } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _editBalloonColor, _getContest } from "@/api/contest";
+import { _editBalloonColor, _getContest } from "@/apis/contest";
 import { useUserDataStore } from '@/stores/UserData';
 import { ConvertTools } from '@/utils/globalFunctions';
 

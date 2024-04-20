@@ -1,7 +1,7 @@
-import { _getServerTime } from "@/api/common";
+import { _getServerTime } from "@/apis/common";
 import { useConstValStore } from "@/stores/ConstVal";
-import { TimeType } from "@/interface/common";
-import { ContestRankingProblemType } from "@/interface/contest";
+import { TimeType } from "@/interfaces/common";
+import { ContestRankingProblemType } from "@/interfaces/contest";
 
 // 转换工具
 export class ConvertTools {

@@ -100,8 +100,8 @@ import { Add, Delete, DocumentFolder, EditOne, Eyes, Data as ICONdata, Upload } 
 import { push } from 'notivue';
 import useClipboard from 'vue-clipboard3';
 
-import { _deleteJudgeFiles, _getJudgeFile, _getJudgeFiles, _uploadJudgeFiles } from "@/api/problem";
-import { JudgeFileDetailType, type JudgeFilesType } from '@/interface/problem';
+import { _deleteJudgeFiles, _getJudgeFile, _getJudgeFiles, _uploadJudgeFiles } from "@/apis/problem";
+import { JudgeFileDetailType, type JudgeFilesType } from '@/interfaces/problem';
 
 const router = useRouter();
 const route = useRoute();

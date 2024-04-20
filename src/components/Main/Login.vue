@@ -62,10 +62,10 @@ import { reactive } from 'vue';
 import { Close } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _login } from '@/api/user';
+import { _login } from '@/apis/user';
 import { verifyModeOptions } from '@/config';
 import { useUserDataStore } from '@/stores/UserData';
-import { type LoginInfoType } from '@/interface/user';
+import { type LoginInfoType } from '@/interfaces/user';
 
 const userDataStore = useUserDataStore();
 

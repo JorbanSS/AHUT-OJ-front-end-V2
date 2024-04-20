@@ -90,12 +90,12 @@ import { useRoute, useRouter } from 'vue-router';
 
 import { push } from 'notivue';
 
-import { _getRecords } from '@/api/record';
+import { _getRecords } from '@/apis/record';
 import Pagination from "@/components/Main/Pagination.vue";
 import { submitLanguageOptions } from '@/config';
 import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
-import { type RecordsType, type RecordType } from '@/interface/record';
+import { type RecordsType, type RecordType } from '@/interfaces/record';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const route = useRoute();

@@ -162,10 +162,10 @@ import { useRoute, useRouter } from 'vue-router';
 import { FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, PictureOne } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _addBuckets, _deleteBucket, _deleteObject, _getBuckets, _getObjects } from '@/api/oss';
+import { _addBuckets, _deleteBucket, _deleteObject, _getBuckets, _getObjects } from '@/apis/oss';
 import { objectTypeOptions } from "@/config";
 import { useConstValStore } from '@/stores/ConstVal';
-import { type BucketsType, type ObjectsType } from '@/interface/oss';
+import { type BucketsType, type ObjectsType } from '@/interfaces/oss';
 import { OssUtils } from '@/utils/ossUtils';
 
 const constValStore = useConstValStore();

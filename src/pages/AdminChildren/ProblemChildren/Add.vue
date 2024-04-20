@@ -122,10 +122,10 @@ import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
 
-import { _addProblem } from "@/api/problem";
+import { _addProblem } from "@/apis/problem";
 import { markdownToolbars, problemContentOptions, problemOriginOptions } from '@/config';
-import { FileUploadType, type ImageUploadType } from '@/interface/common';
-import { type ProblemType } from '@/interface/problem';
+import { FileUploadType, type ImageUploadType } from '@/interfaces/common';
+import { type ProblemType } from '@/interfaces/problem';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils";
 

@@ -174,16 +174,16 @@ import 'md-editor-v3/lib/preview.css';
 import { push } from 'notivue';
 import useClipboard from 'vue-clipboard3';
 
-import { _getContest } from '@/api/contest';
-import { _getProblem, _submitCode } from '@/api/problem';
-import { _getProblemList } from '@/api/problemList';
+import { _getContest } from '@/apis/contest';
+import { _getProblem, _submitCode } from '@/apis/problem';
+import { _getProblemList } from '@/apis/problemList';
 import { submitLanguageOptions } from '@/config';
 import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
-import { type ContestType } from '@/interface/contest';
-import { type ProblemType } from '@/interface/problem';
-import { ProblemListType } from '@/interface/problemList';
-import { type SubmitCodeType } from '@/interface/record';
+import { type ContestType } from '@/interfaces/contest';
+import { type ProblemType } from '@/interfaces/problem';
+import { ProblemListType } from '@/interfaces/problemList';
+import { type SubmitCodeType } from '@/interfaces/record';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 
 const { toClipboard } = useClipboard();

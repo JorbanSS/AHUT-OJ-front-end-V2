@@ -51,11 +51,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { Bill, Editor } from "@icon-park/vue-next";
 import { push } from 'notivue';
 
-import { _cloneProblemList, _getProblemList, _getProblemListUsersInfo, _joinProblemList } from '@/api/problemList';
+import { _cloneProblemList, _getProblemList, _getProblemListUsersInfo, _joinProblemList } from '@/apis/problemList';
 import { problemListNavItems } from "@/config";
 import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
-import { type ProblemListType } from '@/interface/problemList';
+import { type ProblemListType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const constValStore = useConstValStore();

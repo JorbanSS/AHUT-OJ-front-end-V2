@@ -8,7 +8,7 @@ import VCalendar from 'v-calendar';
 import VueGtag from "vue-gtag-next";
 
 import App from './App.vue';
-import router from './router';
+import router from './routers';
 
 import 'notivue/animations.css';
 import 'notivue/notifications.css';
