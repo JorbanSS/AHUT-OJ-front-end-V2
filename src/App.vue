@@ -1,5 +1,5 @@
 <template>
-  <Main />
+  <Main></Main>
   <Notivue v-slot="item">
     <NotivueSwipe :item="item">
       <Notification :item="item" :theme="pastelTheme" />

@@ -13,7 +13,7 @@
     <ul class="bg-bubbles">
       <li v-for="i in 10" :key="i"></li>
     </ul>
-    <div class="cover" />
+    <div class="cover"></div>
   </div>
   <component :is="Login" :init="initAction" :register="registerAction" v-if="showConfig.showLogin" />
   <component :is="Register" :init="initAction" :login="loginAction" v-if="showConfig.showRegister" />
