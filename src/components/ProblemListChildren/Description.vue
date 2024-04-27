@@ -1,9 +1,9 @@
 <template>
-  <div class="card bg-white Border p-6 shadow-lg">
+  <div class="card bg-white Border shadow-lg overflow-hidden">
     <div v-if="props.problemList.Description">
-      {{ props.problemList.Description }}
+      <MdPreview :modelValue="props.problemList.Description" class="px-1 mb-4" />
     </div>
-    <div v-else>
+    <div class="p-6" v-else>
       暂无题单描述
     </div>
   </div>
@@ -11,6 +11,9 @@
 
 <script lang="ts" setup name="ProblemListDescription">
 import { ProblemListType } from '@/interfaces/problemList';
+
+import { MdCatalog, MdPreview } from 'md-editor-v3';
+import 'md-editor-v3/lib/preview.css';
 
 interface propsType {
   problemList?: ProblemListType;

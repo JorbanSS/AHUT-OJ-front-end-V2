@@ -10,6 +10,6 @@
 <script lang="ts" setup name="App">
 import { Notification, Notivue, NotivueSwipe, pastelTheme } from 'notivue';
 
-import Main from '@/pages/Main.vue';
+import Main from '@/views/Main.vue';
 
 </script>

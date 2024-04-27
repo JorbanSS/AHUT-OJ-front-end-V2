@@ -11,37 +11,39 @@
   </div>
   <div class="mt-6"></div>
   <div class="bg-white card shadow-lg Border">
-    <table class="table table-zebra">
-      <thead>
-        <tr>
-          <th v-for="(item, index) in ['题单号', '题单名称', '标签', '创建时间', '创建人']" :key="index">
-            {{ item }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in problemLists.problemLists" :key="item.LID" @click="router.push(`/problemlist/${item.LID}`);"
-          class="cursor-pointer">
-          <th>
-            {{ item.LID }}
-          </th>
-          <td class="font-bold talbe-lg">
-            {{ item.Title }}
-          </td>
-          <td class="space-x-1 space-y-0.5">
-            <span class="badge badge-neutral badge-md">
-              Offical
-            </span>
-          </td>
-          <td>
-            {{ ConvertTools.PrintTime(item.StartTime, 1) }}
-          </td>
-          <td>
-            {{ item.UID }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="overflow-x-hidden rounded-t-2xl" style="max-height: calc(100vh - 124px - 252px)">
+      <table class="table table-zebra table-pin-rows">
+        <thead>
+          <tr>
+            <th v-for="(item, index) in ['题单号', '题单名称', '标签', '创建时间', '创建人']" :key="index">
+              {{ item }}
+            </th>
+          </tr>
+        </thead>
+        <tbody v-auto-animate>
+          <tr v-for="item in problemLists.problemLists" :key="item.LID" @click="router.push(`/problemlist/${item.LID}`);"
+            class="cursor-pointer">
+            <th>
+              {{ item.LID }}
+            </th>
+            <td class="font-bold talbe-lg">
+              {{ item.Title }}
+            </td>
+            <td class="space-x-1 space-y-0.5">
+              <span class="badge badge-neutral badge-md">
+                Offical
+              </span>
+            </td>
+            <td>
+              {{ ConvertTools.PrintTime(item.StartTime, 1) }}
+            </td>
+            <td>
+              {{ item.UID }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="mx-auto py-4 flex space-x-4">
       <Pagination :page="problemLists.page" :maxPage="maxPage" :changePage="problemLists.changePage" />
     </div>

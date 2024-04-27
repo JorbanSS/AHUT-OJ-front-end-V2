@@ -35,49 +35,51 @@
   </div>
   <div class="mt-6"></div>
   <div class="bg-white card shadow-lg Border">
-    <table class="table table-zebra">
-      <thead>
-        <tr>
-          <th v-for="(item, index) in ['状态', '分数', '提交号', '题号', '提交者', '用时', '内存', '语言', '提交时间']" :key="index">
-            {{ item }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in records.records" :key="item.SID">
-          <td class="font-bold talbe-lg">
-            {{ item.Result }}
-          </td>
-          <td class="talbe-lg">
-            100
-          </td>
-          <th class="font-normal talbe-lg">
-            {{ item.SID }}
-          </th>
-          <td @click="router.push(`/problem/${item.PID}`)"
-            class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目">
-            {{ item.PID }}
-          </td>
-          <td @click="router.push(`/user/${item.UID}`)"
-            class="font-bold text-blue-500 hover:text-blue-400 cursor-pointer">
-            {{ item.UID }}
-          </td>
-          <td>
-            {{ item.UseTime }} ms
-          </td>
-          <td>
-            {{ Math.ceil(item.UseMemory / 1024 / 1024) }} MB
-          </td>
-          <td @click="router.push(`/record/${item.SID}`)"
-            class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看代码">
-            {{ constValStore.SUBMIT_LANG[item.Lang] }}
-          </td>
-          <td>
-            {{ ConvertTools.PrintTime(item.SubmitTime, 1, 1) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="overflow-x-hidden rounded-t-2xl" style="max-height: calc(100vh - 124px - 380px)">
+      <table class="table table-zebra table-pin-rows">
+        <thead>
+          <tr>
+            <th v-for="(item, index) in ['状态', '分数', '提交号', '题号', '提交者', '用时', '内存', '语言', '提交时间']" :key="index">
+              {{ item }}
+            </th>
+          </tr>
+        </thead>
+        <tbody v-auto-animate>
+          <tr v-for="item in records.records" :key="item.SID">
+            <td class="font-bold talbe-lg">
+              {{ item.Result }}
+            </td>
+            <td class="talbe-lg">
+              {{ ConvertTools.Percentage(item.PassSample, item.SampleNumber) }}
+            </td>
+            <th class="font-normal talbe-lg">
+              {{ item.SID }}
+            </th>
+            <td @click="router.push(`/problem/${item.PID}`)"
+              class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目">
+              {{ item.PID }}
+            </td>
+            <td @click="router.push(`/user/${item.UID}`)"
+              class="font-bold text-blue-500 hover:text-blue-400 cursor-pointer">
+              {{ item.UID }}
+            </td>
+            <td>
+              {{ item.UseTime }} ms
+            </td>
+            <td>
+              {{ Math.ceil(item.UseMemory / 1024 / 1024) }} MB
+            </td>
+            <td @click="router.push(`/record/${item.SID}`)"
+              class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看代码">
+              {{ constValStore.SUBMIT_LANG[item.Lang] }}
+            </td>
+            <td>
+              {{ ConvertTools.PrintTime(item.SubmitTime, 1, 1) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="mx-auto py-4 flex space-x-4">
       <Pagination :page="records.page" :maxPage="maxPage" :changePage="records.changePage" />
     </div>

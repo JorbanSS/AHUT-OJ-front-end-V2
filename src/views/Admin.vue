@@ -1,6 +1,6 @@
 <template>
   <NavBar />
-  <div>
+  <div v-auto-animate>
     <RouterView></RouterView>
   </div>
 </template>

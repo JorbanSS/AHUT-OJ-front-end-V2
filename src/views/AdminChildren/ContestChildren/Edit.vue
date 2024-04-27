@@ -33,6 +33,12 @@
           提交编辑
         </div>
       </li>
+      <li>
+        <div class="font-bold text-base" @click="router.push('/contest/' + contest.CID)">
+          <edit-one theme="outline" size="18" />
+          跳转比赛
+        </div>
+      </li>
     </ul>
   </div>
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
@@ -115,7 +121,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Add, ArrowRight, DeleteOne, EditOne, PartyBalloon, Trophy } from '@icon-park/vue-next';
+import { Add, ArrowRight, DeleteOne, EditOne, PartyBalloon, Trophy, GoOn } from '@icon-park/vue-next';
 import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
@@ -249,7 +255,7 @@ let contest = reactive<ContestType>({
       BeginTime: contest.BeginTime,
       EndTime: contest.EndTime,
       IsPublic: contest.IsPublic,
-      Desciption: contest.Description,
+      Description: contest.Description,
       Title: contest.Title,
       Pass: contest.Pass,
       Problems: listStr,

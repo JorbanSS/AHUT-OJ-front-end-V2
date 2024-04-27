@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-white shadow-lg Border p-6">
+  <div class="flex flex-row space-x-6 card bg-white shadow-lg Border p-6">
     <div class="join w-fit">
       <label class="input input-bordered flex items-center gap-2 join-item">
         <span class="whitespace-nowrap">题号</span>
@@ -7,7 +7,6 @@
       </label>
       <button class="btn join-item btn-neutral" @click="problems.goToProblem(problems.searchInfo.PID)">跳转</button>
     </div>
-    <div class="m-3"></div>
     <div class="join w-fit">
       <label class="input input-bordered flex items-center gap-2 join-item">
         <span class="whitespace-nowrap">标签</span>
@@ -23,36 +22,39 @@
   </div>
   <div class="mt-6"></div>
   <div class="bg-white card shadow-lg Border">
-    <table class="table table-zebra">
-      <thead>
-        <tr>
-          <th v-for="(item, index) in ['题号', '题目名称', '标签', '通过率']" :key="index">
-            {{ item }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in problems.problems" :key="item.PID" @click="router.push(`/problem/${item.PID}`);"
-          class="cursor-pointer">
-          <th>
-            {{ item.PID }}
-          </th>
-          <td>
-            <span class="font-bold talbe-lg Nowarp">{{ item.Title }}</span>
-          </td>
-          <td class="space-x-1 space-y-0.5">
-            <span class="badge badge-neutral badge-md"
-              v-for="(label, index) in item.Label.split(/;| /).filter(item => item != '' && item != '/')" :key="index">
-              {{ label }}
-            </span>
-          </td>
-          <td>
-            <progress class="progress progress-success w-20"
-              :value="ConvertTools.Percentage(item.Accepted, item.Submit)" max="100"></progress>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="overflow-x-hidden rounded-t-2xl" style="max-height: calc(100vh - 124px - 252px)">
+      <table class="table table-zebra table-pin-rows">
+        <thead>
+          <tr>
+            <th v-for="(item, index) in ['题号', '题目名称', '标签', '通过率']" :key="index">
+              {{ item }}
+            </th>
+          </tr>
+        </thead>
+        <tbody v-auto-animate>
+          <tr v-for="item in problems.problems" :key="item.PID" @click="router.push(`/problem/${item.PID}`);"
+            class="cursor-pointer">
+            <th>
+              {{ item.PID }}
+            </th>
+            <td>
+              <span class="font-bold talbe-lg Nowarp">{{ item.Title }}</span>
+            </td>
+            <td class="space-x-1 space-y-0.5">
+              <span class="badge badge-neutral badge-md"
+                v-for="(label, index) in item.Label.split(/;| /).filter(item => item != '' && item != '/')"
+                :key="index">
+                {{ label }}
+              </span>
+            </td>
+            <td>
+              <progress class="progress progress-success w-20"
+                :value="ConvertTools.Percentage(item.Accepted, item.Submit)" max="100"></progress>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="mx-auto py-4 flex space-x-4">
       <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" />
     </div>

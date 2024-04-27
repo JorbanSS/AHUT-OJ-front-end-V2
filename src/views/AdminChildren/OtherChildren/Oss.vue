@@ -7,6 +7,12 @@
           OSS 对象存储
         </div>
       </li>
+      <li>
+        <div class="font-bold text-base" @click="router.push('/admin/other/updatelogs')">
+          <memory-one theme="outline" size="18" />
+          更新日志
+        </div>
+      </li>
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li v-if="browserMode == constValStore.OSS_BROWSER_MODE_FOLDER">

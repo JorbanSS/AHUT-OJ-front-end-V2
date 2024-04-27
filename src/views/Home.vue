@@ -93,7 +93,11 @@ function getUpdateLogs() {
     .then((data: any) => {
       updateLogs.updateLogs = data.Data;
       updateLogs.count = data.Count;
-      if (updateLogs.updateLogs.filter(item => item.ID == 0).length) notice.value = updateLogs.updateLogs.filter(item => item.ID == 0)[0];
+      if (updateLogs.updateLogs.filter(item => item.ID == 0).length) {
+        notice.value = updateLogs.updateLogs.filter(item => item.ID == 0)[0];
+        // @ts-ignore
+        if (updateLogs.updateLogs.filter(item => item.ID == 0)) homeNotice.showModal();
+      }
       updateLogs.updateLogs = updateLogs.updateLogs.filter(item => item.ID != 0);
     })
 }
@@ -101,8 +105,6 @@ function getUpdateLogs() {
 
 onMounted(() => {
   getUpdateLogs();
-  // @ts-ignore
-  if (updateLogs.updateLogs.filter(item => item.ID == 0).length) homeNotice.showModal();
   banners.get();
 })
 

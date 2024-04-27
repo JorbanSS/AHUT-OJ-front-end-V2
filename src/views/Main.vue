@@ -1,22 +1,25 @@
 <template>
-  <NavBar :login="loginAction" :logout="logoutAction" v-if="showConfig.showNavBar" />
-  <keep-alive>
-    <div :class="{ 'max-w-6xl mx-auto m-6': !adminMode }"
-      :style="adminMode ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 48px)'" style="" class=""
-      v-if="showConfig.showBody">
-      <RouterView></RouterView>
+  <div v-auto-animate>
+    <NavBar :login="loginAction" :logout="logoutAction" v-if="showConfig.showNavBar" />
+    <keep-alive>
+      <div :class="{ 'max-w-6xl mx-auto m-6': !adminMode }"
+        :style="adminMode ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 48px)'" v-auto-animate
+        v-if="showConfig.showBody">
+        <RouterView></RouterView>
+      </div>
+    </keep-alive>
+    <Footer v-if="showConfig.showFooter"></Footer>
+    <div class="coverBox" v-if="showConfig.showCover" style="background: linear-gradient(to bottom right, #BBB, #DDD);">
+      <!-- #50A3A2, #53E3A6) -->
+      <ul class="bg-bubbles">
+        <li v-for="i in 10" :key="i"></li>
+      </ul>
+      <div class="cover"></div>
     </div>
-  </keep-alive>
-  <Footer v-if="showConfig.showFooter" />
-  <div class="coverBox" v-if="showConfig.showCover" style="background: linear-gradient(to bottom right, #BBB, #DDD);">
-    <!-- #50A3A2, #53E3A6) -->
-    <ul class="bg-bubbles">
-      <li v-for="i in 10" :key="i"></li>
-    </ul>
-    <div class="cover"></div>
+    <component :is="Login" :init="initAction" :register="registerAction" v-if="showConfig.showLogin" />
+    <component :is="Register" :init="initAction" :login="loginAction" v-if="showConfig.showRegister" />
+    <component :is="Editor" :init="initAction" v-if="showConfig.showEditor" />
   </div>
-  <component :is="Login" :init="initAction" :register="registerAction" v-if="showConfig.showLogin" />
-  <component :is="Register" :init="initAction" :login="loginAction" v-if="showConfig.showRegister" />
 </template>
 
 <script lang="ts" setup name="Main">
@@ -30,6 +33,7 @@ import Footer from '@/components/Main/Footer.vue';
 import Login from '@/components/Main/Login.vue';
 import NavBar from '@/components/Main/NavBar.vue';
 import Register from '@/components/Main/Register.vue';
+import Editor from '@/components/Main/Editor.vue';
 import { useUserDataStore } from '@/stores/UserData';
 import { type ShowConfigType } from '@/interfaces/oj';
 import { type UserSimplifiedType } from '@/interfaces/user';
@@ -46,20 +50,26 @@ let showConfig = reactive<ShowConfigType>({
   showLogin: false,
   showRegister: false,
   showBody: true,
+  showEditor: false,
 
   init() {
     this.showNavBar = this.showFooter = this.showBody = true;
-    this.showCover = this.showLogin = this.showRegister = false;
+    this.showCover = this.showLogin = this.showRegister = this.showEditor = false;
   },
 
   showLoginDialog() {
-    this.showNavBar = this.showFooter = this.showRegister = this.showBody = false;
+    this.showNavBar = this.showFooter = this.showRegister = this.showBody = this.showEditor = false;
     this.showCover = this.showLogin = true;
   },
 
   showRegisterDialog() {
     this.showCover = this.showRegister = true;
-    this.showNavBar = this.showFooter = this.showLogin = this.showBody = false;
+    this.showNavBar = this.showFooter = this.showLogin = this.showBody = this.showEditor = false;
+  },
+
+  showEditorDialog() {
+    this.showEditor = true;
+    this.showNavBar = this.showFooter = this.showLogin = this.showRegister = this.showBody = this.showCover = false;
   },
 })
 
@@ -82,6 +92,10 @@ function initAction() {
 
 function registerAction() {
   showConfig.showRegisterDialog();
+}
+
+function goToEditorAction() {
+  showConfig.showEditorDialog();
 }
 
 async function autoLogin() {

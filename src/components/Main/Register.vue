@@ -57,7 +57,6 @@ import { push } from 'notivue';
 
 import { type RegisterInfoType } from '@/interfaces/user';
 import { Validator } from '@/utils/globalFunctions';
-
 import { _codeVerify, _register, _verifyEmail } from "@/apis/user";
 
 interface propsType {

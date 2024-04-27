@@ -5,7 +5,7 @@ export const _login = (data: any) => {
   return Post('auth/login/', data);
 }
 
-// 登录
+// 注册
 export const _register = (data: any) => {
   return Post('auth/register/', data);
 }

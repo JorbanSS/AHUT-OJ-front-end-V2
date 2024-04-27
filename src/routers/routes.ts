@@ -17,20 +17,20 @@ const routes = [
   {
     name: "Home",
     path: "/home",
-    component: () => import("@/pages/Home.vue"),
+    component: () => import("@/views/Home.vue"),
     meta: { title: BaseTitle + "Home" },
   },
   {
     name: "Problems",
     path: "/problems",
-    component: () => import("@/pages/Problems.vue"),
+    component: () => import("@/views/Problems.vue"),
     meta: { title: BaseTitle + "题库" },
   },
   {
     name: "ProblemList",
     path: "/problemlist/:LID",
     redirect: { name: "ProblemListDescription" },
-    component: () => import("@/pages/ProblemList.vue"),
+    component: () => import("@/views/ProblemList.vue"),
     meta: { title: BaseTitle + "题单" },
     children: [
       {
@@ -63,14 +63,14 @@ const routes = [
   {
     name: "ProblemLists",
     path: "/problemlists",
-    component: () => import("@/pages/ProblemLists.vue"),
+    component: () => import("@/views/ProblemLists.vue"),
     meta: { title: BaseTitle + "题单" },
   },
   {
     name: "Contest",
     path: "/contest/:CID",
     redirect: { name: "ContestDescription" },
-    component: () => import("@/pages/Contest.vue"),
+    component: () => import("@/views/Contest.vue"),
     meta: { title: BaseTitle + "比赛" },
     children: [
       {
@@ -103,7 +103,7 @@ const routes = [
   {
     name: "Contests",
     path: "/contests",
-    component: () => import("@/pages/Contests.vue"),
+    component: () => import("@/views/Contests.vue"),
     meta: { title: BaseTitle + "比赛" },
   },
   {
@@ -113,31 +113,31 @@ const routes = [
       {
         name: "RecentContests",
         path: "recentcontests",
-        component: () => import("@/pages/ToolkitsChildren/RecentContests.vue"),
+        component: () => import("@/views/ToolkitsChildren/RecentContests.vue"),
       },
       {
         name: "RankingList",
         path: "rankinglist",
-        component: () => import("@/pages/ToolkitsChildren/RankingList.vue"),
+        component: () => import("@/views/ToolkitsChildren/RankingList.vue"),
       },
     ],
   },
   {
     name: "Training",
     path: "/training",
-    component: () => import("@/pages/Training.vue"),
+    component: () => import("@/views/Training.vue"),
     meta: { title: BaseTitle + "训练" },
   },
   {
     name: "Records",
     path: "/records",
-    component: () => import("@/pages/Records.vue"),
+    component: () => import("@/views/Records.vue"),
     meta: { title: BaseTitle + "记录" },
   },
   {
     name: "Record",
     path: "/record/:SID",
-    component: () => import("@/pages/Record.vue"),
+    component: () => import("@/views/Record.vue"),
     meta: { title: BaseTitle + "记录" },
     beforeEnter: (
       // @ts-ignore
@@ -152,44 +152,44 @@ const routes = [
   {
     name: "About",
     path: "/about",
-    component: () => import("@/pages/About.vue"),
+    component: () => import("@/views/About.vue"),
     meta: { title: BaseTitle + "关于" },
   },
   {
     name: "JoinUs",
     path: "/joinus",
-    component: () => import("@/pages/JoinUs.vue"),
+    component: () => import("@/views/JoinUs.vue"),
     meta: { title: BaseTitle + "加入我们" },
   },
   {
     name: "Editor",
     path: "/editor",
-    component: () => import("@/pages/Editor.vue"),
+    component: () => import("@/views/Editor.vue"),
     meta: { title: BaseTitle + "Editor" },
   },
   {
     name: "Problem",
     path: "/problem/:PID/:BindID?",
-    component: () => import("@/pages/Problem.vue"),
+    component: () => import("@/views/Problem.vue"),
     meta: { title: BaseTitle + "题目" },
   },
   {
     name: "Test",
     path: "/test",
-    component: () => import("@/pages/Test.vue"),
+    component: () => import("@/views/Test.vue"),
     meta: { title: BaseTitle + "测试" },
   },
   {
     name: "User",
     path: "/user/:UID",
-    component: () => import("@/pages/User.vue"),
+    component: () => import("@/views/User.vue"),
     meta: { title: BaseTitle + "用户" },
   },
   Admin,
   {
     name: "Error404",
     path: '/:pathMatch(.*)',
-    component: () => import("@/pages/Error404.vue"),
+    component: () => import("@/views/Error404.vue"),
     meta: { title: BaseTitle + "404" },
   },
 ];

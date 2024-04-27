@@ -1,5 +1,5 @@
 <template>
-  <div class="flex space-x-6">
+  <div class="flex space-x-6" v-auto-animate>
     <div class="space-y-6">
       <div class="card shadow-lg Border bg-white p-6 w-72" v-if="contest.CID || problemList.LID">
         <div class="text-lg space-x-2 space-y-2" v-if="contest.CID">
@@ -235,7 +235,7 @@ let contest = reactive<ContestType>({
   },
 
   goToProblem(PID: string) {
-    router.push(`/problem/${PID}/C${this.CID}`);
+    router.replace(`/problem/${PID}/C${this.CID}`);
     problem.PID = PID;
   },
 })
@@ -344,6 +344,9 @@ let problem = reactive<ProblemType>({
       LID: problemList.LID ? problemList.LID : -1,
       Source: submit.value.Source,
       Lang: +submit.value.Lang,
+      // OnlineJudging: false,
+      // SubmitTime: Date.now(),
+      // Input: ''
     }
     _submitCode(params)
       .then((data: any) => {

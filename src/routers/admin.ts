@@ -16,7 +16,7 @@ const Admin = {
   name: "Admin",
   redirect: { name: "AdminDashboard" },
   path: "/admin",
-  component: () => import("@/pages/Admin.vue"),
+  component: () => import("@/views/Admin.vue"),
   meta: { title: BaseTitle + "管理平台" },
   beforeEnter: (
     // @ts-ignore
@@ -31,13 +31,13 @@ const Admin = {
     {
       name: "AdminDashboard",
       path: "dashboard",
-      component: () => import("@/pages/AdminChildren/Dashboard.vue"),
+      component: () => import("@/views/AdminChildren/Dashboard.vue"),
     },
     {
       name: "AdminProblem",
       path: "problem",
       redirect: { name: "ProblemsList" },
-      component: () => import("@/pages/AdminChildren/Problem.vue"),
+      component: () => import("@/views/AdminChildren/Problem.vue"),
       beforeEnter: (
         // @ts-ignore
         to: RouteLocationNormalized,
@@ -52,31 +52,31 @@ const Admin = {
           name: "ProblemsList",
           path: "list",
           component: () =>
-            import("@/pages/AdminChildren/ProblemChildren/List.vue"),
+            import("@/views/AdminChildren/ProblemChildren/List.vue"),
         },
         {
           name: "AddProblem",
           path: "add",
           component: () =>
-            import("@/pages/AdminChildren/ProblemChildren/Add.vue"),
+            import("@/views/AdminChildren/ProblemChildren/Add.vue"),
         },
         {
           name: "EditProblem",
           path: "edit/:PID",
           component: () =>
-            import("@/pages/AdminChildren/ProblemChildren/Edit.vue"),
+            import("@/views/AdminChildren/ProblemChildren/Edit.vue"),
         },
         {
           name: "ProblemData",
           path: "data/:PID",
           component: () =>
-            import("@/pages/AdminChildren/ProblemChildren/Data.vue"),
+            import("@/views/AdminChildren/ProblemChildren/Data.vue"),
         },
         {
           name: "ImportProblem",
           path: "import",
           component: () =>
-            import("@/pages/AdminChildren/ProblemChildren/Import.vue"),
+            import("@/views/AdminChildren/ProblemChildren/Import.vue"),
         },
       ],
     },
@@ -84,7 +84,7 @@ const Admin = {
       name: "AdminProblemList",
       path: "problemlist",
       redirect: { name: "ProblemListsList" },
-      component: () => import("@/pages/AdminChildren/ProblemList.vue"),
+      component: () => import("@/views/AdminChildren/ProblemList.vue"),
       beforeEnter: (
         // @ts-ignore
         to: RouteLocationNormalized,
@@ -99,19 +99,19 @@ const Admin = {
           name: "ProblemListsList",
           path: "list",
           component: () =>
-            import("@/pages/AdminChildren/ProblemListChildren/List.vue"),
+            import("@/views/AdminChildren/ProblemListChildren/List.vue"),
         },
         {
           name: "AddProblemList",
           path: "add",
           component: () =>
-            import("@/pages/AdminChildren/ProblemListChildren/Add.vue"),
+            import("@/views/AdminChildren/ProblemListChildren/Add.vue"),
         },
         {
           name: "EditProblemList",
           path: "edit/:LID",
           component: () =>
-            import("@/pages/AdminChildren/ProblemListChildren/Edit.vue"),
+            import("@/views/AdminChildren/ProblemListChildren/Edit.vue"),
         },
       ],
     },
@@ -119,7 +119,7 @@ const Admin = {
       name: "AdminContest",
       path: "contest",
       redirect: { name: "ContestsList" },
-      component: () => import("@/pages/AdminChildren/Contest.vue"),
+      component: () => import("@/views/AdminChildren/Contest.vue"),
       beforeEnter: (
         // @ts-ignore
         to: RouteLocationNormalized,
@@ -134,32 +134,32 @@ const Admin = {
           name: "ContestsList",
           path: "list",
           component: () =>
-            import("@/pages/AdminChildren/ContestChildren/List.vue"),
+            import("@/views/AdminChildren/ContestChildren/List.vue"),
         },
         {
           name: "AddContest",
           path: "add",
           component: () =>
-            import("@/pages/AdminChildren/ContestChildren/Add.vue"),
+            import("@/views/AdminChildren/ContestChildren/Add.vue"),
         },
         {
           name: "EditContest",
           path: "edit/:CID",
           component: () =>
-            import("@/pages/AdminChildren/ContestChildren/Edit.vue"),
+            import("@/views/AdminChildren/ContestChildren/Edit.vue"),
         },
         {
           name: "EditBalloon",
           path: "balloon/:CID",
           component: () =>
-            import("@/pages/AdminChildren/ContestChildren/Balloon.vue"),
+            import("@/views/AdminChildren/ContestChildren/Balloon.vue"),
         },
       ],
     },
     {
       name: "AdminTraining",
       path: "training",
-      component: () => import("@/pages/AdminChildren/Training.vue"),
+      component: () => import("@/views/AdminChildren/Training.vue"),
       beforeEnter: (
         // @ts-ignore
         to: RouteLocationNormalized,
@@ -173,7 +173,7 @@ const Admin = {
     {
       name: "AdminUser",
       path: "user",
-      component: () => import("@/pages/AdminChildren/User.vue"),
+      component: () => import("@/views/AdminChildren/User.vue"),
       beforeEnter: (
         // @ts-ignore
         to: RouteLocationNormalized,
@@ -187,7 +187,7 @@ const Admin = {
     {
       name: "AdminOther",
       path: "other",
-      component: () => import("@/pages/AdminChildren/Other.vue"),
+      component: () => import("@/views/AdminChildren/Other.vue"),
       redirect: { name: "AdminOss" },
       beforeEnter: (
         // @ts-ignore
@@ -203,7 +203,13 @@ const Admin = {
           name: "AdminOss",
           path: "oss",
           component: () =>
-            import("@/pages/AdminChildren/OtherChildren/Oss.vue"),
+            import("@/views/AdminChildren/OtherChildren/Oss.vue"),
+        },
+        {
+          name: "AdminUpdateLogs",
+          path: "updatelogs",
+          component: () =>
+            import("@/views/AdminChildren/OtherChildren/UpdateLogs.vue"),
         },
       ],
     },

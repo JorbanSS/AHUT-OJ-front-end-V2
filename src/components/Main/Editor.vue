@@ -13,7 +13,7 @@
           max="100" />
       </label>
     </div>
-    <div style="height: calc(100vh - 124px - 146px)">
+    <div style="height: calc(100vh - 124px - 170px)">
       <vue-monaco-editor v-model:value="code" theme="vs-dark" :language="lang" :options="MONACO_EDITOR_OPTIONS"
         @mount="handleMount" />
     </div>

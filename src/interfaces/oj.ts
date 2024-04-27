@@ -49,9 +49,7 @@ export interface ShowConfigType {
   showLogin: boolean,           // 显示登录页面
   showRegister: boolean,        // 显示注册页面
   showBody: boolean,            // 显示主体内容
-  init: Function,               // 初始化
-  showLoginDialog: Function,    // 显示登陆页面
-  showRegisterDialog: Function, // 显示注册页面
+  showEditor: boolean,          // 显示编辑器
   [item: string]: any,          // 其他属性
 }
 

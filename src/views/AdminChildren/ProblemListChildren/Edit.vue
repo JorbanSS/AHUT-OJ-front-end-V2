@@ -27,6 +27,12 @@
           提交编辑
         </div>
       </li>
+      <li>
+        <div class="font-bold text-base" @click="router.push('/problemlist/' + problemList.LID)">
+          <go-on theme="outline" size="18" />
+          跳转题单
+        </div>
+      </li>
     </ul>
   </div>
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
@@ -94,7 +100,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Add, Bill, DeleteOne, EditOne } from '@icon-park/vue-next';
+import { Add, Bill, DeleteOne, EditOne, GoOn } from '@icon-park/vue-next';
 import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';

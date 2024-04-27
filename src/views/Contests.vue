@@ -10,51 +10,54 @@
   </div>
   <div class="mt-6"></div>
   <div class="bg-white card shadow-lg Border">
-    <table class="table table-zebra">
-      <thead>
-        <tr>
-          <th v-for="(item, index) in ['状态', '比赛号', '比赛名称', '标签', '起止时间', '撰题人']" :key="index">
-            {{ item }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in contests.contests" :key="item.CID" @click="item.Status ? router.push(`/contest/${item.CID}`) : 0"
-          :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': item.Status == 0 }">
-          <td class="font-bold talbe-lg">
-            {{ ContestStatus[item.Status] }}
-          </td>
-          <th>
-            {{ item.CID }}
-          </th>
-          <td class="font-bold talbe-lg">
-            <div>{{ item.Title }}</div>
-          </td>
-          <td class="space-x-1 space-y-0.5">
-            <span class="badge badge-neutral badge-md" v-if="item.Type == 1">
-              ICPC
-            </span>
-            <span class="badge badge-neutral badge-md" v-else>
-              OI
-            </span>
-            <span class="badge badge-neutral badge-md" v-if="item.IsPublic == 1">
-              公开
-            </span>
-            <span class="badge badge-neutral badge-md" v-else>
-              加密
-            </span>
-          </td>
-          <td>
-            {{ ConvertTools.PrintTime(item.BeginTime, 1) }}
-            ~
-            {{ ConvertTools.PrintTime(item.EndTime) }}
-          </td>
-          <td>
-            {{ item.UID }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="overflow-x-hidden rounded-t-2xl" style="max-height: calc(100vh - 124px - 252px)">
+      <table class="table table-zebra table-pin-rows">
+        <thead>
+          <tr>
+            <th v-for="(item, index) in ['状态', '比赛号', '比赛名称', '标签', '起止时间', '撰题人']" :key="index">
+              {{ item }}
+            </th>
+          </tr>
+        </thead>
+        <tbody v-auto-animate>
+          <tr v-for="item in contests.contests" :key="item.CID"
+            @click="item.Status ? router.push(`/contest/${item.CID}`) : 0"
+            :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': item.Status == 0 }">
+            <td class="font-bold talbe-lg">
+              {{ ContestStatus[item.Status] }}
+            </td>
+            <th>
+              {{ item.CID }}
+            </th>
+            <td class="font-bold talbe-lg">
+              <div>{{ item.Title }}</div>
+            </td>
+            <td class="space-x-1 space-y-0.5">
+              <span class="badge badge-neutral badge-md" v-if="item.Type == 1">
+                ICPC
+              </span>
+              <span class="badge badge-neutral badge-md" v-else>
+                OI
+              </span>
+              <span class="badge badge-neutral badge-md" v-if="item.IsPublic == 1">
+                公开
+              </span>
+              <span class="badge badge-neutral badge-md" v-else>
+                加密
+              </span>
+            </td>
+            <td>
+              {{ ConvertTools.PrintTime(item.BeginTime, 1) }}
+              ~
+              {{ ConvertTools.PrintTime(item.EndTime) }}
+            </td>
+            <td>
+              {{ item.UID }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="mx-auto py-4 flex space-x-4">
       <Pagination :page="contests.page" :maxPage="maxPage" :changePage="contests.changePage" />
     </div>
@@ -107,12 +110,16 @@ let contests = reactive<ContestsType>({
             message: `一共获取了 ${contests.count} 场比赛`,
           })
         }
-        contests.contests.forEach((item) => {
-          if (item.EndTime < TimeNow.value) item.Status = 2;
-          else if (item.BeginTime > TimeNow.value) item.Status = 0;
-          else item.Status = 1;
-        })
+        contests.setStatus();
       })
+  },
+
+  setStatus() {
+    this.contests.forEach((item) => {
+      if (item.EndTime < TimeNow.value) item.Status = 2;
+      else if (item.BeginTime > TimeNow.value) item.Status = 0;
+      else item.Status = 1;
+    })
   },
 
   goToContest(CID: string) {
@@ -135,16 +142,16 @@ onMounted(() => {
   getServerTime()
     .then((res: any) => {
       TimeNow.value = res;
+      contests.get(true);
     })
-  contests.get(true);
-})
-
-watch(() => contests.page, () => {
-  getServerTime()
+  })
+  
+  watch(() => contests.page, () => {
+    getServerTime()
     .then((res: any) => {
       TimeNow.value = res;
+      contests.get();
     })
-  contests.get();
 })
 
 const maxPage = computed(() => Math.floor(contests.count / contests.limit) + 1);

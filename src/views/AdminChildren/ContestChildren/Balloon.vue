@@ -33,6 +33,12 @@
           提交编辑
         </div>
       </li>
+      <li>
+        <div class="font-bold text-base" @click="router.push('/contest/' + contest.CID)">
+          <go-on theme="outline" size="18" />
+          跳转比赛
+        </div>
+      </li>
     </ul>
   </div>
   <div class="card bg-white shadow-lg Border max-w-5xl mx-auto pb-4">
@@ -71,7 +77,7 @@
 import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Add, EditOne, PartyBalloon, Trophy } from '@icon-park/vue-next';
+import { Add, EditOne, PartyBalloon, Trophy, GoOn } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _editBalloonColor, _getContest } from "@/apis/contest";

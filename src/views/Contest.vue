@@ -17,7 +17,6 @@
       ~
       {{ ConvertTools.PrintTime(contest.EndTime, 0) }}
     </div>
-    <!-- <progress class="progress w-full" :value="ConvertTools.Percentage(, contest.duration)" max="100"></progress> -->
     <!-- <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
       <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
         <span class="countdown font-mono text-5xl">
@@ -39,7 +38,7 @@
       </div>
     </div> -->
     <progress class="progress w-full"
-      :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
+      :value="ConvertTools.Percentage(Math.min(contest.Duration, TimeNow - contest.BeginTime), contest.Duration)"
       max="100"></progress>
   </div>
   <div class="m-6"></div>
@@ -161,11 +160,11 @@ let problems = reactive<Array<problemsType>>([])
 
 onMounted(() => {
   contest.CID = +route.params.CID;
-  contest.get();
   getServerTime()
     .then((res: any) => {
       TimeNow.value = res;
     })
+  contest.get();
 })
 
 </script>
