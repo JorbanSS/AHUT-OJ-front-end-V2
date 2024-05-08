@@ -1,5 +1,5 @@
 <template>
-  <div class="card Border bg-white shadow-lg p-6">
+  <div class="card Border bg-white shadow-lg p-6" v-auto-animate>
     <div role="tablist" class="tabs tabs-bordered w-fit">
       <a role="tab" class="tab" v-for="item in aboutNavItems" :key="item.label"
         :class="{ 'tab-active': tabInfo.activeTab == item.value }" @click="tabInfo.switch(item.value)">{{ item.label

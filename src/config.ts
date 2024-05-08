@@ -59,7 +59,7 @@ export const submitInfo: SubmitInfoType = {
 export const verifyModeOptions = [
   { label: "账号密码", value: 0 },
   { label: "邮箱密码", value: 1 },
-  // { label: "邮箱验证", value: 2 },
+  { label: "邮箱验证", value: 2 },
 ];
 
 export const problemOriginOptions = [

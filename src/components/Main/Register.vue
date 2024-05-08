@@ -7,34 +7,34 @@
       <span class="flex justify-center font-bold text-3xl pb-6">
         AHUT OJ
       </span>
-      <label class="input input-bordered flex items-center gap-2">
+      <label class="input input-bordered flex items-center gap-2 whitespace-nowrap">
         姓名
         <input type="text" class="grow" v-model="registerInfo.UserName" name="name" autocomplete="name" />
       </label>
-      <label class="input input-bordered flex items-center gap-2">
+      <label class="input input-bordered flex items-center gap-2 whitespace-nowrap">
         账号
         <input type="text" class="grow" v-model="registerInfo.UID" name="username" autocomplete="username" />
       </label>
       <div class="label" style="margin-top: -0.2rem; margin-bottom: -0.5rem;">
         <span class="label-text-alt">格式：学校首字母大写+学号，例：AHUT229074001</span>
       </div>
-      <label class="input input-bordered flex items-center gap-2">
+      <label class="input input-bordered flex items-center gap-2 whitespace-nowrap">
         邮箱
         <input type="text" class="grow" v-model="registerInfo.Email" name="email" autocomplete="email" />
       </label>
       <div class="join">
-        <label class="input input-bordered flex items-center gap-2 join-item">
+        <label class="input input-bordered flex items-center gap-2 join-item whitespace-nowrap">
           验证码
-          <input type="text" class="grow" v-model="registerInfo.VerifyCode" />
+          <input type="text" class="grow w-full" v-model="registerInfo.VerifyCode" />
         </label>
-        <button class="btn join-item w-[62px]" @click="sendVerifyCode()" v-if="!isCountingDown">发送</button>
-        <button class="btn join-item w-[62px]" @click="push.warning({ title: '操作失败', message: '请勿频繁发送邮件' })" v-else>
+        <button class="btn join-item w-16" @click="sendVerifyCode()" v-if="!isCountingDown">发送</button>
+        <button class="btn join-item w-16" @click="push.warning({ title: '操作失败', message: '请勿频繁发送邮件' })" v-else>
           <span class="countdown text-base">
             <span :style="'--value: ' + second + ';'"></span>
           </span>
         </button>
       </div>
-      <label class="input input-bordered flex items-center gap-2">
+      <label class="input input-bordered flex items-center gap-2 whitespace-nowrap">
         密码
         <input type="password" class="grow" v-model="registerInfo.Pass" name="password"
           autocomplete="current-password" />
