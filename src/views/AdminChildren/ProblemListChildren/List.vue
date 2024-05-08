@@ -188,7 +188,7 @@ watch(() => problemLists.page, () => {
   allSelected.value = false;
 })
 
-const maxPage = computed(() => Math.floor(problemLists.count / problemLists.limit) + 1);
+const maxPage = computed(() => Math.ceil(problemLists.count / problemLists.limit));
 
 
 </script>

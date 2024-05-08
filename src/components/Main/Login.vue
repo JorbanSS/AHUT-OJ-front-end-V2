@@ -71,10 +71,12 @@ const userDataStore = useUserDataStore();
 
 interface propsType {
   init?: Function;
+  register?: Function;
 };
 
 let props = withDefaults(defineProps<propsType>(), {
   init: () => { },
+  register: () => { },
 });
 
 let loginInfo = reactive<LoginInfoType>({

@@ -184,6 +184,6 @@ watch(() => records.page, () => {
   records.get();
 })
 
-const maxPage = computed(() => Math.floor(records.count / records.limit) + 1);
+const maxPage = computed(() => Math.ceil(records.count / records.limit));
 
 </script>

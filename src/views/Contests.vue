@@ -154,6 +154,6 @@ onMounted(() => {
     })
 })
 
-const maxPage = computed(() => Math.floor(contests.count / contests.limit) + 1);
+const maxPage = computed(() => Math.ceil(contests.count / contests.limit));
 
 </script>

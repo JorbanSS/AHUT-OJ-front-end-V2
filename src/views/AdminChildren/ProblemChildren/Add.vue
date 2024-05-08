@@ -24,28 +24,6 @@
     </ul>
   </div>
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
-    <label class="input input-bordered flex items-center gap-2 w-[584px]">
-      标题
-      <input type="text" class="grow" placeholder="" v-model="problem.Title">
-    </label>
-    <div class="flex space-x-2">
-      <label class="input input-bordered flex items-center gap-2 w-72">
-        <stopwatch-start theme="outline" size="22" />
-        <input type="number" class="grow" placeholder="1000" v-model="problem.LimitTime" min="500" max="10000"
-          step="500" />
-        <span>ms</span>
-      </label>
-      <label class="input input-bordered flex items-center gap-2 w-72">
-        <disk theme="outline" size="19" class="ml-0.5 :mr-1.5" />
-        <input type="number" class="grow" placeholder="128" v-model="problem.LimitMemory" min="64" max="1024"
-          step="64" />
-        <span>MB</span>
-      </label>
-    </div>
-    <label class="input input-bordered flex items-center gap-2 w-[584px]">
-      标签
-      <input type="text" class="grow" placeholder="用英文;来分隔" v-model="problem.Label" />
-    </label>
     <div class="flex space-x-2">
       <select class="select select-bordered w-72 max-w-xs text-base" v-model="problem.Origin">
         <option disabled selecte value="0">题目来源</option>
@@ -53,9 +31,31 @@
       </select>
       <label class="input input-bordered flex items-center gap-2 w-72" v-if="problem.Origin != -1">
         题号
-        <input type="text" class="grow" placeholder="例：1069A" v-model="problem.OriginPID" />
+        <input type="text" class="grow" placeholder="例：1033A" v-model="problem.OriginPID" />
       </label>
     </div>
+    <label class="input input-bordered flex items-center gap-2 w-[584px]" v-if="problem.Origin == -1">
+      标题
+      <input type="text" class="grow" placeholder="" v-model="problem.Title">
+    </label>
+    <div class="flex space-x-2" v-if="problem.Origin == -1">
+      <label class="input input-bordered flex items-center gap-2 w-72">
+        <stopwatch-start theme="outline" size="22" />
+        <input type="number" class="grow" placeholder="1000" v-model="problem.LimitTime" min="500" max="10000"
+          step="500" />
+          <span>ms</span>
+        </label>
+        <label class="input input-bordered flex items-center gap-2 w-72">
+          <disk theme="outline" size="19" class="ml-0.5 :mr-1.5" />
+          <input type="number" class="grow" placeholder="128" v-model="problem.LimitMemory" min="64" max="1024"
+          step="64" />
+          <span>MB</span>
+        </label>
+    </div>
+    <label class="input input-bordered flex items-center gap-2 w-[584px]">
+      标签
+      <input type="text" class="grow" placeholder="用英文;来分隔，赛时题目请勿加标签" v-model="problem.Label" />
+    </label>
     <div class="form-control w-72" @change="changeVisible()">
       <label class="label cursor-pointer">
         <span class="label-text text-base">可见性</span>
@@ -63,8 +63,8 @@
       </label>
     </div>
   </div>
-  <div class="mt-6"></div>
-  <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
+  <div class="mt-6" v-if="problem.Origin == -1"></div>
+  <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl" v-if="problem.Origin == -1">
     <select class="select select-bordered w-72 max-w-xs text-base" v-model="problem.ContentType">
       <option disabled selecte value="0">题面类型</option>
       <option v-for="item in problemContentOptions" :key="item.value" :value="item.value">{{ item.label }}</option>
@@ -123,7 +123,7 @@ import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
 
 import { _addProblem } from "@/apis/problem";
-import { markdownToolbars, problemContentOptions, problemOriginOptions } from '@/config';
+import { markdownToolbars, problemContentOptions, problemOriginOptions, problemTypeOptions } from '@/config';
 import { FileUploadType, type ImageUploadType } from '@/interfaces/common';
 import { type ProblemType } from '@/interfaces/problem';
 import { ImageUtils } from '@/utils/fileUtils';
@@ -150,16 +150,17 @@ let problem = reactive<ProblemType>({
   SampleInput: '',
   SampleOutput: '',
   Hit: '',
+  PType: 'LOCAL',
 
   add() {
-    if (problem.Title == '' || problem.Description == '') {
+    if (problem.Origin == -1 && (problem.Title == '' || problem.Description == '') || problem.Origin != -1 && problem.OriginPID == '') {
       push.error({
         title: '信息错误',
         message: '请填写完整信息',
       })
       return;
     }
-    let params = {
+    let params: any = {
       ContentType: +problem.ContentType,
       Description: problem.Description,
       Hit: problem.Hit,
@@ -175,6 +176,11 @@ let problem = reactive<ProblemType>({
       Title: problem.Title,
       Visible: problem.Visible,
     }
+    problemTypeOptions.forEach((item: any) => {
+      if (item.ptype == problem.Origin.toString()) {
+        params.PType = item.value;
+      }
+    })
     _addProblem(params)
       .then((data: any) => {
         problem.PID = data.PID;
@@ -182,10 +188,8 @@ let problem = reactive<ProblemType>({
           title: '新增成功',
           message: `题目 ID 为 ${data.PID}`,
         });
-        if (problem.Origin == -1) {
-          let PID = problem.PID;
-          router.push('/admin/problem/data/' + PID);
-        }
+        if (this.ContentType == -1) router.push('/admin/problem/data/' + problem.PID);
+        else router.push('/admin/problem/edit/' + problem.PID);
       })
   }
 });
@@ -209,14 +213,6 @@ let imageUpload = reactive<ImageUploadType>({
     }
   }
 })
-
-// const problemImageChangeHandle = (event: Event) => {
-//   const target = event.target as HTMLInputElement;
-//   if (target.files && target.files.length > 0) {
-//     problemImageInput.value = target.files[0];
-//     imageUpload.selectImage(target.files[0]);
-//   }
-// };
 
 function uploadProblemImage(files: any) {
   if (files.length == 0) {

@@ -64,9 +64,18 @@ export const verifyModeOptions = [
 
 export const problemOriginOptions = [
   { label: "Local", value: -1 },
+  // { label: "Online Judge", value: 0 },
   { label: "Codeforces", value: 1 },
   { label: "Atcoder", value: 2 },
-  { label: "Virtual Judge", value: 3 },
+  // { label: "Virtual Judge", value: 3 },
+];
+
+export const problemTypeOptions = [
+  { label: "全部", value: "", ptype: -100, prefix: "" }, // ptype 无用
+  { label: "Local", value: "LOCAL", ptype: -1, prefix: "" },
+  { label: "LOJ", value: "LOJ", ptype: -100, prefix: "" }, // ptype 无用
+  { label: "Codeforces", value: "CODEFORCES", ptype: 1, prefix: "cf" },
+  { label: "Atcoder", value: "ATCODERTYPE", ptype: 2, prefix: "at" },
 ];
 
 export const problemContentOptions = [
@@ -79,14 +88,6 @@ export const aboutNavItems = [
   { label: "提示信息", value: 0 },
   { label: "出题/比赛 规范", value: 1 },
   { label: "关于 OJ", value: 2 },
-];
-
-export const problemTypeOptions = [
-  { label: "全部", value: "" },
-  { label: "Local", value: "LOCAL" },
-  { label: "LOJ", value: "LOJ" },
-  // { label: "Codeforces", value: "CODEFORCES" },
-  // { label: "Atcoder", value: "ATCODERTYPE" },
 ];
 
 export const objectTypeOptions = [

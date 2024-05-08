@@ -21,6 +21,7 @@ export interface ProblemType extends ProblemSimplifiedType {
   SampleInput: string,    // 样例输入
   SampleOutput: string,   // 样例输出
   Hit: string,            // 提示
+  PType: string,          // 题目类型
 
   submitCode?: Function,  // 提交代码
   [item: string]: any,    // 其他属性

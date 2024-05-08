@@ -42,7 +42,17 @@
     </ul>
   </div>
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
-    <label class="input input-bordered flex items-center gap-2 w-72">
+    <div class="flex space-x-2">
+      <select class="select select-bordered w-72 max-w-xs text-base" v-model="problem.Origin">
+        <option disabled selecte value="0">题目来源</option>
+        <option v-for="item in problemOriginOptions" :key="item.value" :value="item.value" disabled>{{ item.label }}</option>
+      </select>
+      <label class="input input-bordered flex items-center gap-2 w-72" v-if="problem.Origin != -1">
+        题号
+        <input type="text" class="grow" placeholder="例：1033A" v-model="problem.OriginPID" disabled />
+      </label>
+    </div>
+    <label class="input input-bordered flex items-center gap-2 w-72" v-if="problem.Origin == -1">
       题号
       <input type="text" class="grow" placeholder="" v-model="problem.PID" disabled>
     </label>
@@ -66,18 +76,8 @@
     </div>
     <label class="input input-bordered flex items-center gap-2 w-[584px]">
       标签
-      <input type="text" class="grow" placeholder="用英文;来分隔" v-model="problem.Label" />
+      <input type="text" class="grow" placeholder="用英文;来分隔，赛时题目请勿加标签" v-model="problem.Label" />
     </label>
-    <div class="flex space-x-2">
-      <select class="select select-bordered w-72 max-w-xs text-base" v-model="problem.Origin">
-        <option disabled selecte value="0">题目来源</option>
-        <option v-for="item in problemOriginOptions" :key="item.value" :value="item.value">{{ item.label }}</option>
-      </select>
-      <label class="input input-bordered flex items-center gap-2 w-72" v-if="problem.Origin != -1">
-        题号
-        <input type="text" class="grow" placeholder="例：1069A" v-model="problem.OriginPID" />
-      </label>
-    </div>
     <div class="form-control w-72" @change="changeVisible()">
       <label class="label cursor-pointer">
         <span class="label-text text-base">可见性</span>
@@ -173,6 +173,7 @@ let problem = reactive<ProblemType>({
   SampleInput: '',
   SampleOutput: '',
   Hit: '',
+  PType: '',
 
   get() {
     _getProblem({}, problem.PID)
@@ -192,6 +193,7 @@ let problem = reactive<ProblemType>({
         problem.Origin = data.Origin;
         problem.OriginPID = data.OriginPID;
         problem.PType = data.PType;
+        problem.Visible = data.Visible;
       })
   },
 

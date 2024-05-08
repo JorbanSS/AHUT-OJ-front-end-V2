@@ -48,6 +48,12 @@
     <ul class="menu rounded-box bg-white Border">
       <!-- <ul class="menu rounded-box bg-white lg:menu-horizontal Border"> -->
       <li>
+        <div class="font-bold text-base" onclick="editUserInfoModal.showModal()">
+          <info theme="outline" size="18" />
+          修改用户信息
+        </div>
+      </li>
+      <li>
         <div class="font-bold text-base" onclick="editHeadImageModal.showModal()">
           <avatar theme="outline" size="18" />
           修改头像
@@ -169,16 +175,35 @@
       </div>
     </div>
   </dialog>
+  <dialog id="editUserInfoModal" class="modal">
+    <div class="modal-box space-y-2 w-96">
+      <h3 class="font-bold text-lg mb-4">修改用户信息</h3>
+      <label class="input input-bordered flex items-center gap-2">
+        用户名
+        <input type="text" class="grow" v-model="editUserInfo.userName" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        QQ
+        <input type="text" class="grow" v-model="editUserInfo.QQ" />
+      </label>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn mr-2">取消</button>
+          <button class="btn btn-neutral" @click="editUserInfo.edit()">修改</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
 </template>
 
 <script lang="ts" setup name="User">
 import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Avatar, Cattle, EmotionHappy, HorseZodiac, Key, Ranking } from "@icon-park/vue-next";
+import { Avatar, Cattle, EmotionHappy, HorseZodiac, Key, Ranking, Info } from "@icon-park/vue-next";
 import { push } from 'notivue';
 
-import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword, _getUserInfo } from "@/apis/user";
+import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword, _editUserInfo, _getUserInfo } from "@/apis/user";
 import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
 import { ImageUploadType } from '@/interfaces/common';
@@ -375,6 +400,10 @@ let user = reactive<UserType>({
 
         user.PermissionMap = data.PermissionMap;
       })
+      .then(() => {
+        editUserInfo.QQ = this.QQ;
+        editUserInfo.userName = this.UserName;
+      })
   },
   // getUserHead(){
   //   Post('oss/get',{
@@ -443,6 +472,24 @@ const headImageChangeHandle = (event: Event) => {
     headImage.selectImage(target.files[0]);
   }
 };
+
+let editUserInfo = reactive({
+  userName: '',
+  QQ: '',
+  
+  edit() {
+    let params: any = {};
+    if (this.userName != '') params.userName = this.userName;
+    if (this.QQ != '') params.QQ = this.QQ;
+    _editUserInfo(params)
+      .then(() => {
+        push.success({
+          title: "修改成功",
+        })
+        user.get();
+      })
+  },
+})
 
 onMounted(() => {
   if (typeof route.params.UID == 'string') user.UID = route.params.UID;

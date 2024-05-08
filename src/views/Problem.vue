@@ -295,6 +295,7 @@ let problem = reactive<ProblemType>({
   SampleInput: '',
   SampleOutput: '',
   Hit: '',
+  PType: '',
 
   get() {
     _getProblem({}, problem.PID)
@@ -313,6 +314,7 @@ let problem = reactive<ProblemType>({
         this.Input = data.Input;
         this.Output = data.Output;
         this.Hit = data.Hit;
+        this.PType = data.PType;
         if (this.ContentType == constValStore.PROBLEM_TYPE_PLAIN_TEXT) {
           this.content = this.convertToMarkdown();
         } else {

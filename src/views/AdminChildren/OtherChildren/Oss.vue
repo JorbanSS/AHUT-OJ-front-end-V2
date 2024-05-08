@@ -8,8 +8,8 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/other/updatelogs')">
-          <memory-one theme="outline" size="18" />
+        <div class="font-bold text-base" @click="router.push('/admin/other/updatelog')">
+          <notepad theme="outline" size="18" />
           更新日志
         </div>
       </li>
@@ -165,7 +165,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, PictureOne } from '@icon-park/vue-next';
+import { FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, PictureOne, Notepad } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _addBuckets, _deleteBucket, _deleteObject, _getBuckets, _getObjects } from '@/apis/oss';

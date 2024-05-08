@@ -227,6 +227,6 @@ watch(() => problems.page, () => {
   allSelected.value = false;
 })
 
-const maxPage = computed(() => Math.floor(problems.count / problems.limit) + 1);
+const maxPage = computed(() => Math.ceil(problems.count / problems.limit));
 
 </script>

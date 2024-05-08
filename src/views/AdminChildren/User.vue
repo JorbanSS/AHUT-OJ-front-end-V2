@@ -17,7 +17,13 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="showEditPermissionModal()">
+        <div class="font-bold text-base" @click="showChangePasswordModal()">
+          <edit-one theme="outline" size="18" />
+          用户编辑
+        </div>
+      </li>
+      <li>
+        <div class="font-bold text-base" onclick="changePasswordModal.showModal()">
           <permissions theme="outline" size="18" />
           修改权限
         </div>
@@ -179,7 +185,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Add, AfferentThree, DeleteOne, Peoples, Permissions } from '@icon-park/vue-next';
+import { Add, AfferentThree, DeleteOne, Peoples, Permissions, EditOne } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _addUser, _changePassword, _deleteUsers, _editUserPermission, _getAdmins, _getUserPermission } from "@/apis/user";
@@ -493,6 +499,6 @@ watch(() => permission.super, () => {
   }
 })
 
-const maxPage = computed(() => Math.floor(users.count / users.limit) + 1);
+const maxPage = computed(() => Math.ceil(users.count / users.limit));
 
 </script>

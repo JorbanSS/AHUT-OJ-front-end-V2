@@ -30,6 +30,11 @@ export const _getUserInfo = (params: any) => {
   return Get('user/info', params);
 }
 
+// 修改用户信息
+export const _editUserInfo = (data: any) => {
+  return Post('user/edit/', data);
+}
+
 // 获取用户权限
 export const _getUserPermission = (params: any, UID: string) => {
   return Get(`admin/permission/${UID}`, params);

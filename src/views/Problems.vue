@@ -132,6 +132,6 @@ watch(() => problems.page, () => {
   problems.get();
 })
 
-const maxPage = computed(() => Math.floor(problems.count / problems.limit) + 1);
+const maxPage = computed(() => Math.ceil(problems.count / problems.limit));
 
 </script>

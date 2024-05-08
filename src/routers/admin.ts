@@ -206,10 +206,10 @@ const Admin = {
             import("@/views/AdminChildren/OtherChildren/Oss.vue"),
         },
         {
-          name: "AdminUpdateLogs",
-          path: "updatelogs",
+          name: "AdminUpdateLog",
+          path: "updatelog",
           component: () =>
-            import("@/views/AdminChildren/OtherChildren/UpdateLogs.vue"),
+            import("@/views/AdminChildren/OtherChildren/UpdateLog.vue"),
         },
       ],
     },
