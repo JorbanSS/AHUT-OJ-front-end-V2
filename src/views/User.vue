@@ -1,5 +1,36 @@
 <template>
-  <div class="max-w-6xl">
+  <div class="card Border shandow-2xl bg-white relative max-w-2xl mx-auto">
+    <img class="cursor-no-focus absolute top-0 w-full h-full object-cover blur-2xl opacity-25 select-none"
+      :src="user.HeadURL != '' ? '/oss/head-images/' + user.HeadURL : 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png'"
+      alt="" draggable="false" />
+    <div class="relative flex items-end">
+      <div id="userImg" class="relative ml-6 mt-6 h-24 w-24 rounded-lg overflow-hidden">
+        <img
+          :src="user.HeadURL != '' ? '/oss/head-images/' + user.HeadURL : 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png'"
+          class="select-none" draggable="false" />
+      </div>
+      <div class="ml-4">
+        <div class="text-xl font-bold">
+          {{ user.UserName }}
+        </div>
+        <div class="text-md text-gray-500">UID：{{ user.UID }}</div>
+      </div>
+      <div class="absolute right-6 h-full flex flex-col items-end justify-end font-bold">
+        <div class="">AC:&nbsp;&nbsp;&nbsp;<span class="text-green-500">{{ user.Solved }}</span></div>
+        <div class="">Submited:&nbsp;&nbsp;&nbsp;<span class="text-blue-500">{{ user.Submited }}</span>
+        </div>
+        <!-- <div class="rating">Rating:&nbsp;&nbsp;&nbsp;<span :style="getRatingColor(userInfo.Rating ? user.Rating : 0)">{{ userInfo.Rating ? userInfo.Rating : 0 }}</span></div> -->
+      </div>
+    </div>
+    <div class="w-full py-6 pl-6 flex flex-col">
+      <div>学校:&nbsp;{{ user.School }}</div>
+      <div>专业:&nbsp;{{ user.Major }}</div>
+      <div>班级:&nbsp;{{ user.Class }}</div>
+      <div>邮箱:&nbsp;{{ user.Email }}</div>
+    </div>
+  </div>
+
+  <!-- <div class="max-w-6xl">
     <div class="hero bg-base-200">
       <div class="hero-content flex-col lg:flex-row">
         <div class="avatar">
@@ -9,7 +40,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- <div class="Boder bg-white max-w-6xl p-4 flex rounded-2xl shadow-lg">
     <div class="avatar">
       <div class="w-36 rounded-xl">
@@ -50,7 +81,7 @@
       <li>
         <div class="font-bold text-base" onclick="editUserInfoModal.showModal()">
           <info theme="outline" size="18" />
-          修改用户信息
+          修改信息
         </div>
       </li>
       <li>
@@ -186,6 +217,22 @@
         QQ
         <input type="text" class="grow" v-model="editUserInfo.QQ" />
       </label>
+      <label class="input input-bordered flex items-center gap-2">
+        学校
+        <input type="text" class="grow" v-model="editUserInfo.School" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        专业
+        <input type="text" class="grow" v-model="editUserInfo.Major" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        班级
+        <input type="text" class="grow" v-model="editUserInfo.Class" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        入学年份
+        <input type="text" class="grow" v-model="editUserInfo.Year" />
+      </label>
       <div class="modal-action">
         <form method="dialog">
           <button class="btn mr-2">取消</button>
@@ -197,10 +244,10 @@
 </template>
 
 <script lang="ts" setup name="User">
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Avatar, Cattle, EmotionHappy, HorseZodiac, Key, Ranking, Info } from "@icon-park/vue-next";
+import { Avatar, Cattle, EmotionHappy, HorseZodiac, Key, Ranking, Info, School } from "@icon-park/vue-next";
 import { push } from 'notivue';
 
 import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword, _editUserInfo, _getUserInfo } from "@/apis/user";
@@ -356,6 +403,9 @@ let user = reactive<UserType>({
   UserName: '',
   Email: '',
   School: '',
+  Major: '',
+  Class: '',
+  Year: '',
   QQ: '',
   RegisterTime: 0,
   HeadURL: '',
@@ -383,6 +433,9 @@ let user = reactive<UserType>({
         user.UserName = data.UserName;
         user.Email = data.Email;
         user.School = data.School;
+        user.Major = data.Major;
+        user.Class = data.Classes;
+        user.Year = data.Year;
         user.QQ = data.QQ;
         user.RegisterTime = data.RegisterTime;
         user.HeadURL = data.HeadURL;
@@ -403,16 +456,12 @@ let user = reactive<UserType>({
       .then(() => {
         editUserInfo.QQ = this.QQ;
         editUserInfo.userName = this.UserName;
+        editUserInfo.School = this.School;
+        editUserInfo.Major = this.Major;
+        editUserInfo.Class = this.Class;
+        editUserInfo.Year = this.Year;
       })
   },
-  // getUserHead(){
-  //   Post('oss/get',{
-  //     GetObjectType:constValStore.OSS_OBJECT_BASE64,
-  //     BucketName:"ahutoj",
-  //     ObjectName:"UID_"+user.UID+"_head.jpg"
-  //   }
-  //   )
-  // }
 });
 
 let headImage = reactive<ImageUploadType>({
@@ -476,11 +525,19 @@ const headImageChangeHandle = (event: Event) => {
 let editUserInfo = reactive({
   userName: '',
   QQ: '',
-  
+  School: '',
+  Major: '',
+  Class: '',
+  Year: '',
+
   edit() {
     let params: any = {};
     if (this.userName != '') params.userName = this.userName;
     if (this.QQ != '') params.QQ = this.QQ;
+    if (this.School != '') params.School = this.School;
+    if (this.Major != '') params.Major = this.Major;
+    if (this.Class != '') params.Class = this.Class;
+    if (this.Year != '') params.Year = this.Year;
     _editUserInfo(params)
       .then(() => {
         push.success({
@@ -493,6 +550,11 @@ let editUserInfo = reactive({
 
 onMounted(() => {
   if (typeof route.params.UID == 'string') user.UID = route.params.UID;
+  user.get();
+})
+
+watch(() => route.params.UID, () => {
+  user.UID = route.params.UID as string;
   user.get();
 })
 

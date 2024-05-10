@@ -39,6 +39,12 @@
           删除题目
         </div>
       </li>
+      <li>
+        <div class="font-bold text-base" @click="router.push(`/problem/${problem.PID}`)">
+          <go-on theme="outline" size="18" />
+          跳转题目
+        </div>
+      </li>
     </ul>
   </div>
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
@@ -139,7 +145,7 @@
 import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Add, DeleteOne, Disk, DocumentFolder, EditOne, Data as ICONdata, StopwatchStart } from '@icon-park/vue-next';
+import { Add, DeleteOne, Disk, DocumentFolder, EditOne, Data as ICONdata, StopwatchStart, GoOn } from '@icon-park/vue-next';
 import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';

@@ -137,13 +137,13 @@ let updateLog = reactive({
     };
     _addUpdateLog(params)
       .then(() => {
+        this.Content = '';
+        updateLogs.get(false);
         push.success({
           title: '新增成功',
           message: `新增了标题为 ${updateLog.Title} 的更新日志`,
         })
       })
-    this.Content = '';
-    updateLogs.get(false);
   }
 })
 

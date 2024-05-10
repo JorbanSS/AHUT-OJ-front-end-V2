@@ -30,9 +30,12 @@
               {{ item.Title }}
             </td>
             <td class="space-x-1 space-y-0.5">
-              <span class="badge badge-neutral badge-md">
-                Offical
-              </span>
+              <template v-for="labelItem in problemListLabelOptions">
+                <span class="badge badge-neutral badge-md" v-if="item.Title.split(' - ').length > 1 &&item.Title.split(' - ')[0] == labelItem.value">
+                  {{ labelItem.value }}
+                </span>
+              </template>
+              <span class="badge badge-neutral badge-md" v-if="item.Title.endsWith('(By Clone)')">Cloned</span>
             </td>
             <td>
               {{ ConvertTools.PrintTime(item.StartTime, 1) }}
@@ -60,6 +63,7 @@ import { _getProblemLists } from '@/apis/problemList';
 import Pagination from "@/components/Main/Pagination.vue";
 import { type ProblemListSimplifiedType, type ProblemListsType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
+import { problemListLabelOptions } from '@/config';
 
 const router = useRouter();
 

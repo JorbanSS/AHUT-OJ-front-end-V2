@@ -35,7 +35,7 @@
       </li>
       <li>
         <div class="font-bold text-base" @click="router.push('/contest/' + contest.CID)">
-          <edit-one theme="outline" size="18" />
+          <go-on theme="outline" size="18" />
           跳转比赛
         </div>
       </li>

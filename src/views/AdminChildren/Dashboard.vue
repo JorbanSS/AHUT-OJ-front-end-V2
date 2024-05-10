@@ -19,7 +19,7 @@
       <div class="stat">
         <div class="stat-value flex">
           <preview-open theme="outline" size="32" class="mt-2 mr-2" />
-          123
+          ?
         </div>
         <div class="stat-title ml-10">当日访问量</div>
       </div>
@@ -44,7 +44,7 @@
     <div class="space-y-6 col-span-4">
       <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
         <button class="btn btn-neutral" @click="showEditHomeNoticeModal()">编辑首页公告</button>
-        <button class="btn btn-neutral" @click="editUpdateLogs()">编辑更新日志</button>
+        <button class="btn btn-neutral" @click="$router.push('/admin/other/updatelog')">编辑更新日志</button>
       </div>
       <div class="card Border bg-white shadow-lg p-6 w-fit">
         <label class="form-control w-full max-w-xs">
@@ -93,7 +93,7 @@
   </div>
   <div class="m-6"></div>
   <dialog id="mdEditor" class="modal">
-    <div class="modal-box">
+    <div class="modal-box max-w-5xl">
       <h3 class="font-bold text-lg mb-4">主页公告编辑</h3>
       <label class="input input-bordered flex items-center gap-2 mb-2">
         标题
@@ -126,8 +126,6 @@ import { type HomeNoticeType, type OjStasticsType } from '@/interfaces/oj';
 import { type RejudgeInfoType } from '@/interfaces/record';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils";
-
-let bannerImageInput = ref<File | null>(null);
 
 let rejudgeInfo = reactive<RejudgeInfoType>({
   SID: 0,
@@ -261,10 +259,6 @@ let ojStastics = reactive<OjStasticsType>({
       })
   },
 })
-
-function editUpdateLogs() {
-
-}
 
 onMounted(() => {
   ojStastics.get();

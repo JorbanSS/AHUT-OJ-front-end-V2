@@ -137,15 +137,24 @@
       </button>
     </div>
     <div class="card shadow-lg bg-white Border container h-fit" v-else>
-      <button class="btn w-fit ml-6 mt-6" @click="copyMarkdown()">
-        <copy theme="outline" size="18" />
-        复制 MarkDown
-      </button>
+      <div class="flex space-x-3 ml-6 mt-6">
+        <button class="btn w-fit" @click="copyMarkdown()">
+          <copy theme="outline" size="18" />
+          复制 MarkDown
+        </button>
+        <a v-if="problem.Origin == 1 && (contest.CID == 0 || contest.CID != 0 && contest.EndTime < contest.TimeNow)"
+          href="" target="_blank">
+          <button class="btn w-fit">
+            <link-two theme="outline" size="20" />
+            跳转原题
+          </button>
+        </a>
+      </div>
       <MdPreview :editorId="id" :modelValue="problem.content" class="px-1 mb-4" />
     </div>
   </div>
   <dialog id="codeModal" class="modal">
-    <div class="modal-box h-[600px]">
+    <div class="modal-box max-w-3xl">
       <h3 class="font-bold text-lg pb-6">{{ problem.PID }} {{ problem.Title }}</h3>
       <select class="select select-bordered w-72 max-w-xs text-base" v-model="submit.Lang">
         <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
@@ -168,7 +177,7 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Check, Copy, Disk, FilePdf, Data as ICONdata, StopwatchStart, Tips } from '@icon-park/vue-next';
+import { Check, Copy, Disk, FilePdf, Data as ICONdata, StopwatchStart, Tips, LinkTwo } from '@icon-park/vue-next';
 import { MdCatalog, MdPreview } from 'md-editor-v3';
 import 'md-editor-v3/lib/preview.css';
 import { push } from 'notivue';
@@ -284,7 +293,7 @@ let problem = reactive<ProblemType>({
   Submit: 0,
   Accepted: 0,
   Description: '',
-  Origin: 0,
+  Origin: -1,
   OriginPID: '',
   LimitMemory: 0,
   LimitTime: 0,
@@ -315,11 +324,9 @@ let problem = reactive<ProblemType>({
         this.Output = data.Output;
         this.Hit = data.Hit;
         this.PType = data.PType;
-        if (this.ContentType == constValStore.PROBLEM_TYPE_PLAIN_TEXT) {
-          this.content = this.convertToMarkdown();
-        } else {
-          this.content = this.Description;
-        }
+        this.Origin = data.Origin;
+        this.OriginPID = data.OriginPID;
+        this.content = this.convertToMarkdown();
       })
       .then(() => {
         if (this.ContentType == constValStore.PROBLEM_CONTENTTYPE_PDF) {

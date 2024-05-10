@@ -22,6 +22,11 @@ import { ToolbarNames } from "md-editor-v3";
 import { type NavItemType } from "@/interfaces/oj";
 import { SubmitInfoType } from "./interfaces/record";
 
+export const problemListLabelOptions = [
+  { label: "算法设计与分析", value: "算法设计与分析" },
+  { label: "C 语言程序设计", value: "C 语言程序设计" },
+]
+
 export const submitStatusColor: Record<string, string> = {
   AC: "#19BE6B",
   WA: "#ED3F14",
