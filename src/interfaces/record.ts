@@ -29,10 +29,12 @@ export interface SubmitCodeType {
 }
 
 export interface RejudgeInfoType {
-  SID?: number,           // 记录 SID
+  SID?: string,           // 记录 SID
   PID?: string,           // 题目 PID
   UID?: string,           // 用户 UID
-  CID?: number,           // 比赛 CID
+  CID?: string,           // 比赛 CID
+  LID?: string,           // 题单 LID
+  Timestamp?: number,          // 时间
   [item: string]: any,    // 其他属性
 }
 

@@ -43,7 +43,6 @@ Axios.interceptors.request.use(
     return config;
   },
   err => {
-    console.log(1, err);
     push.error({
       title: `Error: ${err.response.data.Code}`,
       message: err.response.data.Msg,
@@ -67,7 +66,6 @@ Axios.interceptors.response.use(
     }
   },
   err => {
-    console.log(2, err);
     push.error({
       title: `Error: ${err.name}`,
       message: err.message,

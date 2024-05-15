@@ -76,6 +76,12 @@
           比赛号
           <input type="text" class="grow" placeholder="" v-model="rejudgeInfo.CID">
         </label>
+        <label class="input input-bordered flex items-center gap-2">
+          题单号
+          <input type="text" class="grow" placeholder="" v-model="rejudgeInfo.LID">
+        </label>
+        <input type="datetime-local" id="datetime" name="datetime" v-model="Timestamp"
+        class="input input-bordered flex items-center gap-2 w-full" />
         <button class="btn btn-neutral" @click="rejudgeInfo.rejudge()">重判</button>
       </div>
     </div>
@@ -127,25 +133,34 @@ import { type RejudgeInfoType } from '@/interfaces/record';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils";
 
+let Timestamp = ref<string>('');
+
 let rejudgeInfo = reactive<RejudgeInfoType>({
-  SID: 0,
+  SID: '',
   UID: '',
   PID: '',
-  CID: 0,
+  CID: '',
+  LID: '',
+  Timestamp: 0,
 
   rejudge() {
     let params: RejudgeInfoType = {};
-    if (rejudgeInfo.SID == 0 && rejudgeInfo.CID == 0 && rejudgeInfo.UID == '' && rejudgeInfo.PID == '') {
+    if (Timestamp.value != '') this.Timestamp = new Date(Timestamp.value).getTime();
+    console.log(this.Timestamp);
+    
+    if (rejudgeInfo.SID == '' && rejudgeInfo.CID == '' && rejudgeInfo.UID == '' && rejudgeInfo.PID == '' && rejudgeInfo.LID == '' && rejudgeInfo.Timestamp == 0) {
       push.warning({
         title: '信息错误',
         message: '请填写至少一项信息',
       });
       return;
     }
-    if (rejudgeInfo.SID) params.SID = +rejudgeInfo.SID;
+    if (rejudgeInfo.SID) params.SID = rejudgeInfo.SID;
     if (rejudgeInfo.UID) params.UID = rejudgeInfo.UID;
     if (rejudgeInfo.PID) params.PID = rejudgeInfo.PID;
-    if (rejudgeInfo.CID) params.CID = +rejudgeInfo.CID;
+    if (rejudgeInfo.CID) params.CID = rejudgeInfo.CID;
+    if (rejudgeInfo.LID) params.LID = rejudgeInfo.LID;
+    if (rejudgeInfo.Timestamp) params.SubmitTime = rejudgeInfo.Timestamp;
     _rejudge(params)
       .then(() => {
         push.success({
