@@ -11,6 +11,7 @@
       <input type="checkbox" />
       <div class="collapse-title text-md font-bold">
         高级筛选
+        <div class="badge badge-neutral">{{ filterNumber }}</div>
       </div>
       <div class="collapse-content space-y-2">
         <label class="input input-bordered flex items-center gap-2 join-item">
@@ -139,6 +140,8 @@ const router = useRouter();
 const userDataStore = useUserDataStore();
 
 let toPage = ref();
+
+const filterNumber = computed(() => Number(records.searchInfo.PID != '') + Number(records.searchInfo.UID != '') + Number(records.searchInfo.CID != '') + Number(records.searchInfo.LID != '') + Number(records.searchInfo.Lang != 0) + Number(records.searchInfo.Result != ''))
 
 let records = reactive<RecordsType>({
   records: Array<RecordType>(),

@@ -11,6 +11,7 @@
       <input type="checkbox" />
       <div class="collapse-title text-md font-bold">
         高级筛选
+        <div class="badge badge-neutral">{{ filterNumber }}</div>
       </div>
       <div class="collapse-content space-y-2">
         <label class="input input-bordered flex items-center gap-2 join-item">
@@ -94,6 +95,8 @@ import { useConstValStore } from '@/stores/ConstVal';
 const router = useRouter();
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
+
+const filterNumber = computed(() => Number(problems.searchInfo.PID != '') + Number(problems.searchInfo.Label != '') + Number(problems.searchInfo.PType != '') + Number(problems.searchInfo.Keyword != ''))
 
 let problems = reactive<ProblemsType>({
   problems: Array<ProblemSimplifiedType>(),

@@ -34,7 +34,8 @@ export interface RejudgeInfoType {
   UID?: string,           // 用户 UID
   CID?: string,           // 比赛 CID
   LID?: string,           // 题单 LID
-  Timestamp?: number,          // 时间
+  Timestamp?: number,     // 时间
+  Lang?: number,          // 语言
   [item: string]: any,    // 其他属性
 }
 

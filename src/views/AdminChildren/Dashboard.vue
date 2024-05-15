@@ -80,6 +80,14 @@
           题单号
           <input type="text" class="grow" placeholder="" v-model="rejudgeInfo.LID">
         </label>
+        <select class="select select-bordered join-item" v-model="rejudgeInfo.Lang">
+          <option value="0">
+            语言不限
+          </option>
+          <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
+            {{ item.name }}
+          </option>
+        </select>
         <input type="datetime-local" id="datetime" name="datetime" v-model="Timestamp"
         class="input input-bordered flex items-center gap-2 w-full" />
         <button class="btn btn-neutral" @click="rejudgeInfo.rejudge()">重判</button>
@@ -132,6 +140,7 @@ import { type HomeNoticeType, type OjStasticsType } from '@/interfaces/oj';
 import { type RejudgeInfoType } from '@/interfaces/record';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils";
+import { submitLanguageOptions } from '@/config';
 
 let Timestamp = ref<string>('');
 
@@ -141,6 +150,7 @@ let rejudgeInfo = reactive<RejudgeInfoType>({
   PID: '',
   CID: '',
   LID: '',
+  Lang: 0,
   Timestamp: 0,
 
   rejudge() {
@@ -148,7 +158,7 @@ let rejudgeInfo = reactive<RejudgeInfoType>({
     if (Timestamp.value != '') this.Timestamp = new Date(Timestamp.value).getTime();
     console.log(this.Timestamp);
     
-    if (rejudgeInfo.SID == '' && rejudgeInfo.CID == '' && rejudgeInfo.UID == '' && rejudgeInfo.PID == '' && rejudgeInfo.LID == '' && rejudgeInfo.Timestamp == 0) {
+    if (rejudgeInfo.SID == '' && rejudgeInfo.CID == '' && rejudgeInfo.UID == '' && rejudgeInfo.PID == '' && rejudgeInfo.LID == '' && rejudgeInfo.Timestamp == 0 && rejudgeInfo.Lang == 0) {
       push.warning({
         title: '信息错误',
         message: '请填写至少一项信息',
@@ -161,6 +171,7 @@ let rejudgeInfo = reactive<RejudgeInfoType>({
     if (rejudgeInfo.CID) params.CID = rejudgeInfo.CID;
     if (rejudgeInfo.LID) params.LID = rejudgeInfo.LID;
     if (rejudgeInfo.Timestamp) params.SubmitTime = rejudgeInfo.Timestamp;
+    if (rejudgeInfo.Lang) params.Lang = +rejudgeInfo.Lang;
     _rejudge(params)
       .then(() => {
         push.success({
