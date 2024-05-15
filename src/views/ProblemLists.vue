@@ -1,9 +1,9 @@
 <template>
-  <div class="card bg-white shadow-lg Border p-6">
+  <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto w-fit">
     <div class="join w-fit">
       <label class="input input-bordered flex items-center gap-2 join-item">
         <span class="whitespace-nowrap">题单号</span>
-        <input type="text" class="grow w-32" v-model="problemLists.searchInfo.LID" />
+        <input type="text" class="grow w-60" v-model="problemLists.searchInfo.LID" />
       </label>
       <button class="btn join-item btn-neutral"
         @click="problemLists.goToProblemList(problemLists.searchInfo.LID)">跳转</button>
@@ -11,19 +11,31 @@
   </div>
   <div class="mt-6"></div>
   <div class="bg-white card shadow-lg Border">
-    <div class="overflow-x-hidden rounded-t-2xl" style="max-height: calc(100vh - 124px - 252px)">
+    <div class="overflow-x-hidden rounded-t-2xl">
       <table class="table table-zebra table-pin-rows">
         <thead>
           <tr>
-            <th v-for="(item, index) in ['题单号', '题单名称', '标签', '创建时间', '创建人']" :key="index">
-              {{ item }}
+            <th class="hidden md:table-cell">
+              题单号
+            </th>
+            <th>
+              题单名称
+            </th>
+            <th>
+              标签
+            </th>
+            <th class="hidden md:table-cell">
+              创建时间
+            </th>
+            <th class="hidden md:table-cell">
+              创建人
             </th>
           </tr>
         </thead>
         <tbody v-auto-animate>
-          <tr v-for="item in problemLists.problemLists" :key="item.LID" @click="router.push(`/problemlist/${item.LID}`);"
-            class="cursor-pointer">
-            <th>
+          <tr v-for="item in problemLists.problemLists" :key="item.LID"
+            @click="router.push(`/problemlist/${item.LID}`);" class="cursor-pointer">
+            <th class="hidden md:table-cell">
               {{ item.LID }}
             </th>
             <td class="font-bold talbe-lg">
@@ -31,16 +43,17 @@
             </td>
             <td class="space-x-1 space-y-0.5">
               <template v-for="labelItem in problemListLabelOptions">
-                <span class="badge badge-neutral badge-md" v-if="item.Title.split(' - ').length > 1 &&item.Title.split(' - ')[0] == labelItem.value">
+                <span class="badge badge-neutral badge-md whitespace-nowrap"
+                  v-if="item.Title.split(' - ').length > 1 && item.Title.split(' - ')[0] == labelItem.value">
                   {{ labelItem.value }}
                 </span>
               </template>
-              <span class="badge badge-neutral badge-md" v-if="item.Title.endsWith('(By Clone)')">Cloned</span>
+              <span class="badge badge-neutral badge-md whitespace-nowrap" v-if="item.Title.endsWith('(By Clone)')">Cloned</span>
             </td>
-            <td>
+            <td class="hidden md:table-cell">
               {{ ConvertTools.PrintTime(item.StartTime, 1) }}
             </td>
-            <td>
+            <td class="hidden md:table-cell">
               {{ item.UID }}
             </td>
           </tr>

@@ -56,7 +56,7 @@
             {{ item.FileType }}
           </td>
           <td>
-            {{ item.FileSize }} MB
+            {{ item.FileSize >= 2048 * 1024? (item.FileSize / 1024 / 1024).toFixed(2) + ' MB' : ((item.FileSize + 6) / 1024).toFixed(2) + ' KB' }}
           </td>
           <td class="space-x-2">
             <button class="btn btn-neutral btn-sm" @click="judgeFileDetail.get(item.FileName)">

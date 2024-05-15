@@ -18,7 +18,7 @@
   </div>
   <div class="join">
     <input class="input input-bordered join-item w-20" v-model="toPage" type="number" min="1" :max="props.maxPage" />
-    <button class="btn join-item" @click="props.changePage(toPage)">跳转页面</button>
+    <button class="btn join-item" @click="props.changePage(toPage)">跳转</button>
   </div>
 </template>
 

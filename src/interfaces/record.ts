@@ -8,7 +8,7 @@ export interface RecordType {
   UseTime: number,              // 时间
   SubmitTime: number,           // 提交时间
   Source: string,               // 源代码
-  CeInfo: string,               // CE 报错信息
+  ErrInfo: string,              // 报错信息
   SampleNumber: number,         // 样例数量
   PassSample: number,           // 通过样例数量
   [item: string]: any,          // 其他属性

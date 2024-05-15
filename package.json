@@ -1,7 +1,7 @@
 {
   "name": "ahutoj",
   "private": true,
-  "version": "2.1",
+  "version": "2.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,6 +20,7 @@
     "notivue": "^2.2.1",
     "pdfobject": "^2.3.0",
     "pinia": "^2.1.7",
+    "pnpm": "^9.1.0",
     "sass": "^1.72.0",
     "spark-md5": "^3.0.2",
     "v-calendar": "^3.1.2",

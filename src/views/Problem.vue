@@ -357,6 +357,13 @@ let problem = reactive<ProblemType>({
       // SubmitTime: Date.now(),
       // Input: ''
     }
+    if (params.Lang == 5 && (userDataStore.PermissionMap & constValStore.SuperAdminBit) == 0) {
+      push.warning({
+        title: '提交失败',
+        message: '暂不支持 Java 语言提交',
+      })
+      return;
+    }
     _submitCode(params)
       .then((data: any) => {
         push.success({
@@ -369,16 +376,26 @@ let problem = reactive<ProblemType>({
 
   convertToMarkdown(): string {
     let res = "";
-    res += "## 题目描述\n\n";
-    res += problem.Description;
-    res += "\n\n## 输入格式\n\n";
-    res += problem.Input;
-    res += "\n\n## 输出格式\n\n";
-    res += problem.Output;
-    res += "\n\n## 样例输入\n\n";
-    res += "```\n\n" + problem.SampleInput + "\n\n```";
-    res += "\n\n## 样例输出\n\n";
-    res += "```\n\n" + problem.SampleOutput + "\n\n```";
+    if (problem.Description) {
+      res += "## 题目描述\n\n";
+      res += problem.Description;
+    }
+    if (problem.Input) {
+      res += "\n\n## 输入格式\n\n";
+      res += problem.Input;
+    }
+    if (problem.Output) {
+      res += "\n\n## 输出格式\n\n";
+      res += problem.Output;
+    }
+    if (problem.SampleInput) {
+      res += "\n\n## 样例输入\n\n";
+      res += "```\n\n" + problem.SampleInput + "\n\n```";
+    }
+    if (problem.SampleOutput) {
+      res += "\n\n## 样例输出\n\n";
+      res += "```\n\n" + problem.SampleOutput + "\n\n```";
+    }
     return res;
   }
 })

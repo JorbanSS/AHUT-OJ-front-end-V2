@@ -49,7 +49,7 @@
   <div v-if="record.CeInfo != null && record.CeInfo != ''">
     <div class="m-6"></div>
     <div class="card shadow-lg p-6 bg-white Border">
-      {{ record.CeInfo }}
+      {{ record.ErrInfo }}
     </div>
   </div>
   <div class="m-6"></div>
@@ -92,7 +92,7 @@ let record = ref<RecordType>({
   Lang: 0,
   SubmitTime: 0,
   Source: '',
-  CeInfo: '',
+  ErrInfo: '',
   SampleNumber: 0,
   PassSample: 0,
   UpdateNumber: 0,
@@ -109,7 +109,7 @@ let record = ref<RecordType>({
         record.value.Lang = data.Lang;
         record.value.SubmitTime = data.SubmitTime;
         record.value.Source = data.Source;
-        record.value.CeInfo = data.CeInfo;
+        record.value.ErrInfo = data.ErrInfo;
         record.value.SampleNumber = data.SampleNumber;
         record.value.PassSample = data.PassSample;
       })

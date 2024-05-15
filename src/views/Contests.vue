@@ -1,21 +1,36 @@
 <template>
-  <div class="card bg-white shadow-lg Border p-6">
+  <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto w-fit">
     <div class="join w-fit">
       <label class="input input-bordered flex items-center gap-2 join-item">
         <span class="whitespace-nowrap">比赛号</span>
-        <input type="text" class="grow w-32" v-model="contests.searchInfo.CID" />
+        <input type="text" class="grow w-60" v-model="contests.searchInfo.CID" />
       </label>
       <button class="btn join-item btn-neutral" @click="contests.goToContest(contests.searchInfo.CID)">跳转</button>
     </div>
   </div>
   <div class="mt-6"></div>
   <div class="bg-white card shadow-lg Border">
-    <div class="overflow-x-hidden rounded-t-2xl" style="max-height: calc(100vh - 124px - 252px)">
+    <div class="overflow-x-hidden rounded-t-2xl">
       <table class="table table-zebra table-pin-rows">
         <thead>
           <tr>
-            <th v-for="(item, index) in ['状态', '比赛号', '比赛名称', '标签', '起止时间', '撰题人']" :key="index">
-              {{ item }}
+            <th class="hidden md:table-cell">
+              状态
+            </th>
+            <th class="hidden lg:table-cell">
+              比赛号
+            </th>
+            <th>
+              比赛名称
+            </th>
+            <th>
+              标签
+            </th>
+            <th>
+              起止时间
+            </th>
+            <th class="hidden lg:table-cell">
+              撰题人
             </th>
           </tr>
         </thead>
@@ -23,10 +38,10 @@
           <tr v-for="item in contests.contests" :key="item.CID"
             @click="item.Status ? router.push(`/contest/${item.CID}`) : 0"
             :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': item.Status == 0 }">
-            <td class="font-bold talbe-lg">
+            <td class="font-bold talbe-lg whitespace-nowrap hidden md:table-cell">
               {{ ContestStatus[item.Status] }}
             </td>
-            <th>
+            <th class="hidden lg:table-cell">
               {{ item.CID }}
             </th>
             <td class="font-bold talbe-lg">
@@ -51,7 +66,7 @@
               ~
               {{ ConvertTools.PrintTime(item.EndTime) }}
             </td>
-            <td>
+            <td class="hidden lg:table-cell">
               {{ item.UID }}
             </td>
           </tr>
@@ -138,21 +153,21 @@ let contests = reactive<ContestsType>({
   },
 })
 
-onMounted(() => {
+function syncSeverTime() {
   getServerTime()
     .then((res: any) => {
       TimeNow.value = res;
       contests.get(true);
     })
-  })
-  
-  watch(() => contests.page, () => {
-    getServerTime()
-    .then((res: any) => {
-      TimeNow.value = res;
-      contests.get();
-    })
-})
+}
+
+onMounted(() => {
+  syncSeverTime();
+});
+
+watch(() => contests.page, () => {
+  syncSeverTime();
+});
 
 const maxPage = computed(() => Math.ceil(contests.count / contests.limit));
 
