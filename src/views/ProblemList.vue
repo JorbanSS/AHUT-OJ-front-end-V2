@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup name="problemList">
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { Bill, Editor } from "@icon-park/vue-next";
@@ -83,7 +83,7 @@ let problemList = reactive<ProblemListType>({
         problemList.StartTime = data.StartTime;
         problemList.LID = data.LID;
         problemList.Description = data.Description;
-        problems = data.Data;
+        problems.value = data.Data;
         if (showInfo) {
           push.success({
             title: '',
@@ -110,54 +110,54 @@ let problemList = reactive<ProblemListType>({
   },
 })
 
-type problems = {
+type problemsType = {
   PID: string,
   Title: string,
   SubmitNum: number,
   ACNum: number,
-}
+  Status: string,
+};
 
-let problems = reactive<Array<problems>>([])
-
-let acceptedProblems = reactive<Array<string>>([])
+let problems = ref<Array<problemsType>>([]);
 
 function getProblemListUsersInfo(showInfo: boolean = false) {
   let params = {
-    lid: problemList.LID,
+    LID: problemList.LID,
   }
   _getProblemListUsersInfo(params)
     .then((data: any) => {
-      acceptedProblems = data.SolvedPID;
+      if (data.Msg == 'false') {
+        let params = {
+          LID: problemList.LID,
+          UID: userDataStore.UID,
+        };
+        _joinProblemList(params)
+          .then(() => {
+            getProblemListUsersInfo(showInfo);
+            push.success({
+              title: '加入成功',
+              message: '已自动加入题单',
+            })
+          })
+        return;
+      }
       if (showInfo) {
         push.success({
           title: '获取成功',
           message: ``,
         })
       }
-    })
-    .catch(() => {
-      if (userDataStore.UID) {
-        let params = {
-          LID: problemList.LID,
-          UID: userDataStore.UID,
-        };
-        _joinProblemList(params)
-        .then(() => {
-          push.success({
-            title: '加入成功',
-            message: '已自动加入题单',
+      for (let i = 0; i < data.SolvedPID.length; i++) {
+        if (problems.value && Array.isArray(problems.value)) {
+          problems.value.forEach((item: any) => {
+            if (item.PID == data.SolvedPID[i]) {
+              console.log(data.SolvedPID[i], item.PID);
+              item.Status = 'AC';
+            }
           })
-        })
-        // getProblemListUsersInfo();
+        }
       }
     })
-}
-
-function checkAccepted(PID: string) {
-  for (let item in acceptedProblems) {
-    if (item == PID) return true;
-  }
-  return false;
 }
 
 onMounted(() => {

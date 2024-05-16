@@ -14,30 +14,22 @@
       <table class="table table-zebra table-pin-rows">
         <thead>
           <tr>
-            <th class="hidden md:table-cell">
-              状态
-            </th>
-            <th class="hidden lg:table-cell">
-              比赛号
-            </th>
-            <th>
-              比赛名称
-            </th>
-            <th>
-              标签
-            </th>
-            <th>
-              起止时间
-            </th>
-            <th class="hidden lg:table-cell">
-              撰题人
-            </th>
+            <template v-for="[title, style] in [
+              ['状态', 'hidden md:table-cell'],
+              ['比赛号', 'hidden lg:table-cell'],
+              ['比赛名称'],
+              ['标签'],
+              ['起止时间'],
+              ['撰题人', 'hidden lg:table-cell']
+            ]" :key="title">
+              <th :class=style>{{ title }}</th>
+            </template>
           </tr>
         </thead>
         <tbody v-auto-animate>
           <tr v-for="item in contests.contests" :key="item.CID"
-            @click="item.Status ? router.push(`/contest/${item.CID}`) : 0"
-            :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': item.Status == 0 }">
+            @click="item.Status && router.push(`/contest/${item.CID}`)"
+            :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': !item.Status }">
             <td class="font-bold talbe-lg whitespace-nowrap hidden md:table-cell">
               {{ ContestStatus[item.Status] }}
             </td>
@@ -47,18 +39,12 @@
             <td class="font-bold talbe-lg">
               <div>{{ item.Title }}</div>
             </td>
-            <td class="space-x-1 space-y-0.5">
-              <span class="badge badge-neutral badge-md" v-if="item.Type == 1">
-                ICPC
+            <td class="space-y-0.5 [&_span]:badge [&_span]:badge-neutral [&_span]:mr-1">
+              <span>
+                {{ item.Type == 1 ? 'ICPC' : 'OI' }}
               </span>
-              <span class="badge badge-neutral badge-md" v-else>
-                OI
-              </span>
-              <span class="badge badge-neutral badge-md" v-if="item.IsPublic == 1">
-                公开
-              </span>
-              <span class="badge badge-neutral badge-md" v-else>
-                加密
+              <span>
+                {{ item.IsPublic ? '公开' : '加密' }}
               </span>
             </td>
             <td>

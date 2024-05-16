@@ -1,12 +1,12 @@
 <template>
-  <div class="flex space-x-6" v-auto-animate>
-    <div class="space-y-6">
-      <div class="card shadow-lg Border bg-white p-6 w-72" v-if="contest.CID || problemList.LID">
+  <div class="flex flex-col space-y-2 sm:space-y-4 md:space-y-6 lg:flex-row lg:space-x-6 lg:space-y-0" v-auto-animate>
+    <div class="flex flex-row space-x-2 sm:space-x-4 md:space-x-6 lg:flex-col lg:space-x-0 lg:space-y-6 mx-auto">
+      <div class="card shadow-lg Border bg-white p-4 sm:p-6 w-72 h-fit" v-if="contest.CID || problemList.LID">
         <div class="text-lg space-x-2 space-y-2" v-if="contest.CID">
           <span>
             #{{ contest.CID }}
           </span>
-          <span class="font-bold ">
+          <span class="font-bold">
             {{ contest.Title }}
           </span>
         </div>
@@ -20,14 +20,14 @@
           <span>
             #{{ problemList.LID }}
           </span>
-          <span class="font-bold ">
+          <span class="font-bold">
             {{ problemList.Title }}
           </span>
         </div>
-        <div class="grid grid-cols-5 gap-2 w-60 pt-2">
+        <div class="flex gap-2 pt-2 flex-wrap [&_div_button]:w-10">
           <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
             <button tabindex="0" role="button" class="btn w-full group-hover/dropdown"
-              :class="(item.PID == problem.PID ? 'btn-active' : '')"
+              :class="{'btn-active': item.PID == problem.PID}"
               @click="contest.CID ? contest.goToProblem(item.PID) : problemList.goToProblem(item.PID)">
               {{ ConvertTools.Number2Alpha(index + 1) }}
             </button>
@@ -55,7 +55,7 @@
           </div>
         </div>
       </div>
-      <div class="card shadow-lg bg-white Border p-6 container w-72 h-fit flex space-y-2">
+      <div class="card shadow-lg bg-white Border p-4 sm:p-6 w-72 h-fit flex space-y-2">
         <div class="text-lg space-x-2">
           <span>
             {{ problem.PID }}
@@ -65,18 +65,18 @@
           </span>
         </div>
         <div class="grid grid-cols-2 gap-2">
-          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8">
+          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8 whitespace-nowrap">
             <stopwatch-start theme="outline" size="17" fill="#fff" />
             &nbsp;{{ problem.LimitTime }} ms
           </div>
-          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8">
+          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8 whitespace-nowrap">
             <disk theme="outline" size="16" fill="#fff" />
             &nbsp;{{ problem.LimitMemory }} MB
           </div>
         </div>
         <div class="collapse bg-base-200 collapse-arrow rounded-lg">
           <input type="checkbox" />
-          <div class="collapse-title text-md font-bold">
+          <div class="collapse-title text-md font-bold whitespace-nowrap">
             题目标签
           </div>
           <div class="collapse-content">
@@ -89,27 +89,27 @@
         <div class="grid grid-cols-2 gap-2" v-if="userDataStore.PermissionMap & constValStore.ProblemAdminBit">
           <button class="btn" @click="router.push('/admin/problem/edit/' + problem.PID)">
             <!-- <editor theme="outline" size="18" /> -->
-            <div class="text-base">
+            <div class="text-base whitespace-nowrap">
               题目编辑
             </div>
           </button>
           <button class="btn" @click="router.push('/admin/problem/data/' + problem.PID)">
             <!-- <ICONdata theme="outline" size="18" /> -->
-            <div class="text-base">
+            <div class="text-base whitespace-nowrap">
               数据编辑
             </div>
           </button>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <button class="btn" @click="$router.push(`/records?PID=${problem.PID}`)">
-            <ICONdata theme="outline" size="18" />
-            <div class="text-base">
+            <ICONdata class="hidden sm:block" theme="outline" size="18"/>
+            <div class="text-base whitespace-nowrap">
               记 录
             </div>
           </button>
           <button class="btn">
-            <tips theme="outline" size="20" />
-            <div class="text-base">
+            <tips class="hidden sm:block" theme="outline" size="20" />
+            <div class="text-base whitespace-nowrap">
               题 解
             </div>
             <div class="badge" v-if="problem.SolutionNumber">{{ problem.SolutionNumber }}</div>
@@ -122,7 +122,7 @@
           </div>
         </button>
       </div>
-      <div class="card shadow-lg bg-white Border p-6 w-72">
+      <div class="card shadow-lg bg-white Border p-6 w-72 hidden lg:block">
         <div class="font-bold text-lg pb-2">
           大纲
         </div>
@@ -136,7 +136,7 @@
         下载 PDF
       </button>
     </div>
-    <div class="card shadow-lg bg-white Border container h-fit" v-else>
+    <div class="card shadow-lg bg-white Border container h-fit mx-auto" v-else>
       <div class="flex space-x-3 ml-6 mt-6">
         <button class="btn w-fit" @click="copyMarkdown()">
           <copy theme="outline" size="18" />
@@ -166,7 +166,7 @@
       <div class="modal-action">
         <form method="dialog">
           <button class="btn mr-2">暂存并退出</button>
-          <button class="btn" @click="problem.submitCode != undefined ? problem.submitCode() : 0">提交代码</button>
+          <button class="btn btn-neutral" @click="problem.submitCode != undefined ? problem.submitCode() : 0">提交代码</button>
         </form>
       </div>
     </div>

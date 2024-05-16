@@ -46,10 +46,16 @@
       </tbody>
     </table>
   </div>
-  <div v-if="record.CeInfo != null && record.CeInfo != ''">
-    <div class="m-6"></div>
-    <div class="card shadow-lg p-6 bg-white Border">
-      {{ record.ErrInfo }}
+  <div class="m-6"></div>
+  <div v-if="record.ErrInfo != null && record.ErrInfo != ''">
+    <div class="card shadow-lg bg-white Border">
+      <div class="mockup-code">
+        <pre>
+          <code>
+          {{ record.ErrInfo }}
+          </code>
+        </pre>
+      </div>
     </div>
   </div>
   <div class="m-6"></div>

@@ -119,7 +119,7 @@ export default {
     extend: {},
   },
   plugins: [],
-}
+};
 ```
 
 创建 `tailwind.css` 文件
@@ -147,7 +147,7 @@ pnpm i -D daisyui@latest
 ```js
 module.exports = {
   plugins: [require("daisyui")],
-}
+};
 ```
 
 3. 安装其余组件
@@ -177,12 +177,24 @@ pnpm i --save-dev @types/canvas-confetti
 pnpm install spark-md5
 
 pnpm install @types/spark-md5 -D
+
+pnpm i @vitejs/plugin-vue-jsx -D
 ```
 
 `main.ts` 中添加
 
 ```ts
-import '@icon-park/vue/styles/index.css';
+import "@icon-park/vue/styles/index.css";
+```
+
+`vite.config.ts` 中添加
+
+```ts
+import vueJsx from "@vitejs/plugin-vue-jsx";
+
+export default defineConfig({
+  plugins: [vueJsx()],
+});
 ```
 
 4. 安装 AutoAnimate
@@ -193,12 +205,12 @@ pnpm install @formkit/auto-animate
 
 使用 `v-auto-animate` 作用于其父元素对象上
 
-## 其他一些琐碎的 
+## 其他一些琐碎的
 
 在 `vite.config.ts` 添加如下语句以支持 `<script lang="ts" setup name="Main">` 中 `name=""` 的语法
 
 ```ts
-import VueSetupExtend from 'vite-plugin-vue-setup-extend'
+import VueSetupExtend from "vite-plugin-vue-setup-extend";
 ```
 
 修改如下来实现用 `@/` 访问项目根目录
@@ -210,10 +222,10 @@ import VueSetupExtend from 'vite-plugin-vue-setup-extend'
   export default defineConfig({
     resolve: {
       alias: {
-        '@': '/src',
+        "@": "/src",
       },
     },
-  })
+  });
 }
 ```
 
@@ -222,12 +234,10 @@ import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 ```json
 {
   "compilerOptions": {
-          "baseUrl": ".",
+    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
-    },
+      "@/*": ["src/*"]
+    }
   }
 }
 ```

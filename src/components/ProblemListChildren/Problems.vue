@@ -40,16 +40,17 @@ import { useRouter } from 'vue-router';
 
 import { ProblemListType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
+import { onMounted } from 'vue';
 
 const router = useRouter();
 
 type problemsType = {
   PID: string,
   Title: string,
-  ACNum: number,
   SubmitNum: number,
+  ACNum: number,
   Status: string,
-}
+};
 
 interface propsType {
   problemList?: ProblemListType;
@@ -78,5 +79,10 @@ let props = withDefaults(defineProps<propsType>(), {
 function goToProblem(PID: string) {
   router.push(`/problem/${PID}/L${props.problemList.LID}`);
 }
+
+onMounted(() => {
+  console.log(props.problems);
+  
+})
 
 </script>

@@ -14,23 +14,26 @@
         <div class="badge badge-neutral">{{ filterNumber }}</div>
       </div>
       <div class="collapse-content space-y-2">
-        <label class="input input-bordered flex items-center gap-2 join-item">
-          <span class="whitespace-nowrap">UID</span>
-          <input type="text" class="grow w-32" v-model="records.searchInfo.UID" />
-          <button class="btn btn-neutral btn-sm -mr-2" @click.stop="records.onlyMine()">仅看自己</button>
-        </label>
-        <label class="input input-bordered flex items-center gap-2 join-item">
-          <span class="whitespace-nowrap">PID</span>
-          <input type="text" class="grow w-32" v-model="records.searchInfo.PID" />
-        </label>
-        <label class="input input-bordered flex items-center gap-2 join-item">
-          <span class="whitespace-nowrap">CID</span>
-          <input type="text" class="grow w-32" v-model="records.searchInfo.CID" />
-        </label>
-        <label class="input input-bordered flex items-center gap-2 join-item">
-          <span class="whitespace-nowrap">LID</span>
-          <input type="text" class="grow w-32" v-model="records.searchInfo.LID" />
-        </label>
+        <div
+          class="space-y-2 [&_label]:input [&_label]:input-bordered [&_label]:flex [&_label]:items-center [&_label]:gap-2 [&_label_span]:whitespace-nowrap  [&_label_span]:text-sm">
+          <label>
+            <span>UID</span>
+            <input type="text" class="grow" v-model="records.searchInfo.UID" />
+            <button class="btn btn-neutral btn-sm -mr-2" @click.stop="records.onlyMine()">仅看自己</button>
+          </label>
+          <label>
+            <span>PID</span>
+            <input type="text" class="grow" v-model="records.searchInfo.PID" />
+          </label>
+          <label>
+            <span>CID</span>
+            <input type="text" class="grow" v-model="records.searchInfo.CID" />
+          </label>
+          <label>
+            <span>LID</span>
+            <input type="text" class="grow" v-model="records.searchInfo.LID" />
+          </label>
+        </div>
         <select class="select select-bordered join-item" v-model="records.searchInfo.Lang">
           <option value="0">
             语言不限
@@ -49,33 +52,21 @@
       <table class="table table-zebra table-pin-rows">
         <thead>
           <tr>
-            <th>
-              状态
-            </th>
-            <th>
-              分数
-            </th>
-            <th class="hidden md:table-cell">
-              提交号
-            </th>
-            <th>
-              题号
-            </th>
-            <th>
-              提交者
-            </th>
-            <th class="hidden md:table-cell">
-              用时
-            </th>
-            <th class="hidden lg:table-cell">
-              内存
-            </th>
-            <th class="hidden md:table-cell">
-              语言
-            </th>
-            <th class="hidden sm:table-cell">
-              提交时间
-            </th>
+            <template v-for="[title, style] in [
+              ['状态'],
+              ['分数'],
+              ['提交号', 'hidden md:table-cell'],
+              ['题号'],
+              ['提交者'],
+              ['用时', 'hidden md:table-cell'],
+              ['内存', 'hidden lg:table-cell'],
+              ['语言', 'hidden md:table-cell'],
+              ['提交时间', 'hidden sm:table-cell'],
+            ]" :key="title">
+              <th :class="style">
+                {{ title }}
+              </th>
+            </template>
           </tr>
         </thead>
         <tbody v-auto-animate>
@@ -104,7 +95,8 @@
               {{ Math.ceil(item.UseMemory / 1024 / 1024) }} MB
             </td>
             <td @click="router.push(`/record/${item.SID}`)"
-              class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer hidden md:table-cell" data-tip="查看代码">
+              class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer hidden md:table-cell"
+              data-tip="查看代码">
               {{ constValStore.SUBMIT_LANG[item.Lang] }}
             </td>
             <td class="hidden sm:table-cell">

@@ -14,14 +14,17 @@
         <div class="badge badge-neutral">{{ filterNumber }}</div>
       </div>
       <div class="collapse-content space-y-2">
-        <label class="input input-bordered flex items-center gap-2 join-item">
-          <span class="whitespace-nowrap text-sm">标题</span>
-          <input type="text" class="grow" v-model="problems.searchInfo.Keyword" />
-        </label>
-        <label class="input input-bordered flex items-center gap-2 join-item">
-          <span class="whitespace-nowrap text-sm">标签</span>
-          <input type="text" class="grow" v-model="problems.searchInfo.Label" />
-        </label>
+        <div
+          class="space-y-2 [&_label]:input [&_label]:input-bordered [&_label]:flex [&_label]:items-center [&_label]:gap-2 [&_label_span]:whitespace-nowrap [&_label_span]:text-sm">
+          <label>
+            <span>标题</span>
+            <input type="text" class="grow" v-model="problems.searchInfo.Keyword" />
+          </label>
+          <label>
+            <span>标签</span>
+            <input type="text" class="grow" v-model="problems.searchInfo.Label" />
+          </label>
+        </div>
         <select class="select select-bordered join-item" v-model="problems.searchInfo.PType">
           <option v-for="item in problemTypeOptions" :value="item.value" :key="item.value">
             {{ item.label }}
@@ -37,15 +40,14 @@
       <table class="table table-zebra table-pin-rows">
         <thead>
           <tr>
-            <th v-for="(item, index) in ['题号', '题目名称']" :key="index">
-              {{ item }}
-            </th>
-            <th class="hidden md:table-cell">
-              标签
-            </th>
-            <th class="hidden sm:table-cell">
-              通过率
-            </th>
+            <template v-for="[title, style] in [
+              ['题号'],
+              ['题目名称'],
+              ['标签', 'hidden md:table-cell'],
+              ['通过率', 'hidden sm:table-cell']
+            ]" :key="title">
+              <th :class="style">{{ title }}</th>
+            </template>
           </tr>
         </thead>
         <tbody v-auto-animate>
@@ -57,8 +59,8 @@
             <td>
               <span class="font-bold talbe-lg Nowarp">{{ item.Title }}</span>
             </td>
-            <td class="space-x-1 space-y-0.5 hidden md:table-cell">
-              <span class="badge badge-neutral badge-md"
+            <td class="space-y-0.5 hidden md:table-cell">
+              <span class="badge badge-neutral mr-1"
                 v-for="(label, index) in item.Label.split(/;| /).filter(item => item != '' && item != '/')"
                 :key="index">
                 {{ label }}

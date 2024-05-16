@@ -15,21 +15,15 @@
       <table class="table table-zebra table-pin-rows">
         <thead>
           <tr>
-            <th class="hidden md:table-cell">
-              题单号
-            </th>
-            <th>
-              题单名称
-            </th>
-            <th>
-              标签
-            </th>
-            <th class="hidden md:table-cell">
-              创建时间
-            </th>
-            <th class="hidden md:table-cell">
-              创建人
-            </th>
+            <template v-for="[title, style] in [
+              ['题单号', 'hidden md:table-cell'],
+              ['题单名称'],
+              ['标签'],
+              ['创建时间', 'hidden md:table-cell'],
+              ['创建人', 'hidden md:table-cell']
+            ]" :key="title">
+              <th :class="style">{{ title }}</th>
+            </template>
           </tr>
         </thead>
         <tbody v-auto-animate>
@@ -41,14 +35,15 @@
             <td class="font-bold talbe-lg">
               {{ item.Title }}
             </td>
-            <td class="space-x-1 space-y-0.5">
+            <td class="space-y-0.5">
               <template v-for="labelItem in problemListLabelOptions">
-                <span class="badge badge-neutral badge-md whitespace-nowrap"
+                <span class="badge badge-neutral whitespace-nowrap mr-1"
                   v-if="item.Title.split(' - ').length > 1 && item.Title.split(' - ')[0] == labelItem.value">
                   {{ labelItem.value }}
                 </span>
               </template>
-              <span class="badge badge-neutral badge-md whitespace-nowrap" v-if="item.Title.endsWith('(By Clone)')">Cloned</span>
+              <span class="badge badge-neutral whitespace-nowrap mr-1"
+                v-if="item.Title.endsWith('(By Clone)')">Cloned</span>
             </td>
             <td class="hidden md:table-cell">
               {{ ConvertTools.PrintTime(item.StartTime, 1) }}
