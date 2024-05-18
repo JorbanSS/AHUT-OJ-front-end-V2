@@ -1,7 +1,6 @@
 export interface UserSimplifiedType {
   UID: string,               // 用户唯一 UID, 格式: 学校英文首字母大写 + 学号, e.g. AHUT229074001
   UserName: string,          // 真实姓名
-  PermissionMap: 0,          // 权限, 用二进制表示
 
   [item: string]: any,       // 其他属性
 }

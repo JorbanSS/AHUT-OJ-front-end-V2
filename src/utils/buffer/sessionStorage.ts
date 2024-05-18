@@ -10,4 +10,8 @@ export class UserDataSessionStorage {
     let jsonString = JSON.stringify(data);
     sessionStorage.setItem("userInfo", jsonString);
   }
+  
+  public static updatePermissionMap(permissionMap: number) {
+    sessionStorage.setItem("permissionMap", permissionMap.toString());
+  }
 }

@@ -190,9 +190,10 @@ function login() {
       localStorage.setItem("token", data.Token);
       localStorage.setItem("UID", data.UID);
       localStorage.setItem("saveLoginStatus", loginInfo.Save.toString());
+      localStorage.setItem("permissionMap", data.PermissionMap.toString());
       sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
       userDataStore.login(data);
-      // userDataStore.updatePermissionMap(data.PermissionMap);
+      userDataStore.updatePermissionMap(data.PermissionMap);
       getUserInfo();
       props.init();
     })

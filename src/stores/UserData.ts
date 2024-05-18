@@ -4,6 +4,7 @@ import { type UserSimplifiedType, type UserType } from "@/interfaces/user";
 import { UserDataLocalStorage } from "@/utils/buffer/localStorage";
 import { UserDataSessionStorage } from "@/utils/buffer/sessionStorage";
 import { StoreNameSpace } from "./StoreNameSpace";
+import { _getUserPermission } from "@/apis/user";
 
 export const useUserDataStore = defineStore(StoreNameSpace.UserData, {
   state: () => {
@@ -53,19 +54,40 @@ export const useUserDataStore = defineStore(StoreNameSpace.UserData, {
       this.NowCoderScore = data.NowCoderScore;
 
       this.isLogin = true;
-      if (data.PermissionMap) this.PermissionMap = data.PermissionMap;
-
+      
       UserDataSessionStorage.update(data);
     },
 
     loginSimplified(data: UserSimplifiedType) {
       this.UID = data.UID;
       this.UserName = data.UserName;
-      this.isLogin = true;
-      this.PermissionMap = data.PermissionMap;
+      this.Email = data.Email;
+      this.School = data.School;
+      this.QQ = data.QQ;
+      this.RegisterTime = data.RegisterTime;
       this.HeadURL = data.HeadURL;
 
-      UserDataSessionStorage.update(data);  
+      this.Rating = data.Rating;
+      this.Submited = data.Submited;
+      this.Solved = data.Solved;
+
+      this.CodeForceUser = data.CodeForceUser;
+      this.CodeForceScore = data.CodeForceScore;
+      this.AtcoderUser = data.AtcoderUser;
+      this.AtcoderScore = data.AtcoderScore;
+      this.NowCoderUser = data.NowCoderUser;
+      this.NowCoderScore = data.NowCoderScore;
+
+      this.isLogin = true;
+      UserDataSessionStorage.update(data);
+    },
+
+    getUserPermission(UID: string) {
+      _getUserPermission({}, UID)
+        .then((data: any) => {
+          let permissionMap = data.PermissionMap;
+          this.updatePermissionMap(permissionMap);
+        })
     },
 
     init() {
