@@ -172,6 +172,24 @@ const routes = [
     path: "/problem/:PID/:BindID?",
     component: () => import("@/views/Problem.vue"),
     meta: { title: BaseTitle + "题目" },
+    redirect: { name: "ProblemDescription" },
+    children: [
+      {
+        name: "ProblemDescription",
+        path: "description",
+        component: () => import("@/components/Problem/Description.vue"),
+      },
+      {
+        name: "ProblemRecords",
+        path: "records",
+        component: () => import("@/components/Problem/Records.vue"),
+      },
+      {
+        name: "ProblemDiscussions",
+        path: "discussions",
+        component: () => import("@/components/Problem/Discussions.vue"),
+      },
+    ],
   },
   {
     name: "Test",

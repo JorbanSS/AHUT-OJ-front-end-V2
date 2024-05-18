@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar bg-white">
+  <div class="navbar border-b bg-white fixed top-0 z-[100] backdrop-blur-md bg-opacity-60">
     <div class="navbar-start">
       <div class="dropdown">
         <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -54,6 +54,7 @@
       <a class="btn" v-else @click="props.login">登录</a>
     </div>
   </div>
+  <div class="pb-[70px]"></div>
 </template>
 
 <script lang="ts" setup>

@@ -27,12 +27,12 @@
         <div class="flex gap-2 pt-2 flex-wrap [&_div_button]:w-10">
           <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
             <button tabindex="0" role="button" class="btn w-full group-hover/dropdown"
-              :class="{'btn-active': item.PID == problem.PID}"
+              :class="{ 'btn-active': item.PID == problem.PID }"
               @click="contest.CID ? contest.goToProblem(item.PID) : problemList.goToProblem(item.PID)">
               {{ ConvertTools.Number2Alpha(index + 1) }}
             </button>
             <div tabindex="0"
-              class="z-[1] card card-compact w-64 p-2 shadow bg-base-200 Border group-hover/dropdown:block hidden absolute mt-2">
+              class="z-[1] card card-compact w-64 shadow bg-white Border group-hover/dropdown:block hidden absolute mt-3 right-1 backdrop-blur-md bg-opacity-60">
               <div class="card-body">
                 <h3 class="card-title">
                   <div class="text-lg space-x-2 font-normal">
@@ -77,43 +77,15 @@
         <div class="collapse bg-base-200 collapse-arrow rounded-lg">
           <input type="checkbox" />
           <div class="collapse-title text-md font-bold whitespace-nowrap">
-            题目标签
+            <span>题目标签</span>
+            <div class="badge badge-neutral badge-md ml-2">{{ problem.Label == '' ? 0 : problem.Label.split(/;| /).length }}</div>
           </div>
-          <div class="collapse-content">
-            <span class="badge badge-neutral badge-md " v-for="(label, index) in problem.Label.split(/;| /)"
-              :key="index" v-if="problem.Label != ''">
+          <div class="collapse-content [&_span]:mr-1">
+            <span class="badge badge-neutral badge-md" v-for="(label, index) in problem.Label.split(/;| /)" :key="index"
+              v-if="problem.Label != ''">
               {{ label }}
             </span>
           </div>
-        </div>
-        <div class="grid grid-cols-2 gap-2" v-if="userDataStore.PermissionMap & constValStore.ProblemAdminBit">
-          <button class="btn" @click="router.push('/admin/problem/edit/' + problem.PID)">
-            <!-- <editor theme="outline" size="18" /> -->
-            <div class="text-base whitespace-nowrap">
-              题目编辑
-            </div>
-          </button>
-          <button class="btn" @click="router.push('/admin/problem/data/' + problem.PID)">
-            <!-- <ICONdata theme="outline" size="18" /> -->
-            <div class="text-base whitespace-nowrap">
-              数据编辑
-            </div>
-          </button>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <button class="btn" @click="$router.push(`/records?PID=${problem.PID}`)">
-            <ICONdata class="hidden sm:block" theme="outline" size="18"/>
-            <div class="text-base whitespace-nowrap">
-              记 录
-            </div>
-          </button>
-          <button class="btn">
-            <tips class="hidden sm:block" theme="outline" size="20" />
-            <div class="text-base whitespace-nowrap">
-              题 解
-            </div>
-            <div class="badge" v-if="problem.SolutionNumber">{{ problem.SolutionNumber }}</div>
-          </button>
         </div>
         <button class="btn btn-success" onclick="codeModal.showModal()">
           <check theme="outline" size="20" />
@@ -122,35 +94,49 @@
           </div>
         </button>
       </div>
-      <div class="card shadow-lg bg-white Border p-6 w-72 hidden lg:block">
-        <div class="font-bold text-lg pb-2">
-          大纲
-        </div>
-        <MdCatalog :editorId="id" :scrollElement="scrollElement" class="text-sm" />
-      </div>
     </div>
-    <div class="card shadow-lg bg-white Border container h-fit"
-      v-if="problem.ContentType == constValStore.PROBLEM_CONTENTTYPE_PDF">
-      <button class="btn w-fit ml-6 my-6" @click="downloadPdf()">
-        <file-pdf theme="outline" size="18" />
-        下载 PDF
-      </button>
-    </div>
-    <div class="card shadow-lg bg-white Border container h-fit mx-auto" v-else>
-      <div class="flex space-x-3 ml-6 mt-6">
-        <button class="btn w-fit" @click="copyMarkdown()">
-          <copy theme="outline" size="18" />
-          复制 MarkDown
-        </button>
-        <a v-if="problem.Origin == 1 && (contest.CID == 0 || contest.CID != 0 && contest.EndTime < contest.TimeNow)"
-          href="" target="_blank">
-          <button class="btn w-fit">
-            <link-two theme="outline" size="20" />
-            跳转原题
-          </button>
-        </a>
+    <div class="space-y-6 w-full">
+      <div class="flex justify-between space-x-6">
+        <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
+          <li>
+            <a @click="router.replace({ name: 'ProblemDescription' })"
+              :class="{ 'btn-active': route.name == 'ProblemDescription' }">
+              <word theme="outline" size="18" />
+              题面
+            </a>
+          </li>
+          <li>
+            <a @click="$router.push(`/records?PID=${problem.PID}`)">
+              <!-- <a @click="router.replace({name: 'ProblemRecords'})" :class="{ 'btn-active': route.name == 'ProblemRecords' }"> -->
+              <history theme="outline" size="18" />
+              提交记录
+            </a>
+          </li>
+          <li>
+            <a @click="router.replace({ name: 'ProblemDiscussions' })"
+              :class="{ 'btn-active': route.name == 'ProblemDiscussions' }">
+              <text-message theme="outline" size="18" />
+              题解
+            </a>
+          </li>
+        </ul>
+        <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit"
+          v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
+          <li>
+            <a @click="router.push('/admin/problem/edit/' + problem.PID)" class="whitespace-nowrap">
+              <editor theme="outline" size="18" />
+              题目编辑
+            </a>
+          </li>
+          <li>
+            <a @click="router.push('/admin/problem/data/' + problem.PID)" class="whitespace-nowrap">
+              <ICONdata theme="outline" size="18" />
+              数据编辑
+            </a>
+          </li>
+        </ul>
       </div>
-      <MdPreview :editorId="id" :modelValue="problem.content" class="px-1 mb-4" />
+      <RouterView :problem="problem"></RouterView>
     </div>
   </div>
   <dialog id="codeModal" class="modal">
@@ -166,7 +152,8 @@
       <div class="modal-action">
         <form method="dialog">
           <button class="btn mr-2">暂存并退出</button>
-          <button class="btn btn-neutral" @click="problem.submitCode != undefined ? problem.submitCode() : 0">提交代码</button>
+          <button class="btn btn-neutral"
+            @click="problem.submitCode != undefined ? problem.submitCode() : 0">提交代码</button>
         </form>
       </div>
     </div>
@@ -177,11 +164,8 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Check, Copy, Disk, FilePdf, Data as ICONdata, StopwatchStart, Tips, LinkTwo } from '@icon-park/vue-next';
-import { MdCatalog, MdPreview } from 'md-editor-v3';
-import 'md-editor-v3/lib/preview.css';
+import { Check, Word, Disk, Data as ICONdata, StopwatchStart, Tips, TextMessage, History, Editor } from '@icon-park/vue-next';
 import { push } from 'notivue';
-import useClipboard from 'vue-clipboard3';
 
 import { _getContest } from '@/apis/contest';
 import { _getProblem, _submitCode } from '@/apis/problem';
@@ -195,12 +179,10 @@ import { ProblemListType } from '@/interfaces/problemList';
 import { type SubmitCodeType } from '@/interfaces/record';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 
-const { toClipboard } = useClipboard();
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
 const router = useRouter();
 const route = useRoute();
-const id = 'preview-only';
 const scrollElement = document.documentElement;
 
 let submit = ref<SubmitCodeType>({
@@ -408,34 +390,6 @@ type problems = {
 }
 
 let problems = reactive<Array<problems>>([])
-
-async function copyMarkdown() {
-  try {
-    await toClipboard(problem.content);
-    push.success({
-      title: '复制成功',
-      message: '已复制题面 MarkDown 到剪贴板',
-    })
-  } catch (e) {
-    push.error({
-      title: '复制失败',
-    })
-  }
-}
-
-async function downloadPdf() {
-  const link = document.createElement('a');
-  link.href = '/oss/problem-pdfs/' + problem.Description;
-  console.log(link.href);
-  link.setAttribute('download', problem.PID + '-' + problem.Title + '.pdf');
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  push.success({
-    title: '下载成功',
-    message: '已保存题面 PDF',
-  })
-}
 
 function syncUrl() {
   if (typeof route.params.PID == 'string') {
