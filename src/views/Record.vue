@@ -22,13 +22,17 @@
           <th class="font-bold talbe-lg">
             {{ record.SID }}
           </th>
-          <td @click="$router.push(`/problem/${record.PID}`)"
-            class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目">
-            {{ record.PID }}
+          <td>
+            <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目"
+              @click="$router.push(`/problem/${record.PID}`)">
+              {{ record.PID }}
+            </span>
           </td>
-          <td @click="$router.push(`/user/${record.UID}`)"
-            class="font-bold text-blue-500 hover:text-blue-400 cursor-pointer">
-            {{ record.UID }}
+          <td>
+            <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页"
+              @click="$router.push(`/user/${record.UID}`)">
+              {{ record.UID }}
+            </span>
           </td>
           <td>
             {{ record.UseTime }} ms

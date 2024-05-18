@@ -53,7 +53,7 @@ export const useUserDataStore = defineStore(StoreNameSpace.UserData, {
       this.NowCoderScore = data.NowCoderScore;
 
       this.isLogin = true;
-      this.PermissionMap = data.PermissionMap;
+      if (data.PermissionMap) this.PermissionMap = data.PermissionMap;
 
       UserDataSessionStorage.update(data);
     },
@@ -63,6 +63,7 @@ export const useUserDataStore = defineStore(StoreNameSpace.UserData, {
       this.UserName = data.UserName;
       this.isLogin = true;
       this.PermissionMap = data.PermissionMap;
+      this.HeadURL = data.HeadURL;
 
       UserDataSessionStorage.update(data);  
     },

@@ -46,15 +46,15 @@
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
           <td class="space-x-2">
-            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/contest/edit/' + item.CID)">编辑比赛</button>
-            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/contest/balloon/' + item.CID)">编辑气球颜色</button>
+            <button class="btn btn-sm btn-neutral"
+              @click.stop="router.push('/admin/contest/edit/' + item.CID)">编辑比赛</button>
+            <button class="btn btn-sm btn-neutral"
+              @click.stop="router.push('/admin/contest/balloon/' + item.CID)">编辑气球颜色</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <div class="mx-auto py-4 flex space-x-4">
-      <Pagination :page="contests.page" :maxPage="maxPage" :changePage="contests.changePage" />
-    </div>
+    <Pagination :page="contests.page" :maxPage="maxPage" :changePage="contests.changePage" />
   </div>
 </template>
 

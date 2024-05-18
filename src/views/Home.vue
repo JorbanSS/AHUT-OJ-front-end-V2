@@ -8,30 +8,33 @@
     <button class="btn btn-sm" onclick="homeNotice.showModal()">详情</button>
   </div>
   <div class="mt-6"></div>
-  <div class="flex space-x-6 h-96">
-    <div class="basis-2/3">
-      <div class="carousel w-full h-full rounded-2xl shadow-lg Border">
-        <div class="carousel-item relative w-full" v-for="(item, index) in banners.banners" :key="index"
-          :id="`slide${index}`">
-          <img :src="'data:image/*;base64,' + item.ObjectData" class="w-full" alt="首页横幅" />
-          <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-            <a :href="`#slide${(index - 1 + banners.Count) % banners.Count}`" class="btn btn-circle">❮</a>
-            <a :href="`#slide${(index + 1) % banners.Count}`" class="btn btn-circle">❯</a>
-          </div>
+  <div class="flex space-y-6 flex-col md:flex-row md:space-y-0 md:space-x-6">
+    <div class="carousel w-full rounded-2xl shadow-lg Border h-96">
+      <div class="carousel-item relative w-full" v-for="(item, index) in banners.banners" :key="index"
+        :id="`slide${index}`">
+        <img :src="'data:image/*;base64,' + item.ObjectData" class="w-full" alt="首页横幅" />
+        <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+          <a :href="`#slide${(index - 1 + banners.Count) % banners.Count}`" class="btn btn-circle">❮</a>
+          <a :href="`#slide${(index + 1) % banners.Count}`" class="btn btn-circle">❯</a>
         </div>
       </div>
     </div>
-    <div class="basis-1/3 card rounded-2xl bg-white shadow-lg Border">
+    <div class="min-w-96 card rounded-2xl bg-white shadow-lg Border h-96">
       <div class="text-lg m-4 font-bold">
         版本更新日志
       </div>
       <div class="px-4 overflow-auto rounded-2xl">
         <div v-for="item in updateLogs.updateLogs" :key="item.ID">
           <div class="pb-4">
-            <div class="font-bold -mb-1">
-              {{ item.Title }}
+            <div class="flex items-center space-x-2">
+              <div class="font-bold">
+                {{ item.Title.split(' Version=')[0] }}
+              </div>
+              <span v-if="item.Title.split('Version=').length > 1" class="text-white rounded-full px-2" style="background-color: #19BE6B;">
+                {{ item.Title.split('Version=')[1] }}
+              </span>
             </div>
-            <div class="-mx-4">
+            <div class="-mx-4 overflow-hidden">
               <MdPreview :editorId="'updateLogs' + item.ID.toString()" :modelValue="item.Content" preview-only />
             </div>
           </div>

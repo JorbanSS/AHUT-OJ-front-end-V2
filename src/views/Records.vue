@@ -1,9 +1,9 @@
 <template>
-  <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto w-fit">
-    <div class="join w-fit">
-      <label class="input input-bordered flex items-center gap-2 join-item">
+  <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto max-w-96">
+    <div class="join w-full">
+      <label class="input input-bordered flex items-center gap-2 join-item w-full">
         <span class="whitespace-nowrap">记录号</span>
-        <input type="text" class="grow w-60" v-model="records.searchInfo.SID" />
+        <input type="text" class="grow w-full" v-model="records.searchInfo.SID" />
       </label>
       <button class="btn join-item btn-neutral" @click="records.goToRecord(records.searchInfo.SID)">跳转</button>
     </div>
@@ -16,25 +16,25 @@
       <div class="collapse-content space-y-2">
         <div
           class="space-y-2 [&_label]:input [&_label]:input-bordered [&_label]:flex [&_label]:items-center [&_label]:gap-2 [&_label_span]:whitespace-nowrap  [&_label_span]:text-sm">
-          <label>
+          <label class="w-full">
             <span>UID</span>
-            <input type="text" class="grow" v-model="records.searchInfo.UID" />
+            <input type="text" class="grow w-full" v-model="records.searchInfo.UID" />
             <button class="btn btn-neutral btn-sm -mr-2" @click.stop="records.onlyMine()">仅看自己</button>
           </label>
           <label>
             <span>PID</span>
-            <input type="text" class="grow" v-model="records.searchInfo.PID" />
+            <input type="text" class="grow w-full" v-model="records.searchInfo.PID" />
           </label>
           <label>
             <span>CID</span>
-            <input type="text" class="grow" v-model="records.searchInfo.CID" />
+            <input type="text" class="grow w-full" v-model="records.searchInfo.CID" />
           </label>
           <label>
             <span>LID</span>
-            <input type="text" class="grow" v-model="records.searchInfo.LID" />
+            <input type="text" class="grow w-full" v-model="records.searchInfo.LID" />
           </label>
         </div>
-        <select class="select select-bordered join-item" v-model="records.searchInfo.Lang">
+        <select class="select select-bordered join-item w-full" v-model="records.searchInfo.Lang">
           <option value="0">
             语言不限
           </option>
@@ -49,18 +49,18 @@
   <div class="mt-6"></div>
   <div class="bg-white card shadow-lg Border">
     <div class="overflow-x-hidden rounded-t-2xl">
-      <table class="table table-zebra table-pin-rows">
+      <table class="table table-zebra table-pin-rows text-center">
         <thead>
           <tr>
             <template v-for="[title, style] in [
               ['状态'],
-              ['分数'],
+              ['分数', 'hidden md:table-cell'],
               ['提交号', 'hidden md:table-cell'],
               ['题号'],
               ['提交者'],
               ['用时', 'hidden md:table-cell'],
               ['内存', 'hidden lg:table-cell'],
-              ['语言', 'hidden md:table-cell'],
+              ['语言'],
               ['提交时间', 'hidden sm:table-cell'],
             ]" :key="title">
               <th :class="style">
@@ -71,22 +71,28 @@
         </thead>
         <tbody v-auto-animate>
           <tr v-for="item in records.records" :key="item.SID">
-            <td class="font-bold talbe-lg">
-              {{ item.Result }}
+            <td class="font-bold">
+              <span :style="'background-color: ' + submitStatusColor[item.Result]" class="text-white rounded-full px-2 py-1">
+                {{ item.Result }}
+              </span>
             </td>
-            <td>
+            <td class="hidden md:table-cell">
               {{ ConvertTools.Percentage(item.PassSample, item.SampleNumber) }}
             </td>
-            <th class="font-normal talbe-lg hidden md:table-cell">
+            <th class="font-normal hidden md:table-cell">
               {{ item.SID }}
             </th>
-            <td @click="router.push(`/problem/${item.PID}`)"
-              class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目">
-              {{ item.PID }}
+            <td>
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目"
+                @click="$router.push(`/problem/${item.PID}`)">
+                {{ item.PID }}
+              </span>
             </td>
-            <td @click="router.push(`/user/${item.UID}`)"
-              class="font-bold text-blue-500 hover:text-blue-400 cursor-pointer">
-              {{ item.UID }}
+            <td>
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页"
+                @click="$router.push(`/user/${item.UID}`)">
+                {{ item.UID }}
+              </span>
             </td>
             <td class="hidden md:table-cell">
               {{ item.UseTime }} ms
@@ -94,10 +100,11 @@
             <td class="hidden lg:table-cell">
               {{ Math.ceil(item.UseMemory / 1024 / 1024) }} MB
             </td>
-            <td @click="router.push(`/record/${item.SID}`)"
-              class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer hidden md:table-cell"
-              data-tip="查看代码">
-              {{ constValStore.SUBMIT_LANG[item.Lang] }}
+            <td>
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看代码"
+                @click="router.push(`/record/${item.SID}`)">
+                {{ constValStore.SUBMIT_LANG[item.Lang] }}
+              </span>
             </td>
             <td class="hidden sm:table-cell">
               {{ ConvertTools.PrintTime(item.SubmitTime, 1, 1) }}
@@ -106,9 +113,7 @@
         </tbody>
       </table>
     </div>
-    <div class="mx-auto py-4 flex space-x-4">
-      <Pagination :page="records.page" :maxPage="maxPage" :changePage="records.changePage" />
-    </div>
+    <Pagination :page="records.page" :maxPage="maxPage" :changePage="records.changePage" />
   </div>
 </template>
 
@@ -125,6 +130,7 @@ import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
 import { type RecordsType, type RecordType } from '@/interfaces/record';
 import { ConvertTools } from '@/utils/globalFunctions';
+import { submitStatusColor } from '@/config';
 
 const route = useRoute();
 const constValStore = useConstValStore();

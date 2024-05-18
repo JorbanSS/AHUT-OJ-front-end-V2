@@ -179,9 +179,22 @@ watch(() => route.path, () => {
   }
 })
 
+function getUserInfo() {
+  let params = {
+    UID: localStorage.getItem("UID"),
+  };
+  if (params.UID && params.UID != "") {
+    _getUserInfo(params)
+      .then((data: any) => {
+        userDataStore.login(data);
+      })
+  }
+}
+
 onMounted(() => {
   showConfig.init();
   autoLogin();
+  getUserInfo();
 });
 
 </script>

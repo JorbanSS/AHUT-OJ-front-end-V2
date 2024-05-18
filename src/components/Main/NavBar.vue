@@ -21,16 +21,19 @@
       </ul>
     </div>
     <div class="navbar-end">
-      <label class="swap swap-rotate pr-4">
+      <!-- <label class="swap swap-rotate pr-4">
         <input type="checkbox" :value="ThemeSwitchStore.theme" @click="ThemeSwitchStore.switchTheme()" />
         <SunOne theme="outline" size="24" class="swap-off fill-current" />
         <moon theme="outline" size="22" class="swap-on fill-current" />
-      </label>
+      </label> -->
       <div v-if="userDataStore.isLogin">
         <div class="dropdown dropdown-bottom dropdown-end">
           <div tabindex="0" role="button" class="btn">
-            <div class="badge badge-neutral" v-if="userDataStore.PermissionMap > 3">OP</div>
-            {{ userDataStore.UserName }}
+            <img
+              :src="userDataStore.HeadURL != '' ? '/oss/head-images/' + userDataStore.HeadURL : 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png'"
+              class="select-none avatar h-10 w-10 -ml-2 rounded-full" draggable="false" />
+            <!-- <div class="badge badge-neutral" v-if="userDataStore.PermissionMap > 3">OP</div> -->
+            <span class="-mr-1">{{ userDataStore.UserName }}</span>
           </div>
           <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-white rounded-box w-36 Border font-bold">
             <li><a @click="router.push(`/user/${userDataStore.UID}`)">

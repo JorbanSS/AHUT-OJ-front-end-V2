@@ -74,9 +74,7 @@
         </tbody>
       </table>
     </div>
-    <div class="mx-auto py-4 flex space-x-4">
-      <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" />
-    </div>
+    <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" />
   </div>
 </template>
 

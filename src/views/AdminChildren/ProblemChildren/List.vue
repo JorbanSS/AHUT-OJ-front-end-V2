@@ -72,15 +72,15 @@
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
           <td class="space-x-2">
-            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/problem/edit/' + item.PID)">编辑题目</button>
-            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/problem/data/' + item.PID)">编辑数据</button>
+            <button class="btn btn-sm btn-neutral"
+              @click.stop="router.push('/admin/problem/edit/' + item.PID)">编辑题目</button>
+            <button class="btn btn-sm btn-neutral"
+              @click.stop="router.push('/admin/problem/data/' + item.PID)">编辑数据</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <div class="mx-auto py-4 flex space-x-4">
-      <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" />
-    </div>
+    <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" />
   </div>
 </template>
 

@@ -80,7 +80,7 @@ import { reactive, ref } from 'vue';
 import { Close } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _login, _verifyEmail } from '@/apis/user';
+import { _getUserInfo, _login, _verifyEmail } from '@/apis/user';
 import { verifyModeOptions } from '@/config';
 import { useUserDataStore } from '@/stores/UserData';
 import { type LoginInfoType } from '@/interfaces/user';
@@ -192,7 +192,8 @@ function login() {
       localStorage.setItem("saveLoginStatus", loginInfo.Save.toString());
       sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
       userDataStore.login(data);
-      userDataStore.updatePermissionMap(data.PermissionMap);
+      // userDataStore.updatePermissionMap(data.PermissionMap);
+      getUserInfo();
       props.init();
     })
 }
@@ -226,5 +227,14 @@ function sendVerifyCode() {
     })
 }
 
+function getUserInfo() {
+  let params = {
+    UID: loginInfo.UID,
+  };
+  _getUserInfo(params)
+    .then((data: any) => {
+      userDataStore.login(data);
+    })
+}
 
 </script>

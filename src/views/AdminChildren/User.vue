@@ -23,7 +23,7 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" onclick="changePasswordModal.showModal()">
+        <div class="font-bold text-base" @click="showEditPermissionModal()">
           <permissions theme="outline" size="18" />
           修改权限
         </div>
@@ -84,9 +84,7 @@
         </tr>
       </tbody>
     </table>
-    <div class="mx-auto py-4 flex space-x-4">
-      <Pagination :page="users.page" :maxPage="maxPage" :changePage="users.changePage" />
-    </div>
+    <Pagination :page="users.page" :maxPage="maxPage" :changePage="users.changePage" />
   </div>
   <dialog id="changePasswordModal" class="modal">
     <div class="modal-box space-y-2 w-96">
@@ -438,6 +436,7 @@ let user = reactive<UserSimplifiedType>({
 
 function showEditPermissionModal(UID: string = '') {
   user.UID = UID;
+  permission.set(0);
   if (UID == '') {
     let list = getSelectedList();
     if (list.length > 1) {

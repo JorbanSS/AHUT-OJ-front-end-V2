@@ -64,14 +64,13 @@
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
           <td>
-            <button class="btn btn-sm btn-neutral" @click.stop="router.push('/admin/problemlist/edit/' + item.LID)">编辑题单</button>
+            <button class="btn btn-sm btn-neutral"
+              @click.stop="router.push('/admin/problemlist/edit/' + item.LID)">编辑题单</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <div class="mx-auto py-4 flex space-x-4">
-      <Pagination :page="problemLists.page" :maxPage="maxPage" :changePage="problemLists.changePage" />
-    </div>
+    <Pagination :page="problemLists.page" :maxPage="maxPage" :changePage="problemLists.changePage" />
   </div>
 </template>
 
@@ -156,25 +155,25 @@ let problemLists = reactive<ProblemListsType>({
 
   delete() {
     let list = getSelectedList();
-  if (list.length == 0) {
-    push.warning({
-      title: '操作不合法',
-      message: '尚未选择任何题目，无法删除',
-    })
-    return;
-  }
-  let params = {
-    LIDs: list,
-  };
-  _deleteProblemLists(params)
-  .then(() => {
-    problemLists.get();
+    if (list.length == 0) {
+      push.warning({
+        title: '操作不合法',
+        message: '尚未选择任何题目，无法删除',
+      })
+      return;
+    }
+    let params = {
+      LIDs: list,
+    };
+    _deleteProblemLists(params)
+      .then(() => {
+        problemLists.get();
         switchAllSelectedStatus(false);
         push.success({
           title: '删除成功',
           message: `一共删除了 ${list.length} 个题单`,
         });
-  })
+      })
   }
 
 })

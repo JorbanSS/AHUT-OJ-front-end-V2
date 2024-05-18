@@ -5,11 +5,10 @@
         :class="{ 'tab-active': tabInfo.activeTab == item.value }" @click="tabInfo.switch(item.value)">{{ item.label
         }}</a>
     </div>
-    <div></div>
-    <MdPreview editorId="OJInfo" :modelValue="MD_OJInfo" v-if="tabInfo.activeTab == 0" />
-    <MdPreview editorId="Requirements" :modelValue="MD_Requirements" v-if="tabInfo.activeTab == 1" />
+    <MdPreview editorId="OJInfo" :modelValue="MD_OJInfo" v-if="tabInfo.activeTab == 0" class="-mx-4" />
+    <MdPreview editorId="Requirements" :modelValue="MD_Requirements" v-if="tabInfo.activeTab == 1" class="-mx-4" />
     <div v-if="tabInfo.activeTab == 2">
-      <MdPreview editorId="AboutOJ" :modelValue="MD_AboutOJ" />
+      <MdPreview editorId="AboutOJ" :modelValue="MD_AboutOJ" class="-mx-4" />
       <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical px-4">
         <li>
           <div class="timeline-middle">
