@@ -65,7 +65,10 @@
           </td>
           <td>
             <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/problemlist/edit/' + item.LID)">编辑题单</button>
+              @click.stop="router.push('/admin/problemlist/edit/' + item.LID)">
+              <edit-two theme="outline" size="18" />
+              编辑
+            </button>
           </td>
         </tr>
       </tbody>
@@ -78,7 +81,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Add, Bill, DeleteOne } from '@icon-park/vue-next';
+import { Add, Bill, DeleteOne, EditTwo } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _deleteProblemLists, _getProblemLists } from '@/apis/problemList';

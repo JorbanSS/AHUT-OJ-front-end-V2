@@ -210,7 +210,7 @@ let problemList = reactive<ProblemListType>({
         for (let i = 0; i < data.Data.length; i++) {
           list.value.push({
             PID: data.Data[i].PID,
-            Title: data.Data[i].Ptitle,
+            Title: data.Data[i].Title,
           });
         }
       })

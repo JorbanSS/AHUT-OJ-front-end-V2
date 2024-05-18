@@ -81,7 +81,10 @@
               文件夹
             </td>
             <td>
-              <button class="btn btn-sm btn-neutral" @click.stop="buckets.delete(item.name)">删除</button>
+              <button class="btn btn-sm btn-neutral" @click.stop="buckets.delete(item.name)">
+                <delete-one theme="outline" size="18" hover:fill="#EC4545" />
+                删除
+              </button>
             </td>
           </tr>
         </tbody>
@@ -165,7 +168,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, PictureOne, Notepad } from '@icon-park/vue-next';
+import { FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, PictureOne, Notepad, DeleteOne } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _addBuckets, _deleteBucket, _deleteObject, _getBuckets, _getObjects } from '@/apis/oss';

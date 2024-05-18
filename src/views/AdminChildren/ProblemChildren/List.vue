@@ -56,7 +56,7 @@
       <thead>
         <tr>
           <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>
-          <th v-for="(item, index) in ['题号', '题目名称', '操作']" :key="index">
+          <th v-for="(item, index) in ['题号', '题目名称', '编辑操作']" :key="index">
             {{ item }}
           </th>
         </tr>
@@ -73,9 +73,15 @@
           </td>
           <td class="space-x-2">
             <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/problem/edit/' + item.PID)">编辑题目</button>
+              @click.stop="router.push('/admin/problem/edit/' + item.PID)">
+              <edit-two theme="outline" size="18" />
+              题目
+            </button>
             <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/problem/data/' + item.PID)">编辑数据</button>
+              @click.stop="router.push('/admin/problem/data/' + item.PID)">
+              <ICONdata theme="outline" size="18" />
+              数据
+            </button>
           </td>
         </tr>
       </tbody>
@@ -88,7 +94,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Add, AfferentThree, DeleteOne, DocumentFolder, EfferentThree } from '@icon-park/vue-next';
+import { Add, AfferentThree, DeleteOne, DocumentFolder, EfferentThree, EditTwo, Data as ICONdata } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _deleteProblems, _exportProblems, _getProblems } from "@/apis/problem";

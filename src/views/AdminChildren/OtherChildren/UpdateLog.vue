@@ -43,8 +43,14 @@
             <div class="text-sm truncate max-w-lg">{{ item.Content }}</div>
           </td>
           <td class="space-x-2">
-            <button class="btn btn-sm btn-neutral" @click="updateLogs.edit(item.ID)">编辑</button>
-            <button class="btn btn-sm btn-neutral" @click="updateLogs.delete(item.ID)">删除</button>
+            <button class="btn btn-sm btn-neutral" @click="updateLogs.edit(item.ID)">
+              <edit-two theme="outline" size="18" hover:fill="#EC4545" />
+              编辑
+            </button>
+            <button class="btn btn-sm btn-neutral" @click="updateLogs.delete(item.ID)">
+              <delete-one theme="outline" size="18" hover:fill="#EC4545" />
+              删除
+            </button>
           </td>
         </tr>
       </tbody>
@@ -73,7 +79,7 @@
 import { onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Add, Notepad, MemoryOne } from '@icon-park/vue-next';
+import { Add, Notepad, MemoryOne, DeleteOne, EditTwo } from '@icon-park/vue-next';
 import { push } from 'notivue';
 import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';

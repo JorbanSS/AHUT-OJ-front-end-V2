@@ -47,9 +47,15 @@
           </td>
           <td class="space-x-2">
             <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/contest/edit/' + item.CID)">编辑比赛</button>
+              @click.stop="router.push('/admin/contest/edit/' + item.CID)">
+              <edit-two theme="outline" size="18" />
+              比赛
+            </button>
             <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/contest/balloon/' + item.CID)">编辑气球颜色</button>
+              @click.stop="router.push('/admin/contest/balloon/' + item.CID)">
+              <PartyBalloon theme="outline" size="18" class="-mx-0.5" />
+              气球
+            </button>
           </td>
         </tr>
       </tbody>
@@ -62,7 +68,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Add, DeleteOne, Trophy } from '@icon-park/vue-next';
+import { Add, DeleteOne, Trophy, EditTwo, PartyBalloon } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _deleteContests, _getContests } from '@/apis/contest';

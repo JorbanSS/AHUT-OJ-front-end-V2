@@ -78,8 +78,14 @@
             <input type="checkbox" class="checkbox" v-model="item.problem" disabled />
           </td>
           <td class="space-x-2">
-            <button class="btn btn-sm btn-neutral" @click.stop="showChangePasswordModal(item.UID)">编辑用户</button>
-            <button class="btn btn-sm btn-neutral" @click.stop="showEditPermissionModal(item.UID)">修改权限</button>
+            <button class="btn btn-sm btn-neutral" @click.stop="showChangePasswordModal(item.UID)">
+              <edit-two theme="outline" size="18" />
+              用户
+            </button>
+            <button class="btn btn-sm btn-neutral" @click.stop="showEditPermissionModal(item.UID)">
+              <permissions theme="outline" size="18" />
+              权限
+            </button>
           </td>
         </tr>
       </tbody>
@@ -183,7 +189,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Add, AfferentThree, DeleteOne, Peoples, Permissions, EditOne } from '@icon-park/vue-next';
+import { Add, AfferentThree, DeleteOne, Peoples, Permissions, EditOne, EditTwo } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _addUser, _changePassword, _deleteUsers, _editUserPermission, _getAdmins, _getUserPermission } from "@/apis/user";
