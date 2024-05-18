@@ -1,6 +1,6 @@
 <template>
-  <div class="navbar bg-white">
-    <div class="navbar-start">
+  <div class="navbar flex-row lg:flex-col bg-white lg:w-fit justify-between">
+    <div class="justify-begin flex flex-row lg:flex-col">
       <div class="dropdown">
         <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -12,23 +12,39 @@
         </ul>
       </div>
       <RouterLink :to="{ name: 'Admin' }">
-        <a class="btn btn-ghost text-xl">AHUT OJ 管理平台</a>
+        <a class="btn btn-ghost text-xl whitespace-nowrap">AHUT OJ 管理平台</a>
       </RouterLink>
-    </div>
-    <div class="navbar-center hidden lg:flex">
-      <ul class="menu menu-horizontal px-1 text-base font-bold font-sans">
+      <ul class="menu menu-vertical px-1 text-base font-bold font-sans w-full hidden lg:flex">
         <NavigationBarTabs />
       </ul>
     </div>
-    <div class="navbar-end">
-      <label class="swap swap-rotate pr-4">
+    <div class="justify-begin hidden lg:flex">
+    </div>
+    <div class="justify-end w-full">
+      <!-- <label class="swap swap-rotate pr-4">
         <input type="checkbox" :value="ThemeSwitchStore.theme" @click="ThemeSwitchStore.switchTheme()" />
         <SunOne theme="outline" size="24" class="swap-off fill-current" />
         <moon theme="outline" size="22" class="swap-on fill-current" />
-      </label>
-      <button class="btn" @click="router.push('/home')">
-        返回首页
-      </button>
+      </label> -->
+      <div v-if="userDataStore.isLogin" class="lg:w-full">
+        <div class="dropdown dropdown-bottom dropdown-end lg:dropdown-top lg:dropdown-begin w-full">
+          <div tabindex="0" role="button" class="btn w-full">
+            <img
+              :src="userDataStore.HeadURL != '' ? '/oss/head-images/' + userDataStore.HeadURL : 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png'"
+              class="select-none avatar h-10 w-10 -ml-2 rounded-full" draggable="false" />
+            <!-- <div class="badge badge-neutral" v-if="userDataStore.PermissionMap > 3">OP</div> -->
+            <span class="-mr-1 hidden sm:block">{{ userDataStore.UserName }}</span>
+          </div>
+          <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-white rounded-box w-36 Border font-bold">
+            <li>
+              <div @click="router.push('/home')">
+                <home theme="outline" size="18" />
+                返回首页
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -37,7 +53,7 @@
 import { reactive } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
-import { Moon, SunOne } from '@icon-park/vue-next';
+import { Moon, SunOne, Home } from '@icon-park/vue-next';
 
 import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
 import { useUserDataStore } from '@/stores/UserData';

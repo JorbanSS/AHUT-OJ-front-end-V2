@@ -1,7 +1,9 @@
 <template>
-  <NavBar />
-  <div v-auto-animate>
-    <RouterView></RouterView>
+  <div class="flex flex-col lg:flex-row h-screen w-full">
+    <NavBar />
+    <div class="overflow-y-auto w-full" v-auto-animate>
+      <RouterView></RouterView>
+    </div>
   </div>
 </template>
 
@@ -9,7 +11,3 @@
 import NavBar from '@/components/Admin/NavBar.vue';
 
 </script>
-
-<style scoped>
-
-</style>
