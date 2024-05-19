@@ -154,7 +154,7 @@ export const contestNavItems: Array<NavItemType> = [
   { title: "题目", icon: DocumentFolder, to: { name: "ContestProblems" } },
   { title: "排名", icon: RankingList, to: { name: "ContestRanking" } },
   { title: "记录", icon: History, to: { name: "ContestRecords" } },
-  { title: "讨论", icon: Topic, to: { name: "ContestDiscussion" } },
+  { title: "讨论", icon: Topic, to: { name: "ContestDiscussions" } },
 ];
 
 export const problemListNavItems: Array<NavItemType> = [
@@ -162,7 +162,7 @@ export const problemListNavItems: Array<NavItemType> = [
   { title: "题目", icon: DocumentFolder, to: { name: "ProblemListProblems" } },
   { title: "排名", icon: RankingList, to: { name: "ProblemListRanking" } },
   { title: "记录", icon: History, to: { name: "ProblemListRecords" } },
-  { title: "讨论", icon: Topic, to: { name: "ProblemListDiscussion" } },
+  { title: "讨论", icon: Topic, to: { name: "ProblemListDiscussions" } },
 ];
 
 export const adminNavItems: Array<NavItemType> = [

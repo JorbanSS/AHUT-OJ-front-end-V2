@@ -30,7 +30,7 @@
         <div class="dropdown dropdown-bottom dropdown-end">
           <div tabindex="0" role="button" class="btn">
             <img
-              :src="userDataStore.HeadURL != '' ? '/oss/head-images/' + userDataStore.HeadURL : 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png'"
+              :src="getHeadURL(userDataStore.HeadURL)"
               class="select-none avatar h-10 w-10 -ml-2 rounded-full" draggable="false" />
             <!-- <div class="badge badge-neutral" v-if="userDataStore.PermissionMap > 3">OP</div> -->
             <span class="-mr-1">{{ userDataStore.UserName }}</span>
@@ -64,6 +64,7 @@ import { RouterLink, useRouter } from 'vue-router';
 import { Logout, Moon, People, SettingConfig, SunOne } from '@icon-park/vue-next';
 
 import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
+import { getHeadURL } from '@/utils/globalFunctions';
 import { useUserDataStore } from '@/stores/UserData';
 import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue';
 

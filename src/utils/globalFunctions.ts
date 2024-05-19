@@ -100,6 +100,7 @@ export function getServerTime() {
   })
 }
 
+// 获取排名背景颜色
 export function getRankingBackgroundColor(item: ContestRankingProblemType): string {
   const constValStore = useConstValStore();
   let baseBackgroundColor = "background-color: ";
@@ -110,4 +111,10 @@ export function getRankingBackgroundColor(item: ContestRankingProblemType): stri
   return item.Status == "AC" ?
     baseBackgroundColor + constValStore.RANKING_COLOR_AC :
     baseBackgroundColor + constValStore.RANKING_COLOR_NOT_AC;
+}
+
+// 获取头像地址
+export function getHeadURL(url: string) {
+  if (url && url.startsWith('http')) return url;
+  return url == '' ? 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png' : '/oss/head-images/' + url;
 }

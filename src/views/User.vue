@@ -1,13 +1,10 @@
 <template>
   <div class="card Border shandow-2xl bg-white relative max-w-2xl mx-auto">
     <img class="cursor-no-focus absolute top-0 w-full h-full object-cover blur-2xl opacity-25 select-none"
-      :src="user.HeadURL != '' ? '/oss/head-images/' + user.HeadURL : 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png'"
-      alt="" draggable="false" />
+      :src="getHeadURL(userDataStore.HeadURL)" alt="" draggable="false" />
     <div class="relative flex items-end">
       <div id="userImg" class="relative ml-6 mt-6 h-24 w-24 rounded-lg overflow-hidden">
-        <img
-          :src="user.HeadURL != '' ? '/oss/head-images/' + user.HeadURL : 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png'"
-          class="select-none" draggable="false" />
+        <img :src="getHeadURL(userDataStore.HeadURL)" class="select-none" draggable="false" />
       </div>
       <div class="ml-4">
         <div class="text-xl font-bold">
@@ -247,15 +244,16 @@
 import { onMounted, reactive, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Avatar, Cattle, EmotionHappy, HorseZodiac, Key, Ranking, Info, School } from "@icon-park/vue-next";
+import { Avatar, Cattle, EmotionHappy, HorseZodiac, Info, Key, Ranking } from "@icon-park/vue-next";
 import { push } from 'notivue';
 
 import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword, _editUserInfo, _getUserInfo } from "@/apis/user";
-import { useConstValStore } from '@/stores/ConstVal';
-import { useUserDataStore } from '@/stores/UserData';
 import { ImageUploadType } from '@/interfaces/common';
 import { type BindType, type UserType } from '@/interfaces/user';
+import { useConstValStore } from '@/stores/ConstVal';
+import { useUserDataStore } from '@/stores/UserData';
 import { ImageUtils } from '@/utils/fileUtils';
+import { getHeadURL } from '@/utils/globalFunctions';
 import { OssUtils } from '@/utils/ossUtils';
 
 const userDataStore = useUserDataStore();

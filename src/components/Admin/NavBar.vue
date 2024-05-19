@@ -29,9 +29,8 @@
       <div v-if="userDataStore.isLogin" class="lg:w-full">
         <div class="dropdown dropdown-bottom dropdown-end lg:dropdown-top lg:dropdown-begin w-full">
           <div tabindex="0" role="button" class="btn w-full">
-            <img
-              :src="userDataStore.HeadURL != '' ? '/oss/head-images/' + userDataStore.HeadURL : 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png'"
-              class="select-none avatar h-10 w-10 -ml-2 rounded-full" draggable="false" />
+            <img :src="getHeadURL(userDataStore.HeadURL)" class="select-none avatar h-10 w-10 -ml-2 rounded-full"
+              draggable="false" />
             <!-- <div class="badge badge-neutral" v-if="userDataStore.PermissionMap > 3">OP</div> -->
             <span class="-mr-1 hidden sm:block">{{ userDataStore.UserName }}</span>
           </div>
@@ -53,10 +52,11 @@
 import { reactive } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
-import { Moon, SunOne, Home } from '@icon-park/vue-next';
+import { Home } from '@icon-park/vue-next';
 
 import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
 import { useUserDataStore } from '@/stores/UserData';
+import { getHeadURL } from '@/utils/globalFunctions';
 import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue';
 
 const router = useRouter();
