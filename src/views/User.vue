@@ -1,10 +1,10 @@
 <template>
   <div class="card Border shandow-2xl bg-white relative max-w-2xl mx-auto">
     <img class="cursor-no-focus absolute top-0 w-full h-full object-cover blur-2xl opacity-25 select-none"
-      :src="getHeadURL(userDataStore.HeadURL)" alt="" draggable="false" />
+      :src="getHeadURL(user.HeadURL)" alt="" draggable="false" />
     <div class="relative flex items-end">
       <div id="userImg" class="relative ml-6 mt-6 h-24 w-24 rounded-lg overflow-hidden">
-        <img :src="getHeadURL(userDataStore.HeadURL)" class="select-none" draggable="false" />
+        <img :src="getHeadURL(user.HeadURL)" class="select-none" draggable="false" />
       </div>
       <div class="ml-4">
         <div class="text-xl font-bold">

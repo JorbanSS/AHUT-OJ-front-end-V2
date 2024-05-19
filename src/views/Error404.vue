@@ -5,7 +5,7 @@
         <div class="max-w-md">
           <h1 class="text-5xl font-bold">404 Not Found</h1>
           <p class="py-6">Oops, 你请求的路径不存在或已迁移</p>
-          <button class="btn btn-primary" @click="router.push('/')" >返回首页</button>
+          <button class="btn btn-primary" @click="router.push({name: 'Index'})" >返回首页</button>
         </div>
       </div>
     </div>
