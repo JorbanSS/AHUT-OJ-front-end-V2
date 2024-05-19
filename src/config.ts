@@ -4,7 +4,7 @@ import {
   Check,
   Close,
   Code,
-  Data,
+  History,
   DocumentFolder,
   HardDisk,
   Info,
@@ -27,6 +27,10 @@ export const problemListLabelOptions = [
   { label: "C 语言程序设计", value: "C 语言程序设计" },
 ]
 
+export const submitStatusOptions = [
+  'AC', 'WA', 'TLE', 'MLE', 'RE', 'PE', 'OLE', 'CE', 'REJUDGING', 'JUDGING', 'PENDING', 'DENIAL_JUDGE', 'JUDGE_TIMEOUT', 'FAILED'
+];
+
 export const submitStatusColor: Record<string, string> = {
   AC: "#19BE6B",
   WA: "#ED3F14",
@@ -36,7 +40,7 @@ export const submitStatusColor: Record<string, string> = {
   PE: "#5F9EA0",
   OLE: "#212121",
   CE: "#8C8C8C",
-  REJUDGING: "#D9933",
+  REJUDGING: "#DD9933",
   JUDGING: "#DD9933",
   PENDING: "#EBCB8B",
   DENIAL_JUDGE: "#9E1030",
@@ -140,7 +144,7 @@ export const navItems: Array<NavItemType> = [
   //     { title: "排行榜", icon: RankingList, to: { name: "RankingList" } },
   //   ],
   // },
-  { title: "记录", icon: Data, to: { name: "Records" } },
+  { title: "记录", icon: History, to: { name: "Records" } },
   { title: "Editor", icon: Code, to: { name: "Editor" } },
   { title: "关于", icon: Info, to: { name: "About" } },
 ];
@@ -149,16 +153,16 @@ export const contestNavItems: Array<NavItemType> = [
   { title: "比赛说明", icon: Info, to: { name: "ContestDescription" } },
   { title: "题目", icon: DocumentFolder, to: { name: "ContestProblems" } },
   { title: "排名", icon: RankingList, to: { name: "ContestRanking" } },
-  { title: "记录", icon: Data, to: { name: "ContestRecords" } },
-  { title: "题解 & 讨论", icon: Topic, to: { name: "ContestDiscussion" } },
+  { title: "记录", icon: History, to: { name: "ContestRecords" } },
+  { title: "讨论", icon: Topic, to: { name: "ContestDiscussion" } },
 ];
 
 export const problemListNavItems: Array<NavItemType> = [
   { title: "题单说明", icon: Info, to: { name: "ProblemListDescription" } },
   { title: "题目", icon: DocumentFolder, to: { name: "ProblemListProblems" } },
   { title: "排名", icon: RankingList, to: { name: "ProblemListRanking" } },
-  { title: "记录", icon: Data, to: { name: "ProblemListRecords" } },
-  { title: "题解 & 讨论", icon: Topic, to: { name: "ProblemListDiscussion" } },
+  { title: "记录", icon: History, to: { name: "ProblemListRecords" } },
+  { title: "讨论", icon: Topic, to: { name: "ProblemListDiscussion" } },
 ];
 
 export const adminNavItems: Array<NavItemType> = [

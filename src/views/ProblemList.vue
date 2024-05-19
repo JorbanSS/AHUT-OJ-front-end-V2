@@ -20,6 +20,7 @@
           :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(11).toLowerCase() }">
           <component :is="item.icon" theme="outline" size="18" />
           {{ item.title }}
+          <div class="badge badge-neutral" v-if="item.title == '记录'">{{ problemList.RecordNumber }}</div>
         </RouterLink>
       </li>
     </ul>
@@ -57,6 +58,7 @@ import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
 import { type ProblemListType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
+import { _getRecords } from '@/apis/record';
 
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
@@ -76,6 +78,8 @@ let problemList = reactive<ProblemListType>({
   UID: '',
   Type: 0,
 
+  RecordNumber: 0,
+
   get(showInfo: boolean = false) {
     _getProblemList({}, problemList.LID)
       .then((data: any) => {
@@ -90,6 +94,17 @@ let problemList = reactive<ProblemListType>({
             message: ``,
           })
         }
+      })
+  },
+
+  getRecordNumber() {
+    let params = {
+      LID: this.LID,
+      Limit: 1,
+    }
+    _getRecords(params)
+      .then((data: any) => {
+        this.RecordNumber = data.Count;
       })
   },
 
@@ -163,6 +178,7 @@ function getProblemListUsersInfo(showInfo: boolean = false) {
 onMounted(() => {
   problemList.LID = +route.params.LID;
   problemList.get();
+  problemList.getRecordNumber();
   getProblemListUsersInfo();
 })
 

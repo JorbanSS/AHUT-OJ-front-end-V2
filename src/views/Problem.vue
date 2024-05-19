@@ -78,7 +78,9 @@
           <input type="checkbox" />
           <div class="collapse-title text-md font-bold whitespace-nowrap">
             <span>题目标签</span>
-            <div class="badge badge-neutral badge-md ml-2">{{ problem.Label == '' ? 0 : problem.Label.split(/;| /).length }}</div>
+            <div class="badge badge-neutral badge-md ml-2">
+              {{ problem.Label == '' ? 0 : problem.Label.split(/;| /).length }}
+            </div>
           </div>
           <div class="collapse-content [&_span]:mr-1">
             <span class="badge badge-neutral badge-md" v-for="(label, index) in problem.Label.split(/;| /)" :key="index"
@@ -95,7 +97,7 @@
         </button>
       </div>
     </div>
-    <div class="space-y-6 w-full">
+    <div class="space-y-6 w-full" v-auto-animate>
       <div class="flex justify-between space-x-6">
         <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
           <li>
@@ -106,17 +108,20 @@
             </a>
           </li>
           <li>
-            <a @click="$router.push(`/records?PID=${problem.PID}`)">
-              <!-- <a @click="router.replace({name: 'ProblemRecords'})" :class="{ 'btn-active': route.name == 'ProblemRecords' }"> -->
+            <!-- <a @click="$router.push(`/records?PID=${problem.PID}`)"> -->
+            <a @click="router.replace({ name: 'ProblemRecords' })"
+              :class="{ 'btn-active': route.name == 'ProblemRecords' }">
               <history theme="outline" size="18" />
-              提交记录
+              记录
+              <div class="badge badge-neutral badge-md">{{ problem.RecordNumber }}</div>
             </a>
           </li>
           <li>
             <a @click="router.replace({ name: 'ProblemDiscussions' })"
               :class="{ 'btn-active': route.name == 'ProblemDiscussions' }">
-              <text-message theme="outline" size="18" />
-              题解
+              <topic theme="outline" size="18" />
+              讨论
+              <div class="badge badge-neutral badge-md">{{ problem.SolutionNumber }}</div>
             </a>
           </li>
         </ul>
@@ -164,7 +169,7 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Check, Word, Disk, Data as ICONdata, StopwatchStart, Tips, TextMessage, History, Editor } from '@icon-park/vue-next';
+import { Check, Word, Disk, Data as ICONdata, StopwatchStart, Topic, History, Editor } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _getContest } from '@/apis/contest';
@@ -178,12 +183,12 @@ import { type ProblemType } from '@/interfaces/problem';
 import { ProblemListType } from '@/interfaces/problemList';
 import { type SubmitCodeType } from '@/interfaces/record';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
+import { _getRecords } from '@/apis/record';
 
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
 const router = useRouter();
 const route = useRoute();
-const scrollElement = document.documentElement;
 
 let submit = ref<SubmitCodeType>({
   Lang: 4,
@@ -288,6 +293,8 @@ let problem = reactive<ProblemType>({
   Hit: '',
   PType: '',
 
+  RecordNumber: 0,
+
   get() {
     _getProblem({}, problem.PID)
       .then((data: any) => {
@@ -317,6 +324,17 @@ let problem = reactive<ProblemType>({
             message: '题面为 PDF 格式，请点击下载按钮下载',
           })
         }
+      })
+  },
+
+  getRecordNumber() {
+    let params = {
+      PID: this.PID,
+      Limit: 1,
+    }
+    _getRecords(params)
+      .then((data: any) => {
+        this.RecordNumber = data.Count;
       })
   },
 
@@ -389,7 +407,7 @@ type problems = {
   ACNum: number,
 }
 
-let problems = reactive<Array<problems>>([])
+let problems = reactive<Array<problems>>([]);
 
 function syncUrl() {
   if (typeof route.params.PID == 'string') {
@@ -417,6 +435,7 @@ onMounted(() => {
 
 watch(() => problem.PID, () => {
   problem.get();
+  problem.getRecordNumber();
 })
 
 </script>

@@ -49,6 +49,7 @@
           :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(7).toLowerCase() }">
           <component :is="item.icon" theme="outline" size="18" />
           {{ item.title }}
+          <div class="badge badge-neutral" v-if="item.title == '记录'">{{ contest.RecordNumber }}</div>
         </RouterLink>
       </li>
     </ul>
@@ -92,6 +93,7 @@ import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
 import { type ContestType } from '@/interfaces/contest';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
+import { _getRecords } from '@/apis/record';
 
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
@@ -115,6 +117,8 @@ let contest = reactive<ContestType>({
   Pass: '',
   Status: 0,
 
+  RecordNumber: 0,
+
   get() {
     _getContest({}, contest.CID)
       .then((data: any) => {
@@ -127,6 +131,17 @@ let contest = reactive<ContestType>({
         contest.Description = data.Description;
         contest.Problems = data.Data;
         problems = data.Data;
+      })
+  },
+
+  getRecordNumber() {
+    let params = {
+      CID: this.CID,
+      Limit: 1,
+    }
+    _getRecords(params)
+      .then((data: any) => {
+        this.RecordNumber = data.Count;
       })
   },
 
@@ -165,6 +180,7 @@ onMounted(() => {
       TimeNow.value = res;
     })
   contest.get();
+  contest.getRecordNumber();
 })
 
 </script>

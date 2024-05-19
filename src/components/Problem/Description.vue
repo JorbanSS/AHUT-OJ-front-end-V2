@@ -12,13 +12,13 @@
         <copy theme="outline" size="18" />
         复制 MarkDown
       </button>
-      <!-- <a v-if="problem.Origin == 1 && (contest.CID == 0 || contest.CID != 0 && contest.EndTime < contest.TimeNow)"
+      <a v-if="props.problem.Origin == 1 && (props.contest.CID == 0 || props.contest.CID != 0 && props.contest.EndTime < props.contest.TimeNow)"
         href="" target="_blank">
         <button class="btn w-fit">
           <link-two theme="outline" size="20" />
           跳转原题
         </button>
-      </a> -->
+      </a>
     </div>
     <MdPreview editorId="preview-only" :modelValue="props.problem.content" class="px-1 mb-4 w-full" />
   </div>
@@ -31,17 +31,18 @@ import { push } from 'notivue';
 import { MdPreview } from 'md-editor-v3';
 import 'md-editor-v3/lib/preview.css';
 import useClipboard from 'vue-clipboard3';
-import { Copy, FilePdf } from '@icon-park/vue-next';
+import { Copy, FilePdf, LinkTwo } from '@icon-park/vue-next';
 
 import { ProblemType } from '@/interfaces/problem';
 import { useConstValStore } from '@/stores/ConstVal';
+import { ContestType } from '@/interfaces/contest';
 
 const constValStore = useConstValStore();
 const { toClipboard } = useClipboard();
 
 interface propsType {
   problem?: ProblemType,
-  contest: any,
+  contest?: ContestType,
 };
 
 let props = withDefaults(defineProps<propsType>(), {
@@ -66,7 +67,23 @@ let props = withDefaults(defineProps<propsType>(), {
     Hit: '',
     PType: '',
   }),
-  contest: () => { },
+  contest: () => ({
+    CID: 0,
+    BeginTime: 0,
+    EndTime: 0,
+    IsPublic: 0,
+    Size: 0,
+    Title: '',
+    Duration: 0,
+    Description: '',
+    Problems: '',
+    UID: '',
+    Type: 0,
+    Pass: '',
+    content: '',
+    TimeNow: 0,
+    Status: 0,
+  }),
 });
 
 async function copyMarkdown() {
