@@ -1,7 +1,4 @@
-import {
-  NavigationGuardNext,
-  RouteLocationNormalized
-} from 'vue-router';
+import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 import Admin from "./admin";
 import { needLoginCertificate } from "./guard";
@@ -11,13 +8,13 @@ const BaseTitle = "AHUT OJ | ";
 const routes = [
   {
     path: "/",
-    redirect: "home",
+    redirect: { name: "Index" },
     meta: { title: BaseTitle + "Home" },
   },
   {
-    name: "Home",
-    path: "/home",
-    component: () => import("@/views/Home.vue"),
+    name: "Index",
+    path: "/index",
+    component: () => import("@/views/Index.vue"),
     meta: { title: BaseTitle + "Home" },
   },
   {
@@ -206,7 +203,7 @@ const routes = [
   Admin,
   {
     name: "Error404",
-    path: '/:pathMatch(.*)',
+    path: "/:pathMatch(.*)",
     component: () => import("@/views/Error404.vue"),
     meta: { title: BaseTitle + "404" },
   },

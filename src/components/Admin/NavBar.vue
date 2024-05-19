@@ -36,7 +36,7 @@
           </div>
           <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-white rounded-box w-36 Border font-bold">
             <li>
-              <div @click="router.push('/home')">
+              <div @click="router.push('/index')">
                 <home theme="outline" size="18" />
                 返回首页
               </div>

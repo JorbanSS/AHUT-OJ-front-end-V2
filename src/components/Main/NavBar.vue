@@ -11,7 +11,7 @@
           <NavigationBarTabs />
         </ul>
       </div>
-      <RouterLink :to="{ name: 'Home' }">
+      <RouterLink :to="{ name: 'Index' }">
         <a class="btn btn-ghost text-xl">AHUT OJ</a>
       </RouterLink>
     </div>

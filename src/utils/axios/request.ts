@@ -3,7 +3,7 @@ import { push } from "notivue";
 
 import httpErrorHandler from "./httpErrorHandler";
 
-// axios.defaults.baseURL = "http://127.0.0.1:4433";
+// axios.defaults.baseURL = "https://angriliset.top:2024/api/notice/images";
 // axios.defaults.baseURL = '/api/';
 // axios.defaults.baseURL = "/";
 
@@ -29,7 +29,8 @@ const requestBaseURL = "api/";
 
 // 创建 axios 请求实例
 const Axios = axios.create({
-  baseURL: host,
+  // baseURL: host,
+  baseURL: "https://angriliset.top:2024",
   timeout: 2000, // 请求 2s 超时
   withCredentials: false, // 跨域请求是否需要携带 cookie
 });
