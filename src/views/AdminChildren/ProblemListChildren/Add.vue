@@ -2,7 +2,7 @@
   <div class="py-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/problemlist')">
+        <div class="font-bold text-base" @click="$router.push({name: 'ProblemListsList'})">
           <bill theme="outline" size="18" />
           题单列表
         </div>
@@ -86,7 +86,6 @@
 
 <script lang="ts" setup name="addProblemList">
 import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
 
 import { Add, Bill, DeleteOne } from '@icon-park/vue-next';
 import { MdEditor } from 'md-editor-v3';
@@ -96,11 +95,8 @@ import { VueDraggable } from 'vue-draggable-plus';
 
 import { _getProblem } from '@/apis/problem';
 import { _addProblemList } from "@/apis/problemList";
-import { useUserDataStore } from '@/stores/UserData';
 import { type ProblemListType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
-const userDataStore = useUserDataStore();
-const router = useRouter();
 
 interface ProblemType {
   PID: string,

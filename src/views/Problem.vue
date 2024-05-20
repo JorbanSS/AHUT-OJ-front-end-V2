@@ -28,7 +28,13 @@
           <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
             <button tabindex="0" role="button" class="btn w-full group-hover/dropdown"
               :class="{ 'btn-active': item.PID == problem.PID }"
-              @click="contest.CID ? contest.goToProblem(item.PID) : problemList.goToProblem(item.PID)">
+              @click="$router.replace({
+                name: 'Problem',
+                params: {
+                  PID: item.PID,
+                  BindID: contest.CID ? 'C' + contest.CID : 'L' + problemList.LID,
+                },
+              })">
               {{ ConvertTools.Number2Alpha(index + 1) }}
             </button>
             <div tabindex="0"
@@ -101,15 +107,14 @@
       <div class="flex justify-between space-x-6">
         <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
           <li>
-            <a @click="router.replace({ name: 'ProblemDescription' })"
+            <a @click="$router.replace({ name: 'ProblemDescription' })"
               :class="{ 'btn-active': route.name == 'ProblemDescription' }">
               <word theme="outline" size="18" />
               题面
             </a>
           </li>
           <li>
-            <!-- <a @click="$router.push(`/records?PID=${problem.PID}`)"> -->
-            <a @click="router.replace({ name: 'ProblemRecords' })"
+            <a @click="$router.replace({ name: 'ProblemRecords' })"
               :class="{ 'btn-active': route.name == 'ProblemRecords' }">
               <history theme="outline" size="18" />
               记录
@@ -117,7 +122,7 @@
             </a>
           </li>
           <li>
-            <a @click="router.replace({ name: 'ProblemDiscussions' })"
+            <a @click="$router.replace({ name: 'ProblemDiscussions' })"
               :class="{ 'btn-active': route.name == 'ProblemDiscussions' }">
               <topic theme="outline" size="18" />
               讨论
@@ -128,13 +133,23 @@
         <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit"
           v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
           <li>
-            <a @click="router.push('/admin/problem/edit/' + problem.PID)" class="whitespace-nowrap">
+            <a @click="$router.push({
+              name: 'EditProblem',
+              params: {
+                PID: problem.PID,
+              },
+            })" class="whitespace-nowrap">
               <editor theme="outline" size="18" />
               题目编辑
             </a>
           </li>
           <li>
-            <a @click="router.push('/admin/problem/data/' + problem.PID)" class="whitespace-nowrap">
+            <a @click="$router.push({
+              name: 'ProblemData',
+              params: {
+                PID: problem.PID,
+              },
+            })" class="whitespace-nowrap">
               <ICONdata theme="outline" size="18" />
               数据编辑
             </a>
@@ -169,21 +184,21 @@
 import { onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Check, Word, Disk, Data as ICONdata, StopwatchStart, Topic, History, Editor } from '@icon-park/vue-next';
+import { Check, Disk, Editor, History, Data as ICONdata, StopwatchStart, Topic, Word } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _getContest } from '@/apis/contest';
 import { _getProblem, _submitCode } from '@/apis/problem';
 import { _getProblemList } from '@/apis/problemList';
+import { _getRecords } from '@/apis/record';
 import { submitLanguageOptions } from '@/config';
-import { useConstValStore } from '@/stores/ConstVal';
-import { useUserDataStore } from '@/stores/UserData';
 import { type ContestType } from '@/interfaces/contest';
 import { type ProblemType } from '@/interfaces/problem';
 import { ProblemListType } from '@/interfaces/problemList';
 import { type SubmitCodeType } from '@/interfaces/record';
+import { useConstValStore } from '@/stores/ConstVal';
+import { useUserDataStore } from '@/stores/UserData';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
-import { _getRecords } from '@/apis/record';
 
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
@@ -264,11 +279,6 @@ let problemList = reactive<ProblemListType>({
           message: `已同步题单 #${this.LID}`,
         })
       })
-  },
-
-  goToProblem(PID: string) {
-    router.push(`/problem/${PID}/L${this.LID}`);
-    problem.PID = PID;
   },
 })
 
@@ -370,7 +380,12 @@ let problem = reactive<ProblemType>({
           title: '提交成功',
           message: '已提交代码',
         })
-        router.push(`/record/${data.SID}`);
+        router.push({
+          name: 'Record',
+          params: {
+            SID: data.SID,
+          },
+        });
       })
   },
 
@@ -400,7 +415,7 @@ let problem = reactive<ProblemType>({
   }
 })
 
-type problems = {
+interface problems {
   PID: string,
   Title: string,
   SubmitNum: number,
@@ -410,19 +425,17 @@ type problems = {
 let problems = reactive<Array<problems>>([]);
 
 function syncUrl() {
-  if (typeof route.params.PID == 'string') {
-    problem.PID = route.params.PID;
-  }
-  if (route.params.BindID != undefined && typeof route.params.BindID == 'string') {
-    let bindID: string = route.params.BindID;
-    if (bindID[0] == "C") {
+  problem.PID = route.params.PID as string;
+  if (route.params.BindID) {
+    let bindID = route.params.BindID as string;
+    if (bindID.startsWith("C")) {
       contest.CID = +bindID.substring(1);
       contest.get();
       getServerTime()
         .then((res: any) => {
           contest.TimeNow = res;
         })
-    } else if (bindID[0] == "L") {
+    } else if (bindID.startsWith("L")) {
       problemList.LID = +bindID.substring(1);
       problemList.get();
     }
@@ -431,9 +444,11 @@ function syncUrl() {
 
 onMounted(() => {
   syncUrl();
+  problem.get();
 })
 
-watch(() => problem.PID, () => {
+watch(() => route.params.PID, () => {
+  problem.PID = route.params.PID as string;
   problem.get();
   problem.getRecordNumber();
 })

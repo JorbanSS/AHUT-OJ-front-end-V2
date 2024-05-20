@@ -9,7 +9,7 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/problemlist/add')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'AddProblemList' })">
           <add theme="outline" size="18" />
           新增题单
         </div>
@@ -64,8 +64,12 @@
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
           <td>
-            <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/problemlist/edit/' + item.LID)">
+            <button class="btn btn-sm btn-neutral" @click.stop="$router.push({
+              name: 'EditProblemList',
+              params: {
+                LID: item.LID,
+              }
+            })">
               <edit-two theme="outline" size="18" />
               编辑
             </button>
@@ -79,7 +83,6 @@
 
 <script lang="ts" setup name="ProblemListsList">
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
 
 import { Add, Bill, DeleteOne, EditTwo } from '@icon-park/vue-next';
 import { push } from 'notivue';
@@ -88,9 +91,6 @@ import { _deleteProblemLists, _getProblemLists } from '@/apis/problemList';
 import Pagination from "@/components/Main/Pagination.vue";
 import { type ProblemListSimplifiedType, type ProblemListsType } from '@/interfaces/problemList';
 
-const router = useRouter();
-
-let toPage = ref<number>();
 let allSelected = ref<boolean>(false);
 
 function switchSelectedStatus(index: number) {

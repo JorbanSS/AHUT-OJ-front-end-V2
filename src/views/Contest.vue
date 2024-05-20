@@ -68,7 +68,12 @@
         </a>
       </li>
       <li>
-        <a @click="router.push('/admin/contest/edit/' + contest.CID)">
+        <a @click="$router.push({
+          name: 'EditContest',
+          params: {
+            CID: contest.CID,
+          }
+        })">
           <editor theme="outline" size="18" />
           比赛编辑
         </a>
@@ -88,12 +93,12 @@ import { Bill, Editor, PartyBalloon } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _cloneToProblemList, _getContest } from '@/apis/contest';
+import { _getRecords } from '@/apis/record';
 import { contestNavItems } from '@/config';
+import { type ContestType } from '@/interfaces/contest';
 import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
-import { type ContestType } from '@/interfaces/contest';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
-import { _getRecords } from '@/apis/record';
 
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
@@ -157,7 +162,12 @@ let contest = reactive<ContestType>({
           title: '克隆成功',
           message: `已克隆比赛 ${contest.CID}`,
         })
-        router.push(`/problemlist/${LID}`);
+        router.push({
+          name: 'ProblemList',
+          params: {
+            LID: LID,
+          },
+        });
       })
   }
 })

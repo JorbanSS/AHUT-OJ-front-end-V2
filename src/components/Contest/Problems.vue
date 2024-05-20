@@ -9,8 +9,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in props.problems" :key="item.PID" @click="goToProblem(item.PID)"
-          class="cursor-pointer">
+        <tr v-for="(item, index) in props.problems" :key="item.PID" @click="$router.push({
+          name: 'Problem',
+          params: {
+            PID: item.PID,
+            BindID: 'C' + props.contest.CID,
+          }
+        });" class="cursor-pointer">
           <td class="font-bold talbe-lg">
             {{ item.Status }}
           </td>
@@ -37,13 +42,8 @@
 
 <script lang="ts" setup name="ContestProblems">
 
-
-import { useRouter } from 'vue-router';
-
 import { ContestType } from '@/interfaces/contest';
 import { ConvertTools } from '@/utils/globalFunctions';
-
-const router = useRouter();
 
 type problemsType = {
   PID: string,
@@ -74,12 +74,8 @@ let props = withDefaults(defineProps<propsType>(), {
     Pass: '',
     Status: 0,
   }),
-  
+
   problems: () => [],
 });
-
-function goToProblem(PID: string) {
-  router.push(`/problem/${PID}/C${props.contest.CID}`);
-}
 
 </script>

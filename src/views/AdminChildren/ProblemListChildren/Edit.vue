@@ -2,13 +2,13 @@
   <div class="py-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/problemlist')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'ProblemListsList' })">
           <bill theme="outline" size="18" />
           题单列表
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/problemlist/add')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'AddProblemList' })">
           <add theme="outline" size="18" />
           新增题单
         </div>
@@ -28,7 +28,12 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/problemlist/' + problemList.LID)">
+        <div class="font-bold text-base" @click="$router.push({
+          name: 'ProblemList',
+          params: {
+            LID: problemList.LID,
+          },
+        })">
           <go-on theme="outline" size="18" />
           跳转题单
         </div>
@@ -108,8 +113,8 @@ import { VueDraggable } from 'vue-draggable-plus';
 
 import { _getProblem } from '@/apis/problem';
 import { _editProblemList, _getProblemList } from "@/apis/problemList";
-import { useUserDataStore } from '@/stores/UserData';
 import { type ProblemListType } from '@/interfaces/problemList';
+import { useUserDataStore } from '@/stores/UserData';
 import { ConvertTools } from '@/utils/globalFunctions';
 const userDataStore = useUserDataStore();
 const router = useRouter();

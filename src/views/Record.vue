@@ -24,13 +24,23 @@
           </th>
           <td>
             <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目"
-              @click="$router.push(`/problem/${record.PID}`)">
+              @click="$router.push({
+                name: 'Problem',
+                params: {
+                  PID: record.PID,
+                },
+              })">
               {{ record.PID }}
             </span>
           </td>
           <td>
             <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页"
-              @click="$router.push(`/user/${record.UID}`)">
+              @click="$router.push({
+                name: 'User',
+                params: {
+                  UID: record.UID,
+                },
+              })">
               {{ record.UID }}
             </span>
           </td>
@@ -84,8 +94,8 @@ import useClipboard from 'vue-clipboard3';
 
 import { _getRecord } from '@/apis/record';
 import { submitInfo, submitStatusColor } from '@/config';
-import { useConstValStore } from '@/stores/ConstVal';
 import { type RecordType } from '@/interfaces/record';
+import { useConstValStore } from '@/stores/ConstVal';
 import { ConvertTools } from '@/utils/globalFunctions';
 
 const { toClipboard } = useClipboard();

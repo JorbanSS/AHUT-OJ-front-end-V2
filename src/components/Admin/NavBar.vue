@@ -36,7 +36,7 @@
           </div>
           <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-white rounded-box w-36 Border font-bold">
             <li>
-              <div @click="router.push('/index')">
+              <div @click="$router.push({name: 'Index'})">
                 <home theme="outline" size="18" />
                 返回首页
               </div>
@@ -50,18 +50,14 @@
 
 <script lang="ts" setup>
 import { reactive } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink } from 'vue-router';
 
 import { Home } from '@icon-park/vue-next';
 
-import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
 import { useUserDataStore } from '@/stores/UserData';
 import { getHeadURL } from '@/utils/globalFunctions';
 import Tabs from './NavBar/Tabs.vue';
 
-const router = useRouter();
-
-const ThemeSwitchStore = reactive(useThemeSwitchStore());
 const userDataStore = reactive(useUserDataStore());
 
 interface propsType {

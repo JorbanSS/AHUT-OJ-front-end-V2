@@ -51,7 +51,12 @@
           </tr>
         </thead>
         <tbody v-auto-animate>
-          <tr v-for="item in problems.problems" :key="item.PID" @click="router.push(`/problem/${item.PID}`)"
+          <tr v-for="item in problems.problems" :key="item.PID" @click="$router.push({
+            name: 'Problem',
+            params: {
+              PID: item.PID,
+            },
+          })"
             class="cursor-pointer">
             <th>
               {{ item.PID }}
@@ -89,12 +94,8 @@ import Pagination from "@/components/Main/Pagination.vue";
 import { problemTypeOptions } from '@/config';
 import { type ProblemSimplifiedType, type ProblemsType } from '@/interfaces/problem';
 import { ConvertTools } from '@/utils/globalFunctions';
-import { useUserDataStore } from '@/stores/UserData';
-import { useConstValStore } from '@/stores/ConstVal';
 
 const router = useRouter();
-const userDataStore = useUserDataStore();
-const constValStore = useConstValStore();
 
 const filterNumber = computed(() => Number(problems.searchInfo.PID != '') + Number(problems.searchInfo.Label != '') + Number(problems.searchInfo.PType != '') + Number(problems.searchInfo.Keyword != ''))
 
@@ -141,7 +142,12 @@ let problems = reactive<ProblemsType>({
       })
       return;
     };
-    router.push('/problem/' + PID);
+    router.push({
+      name: 'Problem',
+      params: {
+        PID: PID,
+      },
+    });
   },
 
   changePage(page: number) {

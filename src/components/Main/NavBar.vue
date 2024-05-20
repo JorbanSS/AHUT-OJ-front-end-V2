@@ -29,18 +29,22 @@
       <div v-if="userDataStore.isLogin">
         <div class="dropdown dropdown-bottom dropdown-end">
           <div tabindex="0" role="button" class="btn">
-            <img
-              :src="getHeadURL(userDataStore.HeadURL)"
-              class="select-none avatar h-10 w-10 -ml-2 rounded-full" draggable="false" />
+            <img :src="getHeadURL(userDataStore.HeadURL)" class="select-none avatar h-10 w-10 -ml-2 rounded-full"
+              draggable="false" />
             <!-- <div class="badge badge-neutral" v-if="userDataStore.PermissionMap > 3">OP</div> -->
             <span class="-mr-1">{{ userDataStore.UserName }}</span>
           </div>
           <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-white rounded-box w-36 Border font-bold">
-            <li><a @click="router.push(`/user/${userDataStore.UID}`)">
+            <li><a @click="$router.push({
+              name: 'User',
+              params: {
+                UID: userDataStore.UID,
+              },
+            })">
                 <people theme="outline" size="18" />
                 个人中心
               </a></li>
-            <li v-if="userDataStore.PermissionMap > 3"><a @click="router.replace('/admin')">
+            <li v-if="userDataStore.PermissionMap > 3"><a @click="$router.replace({ name: 'Admin' })">
                 <setting-config theme="outline" size="18" />
                 管理平台
               </a></li>
@@ -59,18 +63,14 @@
 
 <script lang="ts" setup>
 import { reactive } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink } from 'vue-router';
 
 import { Logout, Moon, People, SettingConfig, SunOne } from '@icon-park/vue-next';
 
-import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
 import { getHeadURL } from '@/utils/globalFunctions';
 import { useUserDataStore } from '@/stores/UserData';
 import Tabs from './NavBar/Tabs.vue';
 
-const router = useRouter();
-
-const ThemeSwitchStore = reactive(useThemeSwitchStore());
 const userDataStore = reactive(useUserDataStore());
 
 interface propsType {

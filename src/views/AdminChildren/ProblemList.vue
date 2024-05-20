@@ -3,7 +3,7 @@
   <div class="pb-6"></div>
 </template>
 
-<script lang="ts" setup name="AdminContest">
+<script lang="ts" setup>
 
 </script>
 

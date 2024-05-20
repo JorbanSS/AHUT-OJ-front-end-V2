@@ -2,7 +2,7 @@
   <div class="py-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/problem')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'ProblemList' })">
           <document-folder theme="outline" size="18" />
           题目列表
         </div>
@@ -43,14 +43,14 @@
         <stopwatch-start theme="outline" size="22" />
         <input type="number" class="grow" placeholder="1000" v-model="problem.LimitTime" min="500" max="10000"
           step="500" />
-          <span>ms</span>
-        </label>
-        <label class="input input-bordered flex items-center gap-2 w-72">
-          <disk theme="outline" size="19" class="ml-0.5 :mr-1.5" />
-          <input type="number" class="grow" placeholder="128" v-model="problem.LimitMemory" min="64" max="1024"
+        <span>ms</span>
+      </label>
+      <label class="input input-bordered flex items-center gap-2 w-72">
+        <disk theme="outline" size="19" class="ml-0.5 :mr-1.5" />
+        <input type="number" class="grow" placeholder="128" v-model="problem.LimitMemory" min="64" max="1024"
           step="64" />
-          <span>MB</span>
-        </label>
+        <span>MB</span>
+      </label>
     </div>
     <label class="input input-bordered flex items-center gap-2 w-[584px]">
       标签
@@ -64,7 +64,8 @@
     </div>
   </div>
   <div class="mt-6" v-if="problem.Origin == -1"></div>
-  <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl" v-if="problem.Origin == -1">
+  <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl"
+    v-if="problem.Origin == -1">
     <select class="select select-bordered w-72 max-w-xs text-base" v-model="problem.ContentType">
       <option disabled selecte value="0">题面类型</option>
       <option v-for="item in problemContentOptions" :key="item.value" :value="item.value">{{ item.label }}</option>
@@ -188,8 +189,21 @@ let problem = reactive<ProblemType>({
           title: '新增成功',
           message: `题目 ID 为 ${data.PID}`,
         });
-        if (this.ContentType == -1) router.push('/admin/problem/data/' + problem.PID);
-        else router.push('/admin/problem/edit/' + problem.PID);
+        if (this.Origin == -1) {
+          router.push({
+            name: 'ProblemData',
+            params: {
+              PID: data.PID
+            }
+          });
+        } else {
+          router.push({
+            name: 'EditProblem',
+            params: {
+              PID: data.PID
+            }
+          });
+        }
       })
   }
 });

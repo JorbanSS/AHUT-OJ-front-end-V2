@@ -33,7 +33,12 @@
         </a>
       </li>
       <li>
-        <a @click="router.push('/admin/problemlist/edit/' + problemList.LID)">
+        <a @click="$router.push({
+          name: 'EditProblemList',
+          params: {
+            LID: problemList.LID,
+          },
+        })">
           <editor theme="outline" size="18" />
           题单编辑
         </a>
@@ -53,12 +58,12 @@ import { Bill, Editor } from "@icon-park/vue-next";
 import { push } from 'notivue';
 
 import { _cloneProblemList, _getProblemList, _getProblemListUsersInfo, _joinProblemList } from '@/apis/problemList';
+import { _getRecords } from '@/apis/record';
 import { problemListNavItems } from "@/config";
+import { type ProblemListType } from '@/interfaces/problemList';
 import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
-import { type ProblemListType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
-import { _getRecords } from '@/apis/record';
 
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
@@ -120,7 +125,12 @@ let problemList = reactive<ProblemListType>({
           title: '克隆成功',
           message: `已克隆题单 ${problemList.LID}`,
         })
-        router.push(`/problemlist/${LID}`);
+        router.push({
+          name: 'ProblemList',
+          params: {
+            LID: LID,
+          },
+        });
       })
   },
 })

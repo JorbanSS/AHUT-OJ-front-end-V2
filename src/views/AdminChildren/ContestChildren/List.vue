@@ -9,7 +9,7 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/contest/add')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'AddContest' })">
           <add theme="outline" size="18" />
           新增比赛
         </div>
@@ -46,13 +46,21 @@
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
           <td class="space-x-2">
-            <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/contest/edit/' + item.CID)">
+            <button class="btn btn-sm btn-neutral" @click.stop="$router.push({
+              name: 'EditContest',
+              params: {
+                CID: item.CID,
+              },
+            })">
               <edit-two theme="outline" size="18" />
               比赛
             </button>
-            <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/contest/balloon/' + item.CID)">
+            <button class="btn btn-sm btn-neutral" @click.stop="$router.push({
+              name: 'EditBalloon',
+              params: {
+                CID: item.CID,
+              }
+            })">
               <PartyBalloon theme="outline" size="18" class="-mx-0.5" />
               气球
             </button>
@@ -68,7 +76,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Add, DeleteOne, Trophy, EditTwo, PartyBalloon } from '@icon-park/vue-next';
+import { Add, DeleteOne, EditTwo, PartyBalloon, Trophy } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _deleteContests, _getContests } from '@/apis/contest';
@@ -77,7 +85,6 @@ import { type ContestSimplifiedType, type ContestsType } from '@/interfaces/cont
 
 const router = useRouter();
 
-let toPage = ref<number>();
 let allSelected = ref<boolean>(false);
 
 function switchSelectedStatus(index: number) {

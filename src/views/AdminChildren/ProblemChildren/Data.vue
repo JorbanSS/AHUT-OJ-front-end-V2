@@ -2,19 +2,24 @@
   <div class="py-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <label class="font-bold text-base" @click="router.push('/admin/problem')">
+        <label class="font-bold text-base" @click="$router.push({ name: 'ProblemList' })">
           <document-folder theme="outline" size="18" />
           题目列表
         </label>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/problem/add')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'AddProblem' })">
           <add theme="outline" size="18" />
           新增题目
         </div>
       </li>
       <li>
-        <label class="font-bold text-base" @click="router.push('/admin/problem/edit/' + judgeFiles.PID)">
+        <label class="font-bold text-base" @click="$router.push({
+          name: 'EditProblem',
+          params: {
+            PID: judgeFiles.PID,
+          },
+        })">
           <edit-one theme="outline" size="18" />
           编辑题目
         </label>
@@ -56,7 +61,8 @@
             {{ item.FileType }}
           </td>
           <td>
-            {{ item.FileSize >= 2048 * 1024 ? (item.FileSize / 1024 / 1024).toFixed(2) + ' MB' : ((item.FileSize + 6) / 1024).toFixed(2) + ' KB' }}
+            {{ item.FileSize >= 2048 * 1024 ? (item.FileSize / 1024 / 1024).toFixed(2) + ' MB' : ((item.FileSize + 6) /
+              1024).toFixed(2) + ' KB' }}
           </td>
           <td class="space-x-2">
             <button class="btn btn-neutral btn-sm" @click="judgeFileDetail.get(item.FileName)">
@@ -94,7 +100,7 @@
 
 <script lang="ts" setup name="AddProblem">
 import { onMounted, reactive } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 import { Add, Delete, DocumentFolder, EditOne, Eyes, Data as ICONdata, Upload } from '@icon-park/vue-next';
 import { push } from 'notivue';
@@ -103,7 +109,6 @@ import useClipboard from 'vue-clipboard3';
 import { _deleteJudgeFiles, _getJudgeFile, _getJudgeFiles, _uploadJudgeFiles } from "@/apis/problem";
 import { JudgeFileDetailType, type JudgeFilesType } from '@/interfaces/problem';
 
-const router = useRouter();
 const route = useRoute();
 const { toClipboard } = useClipboard();
 

@@ -9,7 +9,7 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/problem/add')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'AddProblem' })">
           <add theme="outline" size="18" />
           新增题目
         </div>
@@ -72,13 +72,21 @@
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
           <td class="space-x-2">
-            <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/problem/edit/' + item.PID)">
+            <button class="btn btn-sm btn-neutral" @click.stop="$router.push({
+              name: 'EditProblem',
+              params: {
+                PID: item.PID,
+              },
+            })">
               <edit-two theme="outline" size="18" />
               题目
             </button>
-            <button class="btn btn-sm btn-neutral"
-              @click.stop="router.push('/admin/problem/data/' + item.PID)">
+            <button class="btn btn-sm btn-neutral" @click.stop="$router.push({
+              name: 'ProblemData',
+              params: {
+                PID: item.PID,
+              },
+            })">
               <ICONdata theme="outline" size="18" />
               数据
             </button>
@@ -92,17 +100,14 @@
 
 <script lang="ts" setup name="AddProblem">
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
 
-import { Add, AfferentThree, DeleteOne, DocumentFolder, EfferentThree, EditTwo, Data as ICONdata } from '@icon-park/vue-next';
+import { Add, AfferentThree, DeleteOne, DocumentFolder, EditTwo, EfferentThree, Data as ICONdata } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _deleteProblems, _exportProblems, _getProblems } from "@/apis/problem";
 import Pagination from "@/components/Main/Pagination.vue";
 import { problemTypeOptions } from '@/config';
 import { type ProblemSimplifiedType, type ProblemsType } from '@/interfaces/problem';
-
-const router = useRouter();
 
 let allSelected = ref<boolean>(false);
 

@@ -9,8 +9,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in props.problems" :key="item.PID" @click="goToProblem(item.PID)"
-          class="cursor-pointer">
+        <tr v-for="(item, index) in props.problems" :key="item.PID" @click="$router.push({
+          name: 'Problem',
+          params: {
+            PID: item.PID,
+            BindID: 'L' + props.problemList.LID
+          }
+        })" class="cursor-pointer">
           <td class="font-bold talbe-lg">
             {{ item.Status }}
           </td>
@@ -25,9 +30,7 @@
               :value="ConvertTools.Percentage(item.ACNum, item.SubmitNum)" max="100"></progress>
           </td>
           <td>
-            {{ item.ACNum }}
-            /
-            {{ item.SubmitNum }}
+            {{ item.ACNum }} / {{ item.SubmitNum }}
           </td>
         </tr>
       </tbody>
@@ -36,15 +39,11 @@
 </template>
 
 <script lang="ts" setup name="ProblemListProblems">
-import { useRouter } from 'vue-router';
 
 import { ProblemListType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
-import { onMounted } from 'vue';
 
-const router = useRouter();
-
-type problemsType = {
+interface problemsType {
   PID: string,
   Title: string,
   SubmitNum: number,
@@ -72,17 +71,8 @@ let props = withDefaults(defineProps<propsType>(), {
     Type: 0,
     Pass: '',
   }),
-  
+
   problems: () => [],
 });
-
-function goToProblem(PID: string) {
-  router.push(`/problem/${PID}/L${props.problemList.LID}`);
-}
-
-onMounted(() => {
-  console.log(props.problems);
-  
-})
 
 </script>

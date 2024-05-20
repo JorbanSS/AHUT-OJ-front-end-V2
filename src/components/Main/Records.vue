@@ -36,14 +36,22 @@
               {{ item.SID }}
             </th>
             <td v-if="props.showPID">
-              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目"
-                @click="$router.push(`/problem/${item.PID}`)">
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目" @click="$router.push({
+                name: 'Problem',
+                params: {
+                  PID: item.PID
+                }
+              })">
                 {{ item.PID }}
               </span>
             </td>
             <td>
-              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页"
-                @click="$router.push(`/user/${item.UID}`)">
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页" @click="$router.push({
+                name: 'User',
+                params: {
+                  UID: item.UID
+                }
+              })">
                 {{ item.UID }}
               </span>
             </td>
@@ -53,9 +61,16 @@
             <td class="hidden lg:table-cell">
               {{ Math.ceil(item.UseMemory / 1024 / 1024) }} MB
             </td>
-            <td>
-              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看代码"
-                @click="$router.push(`/record/${item.SID}`)">
+            <td class="[&_span]:font-bold">
+              <span class="text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看代码" @click="$router.push({
+                name: 'Record',
+                params: {
+                  SID: item.SID
+                }
+              })" v-if="(userDataStore.PermissionMap & constValStore.SourceBorwserBit) || userDataStore.UID === item.UID">
+                {{ constValStore.SUBMIT_LANG[item.Lang] }}
+              </span>
+              <span v-else>
                 {{ constValStore.SUBMIT_LANG[item.Lang] }}
               </span>
             </td>
@@ -71,21 +86,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, ref, withDefaults } from 'vue';
-
-import { push } from 'notivue';
-import { useRouter } from 'vue-router';
+import { computed, defineProps, withDefaults } from 'vue';
 
 import Pagination from "@/components/Main/Pagination.vue";
 import { submitStatusColor } from '@/config';
 import { RecordsType, RecordType } from '@/interfaces/record';
 import { useConstValStore } from '@/stores/ConstVal';
+import { useUserDataStore } from '@/stores/UserData';
 import { ConvertTools } from '@/utils/globalFunctions';
 
-const router = useRouter();
 const constValStore = useConstValStore();
-
-let toPage = ref();
+const userDataStore = useUserDataStore();
 
 interface propsType {
   records?: RecordsType,

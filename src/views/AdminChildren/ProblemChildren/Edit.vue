@@ -2,13 +2,13 @@
   <div class="py-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <label class="font-bold text-base" @click="router.push('/admin/problem')">
+        <label class="font-bold text-base" @click="$router.push({ name: 'ProblemList' })">
           <document-folder theme="outline" size="18" />
           题目列表
         </label>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/problem/add')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'AddProblem' })">
           <add theme="outline" size="18" />
           新增题目
         </div>
@@ -20,7 +20,12 @@
         </label>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/problem/data/' + problem.PID)">
+        <div class="font-bold text-base" @click="$router.push({
+          name: 'ProblemData',
+          params: {
+            PID: problem.PID
+          }
+        })">
           <ICONdata theme="outline" size="18" />
           编辑数据
         </div>
@@ -40,7 +45,12 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push(`/problem/${problem.PID}`)">
+        <div class="font-bold text-base" @click="router.push({
+          name: 'Problem',
+          params: {
+            PID: problem.PID
+          }
+        })">
           <go-on theme="outline" size="18" />
           跳转题目
         </div>
@@ -51,7 +61,8 @@
     <div class="flex space-x-2">
       <select class="select select-bordered w-72 max-w-xs text-base" v-model="problem.Origin">
         <option disabled selecte value="0">题目来源</option>
-        <option v-for="item in problemOriginOptions" :key="item.value" :value="item.value" disabled>{{ item.label }}</option>
+        <option v-for="item in problemOriginOptions" :key="item.value" :value="item.value" disabled>{{ item.label }}
+        </option>
       </select>
       <label class="input input-bordered flex items-center gap-2 w-72" v-if="problem.Origin != -1">
         题号
@@ -145,7 +156,7 @@
 import { onMounted, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Add, DeleteOne, Disk, DocumentFolder, EditOne, Data as ICONdata, StopwatchStart, GoOn } from '@icon-park/vue-next';
+import { Add, DeleteOne, Disk, DocumentFolder, EditOne, GoOn, Data as ICONdata, StopwatchStart } from '@icon-park/vue-next';
 import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
@@ -244,7 +255,7 @@ let problem = reactive<ProblemType>({
     };
     _deleteProblems(params)
       .then(() => {
-        router.push('/admin/problem');
+        router.push({ name: 'ProblemList' });
         push.success({
           title: '删除成功',
           message: `一共删除了 1 个题目`,

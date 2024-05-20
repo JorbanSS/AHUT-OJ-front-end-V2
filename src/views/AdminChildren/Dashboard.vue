@@ -44,7 +44,7 @@
     <div class="space-y-6 col-span-4">
       <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
         <button class="btn btn-neutral" @click="showEditHomeNoticeModal()">编辑首页公告</button>
-        <button class="btn btn-neutral" @click="$router.push('/admin/other/updatelog')">编辑更新日志</button>
+        <button class="btn btn-neutral" @click="$router.push({ name: 'AdminUpdateLog' })">编辑更新日志</button>
       </div>
       <div class="card Border bg-white shadow-lg p-6 w-fit">
         <label class="form-control w-full max-w-xs">
@@ -89,7 +89,7 @@
           </option>
         </select>
         <input type="datetime-local" id="datetime" name="datetime" v-model="Timestamp"
-        class="input input-bordered flex items-center gap-2 w-full" />
+          class="input input-bordered flex items-center gap-2 w-full" />
         <button class="btn btn-neutral" @click="rejudgeInfo.rejudge()">重判</button>
       </div>
     </div>
@@ -157,7 +157,7 @@ let rejudgeInfo = reactive<RejudgeInfoType>({
     let params: RejudgeInfoType = {};
     if (Timestamp.value != '') this.Timestamp = new Date(Timestamp.value).getTime();
     console.log(this.Timestamp);
-    
+
     if (rejudgeInfo.SID == '' && rejudgeInfo.CID == '' && rejudgeInfo.UID == '' && rejudgeInfo.PID == '' && rejudgeInfo.LID == '' && rejudgeInfo.Timestamp == 0 && rejudgeInfo.Lang == 0) {
       push.warning({
         title: '信息错误',

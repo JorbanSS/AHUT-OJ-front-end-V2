@@ -28,7 +28,12 @@
         </thead>
         <tbody v-auto-animate>
           <tr v-for="item in problemLists.problemLists" :key="item.LID"
-            @click="router.push(`/problemlist/${item.LID}`);" class="cursor-pointer">
+            @click="$router.push({
+              name: 'ProblemList',
+              params: {
+                LID: item.LID,
+              },
+            });" class="cursor-pointer">
             <th class="hidden md:table-cell">
               {{ item.LID }}
             </th>
@@ -67,9 +72,9 @@ import { push } from 'notivue';
 
 import { _getProblemLists } from '@/apis/problemList';
 import Pagination from "@/components/Main/Pagination.vue";
+import { problemListLabelOptions } from '@/config';
 import { type ProblemListSimplifiedType, type ProblemListsType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
-import { problemListLabelOptions } from '@/config';
 
 const router = useRouter();
 
@@ -114,7 +119,12 @@ let problemLists = reactive<ProblemListsType>({
       })
       return;
     };
-    router.push(`/problemlist/${LID}`);
+    router.push({
+      name: 'ProblemList',
+      params: {
+        LID: LID,
+      },
+    });
   },
 })
 

@@ -3,22 +3,22 @@
   <div class="m-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/other/oss')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'AdminOss' })">
           <memory-one theme="outline" size="18" />
           OSS 对象存储
         </div>
       </li>
       <li>
         <div class="font-bold text-base btn-active">
-          <notepad theme="outline" size="18"/>
+          <notepad theme="outline" size="18" />
           更新日志
         </div>
       </li>
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" onclick="addUpdateLog.showModal()" >
-          <add theme="outline" size="18"/>
+        <div class="font-bold text-base" onclick="addUpdateLog.showModal()">
+          <add theme="outline" size="18" />
           新增更新日志
         </div>
       </li>
@@ -77,18 +77,15 @@
 
 <script lang="ts" setup name="AddProblem">
 import { onMounted, reactive } from 'vue';
-import { useRouter } from 'vue-router';
 
-import { Add, Notepad, MemoryOne, DeleteOne, EditTwo } from '@icon-park/vue-next';
-import { push } from 'notivue';
+import { Add, DeleteOne, EditTwo, MemoryOne, Notepad } from '@icon-park/vue-next';
 import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
+import { push } from 'notivue';
 
-import { UpdateLogsType, UpdateLogType } from '@/interfaces/oj';
 import { _addUpdateLog, _deleteUpdateLog, _getNoticeList } from '@/apis/oj';
 import { markdownToolbars } from '@/config';
-
-const router = useRouter();
+import { UpdateLogsType, UpdateLogType } from '@/interfaces/oj';
 
 let updateLogs = reactive<UpdateLogsType>({
   updateLogs: new Array<UpdateLogType>,

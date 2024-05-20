@@ -36,7 +36,7 @@ const Admin = {
     {
       name: "AdminProblem",
       path: "problem",
-      redirect: { name: "ProblemsList" },
+      redirect: { name: "ProblemList" },
       component: () => import("@/views/AdminChildren/Problem.vue"),
       beforeEnter: (
         // @ts-ignore
@@ -49,7 +49,7 @@ const Admin = {
       },
       children: [
         {
-          name: "ProblemsList",
+          name: "ProblemList",
           path: "list",
           component: () =>
             import("@/views/AdminChildren/ProblemChildren/List.vue"),
@@ -118,7 +118,7 @@ const Admin = {
     {
       name: "AdminContest",
       path: "contest",
-      redirect: { name: "ContestsList" },
+      redirect: { name: "ContestList" },
       component: () => import("@/views/AdminChildren/Contest.vue"),
       beforeEnter: (
         // @ts-ignore
@@ -131,7 +131,7 @@ const Admin = {
       },
       children: [
         {
-          name: "ContestsList",
+          name: "ContestList",
           path: "list",
           component: () =>
             import("@/views/AdminChildren/ContestChildren/List.vue"),

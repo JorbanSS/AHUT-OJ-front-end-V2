@@ -2,19 +2,24 @@
   <div class="py-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/contest')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'ContestList' })">
           <trophy theme="outline" size="18" />
           比赛列表
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/contest/add')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'AddContest' })">
           <add theme="outline" size="18" />
           新增比赛
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/contest/edit/' + contest.CID)">
+        <div class="font-bold text-base" @click="$router.push({
+          name: 'EditContest',
+          params: {
+            CID: contest.CID,
+          },
+        })">
           <edit-one theme="outline" size="18" />
           编辑比赛
         </div>
@@ -34,7 +39,12 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/contest/' + contest.CID)">
+        <div class="font-bold text-base" @click="router.push({
+          name: 'Contest',
+          params: {
+            CID: contest.CID,
+          },
+        })">
           <go-on theme="outline" size="18" />
           跳转比赛
         </div>

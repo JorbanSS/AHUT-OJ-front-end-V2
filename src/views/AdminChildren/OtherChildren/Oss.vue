@@ -8,7 +8,7 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="router.push('/admin/other/updatelog')">
+        <div class="font-bold text-base" @click="$router.push({ name: 'AdminUpdateLog' })">
           <notepad theme="outline" size="18" />
           更新日志
         </div>
@@ -166,20 +166,17 @@
 
 <script lang="ts" setup name="AdminUser">
 import { onMounted, reactive, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 
-import { FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, PictureOne, Notepad, DeleteOne } from '@icon-park/vue-next';
+import { DeleteOne, FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, Notepad, PictureOne } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _addBuckets, _deleteBucket, _deleteObject, _getBuckets, _getObjects } from '@/apis/oss';
 import { objectTypeOptions } from "@/config";
-import { useConstValStore } from '@/stores/ConstVal';
 import { type BucketsType, type ObjectsType } from '@/interfaces/oss';
+import { useConstValStore } from '@/stores/ConstVal';
 import { OssUtils } from '@/utils/ossUtils';
 
 const constValStore = useConstValStore();
-const router = useRouter();
-const route = useRoute();
 
 let BucketName = ref<string>('');
 let ObjectName = ref<string>('');
