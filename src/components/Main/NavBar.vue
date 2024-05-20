@@ -8,7 +8,7 @@
           </svg>
         </div>
         <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-          <NavigationBarTabs />
+          <Tabs />
         </ul>
       </div>
       <RouterLink :to="{ name: 'Index' }">
@@ -17,7 +17,7 @@
     </div>
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1 text-base font-bold font-sans">
-        <NavigationBarTabs />
+        <Tabs />
       </ul>
     </div>
     <div class="navbar-end">
@@ -66,7 +66,7 @@ import { Logout, Moon, People, SettingConfig, SunOne } from '@icon-park/vue-next
 import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
 import { getHeadURL } from '@/utils/globalFunctions';
 import { useUserDataStore } from '@/stores/UserData';
-import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue';
+import Tabs from './NavBar/Tabs.vue';
 
 const router = useRouter();
 

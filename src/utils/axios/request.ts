@@ -29,8 +29,8 @@ const requestBaseURL = "api/";
 
 // 创建 axios 请求实例
 const Axios = axios.create({
-  // baseURL: host,
-  baseURL: "https://angriliset.top:2024",
+  baseURL: host,
+  // baseURL: "https://angriliset.top:2024",
   timeout: 2000, // 请求 2s 超时
   withCredentials: false, // 跨域请求是否需要携带 cookie
 });

@@ -25,13 +25,13 @@ export class ImageUtils {
 
   public static compress(image: File): Promise<Blob> {
     return new Promise((resolve) => {
-      if (image.size / 1024 > 400) {
+      if (image.size / 1024 > 140) {
         // 单位为 KB
-        imageConversion.compressAccurately(image, 300).then((res: any) => {
+        imageConversion.compressAccurately(image, 100).then((res: any) => {
           resolve(res);
         });
       } else {
-        imageConversion.compress(image, 0.7).then((res: any) => {
+        imageConversion.compress(image, 0.6).then((res: any) => {
           resolve(res);
         });
       }

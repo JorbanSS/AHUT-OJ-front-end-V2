@@ -8,14 +8,14 @@
           </svg>
         </div>
         <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-          <NavigationBarTabs />
+          <Tabs />
         </ul>
       </div>
       <RouterLink :to="{ name: 'Admin' }">
         <a class="btn btn-ghost text-xl whitespace-nowrap">AHUT OJ 管理平台</a>
       </RouterLink>
       <ul class="menu menu-vertical px-1 text-base font-bold font-sans w-full hidden lg:flex">
-        <NavigationBarTabs />
+        <Tabs />
       </ul>
     </div>
     <div class="justify-begin hidden lg:flex">
@@ -57,7 +57,7 @@ import { Home } from '@icon-park/vue-next';
 import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
 import { useUserDataStore } from '@/stores/UserData';
 import { getHeadURL } from '@/utils/globalFunctions';
-import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue';
+import Tabs from './NavBar/Tabs.vue';
 
 const router = useRouter();
 

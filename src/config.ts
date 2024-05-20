@@ -25,7 +25,7 @@ import { SubmitInfoType } from "./interfaces/record";
 export const problemListLabelOptions = [
   { label: "算法设计与分析", value: "算法设计与分析" },
   { label: "C 语言程序设计", value: "C 语言程序设计" },
-]
+];
 
 export const submitStatusOptions = [
   'AC', 'WA', 'TLE', 'MLE', 'RE', 'PE', 'OLE', 'CE', 'REJUDGING', 'JUDGING', 'PENDING', 'DENIAL_JUDGE', 'JUDGE_TIMEOUT', 'FAILED'

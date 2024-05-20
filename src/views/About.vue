@@ -34,7 +34,7 @@
             </svg>
           </div>
           <div class="timeline-end mb-10 timeline-box">
-            <time class="font-mono italic">2019</time>
+            <time class="font-mono italic">2022</time>
             <div class="text-lg font-black">AHUT OJ</div>
             自有 Online Judge 启用，后端为 Golang + Gin 框架，前端为 Vue 3 + Vite + Element-Plus，判题机部分为 C++ 编写。
           </div>
