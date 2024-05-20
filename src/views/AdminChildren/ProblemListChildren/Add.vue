@@ -2,7 +2,7 @@
   <div class="py-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base" @click="$router.push({name: 'ProblemListsList'})">
+        <div class="font-bold text-base" @click="$router.push({name: 'ProblemListList'})">
           <bill theme="outline" size="18" />
           题单列表
         </div>

@@ -103,7 +103,6 @@ async function copyMarkdown() {
 async function downloadPdf() {
   const link = document.createElement('a');
   link.href = '/oss/problem-pdfs/' + props.problem.Description;
-  console.log(link.href);
   link.setAttribute('download', props.problem.PID + '-' + props.problem.Title + '.pdf');
   document.body.appendChild(link);
   link.click();

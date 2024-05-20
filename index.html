@@ -35,7 +35,10 @@
                   //首次按键，提示‘再按一次退出应用’
                   if (!first) {
                     first = new Date().getTime();
-                    console.log("再按一次退出应用");
+                    push.info({
+                      name: "提示",
+                      message: "再按一次退出应用",
+                    })
                     setTimeout(function () {
                       first = null;
                     }, 1000);

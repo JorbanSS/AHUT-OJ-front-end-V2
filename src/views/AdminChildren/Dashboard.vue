@@ -156,7 +156,6 @@ let rejudgeInfo = reactive<RejudgeInfoType>({
   rejudge() {
     let params: RejudgeInfoType = {};
     if (Timestamp.value != '') this.Timestamp = new Date(Timestamp.value).getTime();
-    console.log(this.Timestamp);
 
     if (rejudgeInfo.SID == '' && rejudgeInfo.CID == '' && rejudgeInfo.UID == '' && rejudgeInfo.PID == '' && rejudgeInfo.LID == '' && rejudgeInfo.Timestamp == 0 && rejudgeInfo.Lang == 0) {
       push.warning({

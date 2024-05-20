@@ -13,7 +13,7 @@
           max="100" />
       </label>
     </div>
-    <div style="height: calc(100vh - 124px - 146px)">
+    <div style="height: calc(100vh - 124px - 170px)">
       <vue-monaco-editor v-model:value="code" theme="vs-dark" :language="lang" :options="MONACO_EDITOR_OPTIONS"
         @mount="handleMount" />
     </div>
@@ -23,11 +23,30 @@
 <script lang="ts" setup name="Editor">
 import { reactive, ref, shallowRef, watch } from 'vue';
 
-import { loader } from "@guolao/vue-monaco-editor";
-import * as monaco from "monaco-editor";
 import { Left } from '@icon-park/vue-next';
 
 import { editorLanguageOptions } from "@/config";
+
+import { loader } from "@guolao/vue-monaco-editor";
+// import * as monaco from "monaco-editor";
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+// import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
+// import 'monaco-editor/esm/vs/editor/contrib/contextmenu/browser/contextmenu.js';  // 右键显示菜单
+// import 'monaco-editor/esm/vs/editor/contrib/folding/browser/folding.js';  // 折叠
+// import 'monaco-editor/esm/vs/editor/contrib/format/browser/formatActions.js';  // 格式化代码
+// import 'monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestController.js';  // 代码联想提示
+// import 'monaco-editor/esm/vs/editor/contrib/tokenization/browser/tokenization.js';  // 代码联想提示
+
+let lang = ref('cpp');
+
+// self.MonacoEnvironment = {
+//   getWorker: function (workerId, label) {
+//     switch (label) {
+//       default:
+//         return new editorWorker();
+//     }
+//   }
+// };
 
 loader.config({ monaco });
 
@@ -39,7 +58,6 @@ let MONACO_EDITOR_OPTIONS = reactive({
   fontSize: 20,
 });
 
-let lang = ref('cpp');
 
 const code = ref('// 在线 Editor, 请在此编辑你的代码');
 const editorRef = shallowRef();

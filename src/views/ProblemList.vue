@@ -176,7 +176,6 @@ function getProblemListUsersInfo(showInfo: boolean = false) {
         if (problems.value && Array.isArray(problems.value)) {
           problems.value.forEach((item: any) => {
             if (item.PID == data.SolvedPID[i]) {
-              console.log(data.SolvedPID[i], item.PID);
               item.Status = 'AC';
             }
           })

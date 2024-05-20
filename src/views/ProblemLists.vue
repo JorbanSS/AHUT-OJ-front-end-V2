@@ -32,7 +32,7 @@
               name: 'ProblemList',
               params: {
                 LID: item.LID,
-              },
+              }
             });" class="cursor-pointer">
             <th class="hidden md:table-cell">
               {{ item.LID }}

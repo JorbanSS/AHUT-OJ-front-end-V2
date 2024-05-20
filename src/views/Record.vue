@@ -149,7 +149,6 @@ let record = ref<RecordType>({
   },
 
   autoUpdate() {
-    console.log("autoUpdate");
     this.autoUpdateTimeout = setTimeout(() => {
       this.UpdateNumber++;
       this.get();

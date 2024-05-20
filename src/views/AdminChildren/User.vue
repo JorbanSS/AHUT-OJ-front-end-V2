@@ -314,8 +314,6 @@ let users = reactive({
           user.super = (user.PermissionMap & constValStore.SuperAdminBit) != 0;
           user.problemList = (user.PermissionMap & constValStore.ProblemListAdminBit) != 0;
         });
-        console.log(maxPage.value);
-        console.log(this.count);
         if (showInfo) {
           push.success({
             title: '获取成功',

@@ -2,7 +2,7 @@
   <div class="py-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <label class="font-bold text-base" @click="$router.push({ name: 'ProblemList' })">
+        <label class="font-bold text-base" @click="$router.push({ name: 'ProblemsList' })">
           <document-folder theme="outline" size="18" />
           题目列表
         </label>
