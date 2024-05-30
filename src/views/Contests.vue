@@ -44,12 +44,12 @@
             <td class="font-bold talbe-lg">
               <div>{{ item.Title }}</div>
             </td>
-            <td class="space-y-0.5 [&_span]:badge [&_span]:badge-neutral [&_span]:mr-1">
-              <span>
+            <td class="space-y-0.5 [&_span]:badge [&_span]:mr-1 [&_span]:font-bold [&_span]:text-white">
+              <span :style="item.Type == 1 ? 'background-color: #8F43AC;' : 'background-color: #E37E27;'">
                 {{ item.Type == 1 ? 'ICPC' : 'OI' }}
               </span>
-              <span>
-                {{ item.IsPublic ? '公开' : '加密' }}
+              <span :style="item.IsPublic == 1 ? 'background-color: #21700E;' : 'background-color: #E44D3D;'">
+                {{ item.IsPublic == 1 ? '公开' : '加密' }}
               </span>
             </td>
             <td>
@@ -58,7 +58,14 @@
               {{ ConvertTools.PrintTime(item.EndTime) }}
             </td>
             <td class="hidden lg:table-cell">
-              {{ item.UID }}
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页" @click.stop="$router.push({
+                name: 'User',
+                params: {
+                  UID: item.UID
+                }
+              })">
+                {{ item.UID }}
+              </span>
             </td>
           </tr>
         </tbody>

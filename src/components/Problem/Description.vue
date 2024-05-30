@@ -13,7 +13,7 @@
         复制 MarkDown
       </button>
       <a v-if="props.problem.Origin == 1 && (props.contest.CID == 0 || props.contest.CID != 0 && props.contest.EndTime < props.contest.TimeNow)"
-        href="" target="_blank">
+        :href="'https://codeforces.com/' + (OriginCID > 100000? 'gym' : 'contest') + '/' + OriginCID + '/problem/' + OriginPNO" target="_blank">
         <button class="btn w-fit">
           <link-two theme="outline" size="20" />
           跳转原题
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, withDefaults } from 'vue';
+import { ref, defineProps, withDefaults, onMounted, watch } from 'vue';
 
 import { push } from 'notivue';
 import { MdPreview } from 'md-editor-v3';
@@ -112,5 +112,19 @@ async function downloadPdf() {
     message: '已保存题面 PDF',
   })
 }
+
+let OriginCID = ref(0);
+let OriginPNO = ref('');
+
+watch(() => props.problem.OriginPID, () => {
+  if (props.problem.Origin != -1) {
+    const digitRegex = /^\d+/;
+    let match = props.problem.OriginPID.match(digitRegex);
+    if (match) {
+      OriginCID.value = parseInt(match[0]);
+      OriginPNO.value = props.problem.OriginPID.substring(match[0].length);
+    }
+  }
+});
 
 </script>

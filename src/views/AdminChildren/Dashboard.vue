@@ -43,8 +43,14 @@
   <div class="grid grid-cols-12 gap-6 max-w-5xl mx-auto">
     <div class="space-y-6 col-span-4">
       <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
-        <button class="btn btn-neutral" @click="showEditHomeNoticeModal()">编辑首页公告</button>
-        <button class="btn btn-neutral" @click="$router.push({ name: 'AdminUpdateLog' })">编辑更新日志</button>
+        <button class="btn btn-neutral" @click="showEditHomeNoticeModal()">
+          <remind theme="outline" size="18" />
+          首页公告
+        </button>
+        <button class="btn btn-neutral" @click="$router.push({ name: 'AdminUpdateLog' })">
+          <notepad theme="outline" size="18" />
+          更新日志
+        </button>
       </div>
       <div class="card Border bg-white shadow-lg p-6 w-fit">
         <label class="form-control w-full max-w-xs">
@@ -95,6 +101,20 @@
     </div>
     <div class="space-y-6 col-span-4">
       <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
+        <button class="btn btn-neutral" @click="$router.push({ name: 'AddProblem' })">
+          <document-folder theme="outline" size="18" />
+          新增题目
+        </button>
+        <button class="btn btn-neutral" @click="$router.push({ name: 'AddContest' })">
+          <trophy theme="outline" size="18" />
+          新增比赛
+        </button>
+        <button class="btn btn-neutral" @click="$router.push({ name: 'AddProblemList' })">
+          <bill theme="outline" size="18" />
+          新增题单
+        </button>
+      </div>
+      <div class="card Border bg-white shadow-lg p-6 w-full space-y-2">
         <div class="flex">
           <google theme="outline" size="22" />
           <a class="ml-3 font-bold link link-hover"
@@ -125,9 +145,9 @@
 </template>
 
 <script lang="ts" setup name="Training">
-import { onMounted, reactive, ref } from 'vue';
+import { getCurrentInstance, onMounted, reactive, ref } from 'vue';
 
-import { DocumentFolder, Google, History, Peoples, PreviewOpen, UploadLogs } from '@icon-park/vue-next';
+import { DocumentFolder, Google, History, Peoples, PreviewOpen, UploadLogs, Remind, Notepad, Bill, Trophy } from '@icon-park/vue-next';
 import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';

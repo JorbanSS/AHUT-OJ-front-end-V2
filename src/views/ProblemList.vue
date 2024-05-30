@@ -110,6 +110,8 @@ let problemList = reactive<ProblemListType>({
     _getRecords(params)
       .then((data: any) => {
         this.RecordNumber = data.Count;
+        console.log(data);
+        
       })
   },
 

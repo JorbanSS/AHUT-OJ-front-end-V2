@@ -345,6 +345,8 @@ let problem = reactive<ProblemType>({
     _getRecords(params)
       .then((data: any) => {
         this.RecordNumber = data.Count;
+        console.log(data.Count);
+        
       })
   },
 
@@ -445,6 +447,7 @@ function syncUrl() {
 onMounted(() => {
   syncUrl();
   problem.get();
+  problem.getRecordNumber();
 })
 
 watch(() => route.params.PID, () => {

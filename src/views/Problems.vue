@@ -65,7 +65,7 @@
               <span class="font-bold talbe-lg Nowarp">{{ item.Title }}</span>
             </td>
             <td class="space-y-0.5 hidden md:table-cell">
-              <span class="badge badge-neutral mr-1"
+              <span class="badge badge-neutral mr-1 font-bold"
                 v-for="(label, index) in item.Label.split(/;| /).filter(item => item != '' && item != '/')"
                 :key="index">
                 {{ label }}

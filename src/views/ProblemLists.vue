@@ -42,19 +42,25 @@
             </td>
             <td class="space-y-0.5">
               <template v-for="labelItem in problemListLabelOptions">
-                <span class="badge badge-neutral whitespace-nowrap mr-1"
+                <span class="badge badge-neutral whitespace-nowrap mr-1 font-bold"
                   v-if="item.Title.split(' - ').length > 1 && item.Title.split(' - ')[0] == labelItem.value">
                   {{ labelItem.value }}
                 </span>
               </template>
-              <span class="badge badge-neutral whitespace-nowrap mr-1"
-                v-if="item.Title.endsWith('(By Clone)')">Cloned</span>
+              <span class="badge text-white whitespace-nowrap mr-1 font-bold" v-if="item.Title.endsWith('(By Clone)')" style="background-color: #4398DA;">Cloned</span>
             </td>
             <td class="hidden md:table-cell">
               {{ ConvertTools.PrintTime(item.StartTime, 1) }}
             </td>
             <td class="hidden md:table-cell">
-              {{ item.UID }}
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页" @click.stop="$router.push({
+                name: 'User',
+                params: {
+                  UID: item.UID
+                }
+              })">
+                {{ item.UID }}
+              </span>
             </td>
           </tr>
         </tbody>
