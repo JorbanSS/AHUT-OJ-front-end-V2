@@ -10,6 +10,7 @@ export interface DiscussionType {
   Text: string,             // 内容
   IsFavorite: boolean,      // 是否收藏
   FavoriteCount: number,    // 收藏数
+  NewComment: string,       // 发表新评论
 
   [item: string]: any       // 其他字段
 }
@@ -29,4 +30,6 @@ export interface CommentType {
   UID: string,              // 用户 UID
   UserName: string,         // 用户名
   UpdateTime: number,       // 更新时间
+
+  [item: string]: any       // 其他字段
 }

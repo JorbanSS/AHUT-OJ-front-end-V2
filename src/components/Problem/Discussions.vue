@@ -4,11 +4,13 @@
       <div class="card border shadow-lg p-6 bg-white mb-4">
         <div class="flex justify-between items-center mb-4">
           <div class="flex flex-row items-center">
-            <img :src="getHeadURL(discussion.HeadURL)" alt="Avatar" class="w-12 h-12 rounded-full mr-4">
+            <img :src="getHeadURL(discussion.HeadURL)" alt="Avatar" class="w-12 h-12 rounded-full mr-4 cursor-pointer"
+              @click="$router.push({ name: 'User', params: { UID: discussion.UID } })">
             <div>
               <div class="flex space-x-2">
-                <div class="font-bold">{{ discussion.UserName }}</div>
-                <span>({{ discussion.UID }})</span>
+                <div class="font-bold cursor-pointer"
+                  @click="$router.push({ name: 'User', params: { UID: discussion.UID } })">{{
+                    discussion.UserName }}</div>
               </div>
               <div class="text-gray-500 text-sm">{{ ConvertTools.PrintTime(discussion.CreateTime, 1, 1) }}</div>
             </div>
@@ -31,10 +33,29 @@
         <div class="overflow-hidden mb-4">
           <MdPreview :modelValue="discussion.Text" class="-mx-4 -my-5 w-full" />
         </div>
-        <div class="divider"></div> 
+        <!-- <div class="divider" v-if="discussion.Data != null"></div> -->
+        <div class="m-1"></div>
+        <div class="chat chat-start">
+          <div class="chat-image avatar">
+            <div class="w-12 rounded-full">
+              <img alt="Avatar" :src="getHeadURL(userDataStore.HeadURL)" class="cursor-pointer"
+                @click="$router.push({ name: 'User', params: { UID: userDataStore.UID } })" />
+            </div>
+          </div>
+          <div class="chat-header flex items-baseline gap-1"
+            :class="{ 'flex-row-reverse': userDataStore.UID == discussion.UID }">
+            <span class="cursor-pointer" @click="$router.push({ name: 'User', params: { UID: userDataStore.UID } })">{{
+              userDataStore.UserName }}</span>
+          </div>
+          <!-- <div class="chat-bubble mt-1">{{ discussion.Text }}</div> -->
+          <textarea class="textarea textarea-bordered w-full mt-1" placeholder=""
+            v-model="discussion.NewComment"></textarea>
+        </div>
+        <button class="btn btn-primary w-fit ml-auto mt-1" @click="discussions.comment(discussion.SID, discussion.NewComment)">发表评论</button>
+        <div class="m-3" v-if="discussion.Data != null"></div>
         <template v-if="discussion.Data != null">
           <div v-for="comment in discussion.Data">
-            <component :is="ChatBubble" :comment="comment" :UID="discussion.UID" />
+            <component :is="CommentBubble" :comment="comment" :UID="discussion.UID" />
           </div>
         </template>
       </div>
@@ -70,10 +91,10 @@ import { ThumbsUp, Comment } from '@icon-park/vue-next';
 import { } from '@/config';
 import { } from '@/interfaces/record';
 import { useUserDataStore } from '@/stores/UserData';
-import { _getDiscussions, _giveThumbsUp } from '@/apis/discussion';
+import { _getDiscussions, _giveThumbsUp, _sendComment } from '@/apis/discussion';
 import { getHeadURL, ConvertTools } from '@/utils/globalFunctions';
 import { DiscussionsType } from '@/interfaces/discussion';
-import ChatBubble from '@/components/Main/ChatBubble.vue';
+import CommentBubble from '@/components/Main/CommentBubble.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -122,7 +143,26 @@ let discussions = reactive<DiscussionsType>({
           }
         })
       })
-  }
+  },
+
+  comment(SID: number, commentText: string) {
+    let params = {
+      ActionType: 1,
+      CID: 0,
+      FCID: 0,
+      SID: SID,
+      Text: commentText,
+      Title: '',
+      UID: userDataStore.UID,
+    };
+    _sendComment(params)
+      .then(() => {
+        push.success({
+          title: '评论成功',
+        });
+        discussions.get();
+      })
+  },
 });
 
 function syncUrl() {

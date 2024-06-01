@@ -63,7 +63,7 @@
           <td>
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
-          <td>
+          <td class="flex justify-center space-x-2">
             <button class="btn btn-sm btn-neutral" @click.stop="$router.push({
               name: 'EditProblemList',
               params: {
@@ -72,6 +72,10 @@
             })">
               <edit-two theme="outline" size="18" />
               编辑
+            </button>
+            <button class="btn btn-neutral btn-sm" @click.stop="problemLists.delete(item.LID)">
+              <delete-one theme="outline" size="16" />
+              删除
             </button>
           </td>
         </tr>
@@ -156,25 +160,30 @@ let problemLists = reactive<ProblemListsType>({
     if (1 <= page && page <= maxPage.value) problemLists.page = page;
   },
 
-  delete() {
-    let list = getSelectedList();
-    if (list.length == 0) {
-      push.warning({
-        title: '操作不合法',
-        message: '尚未选择任何题目，无法删除',
-      })
-      return;
-    }
+  delete(LID?: number) {
     let params = {
-      LIDs: list,
+      LIDs: new Array<number>(),
     };
+    if (LID == undefined) {
+      let list = getSelectedList();
+      params.LIDs = list;
+      if (list.length == 0) {
+        push.warning({
+          title: '操作不合法',
+          message: '尚未选择任何题目，无法删除',
+        })
+        return;
+      }
+    } else {
+      params.LIDs.push(LID);
+    }
     _deleteProblemLists(params)
       .then(() => {
         problemLists.get();
         switchAllSelectedStatus(false);
         push.success({
           title: '删除成功',
-          message: `一共删除了 ${list.length} 个题单`,
+          message: `一共删除了 ${params.LIDs.length} 个题单`,
         });
       })
   }

@@ -27,16 +27,15 @@
           </tr>
         </thead>
         <tbody v-auto-animate>
-          <tr v-for="item in contests.contests" :key="item.CID"
-            @click="item.Status && $router.push({
-              name: 'Contest',
-              params: {
-                CID: item.CID
-              }
-            })"
-            :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': !item.Status }">
-            <td class="font-bold talbe-lg whitespace-nowrap hidden md:table-cell">
-              {{ ContestStatus[item.Status] }}
+          <tr v-for="item in contests.contests" :key="item.CID" @click="item.Status && $router.push({
+            name: 'Contest',
+            params: {
+              CID: item.CID,
+            }
+          })" :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': !item.Status }">
+            <td class="font-bold talbe-lg whitespace-nowrap hidden md:table-cell"
+              :style="'color: ' + ContestStatus[item.Status].color">
+              {{ ContestStatus[item.Status].title }}
             </td>
             <th class="hidden lg:table-cell">
               {{ item.CID }}
@@ -58,12 +57,13 @@
               {{ ConvertTools.PrintTime(item.EndTime) }}
             </td>
             <td class="hidden lg:table-cell">
-              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页" @click.stop="$router.push({
-                name: 'User',
-                params: {
-                  UID: item.UID
-                }
-              })">
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页"
+                @click.stop="$router.push({
+                  name: 'User',
+                  params: {
+                    UID: item.UID
+                  }
+                })">
                 {{ item.UID }}
               </span>
             </td>
@@ -90,17 +90,17 @@ const router = useRouter();
 
 let TimeNow = ref(0);
 
-let ContestStatus = [
-  '未开始',
-  '进行中',
-  '已结束',
+let ContestStatus: Array<{ title: string, color: string }> = [
+  { title: '未开始', color: '#2C90D1' },
+  { title: '进行中', color: 'green' },
+  { title: '已结束', color: 'gray' },
 ];
 
 let contests = reactive<ContestsType>({
   contests: Array<ContestSimplifiedType>(),
   count: 0,
   page: 1,
-  limit: 20,
+  limit: 10,
   UID: '',
   searchInfo: {
     CID: '',

@@ -232,6 +232,12 @@ let contest = reactive<ContestType>({
           title: '新增成功',
           message: `比赛 ID 为 ${data.CID}`,
         });
+        router.push({
+          name: 'Contest',
+          params: {
+            CID: data.CID,
+          },
+        });
       })
   },
 
