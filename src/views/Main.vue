@@ -1,13 +1,13 @@
 <template>
   <div v-auto-animate>
-    <NavBar :login="loginAction" :logout="logoutAction" v-if="showConfig.showNavBar" />
+    <NavBar :login="loginAction" :logout="logoutAction" v-if="showConfig.showNavBar && route.name != 'Editor'" />
     <keep-alive>
       <div :style="adminMode ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 22px)'" v-auto-animate
         v-if="showConfig.showBody">
         <RouterView></RouterView>
       </div>
     </keep-alive>
-    <Footer v-if="showConfig.showFooter"></Footer>
+    <Footer v-if="showConfig.showFooter && route.name != 'Editor' && (route.matched.length == 0 || route.matched[0].name != 'Problem')"></Footer>
     <div class="coverBox" v-if="showConfig.showCover" style="background: linear-gradient(to bottom right, #BBB, #DDD);">
       <!-- #50A3A2, #53E3A6) -->
       <ul class="bg-bubbles">
@@ -17,7 +17,7 @@
     </div>
     <component :is="Login" :init="initAction" :register="registerAction" v-if="showConfig.showLogin" />
     <component :is="Register" :init="initAction" :login="loginAction" v-if="showConfig.showRegister" />
-    <component :is="Editor" :init="initAction" v-if="showConfig.showEditor" />
+    <component :is="Editor" v-if="showConfig.showEditor"/>
   </div>
 </template>
 
@@ -36,6 +36,7 @@ import Editor from '@/components/Main/Editor.vue';
 import { useUserDataStore } from '@/stores/UserData';
 import { type ShowConfigType } from '@/interfaces/oj';
 import { type UserSimplifiedType } from '@/interfaces/user';
+import router from '@/routers';
 
 const userDataStore = useUserDataStore();
 const route = useRoute();

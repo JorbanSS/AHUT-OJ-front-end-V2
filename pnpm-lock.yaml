@@ -10,7 +10,7 @@ dependencies:
     version: 0.8.1
   '@guolao/vue-monaco-editor':
     specifier: ^1.5.1
-    version: 1.5.1(monaco-editor@0.47.0)(vue@3.4.21)
+    version: 1.5.1(monaco-editor@0.49.0)(vue@3.4.21)
   '@icon-park/vue-next':
     specifier: ^1.4.2
     version: 1.4.2(vue@3.4.21)
@@ -662,7 +662,7 @@ packages:
     resolution: {integrity: sha512-0/Z2cuNXWVVIG/l0SpcHAWFhGdvLJ8DRvEfRWvmojtmRWfEy+LWNwgDazbZqY0qQYtkHcoEK3jBLkhiZaB/4Ig==}
     dev: false
 
-  /@guolao/vue-monaco-editor@1.5.1(monaco-editor@0.47.0)(vue@3.4.21):
+  /@guolao/vue-monaco-editor@1.5.1(monaco-editor@0.49.0)(vue@3.4.21):
     resolution: {integrity: sha512-nhbQHDAwsxrdH/yitcrBgAkN8Cae0IEiYe/M3LWK8bSJRfapkbMyfTHE6Gcxsxa/6efSUZAPDo8dJWBDx5GZyA==}
     peerDependencies:
       '@vue/composition-api': ^1.7.1
@@ -672,10 +672,10 @@ packages:
       '@vue/composition-api':
         optional: true
     dependencies:
-      '@monaco-editor/loader': 1.4.0(monaco-editor@0.47.0)
-      monaco-editor: 0.47.0
+      '@monaco-editor/loader': 1.4.0(monaco-editor@0.49.0)
+      monaco-editor: 0.49.0
       vue: 3.4.21(typescript@5.4.2)
-      vue-demi: 0.14.7(vue@3.4.21)
+      vue-demi: 0.14.8(vue@3.4.21)
     dev: false
 
   /@icon-park/vue-next@1.4.2(vue@3.4.21):
@@ -854,12 +854,12 @@ packages:
       '@lezer/lr': 1.4.0
     dev: false
 
-  /@monaco-editor/loader@1.4.0(monaco-editor@0.47.0):
+  /@monaco-editor/loader@1.4.0(monaco-editor@0.49.0):
     resolution: {integrity: sha512-00ioBig0x642hytVspPl7DbQyaSWRaolYie/UFNjoTdvoKPzo6xrXLhTk9ixgIKcLH5b5vDOjVNiGyY+uDCUlg==}
     peerDependencies:
       monaco-editor: '>= 0.21.0 < 1'
     dependencies:
-      monaco-editor: 0.47.0
+      monaco-editor: 0.49.0
       state-local: 1.0.7
     dev: false
 
@@ -1858,8 +1858,8 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dev: true
 
-  /monaco-editor@0.47.0:
-    resolution: {integrity: sha512-VabVvHvQ9QmMwXu4du008ZDuyLnHs9j7ThVFsiJoXSOQk18+LF89N4ADzPbFenm0W4V2bGHnFBztIRQTgBfxzw==}
+  /monaco-editor@0.49.0:
+    resolution: {integrity: sha512-2I8/T3X/hLxB2oPHgqcNYUVdA/ZEFShT7IAujifIPMfKkNbLOqY8XCoyHCXrsdjb36dW9MwoTwBCFpXKMwNwaQ==}
     dev: false
 
   /muggle-string@0.3.1:
@@ -2444,6 +2444,21 @@ packages:
 
   /vue-demi@0.14.7(vue@3.4.21):
     resolution: {integrity: sha512-EOG8KXDQNwkJILkx/gPcoL/7vH+hORoBaKgGe+6W7VFMvCYJfmF2dGbvgDroVnI8LU7/kTu8mbjRZGBU1z9NTA==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      vue: 3.4.21(typescript@5.4.2)
+    dev: false
+
+  /vue-demi@0.14.8(vue@3.4.21):
+    resolution: {integrity: sha512-Uuqnk9YE9SsWeReYqK2alDI5YzciATE0r2SkA6iMAtuXvNTMNACJLJEXNXaEy94ECuBe4Sk6RzRU80kjdbIo1Q==}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true

@@ -105,14 +105,10 @@ export const objectTypeOptions = [
 ];
 
 export const editorLanguageOptions = [
-  { label: "C++", value: "cpp" },
-  { label: "JavaScript", value: "javascript" },
-  { label: "Python", value: "python" },
-  { label: "Java", value: "java" },
-  { label: "Go", value: "go" },
-  { label: "SQL", value: "sql" },
-  { label: "JSON", value: "json" },
-  { label: "MarkDown", value: "markdown" },
+  { label: "C", value: "c", compiler: "C17 (gcc 12.2.0)", language: 1 },
+  { label: "C++", value: "cpp", compiler: "C++17 (g++ 12.2.0)", language: 4 },
+  { label: "Java", value: "java", compiler: "Java17 (OpenJDK 17.0.10 64bit)", language: 5 },
+  { label: "Python", value: "py", compiler: "Python3 (3.10.13)", language: 6 },
 ];
 
 export const submitLanguageOptions = [

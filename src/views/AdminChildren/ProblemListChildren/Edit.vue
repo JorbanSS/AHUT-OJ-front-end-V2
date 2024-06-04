@@ -197,10 +197,9 @@ let problemList = reactive<ProblemListType>({
       LID: problemList.LID,
     };
     _editProblemList(params)
-      .then((data: any) => {
+      .then(() => {
         push.success({
           title: '编辑成功',
-          message: `题单 ID 为 ${data.LID}`,
         });
       })
   },

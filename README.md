@@ -177,8 +177,6 @@ pnpm i --save-dev @types/canvas-confetti
 pnpm install spark-md5
 
 pnpm install @types/spark-md5 -D
-
-pnpm i @vitejs/plugin-vue-jsx -D
 ```
 
 `main.ts` 中添加
