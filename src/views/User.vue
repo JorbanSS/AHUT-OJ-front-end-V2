@@ -1,99 +1,83 @@
 <template>
-  <div class="card Border shandow-2xl bg-white relative max-w-2xl mx-auto">
-    <img class="cursor-no-focus absolute top-0 w-full h-full object-cover blur-2xl opacity-25 select-none"
-      :src="getHeadURL(user.HeadURL)" alt="" draggable="false" />
-    <div class="relative flex items-end">
-      <div id="userImg" class="relative ml-6 mt-6 h-24 w-24 rounded-lg overflow-hidden">
-        <img :src="getHeadURL(user.HeadURL)" class="select-none" draggable="false" />
-      </div>
-      <div class="ml-4">
-        <div class="text-xl font-bold">
-          {{ user.UserName }}
+  <div class="m-6 space-y-6 max-w-6xl mx-auto">
+    <div class="card Border shadow-lg bg-white relative max-w-2xl mx-auto">
+      <img class="cursor-no-focus absolute top-0 w-full h-full object-cover blur-2xl opacity-25 select-none"
+        :src="getHeadURL(user.HeadURL)" alt="" draggable="false" />
+      <div class="relative flex items-end">
+        <div id="userImg" class="relative ml-6 mt-6 h-24 w-24 rounded-lg overflow-hidden">
+          <img :src="getHeadURL(user.HeadURL)" class="select-none" draggable="false" />
         </div>
-        <div class="text-md text-gray-500">UID：{{ user.UID }}</div>
-      </div>
-      <div class="absolute right-6 h-full flex flex-col items-end justify-end font-bold">
-        <div class="">AC:&nbsp;&nbsp;&nbsp;<span class="text-green-500">{{ user.Solved }}</span></div>
-        <div class="">Submited:&nbsp;&nbsp;&nbsp;<span class="text-blue-500">{{ user.Submited }}</span>
-        </div>
-        <!-- <div class="rating">Rating:&nbsp;&nbsp;&nbsp;<span :style="getRatingColor(userInfo.Rating ? user.Rating : 0)">{{ userInfo.Rating ? userInfo.Rating : 0 }}</span></div> -->
-      </div>
-    </div>
-    <div class="w-full py-6 pl-6 flex flex-col">
-      <div>学校:&nbsp;{{ user.School }}</div>
-      <div>专业:&nbsp;{{ user.Major }}</div>
-      <div>班级:&nbsp;{{ user.Class }}</div>
-      <div>邮箱:&nbsp;{{ user.Email }}</div>
-    </div>
-  </div>
-
-  <!-- <div class="max-w-6xl">
-    <div class="hero bg-base-200">
-      <div class="hero-content flex-col lg:flex-row">
-        <div class="avatar">
-          <div class="w-36 rounded-xl">
-            <img :src="'/oss/head-images/' + user.HeadURL" />
+        <div class="ml-4">
+          <div class="text-xl font-bold">
+            {{ user.UserName }}
           </div>
+          <div class="text-md text-gray-500">UID：{{ user.UID }}</div>
+        </div>
+        <div class="absolute right-6 h-full flex flex-col items-end justify-end font-bold">
+          <div class="">AC:&nbsp;&nbsp;&nbsp;<span class="text-green-500">{{ user.Solved }}</span></div>
+          <div class="">Submited:&nbsp;&nbsp;&nbsp;<span class="text-blue-500">{{ user.Submited }}</span>
+          </div>
+          <!-- <div class="rating">Rating:&nbsp;&nbsp;&nbsp;<span :style="getRatingColor(userInfo.Rating ? user.Rating : 0)">{{ userInfo.Rating ? userInfo.Rating : 0 }}</span></div> -->
         </div>
       </div>
-    </div>
-  </div> -->
-  <!-- <div class="Boder bg-white max-w-6xl p-4 flex rounded-2xl shadow-lg">
-    <div class="avatar">
-      <div class="w-36 rounded-xl">
-        <img src="https://daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg" />
+      <div class="w-full py-6 pl-6 flex flex-col">
+        <div>学校:&nbsp;{{ user.School }}</div>
+        <div>专业:&nbsp;{{ user.Major }}</div>
+        <div>班级:&nbsp;{{ user.Class }}</div>
+        <div>邮箱:&nbsp;{{ user.Email }}</div>
       </div>
     </div>
-  </div> -->
-  <div class="py-6 flex justify-center space-x-2" v-if="userDataStore.UID == user.UID">
-    <ul class="menu rounded-box bg-white Border w-fit">
-      <!-- <ul class="menu rounded-box bg-white Border w-fit lg:menu-horizontal "> -->
-      <li>
-        <div class="font-bold text-base" onclick="bindCodeforcesModal.showModal()">
-          <ranking theme="outline" size="18" />
-          绑定 Codeforces
-        </div>
-      </li>
-      <li>
-        <div class="font-bold text-base" onclick="bindNowcoderModal.showModal()">
-          <cattle theme="outline" size="18" />
-          绑定 Nowcoder
-        </div>
-      </li>
-      <li>
-        <div class="font-bold text-base" onclick="bindAtcoderModal.showModal()">
-          <horse-zodiac theme="outline" size="18" />
-          绑定 Atcoder
-        </div>
-      </li>
-      <li>
-        <div class="font-bold text-base" onclick="bindVirtualJudgeModal.showModal()">
-          <emotion-happy theme="outline" size="18" />
-          绑定 Virtual Judge
-        </div>
-      </li>
-    </ul>
-    <ul class="menu rounded-box bg-white Border">
-      <!-- <ul class="menu rounded-box bg-white lg:menu-horizontal Border"> -->
-      <li>
-        <div class="font-bold text-base" onclick="editUserInfoModal.showModal()">
-          <info theme="outline" size="18" />
-          修改信息
-        </div>
-      </li>
-      <li>
-        <div class="font-bold text-base" onclick="editHeadImageModal.showModal()">
-          <avatar theme="outline" size="18" />
-          修改头像
-        </div>
-      </li>
-      <li>
-        <div class="font-bold text-base" onclick="editPasswordModal.showModal()">
-          <key theme="outline" size="18" />
-          修改密码
-        </div>
-      </li>
-    </ul>
+    <div class="flex justify-center space-x-2" v-if="userDataStore.UID == user.UID">
+      <ul class="menu rounded-box bg-white Border w-fit">
+        <!-- <ul class="menu rounded-box bg-white Border w-fit lg:menu-horizontal "> -->
+        <li>
+          <div class="font-bold text-base" onclick="bindCodeforcesModal.showModal()">
+            <ranking theme="outline" size="18" />
+            绑定 Codeforces
+          </div>
+        </li>
+        <li>
+          <div class="font-bold text-base" onclick="bindNowcoderModal.showModal()">
+            <cattle theme="outline" size="18" />
+            绑定 Nowcoder
+          </div>
+        </li>
+        <li>
+          <div class="font-bold text-base" onclick="bindAtcoderModal.showModal()">
+            <horse-zodiac theme="outline" size="18" />
+            绑定 Atcoder
+          </div>
+        </li>
+        <li>
+          <div class="font-bold text-base" onclick="bindVirtualJudgeModal.showModal()">
+            <emotion-happy theme="outline" size="18" />
+            绑定 Virtual Judge
+          </div>
+        </li>
+      </ul>
+      <ul class="menu rounded-box bg-white Border">
+        <!-- <ul class="menu rounded-box bg-white lg:menu-horizontal Border"> -->
+        <li>
+          <div class="font-bold text-base" onclick="editUserInfoModal.showModal()">
+            <info theme="outline" size="18" />
+            修改信息
+          </div>
+        </li>
+        <li>
+          <div class="font-bold text-base" onclick="editHeadImageModal.showModal()">
+            <avatar theme="outline" size="18" />
+            修改头像
+          </div>
+        </li>
+        <li>
+          <div class="font-bold text-base" onclick="editPasswordModal.showModal()">
+            <key theme="outline" size="18" />
+            修改密码
+          </div>
+        </li>
+      </ul>
+    </div>
+
   </div>
   <dialog id="bindCodeforcesModal" class="modal">
     <div class="modal-box space-y-2 w-96">

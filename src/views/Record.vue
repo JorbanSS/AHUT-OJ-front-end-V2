@@ -1,85 +1,84 @@
 <template>
-  <div role="alert" class="alert text-white shadow-lg font-bold border-0"
-    :style="'background-color: ' + submitStatusColor[record.Result]" v-if="record.Result != ''">
-    <component :is="submitInfo[record.Result].icon" theme="outline" size="24" />
-    <span class="text-lg">{{ submitInfo[record.Result].label }}</span>
-  </div>
-  <div class="m-6"></div>
-  <div class="card bg-white shadow-lg Border">
-    <table class="table table-zebra">
-      <thead>
-        <tr>
-          <th v-for="(item, index) in ['分数', '提交号', '题号', '提交者', '用时', '内存', '语言', '提交时间']" :key="index">
-            {{ item }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            {{ ConvertTools.Percentage(record.PassSample, record.SampleNumber) }}
-          </td>
-          <th class="font-bold talbe-lg">
-            {{ record.SID }}
-          </th>
-          <td>
-            <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目"
-              @click="$router.push({
+  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+    <div role="alert" class="alert text-white shadow-lg font-bold border-0"
+      :style="'background-color: ' + submitStatusColor[record.Result]" v-if="record.Result != ''">
+      <component :is="submitInfo[record.Result].icon" theme="outline" size="24" />
+      <span class="text-lg">{{ submitInfo[record.Result].label }}</span>
+    </div>
+    <div class="card bg-white shadow-lg Border">
+      <table class="table table-zebra">
+        <thead>
+          <tr>
+            <th v-for="(item, index) in ['分数', '提交号', '题号', '提交者', '用时', '内存', '语言', '提交时间']" :key="index">
+              {{ item }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              {{ ConvertTools.Percentage(record.PassSample, record.SampleNumber) }}
+            </td>
+            <th class="font-bold talbe-lg">
+              {{ record.SID }}
+            </th>
+            <td>
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目" @click="$router.push({
                 name: 'Problem',
                 params: {
                   PID: record.PID,
                 },
               })">
-              {{ record.PID }}
-            </span>
-          </td>
-          <td>
-            <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页"
-              @click="$router.push({
+                {{ record.PID }}
+              </span>
+            </td>
+            <td>
+              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页" @click="$router.push({
                 name: 'User',
                 params: {
                   UID: record.UID,
                 },
               })">
-              {{ record.UID }}
-            </span>
-          </td>
-          <td>
-            {{ record.UseTime }} ms
-          </td>
-          <td>
-            {{ Math.ceil(record.UseMemory / 1024 / 1024) }} MB
-          </td>
-          <td>
-            {{ constValStore.SUBMIT_LANG[record.Lang] }}
-          </td>
-          <td>
-            {{ ConvertTools.PrintTime(record.SubmitTime, 1, 1) }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="m-6"></div>
-  <div v-if="record.ErrInfo != null && record.ErrInfo != ''">
-    <div class="card shadow-lg bg-white Border">
-      <div class="mockup-code">
-        <pre>
-          <code>
-          {{ record.ErrInfo }}
-          </code>
-        </pre>
+                {{ record.UID }}
+              </span>
+            </td>
+            <td>
+              {{ record.UseTime }} ms
+            </td>
+            <td>
+              {{ Math.ceil(record.UseMemory / 1024 / 1024) }} MB
+            </td>
+            <td>
+              {{ constValStore.SUBMIT_LANG[record.Lang] }}
+            </td>
+            <td>
+              {{ ConvertTools.PrintTime(record.SubmitTime, 1, 1) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-if="record.ErrInfo != null && record.ErrInfo != ''">
+      <div class="card shadow-lg bg-white Border">
+        <div class="mockup-code">
+          <pre>
+            <code>
+            {{ record.ErrInfo }}
+            </code>
+          </pre>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="m-6"></div>
-  <button class="btn w-fit btn-sm btn-neutral" @click="copyData()">
-    <copy theme="outline" size="18" />
-    复制内容
-  </button>
-  <div class="m-2"></div>
-  <div class="mockup-code card shadow-lg px-6">
-    <pre v-for="(item, index) in record.Source.split('\n')" :data-prefix="index + 1"><code>{{ item }}</code></pre>
+    <div>
+      <button class="btn w-fit btn-sm btn-neutral" @click="copyData()">
+        <copy theme="outline" size="18" />
+        复制代码
+      </button>
+      <div class="m-2"></div>
+      <div class="mockup-code card shadow-lg px-6">
+        <pre v-for="(item, index) in record.Source.split('\n')" :data-prefix="index + 1"><code>{{ item }}</code></pre>
+      </div>
+    </div>
   </div>
 </template>
 

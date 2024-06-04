@@ -189,12 +189,6 @@ const routes = [
     ],
   },
   {
-    name: "Test",
-    path: "/test",
-    component: () => import("@/views/Test.vue"),
-    meta: { title: BaseTitle + "测试" },
-  },
-  {
     name: "User",
     path: "/user/:UID",
     component: () => import("@/views/User.vue"),

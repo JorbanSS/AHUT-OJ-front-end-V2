@@ -1,72 +1,73 @@
 <template>
-  <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto w-fit">
-    <div class="join w-fit">
-      <label class="input input-bordered flex items-center gap-2 join-item">
-        <span class="whitespace-nowrap">题单号</span>
-        <input type="text" class="grow w-60" v-model="problemLists.searchInfo.LID" />
-      </label>
-      <button class="btn join-item btn-neutral"
-        @click="problemLists.goToProblemList(problemLists.searchInfo.LID)">跳转</button>
+  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+    <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto w-fit">
+      <div class="join w-fit">
+        <label class="input input-bordered flex items-center gap-2 join-item">
+          <span class="whitespace-nowrap">题单号</span>
+          <input type="text" class="grow w-60" v-model="problemLists.searchInfo.LID" />
+        </label>
+        <button class="btn join-item btn-neutral"
+          @click="problemLists.goToProblemList(problemLists.searchInfo.LID)">跳转</button>
+      </div>
     </div>
-  </div>
-  <div class="mt-6"></div>
-  <div class="bg-white card shadow-lg Border">
-    <div class="overflow-x-hidden rounded-t-2xl">
-      <table class="table table-zebra table-pin-rows">
-        <thead>
-          <tr>
-            <template v-for="[title, style] in [
-              ['题单号', 'hidden md:table-cell'],
-              ['题单名称'],
-              ['标签'],
-              ['创建时间', 'hidden md:table-cell'],
-              ['创建人', 'hidden md:table-cell']
-            ]" :key="title">
-              <th :class="style">{{ title }}</th>
-            </template>
-          </tr>
-        </thead>
-        <tbody v-auto-animate>
-          <tr v-for="item in problemLists.problemLists" :key="item.LID"
-            @click="$router.push({
-              name: 'ProblemList',
-              params: {
-                LID: item.LID,
-              }
-            });" class="cursor-pointer">
-            <th class="hidden md:table-cell">
-              {{ item.LID }}
-            </th>
-            <td class="font-bold talbe-lg">
-              {{ item.Title }}
-            </td>
-            <td class="space-y-0.5">
-              <template v-for="labelItem in problemListLabelOptions">
-                <span class="badge badge-neutral whitespace-nowrap mr-1 font-bold"
-                  v-if="item.Title.split(' - ').length > 1 && item.Title.split(' - ')[0] == labelItem.value">
-                  {{ labelItem.value }}
-                </span>
+    <div class="bg-white card shadow-lg Border">
+      <div class="overflow-x-hidden rounded-t-2xl">
+        <table class="table table-zebra table-pin-rows">
+          <thead>
+            <tr>
+              <template v-for="[title, style] in [
+                ['题单号', 'hidden md:table-cell'],
+                ['题单名称'],
+                ['标签'],
+                ['创建时间', 'hidden md:table-cell'],
+                ['创建人', 'hidden md:table-cell']
+              ]" :key="title">
+                <th :class="style">{{ title }}</th>
               </template>
-              <span class="badge text-white whitespace-nowrap mr-1 font-bold" v-if="item.Title.endsWith('(By Clone)')" style="background-color: #4398DA;">Cloned</span>
-            </td>
-            <td class="hidden md:table-cell">
-              {{ ConvertTools.PrintTime(item.StartTime, 1) }}
-            </td>
-            <td class="hidden md:table-cell">
-              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页" @click.stop="$router.push({
-                name: 'User',
+            </tr>
+          </thead>
+          <tbody v-auto-animate>
+            <tr v-for="item in problemLists.problemLists" :key="item.LID"
+              @click="$router.push({
+                name: 'ProblemList',
                 params: {
-                  UID: item.UID
+                  LID: item.LID,
                 }
-              })">
-                {{ item.UID }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              });" class="cursor-pointer">
+              <th class="hidden md:table-cell">
+                {{ item.LID }}
+              </th>
+              <td class="font-bold talbe-lg">
+                {{ item.Title }}
+              </td>
+              <td class="space-y-0.5">
+                <template v-for="labelItem in problemListLabelOptions">
+                  <span class="badge badge-neutral whitespace-nowrap mr-1 font-bold"
+                    v-if="item.Title.split(' - ').length > 1 && item.Title.split(' - ')[0] == labelItem.value">
+                    {{ labelItem.value }}
+                  </span>
+                </template>
+                <span class="badge text-white whitespace-nowrap mr-1 font-bold" v-if="item.Title.endsWith('(By Clone)')" style="background-color: #4398DA;">Cloned</span>
+              </td>
+              <td class="hidden md:table-cell">
+                {{ ConvertTools.PrintTime(item.StartTime, 1) }}
+              </td>
+              <td class="hidden md:table-cell">
+                <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页" @click.stop="$router.push({
+                  name: 'User',
+                  params: {
+                    UID: item.UID
+                  }
+                })">
+                  {{ item.UID }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <Pagination :page="problemLists.page" :maxPage="maxPage" :changePage="problemLists.changePage" />
     </div>
-    <Pagination :page="problemLists.page" :maxPage="maxPage" :changePage="problemLists.changePage" />
   </div>
 </template>
 

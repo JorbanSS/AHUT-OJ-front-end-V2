@@ -1,61 +1,62 @@
 <template>
-  <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto max-w-96">
-    <div class="join w-full">
-      <label class="input input-bordered flex items-center gap-2 join-item w-full">
-        <span class="whitespace-nowrap">记录号</span>
-        <input type="text" class="grow w-full" v-model="records.searchInfo.SID" />
-      </label>
-      <button class="btn join-item btn-neutral" @click="records.goToRecord(records.searchInfo.SID)">跳转</button>
-    </div>
-    <div class="collapse bg-base-200 collapse-arrow rounded-lg">
-      <input type="checkbox" />
-      <div class="collapse-title text-md font-bold">
-        高级筛选
-        <div class="badge badge-neutral">{{ filterNumber }}</div>
+  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+    <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto max-w-96">
+      <div class="join w-full">
+        <label class="input input-bordered flex items-center gap-2 join-item w-full">
+          <span class="whitespace-nowrap">记录号</span>
+          <input type="text" class="grow w-full" v-model="records.searchInfo.SID" />
+        </label>
+        <button class="btn join-item btn-neutral" @click="records.goToRecord(records.searchInfo.SID)">跳转</button>
       </div>
-      <div class="collapse-content space-y-2">
-        <div
-          class="space-y-2 [&_label]:input [&_label]:input-bordered [&_label]:flex [&_label]:items-center [&_label]:gap-2 [&_label_span]:whitespace-nowrap  [&_label_span]:text-sm">
-          <label class="w-full">
-            <span>UID</span>
-            <input type="text" class="grow w-full" v-model="records.searchInfo.UID" />
-            <button class="btn btn-neutral btn-sm -mr-2" @click.stop="records.onlyMine()">仅看自己</button>
-          </label>
-          <label>
-            <span>PID</span>
-            <input type="text" class="grow w-full" v-model="records.searchInfo.PID" />
-          </label>
-          <label>
-            <span>CID</span>
-            <input type="text" class="grow w-full" v-model="records.searchInfo.CID" />
-          </label>
-          <label>
-            <span>LID</span>
-            <input type="text" class="grow w-full" v-model="records.searchInfo.LID" />
-          </label>
+      <div class="collapse bg-base-200 collapse-arrow rounded-lg">
+        <input type="checkbox" />
+        <div class="collapse-title text-md font-bold">
+          高级筛选
+          <div class="badge badge-neutral">{{ filterNumber }}</div>
         </div>
-        <select class="select select-bordered join-item w-full" v-model="records.searchInfo.Lang">
-          <option value="0">
-            语言不限
-          </option>
-          <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
-            {{ item.name }}
-          </option>
-        </select>
-        <select class="select select-bordered join-item w-full" v-model="records.searchInfo.Result">
-          <option value="">
-            结果不限
-          </option>
-          <option v-for="item in submitStatusOptions" :value="item" :key="item">
-            {{ item }}
-          </option>
-        </select>
-        <button class="btn join-item btn-neutral w-full" @click="records.updateQuery()">搜索</button>
+        <div class="collapse-content space-y-2">
+          <div
+            class="space-y-2 [&_label]:input [&_label]:input-bordered [&_label]:flex [&_label]:items-center [&_label]:gap-2 [&_label_span]:whitespace-nowrap  [&_label_span]:text-sm">
+            <label class="w-full">
+              <span>UID</span>
+              <input type="text" class="grow w-full" v-model="records.searchInfo.UID" />
+              <button class="btn btn-neutral btn-sm -mr-2" @click.stop="records.onlyMine()">仅看自己</button>
+            </label>
+            <label>
+              <span>PID</span>
+              <input type="text" class="grow w-full" v-model="records.searchInfo.PID" />
+            </label>
+            <label>
+              <span>CID</span>
+              <input type="text" class="grow w-full" v-model="records.searchInfo.CID" />
+            </label>
+            <label>
+              <span>LID</span>
+              <input type="text" class="grow w-full" v-model="records.searchInfo.LID" />
+            </label>
+          </div>
+          <select class="select select-bordered join-item w-full" v-model="records.searchInfo.Lang">
+            <option value="0">
+              语言不限
+            </option>
+            <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
+              {{ item.name }}
+            </option>
+          </select>
+          <select class="select select-bordered join-item w-full" v-model="records.searchInfo.Result">
+            <option value="">
+              结果不限
+            </option>
+            <option v-for="item in submitStatusOptions" :value="item" :key="item">
+              {{ item }}
+            </option>
+          </select>
+          <button class="btn join-item btn-neutral w-full" @click="records.updateQuery()">搜索</button>
+        </div>
       </div>
     </div>
+    <component :is="Record" :records="records" />
   </div>
-  <div class="mt-6"></div>
-  <component :is="Record" :records="records" />
 </template>
 
 <script lang="ts" setup name="Records">

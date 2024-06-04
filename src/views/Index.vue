@@ -1,49 +1,50 @@
 <template>
-  <div role="alert" class="Border Alert shadow-lg bg-white cursor-pointer" onclick="homeNotice.showModal()">
-    <remind theme="outline" size="20" class="ml-1" />
-    <div>
-      <h3 class="font-bold">{{ notice.Title }}</h3>
-      <div class="text-xs">{{ ConvertTools.PrintTime(notice.UpdatedTime, 1) }}</div>
+  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+    <div role="alert" class="Border Alert shadow-lg bg-white cursor-pointer" onclick="homeNotice.showModal()">
+      <remind theme="outline" size="20" class="ml-1" />
+      <div>
+        <h3 class="font-bold">{{ notice.Title }}</h3>
+        <div class="text-xs">{{ ConvertTools.PrintTime(notice.UpdatedTime, 1) }}</div>
+      </div>
+      <button class="btn btn-sm" @click.stop="$router.push({ name: 'AdminDashboard' })"
+        v-if="userDataStore.PermissionMap > 3">
+        编辑
+      </button>
     </div>
-    <button class="btn btn-sm" @click.stop="$router.push({ name: 'AdminDashboard' })"
-      v-if="userDataStore.PermissionMap > 3">
-      编辑
-    </button>
-  </div>
-  <div class="mt-6"></div>
-  <div class="flex space-y-6 flex-col md:flex-row md:space-y-0 md:space-x-6">
-    <div class="carousel w-full rounded-2xl shadow-lg Border h-96">
-      <div class="carousel-item relative w-full" v-for="(item, index) in banners.banners" :key="index"
-        :id="`slide${index}`">
-        <img :src="'data:image/*;base64,' + item.ObjectData" class="w-full" alt="首页横幅" />
-        <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-          <a :href="`#slide${(index - 1 + banners.Count) % banners.Count}`" class="btn btn-circle">❮</a>
-          <a :href="`#slide${(index + 1) % banners.Count}`" class="btn btn-circle">❯</a>
+    <div class="flex space-y-6 flex-col md:flex-row md:space-y-0 md:space-x-6">
+      <div class="carousel w-full rounded-2xl shadow-lg Border h-96">
+        <div class="carousel-item relative w-full" v-for="(item, index) in banners.banners" :key="index"
+          :id="`slide${index}`">
+          <img :src="'data:image/*;base64,' + item.ObjectData" class="w-full" alt="首页横幅" />
+          <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+            <a :href="`#slide${(index - 1 + banners.Count) % banners.Count}`" class="btn btn-circle">❮</a>
+            <a :href="`#slide${(index + 1) % banners.Count}`" class="btn btn-circle">❯</a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="min-w-96 card rounded-2xl bg-white shadow-lg Border h-96">
-      <div class="flex justify-between items-center">
-        <div class="text-lg m-4 font-bold">
-          版本更新日志
+      <div class="min-w-96 card rounded-2xl bg-white shadow-lg Border h-96">
+        <div class="flex justify-between items-center">
+          <div class="text-lg m-4 font-bold">
+            版本更新日志
+          </div>
+          <button class="btn btn-sm mr-3" @click="$router.push({ name: 'AdminUpdateLog' })"
+            v-if="userDataStore.PermissionMap & constValStore.SuperAdminBit">编辑</button>
         </div>
-        <button class="btn btn-sm mr-3" @click="$router.push({ name: 'AdminUpdateLog' })"
-          v-if="userDataStore.PermissionMap & constValStore.SuperAdminBit">编辑</button>
-      </div>
-      <div class="px-4 overflow-auto rounded-2xl">
-        <div v-for="item in updateLogs.updateLogs" :key="item.ID">
-          <div class="pb-4">
-            <div class="flex items-center space-x-2">
-              <div class="font-bold">
-                {{ item.Title.split(' Version=')[0] }}
+        <div class="px-4 overflow-auto rounded-2xl">
+          <div v-for="item in updateLogs.updateLogs" :key="item.ID">
+            <div class="pb-4">
+              <div class="flex items-center space-x-2">
+                <div class="font-bold">
+                  {{ item.Title.split(' Version=')[0] }}
+                </div>
+                <span v-if="item.Title.split('Version=').length > 1" class="text-white rounded-full px-2"
+                  style="background-color: #19BE6B;">
+                  {{ item.Title.split('Version=')[1] }}
+                </span>
               </div>
-              <span v-if="item.Title.split('Version=').length > 1" class="text-white rounded-full px-2"
-                style="background-color: #19BE6B;">
-                {{ item.Title.split('Version=')[1] }}
-              </span>
-            </div>
-            <div class="-mx-4 overflow-hidden">
-              <MdPreview :editorId="'updateLogs' + item.ID.toString()" :modelValue="item.Content" preview-only />
+              <div class="-mx-4 overflow-hidden">
+                <MdPreview :editorId="'updateLogs' + item.ID.toString()" :modelValue="item.Content" preview-only />
+              </div>
             </div>
           </div>
         </div>

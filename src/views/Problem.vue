@@ -1,162 +1,164 @@
 <template>
-  <div class="flex flex-col space-y-2 sm:space-y-4 md:space-y-6 lg:flex-row lg:space-x-6 lg:space-y-0" v-auto-animate>
-    <div class="flex flex-row space-x-2 sm:space-x-4 md:space-x-6 lg:flex-col lg:space-x-0 lg:space-y-6 mx-auto">
-      <div class="card shadow-lg Border bg-white p-4 sm:p-6 w-72 h-fit" v-if="contest.CID || problemList.LID">
-        <div class="text-lg space-x-2 space-y-2" v-if="contest.CID">
-          <span>
-            #{{ contest.CID }}
-          </span>
-          <span class="font-bold">
-            {{ contest.Title }}
-          </span>
-        </div>
-        <div>
-          <progress class="progress w-full"
-            :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
-            max="100" v-if="contest.CID">
-          </progress>
-        </div>
-        <div class="text-lg space-x-2" v-if="problemList.LID">
-          <span>
-            #{{ problemList.LID }}
-          </span>
-          <span class="font-bold">
-            {{ problemList.Title }}
-          </span>
-        </div>
-        <div class="flex gap-2 pt-2 flex-wrap [&_div_button]:w-10">
-          <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
-            <button tabindex="0" role="button" class="btn w-full group-hover/dropdown"
-              :class="{ 'btn-active': item.PID == problem.PID }"
-              @click="$router.replace({
-                name: 'Problem',
-                params: {
-                  PID: item.PID,
-                  BindID: contest.CID ? 'C' + contest.CID : 'L' + problemList.LID,
-                },
-              })">
-              {{ ConvertTools.Number2Alpha(index + 1) }}
-            </button>
-            <div tabindex="0"
-              class="z-[1] card card-compact w-64 shadow bg-white Border group-hover/dropdown:block hidden absolute mt-3 right-1 backdrop-blur-md bg-opacity-60">
-              <div class="card-body">
-                <h3 class="card-title">
-                  <div class="text-lg space-x-2 font-normal">
-                    <span>
-                      {{ item.PID }}
-                    </span>
-                    <span class="font-bold">
-                      {{ item.Title }}
-                    </span>
-                  </div>
-                </h3>
-                <p>
-                  AC 率
-                  <progress class="progress progress-success w-20 mx-2"
-                    :value="ConvertTools.Percentage(item.ACNum, item.SubmitNum)" max="100"></progress>
-                  {{ item.ACNum }} / {{ item.SubmitNum }}
-                </p>
+  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+    <div class="flex flex-col space-y-2 sm:space-y-4 md:space-y-6 lg:flex-row lg:space-x-6 lg:space-y-0" v-auto-animate>
+      <div class="flex flex-row space-x-2 sm:space-x-4 md:space-x-6 lg:flex-col lg:space-x-0 lg:space-y-6 mx-auto">
+        <div class="card shadow-lg Border bg-white p-4 sm:p-6 w-72 h-fit" v-if="contest.CID || problemList.LID">
+          <div class="text-lg space-x-2 space-y-2" v-if="contest.CID">
+            <span>
+              #{{ contest.CID }}
+            </span>
+            <span class="font-bold">
+              {{ contest.Title }}
+            </span>
+          </div>
+          <div>
+            <progress class="progress w-full"
+              :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
+              max="100" v-if="contest.CID">
+            </progress>
+          </div>
+          <div class="text-lg space-x-2" v-if="problemList.LID">
+            <span>
+              #{{ problemList.LID }}
+            </span>
+            <span class="font-bold">
+              {{ problemList.Title }}
+            </span>
+          </div>
+          <div class="flex gap-2 pt-2 flex-wrap [&_div_button]:w-10">
+            <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
+              <button tabindex="0" role="button" class="btn w-full group-hover/dropdown"
+                :class="{ 'btn-active': item.PID == problem.PID }"
+                @click="$router.replace({
+                  name: 'Problem',
+                  params: {
+                    PID: item.PID,
+                    BindID: contest.CID ? 'C' + contest.CID : 'L' + problemList.LID,
+                  },
+                })">
+                {{ ConvertTools.Number2Alpha(index + 1) }}
+              </button>
+              <div tabindex="0"
+                class="z-[1] card card-compact w-64 shadow bg-white Border group-hover/dropdown:block hidden absolute mt-3 right-1 backdrop-blur-md bg-opacity-60">
+                <div class="card-body">
+                  <h3 class="card-title">
+                    <div class="text-lg space-x-2 font-normal">
+                      <span>
+                        {{ item.PID }}
+                      </span>
+                      <span class="font-bold">
+                        {{ item.Title }}
+                      </span>
+                    </div>
+                  </h3>
+                  <p>
+                    AC 率
+                    <progress class="progress progress-success w-20 mx-2"
+                      :value="ConvertTools.Percentage(item.ACNum, item.SubmitNum)" max="100"></progress>
+                    {{ item.ACNum }} / {{ item.SubmitNum }}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="card shadow-lg bg-white Border p-4 sm:p-6 w-72 h-fit flex space-y-2">
-        <div class="text-lg space-x-2">
-          <span>
-            {{ problem.PID }}
-          </span>
-          <span class="font-bold">
-            {{ problem.Title }}
-          </span>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8 whitespace-nowrap">
-            <stopwatch-start theme="outline" size="17" fill="#fff" />
-            &nbsp;{{ problem.LimitTime }} ms
-          </div>
-          <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8 whitespace-nowrap">
-            <disk theme="outline" size="16" fill="#fff" />
-            &nbsp;{{ problem.LimitMemory }} MB
-          </div>
-        </div>
-        <div class="collapse bg-base-200 collapse-arrow rounded-lg">
-          <input type="checkbox" />
-          <div class="collapse-title text-md font-bold whitespace-nowrap">
-            <span>题目标签</span>
-            <div class="badge badge-neutral badge-md ml-2">
-              {{ problem.Label == '' ? 0 : problem.Label.split(/;| /).length }}
-            </div>
-          </div>
-          <div class="collapse-content [&_span]:mr-1">
-            <span class="badge badge-neutral badge-md" v-for="(label, index) in problem.Label.split(/;| /)" :key="index"
-              v-if="problem.Label != ''">
-              {{ label }}
+        <div class="card shadow-lg bg-white Border p-4 sm:p-6 w-72 h-fit flex space-y-2">
+          <div class="text-lg space-x-2">
+            <span>
+              {{ problem.PID }}
+            </span>
+            <span class="font-bold">
+              {{ problem.Title }}
             </span>
           </div>
-        </div>
-        <button class="btn btn-success" onclick="codeModal.showModal()">
-          <check theme="outline" size="20" />
-          <div class="text-base">
-            提 交
+          <div class="grid grid-cols-2 gap-2">
+            <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8 whitespace-nowrap">
+              <stopwatch-start theme="outline" size="17" fill="#fff" />
+              &nbsp;{{ problem.LimitTime }} ms
+            </div>
+            <div class="flex badge badge-neutral badge-lg w-full rounded-lg h-8 whitespace-nowrap">
+              <disk theme="outline" size="16" fill="#fff" />
+              &nbsp;{{ problem.LimitMemory }} MB
+            </div>
           </div>
-        </button>
+          <div class="collapse bg-base-200 collapse-arrow rounded-lg">
+            <input type="checkbox" />
+            <div class="collapse-title text-md font-bold whitespace-nowrap">
+              <span>题目标签</span>
+              <div class="badge badge-neutral badge-md ml-2">
+                {{ problem.Label == '' ? 0 : problem.Label.split(/;| /).length }}
+              </div>
+            </div>
+            <div class="collapse-content [&_span]:mr-1">
+              <span class="badge badge-neutral badge-md" v-for="(label, index) in problem.Label.split(/;| /)" :key="index"
+                v-if="problem.Label != ''">
+                {{ label }}
+              </span>
+            </div>
+          </div>
+          <button class="btn btn-success" onclick="codeModal.showModal()">
+            <check theme="outline" size="20" />
+            <div class="text-base">
+              提 交
+            </div>
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="space-y-6 w-full" v-auto-animate>
-      <div class="flex justify-between space-x-6">
-        <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
-          <li>
-            <a @click="$router.replace({ name: 'ProblemDescription' })"
-              :class="{ 'btn-active': route.name == 'ProblemDescription' }">
-              <word theme="outline" size="18" />
-              题面
-            </a>
-          </li>
-          <li>
-            <a @click="$router.replace({ name: 'ProblemRecords' })"
-              :class="{ 'btn-active': route.name == 'ProblemRecords' }">
-              <history theme="outline" size="18" />
-              记录
-              <div class="badge badge-neutral badge-md">{{ problem.RecordNumber }}</div>
-            </a>
-          </li>
-          <li>
-            <a @click="$router.replace({ name: 'ProblemDiscussions' })"
-              :class="{ 'btn-active': route.name == 'ProblemDiscussions' }">
-              <topic theme="outline" size="18" />
-              讨论
-              <div class="badge badge-neutral badge-md">{{ problem.SolutionNumber }}</div>
-            </a>
-          </li>
-        </ul>
-        <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit"
-          v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
-          <li>
-            <a @click="$router.push({
-              name: 'EditProblem',
-              params: {
-                PID: problem.PID,
-              },
-            })" class="whitespace-nowrap">
-              <editor theme="outline" size="18" />
-              题目编辑
-            </a>
-          </li>
-          <li>
-            <a @click="$router.push({
-              name: 'ProblemData',
-              params: {
-                PID: problem.PID,
-              },
-            })" class="whitespace-nowrap">
-              <ICONdata theme="outline" size="18" />
-              数据编辑
-            </a>
-          </li>
-        </ul>
+      <div class="space-y-6 w-full" v-auto-animate>
+        <div class="flex justify-between space-x-6">
+          <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
+            <li>
+              <a @click="$router.replace({ name: 'ProblemDescription' })"
+                :class="{ 'btn-active': route.name == 'ProblemDescription' }">
+                <word theme="outline" size="18" />
+                题面
+              </a>
+            </li>
+            <li>
+              <a @click="$router.replace({ name: 'ProblemRecords' })"
+                :class="{ 'btn-active': route.name == 'ProblemRecords' }">
+                <history theme="outline" size="18" />
+                记录
+                <div class="badge badge-neutral badge-md">{{ problem.RecordNumber }}</div>
+              </a>
+            </li>
+            <li>
+              <a @click="$router.replace({ name: 'ProblemDiscussions' })"
+                :class="{ 'btn-active': route.name == 'ProblemDiscussions' }">
+                <topic theme="outline" size="18" />
+                讨论
+                <div class="badge badge-neutral badge-md">{{ problem.SolutionNumber }}</div>
+              </a>
+            </li>
+          </ul>
+          <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit"
+            v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
+            <li>
+              <a @click="$router.push({
+                name: 'EditProblem',
+                params: {
+                  PID: problem.PID,
+                },
+              })" class="whitespace-nowrap">
+                <editor theme="outline" size="18" />
+                题目编辑
+              </a>
+            </li>
+            <li>
+              <a @click="$router.push({
+                name: 'ProblemData',
+                params: {
+                  PID: problem.PID,
+                },
+              })" class="whitespace-nowrap">
+                <ICONdata theme="outline" size="18" />
+                数据编辑
+              </a>
+            </li>
+          </ul>
+        </div>
+        <RouterView :problem="problem"></RouterView>
       </div>
-      <RouterView :problem="problem"></RouterView>
     </div>
   </div>
   <dialog id="codeModal" class="modal">

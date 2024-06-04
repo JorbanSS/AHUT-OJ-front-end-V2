@@ -1,53 +1,53 @@
 <template>
-  <div class="card shadow-lg Border bg-white p-6 space-y-1">
-    <div class="text-xl font-bold">
-      {{ problemList.Title }}
-    </div>
-    <div class="flex space-x-1">
-      <div class="badge badge-neutral">
-        Offical
+  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+    <div class="card shadow-lg Border bg-white p-6 space-y-1">
+      <div class="text-xl font-bold">
+        {{ problemList.Title }}
+      </div>
+      <div class="flex space-x-1">
+        <div class="badge badge-neutral">
+          Offical
+        </div>
+      </div>
+      <div>
+        创建于：{{ ConvertTools.PrintTime(problemList.StartTime, 1) }}
       </div>
     </div>
-    <div>
-      创建于：{{ ConvertTools.PrintTime(problemList.StartTime, 1) }}
+    <div class="flex space-x-2">
+      <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
+        <li v-for="item in problemListNavItems" :key="item.title">
+          <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'"
+            :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(11).toLowerCase() }">
+            <component :is="item.icon" theme="outline" size="18" />
+            {{ item.title }}
+            <div class="badge badge-neutral" v-if="item.title == '记录'">{{ problemList.RecordNumber }}</div>
+          </RouterLink>
+        </li>
+      </ul>
+      <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto"
+        v-if="userDataStore.PermissionMap & constValStore.ProblemListAdminBit">
+        <li>
+          <a @click="problemList.clone()">
+            <bill theme="outline" size="18" />
+            克隆
+          </a>
+        </li>
+        <li>
+          <a @click="$router.push({
+            name: 'EditProblemList',
+            params: {
+              LID: problemList.LID,
+            },
+          })">
+            <editor theme="outline" size="18" />
+            题单编辑
+          </a>
+        </li>
+      </ul>
     </div>
+    <RouterView :problemList="problemList" :problems="problems">
+    </RouterView>
   </div>
-  <div class="m-6"></div>
-  <div class="flex space-x-2">
-    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
-      <li v-for="item in problemListNavItems" :key="item.title">
-        <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'"
-          :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(11).toLowerCase() }">
-          <component :is="item.icon" theme="outline" size="18" />
-          {{ item.title }}
-          <div class="badge badge-neutral" v-if="item.title == '记录'">{{ problemList.RecordNumber }}</div>
-        </RouterLink>
-      </li>
-    </ul>
-    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto"
-      v-if="userDataStore.PermissionMap & constValStore.ProblemListAdminBit">
-      <li>
-        <a @click="problemList.clone()">
-          <bill theme="outline" size="18" />
-          克隆
-        </a>
-      </li>
-      <li>
-        <a @click="$router.push({
-          name: 'EditProblemList',
-          params: {
-            LID: problemList.LID,
-          },
-        })">
-          <editor theme="outline" size="18" />
-          题单编辑
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="m-6"></div>
-  <RouterView :problemList="problemList" :problems="problems">
-  </RouterView>
 </template>
 
 <script lang="ts" setup name="problemList">

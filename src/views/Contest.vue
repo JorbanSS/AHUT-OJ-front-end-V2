@@ -1,88 +1,89 @@
 <template>
-  <div class="card shadow-lg Border bg-white p-6 space-y-1">
-    <div class="text-xl font-bold">
-      {{ contest.Title }}
+  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+
+    <div class="card shadow-lg Border bg-white p-6 space-y-1">
+      <div class="text-xl font-bold">
+        {{ contest.Title }}
+      </div>
+      <div class="flex space-x-1">
+        <div class="badge badge-neutral">
+          {{ contest.Type == 1 ? "OI" : "ICPC" }}
+        </div>
+        <div class="badge badge-neutral">
+          Offical
+        </div>
+      </div>
+      <div>
+        比赛时间：
+        {{ ConvertTools.PrintTime(contest.BeginTime, 1) }}
+        ~
+        {{ ConvertTools.PrintTime(contest.EndTime, 0) }}
+      </div>
+      <!-- <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
+        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+          <span class="countdown font-mono text-5xl">
+            <span style="--value:10;"></span>
+          </span>
+          hours
+        </div>
+        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+          <span class="countdown font-mono text-5xl">
+            <span style="--value:24;"></span>
+          </span>
+          min
+        </div>
+        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+          <span class="countdown font-mono text-5xl">
+            <span style="--value:45;"></span>
+          </span>
+          sec
+        </div>
+      </div> -->
+      <progress class="progress w-full"
+        :value="ConvertTools.Percentage(Math.min(contest.Duration, TimeNow - contest.BeginTime), contest.Duration)"
+        max="100"></progress>
     </div>
-    <div class="flex space-x-1">
-      <div class="badge badge-neutral">
-        {{ contest.Type == 1 ? "OI" : "ICPC" }}
-      </div>
-      <div class="badge badge-neutral">
-        Offical
-      </div>
+    <div class="flex space-x-2">
+      <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
+        <li v-for="item in contestNavItems" :key="item.title">
+          <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'"
+            :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(7).toLowerCase() }">
+            <component :is="item.icon" theme="outline" size="18" />
+            {{ item.title }}
+            <div class="badge badge-neutral" v-if="item.title == '记录'">{{ contest.RecordNumber }}</div>
+          </RouterLink>
+        </li>
+      </ul>
+      <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto"
+        v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
+        <li>
+          <a @click="contest.cloneToProblemList()">
+            <bill theme="outline" size="18" />
+            克隆为题单
+          </a>
+        </li>
+        <li>
+          <a>
+            <party-balloon theme="outline" size="18" />
+            气球提示
+          </a>
+        </li>
+        <li>
+          <a @click="$router.push({
+            name: 'EditContest',
+            params: {
+              CID: contest.CID,
+            }
+          })">
+            <editor theme="outline" size="18" />
+            比赛编辑
+          </a>
+        </li>
+      </ul>
     </div>
-    <div>
-      比赛时间：
-      {{ ConvertTools.PrintTime(contest.BeginTime, 1) }}
-      ~
-      {{ ConvertTools.PrintTime(contest.EndTime, 0) }}
-    </div>
-    <!-- <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
-      <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-        <span class="countdown font-mono text-5xl">
-          <span style="--value:10;"></span>
-        </span>
-        hours
-      </div>
-      <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-        <span class="countdown font-mono text-5xl">
-          <span style="--value:24;"></span>
-        </span>
-        min
-      </div>
-      <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-        <span class="countdown font-mono text-5xl">
-          <span style="--value:45;"></span>
-        </span>
-        sec
-      </div>
-    </div> -->
-    <progress class="progress w-full"
-      :value="ConvertTools.Percentage(Math.min(contest.Duration, TimeNow - contest.BeginTime), contest.Duration)"
-      max="100"></progress>
+    <RouterView :contest="contest" :problems="problems">
+    </RouterView>
   </div>
-  <div class="m-6"></div>
-  <div class="flex space-x-2">
-    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
-      <li v-for="item in contestNavItems" :key="item.title">
-        <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'"
-          :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(7).toLowerCase() }">
-          <component :is="item.icon" theme="outline" size="18" />
-          {{ item.title }}
-          <div class="badge badge-neutral" v-if="item.title == '记录'">{{ contest.RecordNumber }}</div>
-        </RouterLink>
-      </li>
-    </ul>
-    <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto"
-      v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
-      <li>
-        <a @click="contest.cloneToProblemList()">
-          <bill theme="outline" size="18" />
-          克隆为题单
-        </a>
-      </li>
-      <li>
-        <a>
-          <party-balloon theme="outline" size="18" />
-          气球提示
-        </a>
-      </li>
-      <li>
-        <a @click="$router.push({
-          name: 'EditContest',
-          params: {
-            CID: contest.CID,
-          }
-        })">
-          <editor theme="outline" size="18" />
-          比赛编辑
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="m-6"></div>
-  <RouterView :contest="contest" :problems="problems">
-  </RouterView>
 </template>
 
 <script lang="ts" setup name="Contest">
