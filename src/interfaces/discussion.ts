@@ -15,6 +15,13 @@ export interface DiscussionType {
   [item: string]: any       // 其他字段
 }
 
+export interface NewDiscussionType {
+  Title: string,            // 标题
+  Text: string,             // 内容
+
+  [item: string]: any       // 其他字段
+}
+
 export interface DiscussionsType {
   PID: string,                          // 题目 PID
   discussions: Array<DiscussionType>,   // 讨论列表

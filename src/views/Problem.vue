@@ -1,10 +1,9 @@
 <template>
-  <div class="flex flex-row" style="height: calc(100vh - 70px);" v-auto-animate>
-    <div ref="leftPanel" class="bg-gray-200 p-4 overflow-y-auto space-y-4" :style="{ width: `${leftWidth}px` }">
+  <div class="flex flex-row overflow-x-hidden" style="height: calc(100vh - 70px);" v-auto-animate>
+    <div ref="leftPanel" class="bg-base-200 p-6 overflow-y-auto space-y-6" :style="{ width: `${leftWidth}px` }">
       <div class="flex flex-col gap-6 mx-auto" v-if="contest.CID || problemList.LID">
-        <div class="flex flex-col space-y-2 sm:space-y-4 md:space-y-6 lg:flex-row lg:space-x-6 lg:space-y-0"
-          v-auto-animate>
-          <div class="flex flex-row space-x-2 sm:space-x-4 md:space-x-6 lg:flex-col lg:space-x-0 lg:space-y-6 mx-auto">
+        <div class="flex flex-col space-y-6" v-auto-animate>
+          <div class="flex flex-row space-x-6 mx-auto">
             <div class="card shadow-lg Border bg-white p-4 h-fit" v-if="contest.CID || problemList.LID">
               <div class="text-lg space-x-2 space-y-2 hover:text-blue-500 cursor-pointer" @click="$router.push({
                 name: contest.CID ? 'Contest' : 'ProblemList',
@@ -122,7 +121,7 @@
           </template>
         </div>
       </div>
-      <div class="space-y-4 w-full" v-auto-animate>
+      <div class="space-y-6 w-full" v-auto-animate>
         <div class="flex justify-between space-x-6">
           <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
             <li>
@@ -178,7 +177,7 @@
         <RouterView :problem="problem"></RouterView>
       </div>
     </div>
-    <div class="bg-gray-300 hover:bg-gray-400 duration-300 w-2 flex items-center justify-center cursor-col-resize"
+    <div class="bg-base-200 hover:bg-gray-300 duration-300 w-2 flex items-center justify-center cursor-col-resize"
       @mousedown="startDragging">
       <div class="">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -186,29 +185,10 @@
         </svg>
       </div>
     </div>
-    <div class="flex bg-gray-200 overflow-hidden w-full" :style="{ width: `${clientWidth - leftWidth}px` }">
+    <div class="flex bg-gray-200 overflow-hidden w-full" :style="{ width: `${rightWidth}px` }">
       <component :is="MonocoEditor" :problem="problem" :CID="contest.CID" :LID="problemList.LID" />
     </div>
   </div>
-  <!-- <dialog id="codeModal" class="modal">
-    <div class="modal-box max-w-3xl">
-      <h3 class="font-bold text-lg pb-6">{{ problem.PID }} {{ problem.Title }}</h3>
-      <select class="select select-bordered w-72 max-w-xs text-base" v-model="submit.Lang">
-        <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
-          {{ item.name }} ({{ item.compiler }})
-        </option>
-      </select>
-      <textarea class="textarea textarea-bordered w-full h-[340px] mt-4" placeholder=""
-        v-model="submit.Source"></textarea>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">暂存并退出</button>
-          <button class="btn btn-neutral"
-            @click="problem.submitCode != undefined ? problem.submitCode() : 0">提交代码</button>
-        </form>
-      </div>
-    </div>
-  </dialog> -->
 </template>
 
 <script lang="ts" setup name="Problem">
@@ -239,8 +219,9 @@ const route = useRoute();
 
 let showLabels = ref(false);
 
-const clientWidth = ref(document.documentElement.clientWidth);
+const clientWidth = ref(document.documentElement.clientWidth || document.body.clientWidth);
 const leftWidth = ref(document.documentElement.clientWidth / 2);
+const rightWidth = ref(document.documentElement.clientWidth / 2);
 
 let isDragging = false;
 
@@ -252,23 +233,33 @@ const stopDragging = () => {
   isDragging = false;
 };
 
+let intervalId: any = null;
+
 const onMouseMove = (event: { clientX: number; }) => {
   if (!isDragging) return;
   const newWidth = event.clientX;
-  leftWidth.value = Math.min(Math.max(newWidth, 382), clientWidth.value - 100);
+  leftWidth.value = Math.min(Math.max(newWidth, 382));
+  rightWidth.value = clientWidth.value - leftWidth.value;
 };
 
 onMounted(() => {
   window.addEventListener('mousemove', onMouseMove);
   window.addEventListener('mouseup', stopDragging);
+  intervalId = setInterval(() => {
+    let newVal = document.documentElement.clientWidth;
+    if (newVal != clientWidth.value) {
+      leftWidth.value = Math.floor(leftWidth.value * newVal / clientWidth.value);
+      rightWidth.value = newVal - leftWidth.value;
+      clientWidth.value = newVal;
+    }
+  }, 300);
 });
 
 onUnmounted(() => {
   window.removeEventListener('mousemove', onMouseMove);
   window.removeEventListener('mouseup', stopDragging);
+  clearInterval(intervalId);
 });
-
-
 
 let submit = ref<SubmitCodeType>({
   Lang: 4,

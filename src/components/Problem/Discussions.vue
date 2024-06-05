@@ -1,5 +1,12 @@
 <template>
   <div class="space-y-6">
+    <div>
+      <button class="btn btn-neutral btn-lg w-full rounded-2xl" onclick="newDiscussionModal.showModal()"
+        :disabled="userDataStore.isLogin == false">
+        <add theme="outline" size="22" />
+        <span class="text-lg">新建话题</span>
+      </button>
+    </div>
     <div v-for="discussion in discussions.discussions" :key="discussion.SID">
       <div class="card border shadow-lg p-6 bg-white mb-4">
         <div class="flex justify-between items-center mb-4">
@@ -16,6 +23,13 @@
             </div>
           </div>
           <div class="flex space-x-2">
+            <button class="btn flex items-center space-x-1" v-if="userDataStore.UID == discussion.UID" @click="editDiscussion.delete(discussion.SID)">
+              <delete-one theme="outline" size="18" />
+            </button>
+            <button class="btn flex items-center space-x-1" v-if="userDataStore.UID == discussion.UID"
+              @click="editDiscussion.openEditModal(discussion.SID)">
+              <write theme="outline" size="18" />
+            </button>
             <button
               :style="{ backgroundColor: (discussion.IsFavorite ? '#eb4868' : ''), color: (discussion.IsFavorite ? 'white' : '') }"
               class="btn flex items-center space-x-1"
@@ -51,7 +65,8 @@
           <textarea class="textarea textarea-bordered w-full mt-1" placeholder=""
             v-model="discussion.NewComment"></textarea>
         </div>
-        <button class="btn btn-primary w-fit ml-auto mt-1" @click="discussions.comment(discussion.SID, discussion.NewComment)">发表评论</button>
+        <button class="btn btn-neutral w-fit ml-auto mt-1"
+          @click="discussions.comment(discussion.SID, discussion.NewComment)">发表评论</button>
         <div class="m-3" v-if="discussion.Data != null"></div>
         <template v-if="discussion.Data != null">
           <div v-for="comment in discussion.Data">
@@ -61,22 +76,38 @@
       </div>
     </div>
   </div>
-  <!-- <dialog id="mdEditor" class="modal">
+  <dialog id="newDiscussionModal" class="modal">
     <div class="modal-box max-w-5xl">
-      <h3 class="font-bold text-lg mb-4">发表题解</h3>
+      <h3 class="font-bold text-lg mb-4">发表话题</h3>
       <label class="input input-bordered flex items-center gap-2 mb-2">
         标题
-        <input type="text" class="grow" placeholder="" v-model="homeNotice.Title">
+        <input type="text" class="grow" placeholder="" v-model="newDiscussion.Title">
       </label>
-      <MdEditor v-model="homeNotice.Content" :height="500" :toolbars="markdownToolbars" />
+      <MdEditor v-model="newDiscussion.Text" :height="500" :toolbars="markdownToolbars" />
       <div class="modal-action">
         <form method="dialog">
-          <button class="btn mr-2">取消修改</button>
-          <button class="btn btn-neutral" @click="homeNotice.edit()">提交修改</button>
+          <button class="btn mr-2">取消</button>
+          <button class="btn btn-neutral" @click="newDiscussion.add()">发表话题</button>
         </form>
       </div>
     </div>
-  </dialog> -->
+  </dialog>
+  <dialog id="discussionModal" class="modal">
+    <div class="modal-box max-w-5xl">
+      <h3 class="font-bold text-lg mb-4">编辑话题</h3>
+      <label class="input input-bordered flex items-center gap-2 mb-2">
+        标题
+        <input type="text" class="grow" placeholder="" v-model="editDiscussion.Title">
+      </label>
+      <MdEditor v-model="editDiscussion.Text" :height="500" :toolbars="markdownToolbars" />
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn mr-2">取消</button>
+          <button class="btn btn-neutral" @click="editDiscussion.edit()">提交编辑</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
 </template>
 
 <script lang="ts" setup>
@@ -84,21 +115,120 @@ import { computed, onMounted, reactive, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { push } from 'notivue';
-import { MdPreview } from 'md-editor-v3';
+import { MdEditor, MdPreview } from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
 import 'md-editor-v3/lib/preview.css';
-import { ThumbsUp, Comment } from '@icon-park/vue-next';
+import { ThumbsUp, Comment, Add, DeleteOne, Write } from '@icon-park/vue-next';
 
-import { } from '@/config';
-import { } from '@/interfaces/record';
+import { markdownToolbars } from '@/config';
 import { useUserDataStore } from '@/stores/UserData';
-import { _getDiscussions, _giveThumbsUp, _sendComment } from '@/apis/discussion';
+import { _addComment, _addDiscussion, _deleteDiscussion, _editDiscussion, _getDiscussions, _giveThumbsUp } from '@/apis/discussion';
 import { getHeadURL, ConvertTools } from '@/utils/globalFunctions';
-import { DiscussionsType } from '@/interfaces/discussion';
+import { DiscussionsType, NewDiscussionType } from '@/interfaces/discussion';
 import CommentBubble from '@/components/Main/CommentBubble.vue';
 
 const route = useRoute();
 const router = useRouter();
 const userDataStore = useUserDataStore();
+
+let newDiscussion = reactive<NewDiscussionType>({
+  Title: '',
+  Text: '',
+
+  add() {
+    if (userDataStore.isLogin == false) {
+      push.warning({
+        title: '发表失败',
+        message: '请先登录',
+      });
+      return;
+    }
+    if (this.Title == '' || this.Text == '') {
+      push.warning({
+        title: '发表失败',
+        message: '标题和内容不能为空',
+      });
+      return;
+    }
+    let params = {
+      PID: route.params.PID,
+      UID: userDataStore.UID,
+      SID: 0,
+      Title: this.Title,
+      Text: this.Text,
+    };
+    _addDiscussion(params)
+      .then(() => {
+        push.success({
+          title: '新建话题成功',
+        });
+        discussions.get();
+      });
+  }
+});
+
+let editDiscussion = reactive<NewDiscussionType>({
+  SID: 0,
+  Title: '',
+  Text: '',
+
+  openEditModal(SID: number) {
+    const foundDiscussion = discussions.discussions.find((item) => item.SID === SID);
+    if (foundDiscussion) {
+      this.SID = SID;
+      this.Title = foundDiscussion.Title;
+      this.Text = foundDiscussion.Text;
+    }
+    // @ts-ignore
+    discussionModal.showModal();
+  },
+
+  delete(SID: number) {
+    let params = {
+      PID: route.params.PID,
+      UID: userDataStore.UID,
+      SID: SID,
+    };
+    _deleteDiscussion(params)
+      .then(() => {
+        push.success({
+          title: '删除成功',
+        });
+        discussions.get();
+      });
+  },
+
+  edit() {
+    if (userDataStore.isLogin == false) {
+      push.warning({
+        title: '发表失败',
+        message: '请先登录',
+      });
+      return;
+    }
+    if (this.Title == '' || this.Text == '') {
+      push.warning({
+        title: '发表失败',
+        message: '标题和内容不能为空',
+      });
+      return;
+    }
+    let params = {
+      PID: route.params.PID,
+      UID: userDataStore.UID,
+      SID: this.SID,
+      Title: this.Title,
+      Text: this.Text,
+    };
+    _editDiscussion(params)
+      .then(() => {
+        push.success({
+          title: '新建话题成功',
+        });
+        discussions.get();
+      });
+  }
+});
 
 let discussions = reactive<DiscussionsType>({
   PID: '',
@@ -147,7 +277,6 @@ let discussions = reactive<DiscussionsType>({
 
   comment(SID: number, commentText: string) {
     let params = {
-      ActionType: 1,
       CID: 0,
       FCID: 0,
       SID: SID,
@@ -155,7 +284,7 @@ let discussions = reactive<DiscussionsType>({
       Title: '',
       UID: userDataStore.UID,
     };
-    _sendComment(params)
+    _addComment(params)
       .then(() => {
         push.success({
           title: '评论成功',

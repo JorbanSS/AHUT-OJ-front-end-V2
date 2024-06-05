@@ -11,6 +11,31 @@ export const _giveThumbsUp = (params: any) => {
 }
 
 // 评论
-export const _sendComment = (params: any) => {
+export const _addComment = (params: any) => {
+  params.ActionType = 1;
   return Post('comment/', params);
+}
+
+// 删除评论
+export const _deleteComment = (params: any) => {
+  params.ActionType = 3;
+  return Post('comment/', params);
+}
+
+// 发表话题
+export const _addDiscussion = (params: any) => {
+  params.ActionType = 1;
+  return Post('solution/', params);
+}
+
+// 编辑话题
+export const _editDiscussion = (params: any) => {
+  params.ActionType = 2;
+  return Post('solution/', params);
+}
+
+// 删除话题
+export const _deleteDiscussion = (params: any) => {
+  params.ActionType = 3;
+  return Post('solution/', params);
 }

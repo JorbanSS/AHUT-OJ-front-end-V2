@@ -40,7 +40,7 @@
               语言不限
             </option>
             <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
-              {{ item.name }}
+              {{ item.label }}
             </option>
           </select>
           <select class="select select-bordered join-item w-full" v-model="records.searchInfo.Result">

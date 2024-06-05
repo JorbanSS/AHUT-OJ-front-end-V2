@@ -16,7 +16,7 @@
         </label>
       </div>
       <div class="flex items-center gap-2">
-        <button class="btn btn-success text-white" @click="submitCode()"
+        <button class="btn btn-success text-white" @click="submitCode()" :disabled="userDataStore.UID == '' || submit.Source == ''"
           v-if="$route.matched.length && $route.matched[0].name === 'Problem'">
           <code-one theme="outline" size="22" />
           <span class="text-lg">评测</span>
@@ -25,7 +25,7 @@
     </div>
 
     <div style="height: 100vh;">
-      <vue-monaco-editor v-model:value="submit.Source" theme="vs-dark" :language="lang" :options="MONACO_EDITOR_OPTIONS"
+      <vue-monaco-editor v-model:value="submit.Source" theme="vs-dark" :language="submitLanguageOptions.find(item => item.language === submit.Lang)?.language" :options="MONACO_EDITOR_OPTIONS"
         @mount="handleMount" />
     </div>
   </div>
@@ -38,7 +38,7 @@ import { useRouter } from 'vue-router';
 import { Left, CodeOne } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { editorLanguageOptions } from "@/config";
+import { editorLanguageOptions, submitLanguageOptions } from "@/config";
 import { useUserDataStore } from '@/stores/UserData';
 import { useConstValStore } from '@/stores/ConstVal';
 
@@ -58,8 +58,6 @@ import { SubmitCodeType } from '@/interfaces/record';
 const router = useRouter();
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
-
-let lang = ref('cpp');
 
 // self.MonacoEnvironment = {
 //   getWorker: function (_, label) { // workerId, label
@@ -127,13 +125,6 @@ let submit = ref<SubmitCodeType>({
 });
 
 function submitCode() {
-  if (submit.value.Source == "") {
-    push.warning({
-      title: '提交失败',
-      message: '代码不能为空',
-    })
-    return;
-  }
   let params = {
     PID: props.problem.PID,
     UID: userDataStore.UID,

@@ -91,7 +91,7 @@
             语言不限
           </option>
           <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
-            {{ item.name }}
+            {{ item.label }}
           </option>
         </select>
         <input type="datetime-local" id="datetime" name="datetime" v-model="Timestamp"

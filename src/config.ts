@@ -112,12 +112,10 @@ export const editorLanguageOptions = [
 ];
 
 export const submitLanguageOptions = [
-  { value: "1", name: "C17", compiler: "gcc 12.2.0" },
-  // { label: "", value: "2" },
-  // { label: "C++11 (g++ 12.2.0)", value: "3" },
-  { value: "4", name: "C++17", compiler: "g++ 12.2.0" },
-  { value: "5", name: "Java17", compiler: "OpenJDK 17.0.10 64bit" },
-  { value: "6", name: "Python3", compiler: "3.10.13" },
+  { label: "C", value: "c", compiler: "C17 (gcc 12.2.0)", language: 1 },
+  { label: "C++", value: "cpp", compiler: "C++17 (g++ 12.2.0)", language: 4 },
+  { label: "Java", value: "java", compiler: "Java17 (OpenJDK 17.0.10 64bit)", language: 5 },
+  { label: "Python", value: "py", compiler: "Python3 (3.10.13)", language: 6 },
 ];
 
 export const navItems: Array<NavItemType> = [
