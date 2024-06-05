@@ -23,7 +23,8 @@
             </div>
           </div>
           <div class="flex space-x-2">
-            <button class="btn flex items-center space-x-1" v-if="userDataStore.UID == discussion.UID" @click="editDiscussion.delete(discussion.SID)">
+            <button class="btn flex items-center space-x-1" v-if="userDataStore.UID == discussion.UID"
+              @click="editDiscussion.delete(discussion.SID)">
               <delete-one theme="outline" size="18" />
             </button>
             <button class="btn flex items-center space-x-1" v-if="userDataStore.UID == discussion.UID"
@@ -58,8 +59,8 @@
           </div>
           <div class="chat-header flex items-baseline gap-1"
             :class="{ 'flex-row-reverse': userDataStore.UID == discussion.UID }">
-            <span class="cursor-pointer" @click="$router.push({ name: 'User', params: { UID: userDataStore.UID } })">{{
-              userDataStore.UserName }}</span>
+            <span class="cursor-pointer font-bold" @click="$router.push({ name: 'User', params: { UID: userDataStore.UID } })">
+              {{ userDataStore.UserName }}</span>
           </div>
           <!-- <div class="chat-bubble mt-1">{{ discussion.Text }}</div> -->
           <textarea class="textarea textarea-bordered w-full mt-1" placeholder=""
@@ -70,7 +71,7 @@
         <div class="m-3" v-if="discussion.Data != null"></div>
         <template v-if="discussion.Data != null">
           <div v-for="comment in discussion.Data">
-            <component :is="CommentBubble" :comment="comment" :UID="discussion.UID" />
+            <component :is="CommentBubble" :comment="comment" :UID="discussion.UID" :getDiscussionList="discussions.get" />
           </div>
         </template>
       </div>

@@ -10,7 +10,12 @@
       <span class="cursor-pointer" @click="$router.push({ name: 'User', params: { UID: props.comment.UID } })">{{ props.comment.UserName }}</span>
       <time class="text-xs opacity-50">{{ ConvertTools.PrintTime(props.comment.UpdateTime, 1) }}</time>
     </div>
-    <div class="chat-bubble mt-1">{{ props.comment.Text }}</div>
+    <div class="flex gap-2 group">
+      <button class="btn btn-sm mt-2.5 opacity-0 group-hover:opacity-100" @click="deleteComment()">
+        <delete-one theme="outline" size="20" @click="deleteComment"></delete-one>
+      </button>
+      <div class="chat-bubble mt-1">{{ props.comment.Text }}</div>
+    </div>
     <!-- <div class="chat-footer opacity-50">
       Delivered
     </div> -->
@@ -20,15 +25,20 @@
 <script lang="ts" setup>
 import { defineProps, withDefaults } from 'vue';
 
+import { DeleteOne } from '@icon-park/vue-next';
+
 import { CommentType } from '@/interfaces/discussion';
 import { ConvertTools, getHeadURL } from '@/utils/globalFunctions';
 import { useUserDataStore } from '@/stores/UserData';
+import { _deleteComment } from '@/apis/discussion';
+import { push } from 'notivue';
 
 const userDataStore = useUserDataStore();
 
 interface propsType {
   comment?: CommentType;
   UID?: string,
+  getDiscussionsList?: Function,
 }
 
 let props = withDefaults(defineProps<propsType>(), {
@@ -42,6 +52,23 @@ let props = withDefaults(defineProps<propsType>(), {
     Text: '',
   }),
   UID: '',
+  getDiscussionsList: () => {},
 });
+
+function deleteComment() {
+  let params = {
+    CID: props.comment.CID,
+    FCID: props.comment.FCID,
+    UID: props.comment.UID,
+    SID: props.comment.SID,
+  }
+  _deleteComment(params)
+  .then(() => {
+    push.success({
+      message: '删除成功',
+    });
+    props.getDiscussionsList();
+  })
+}
 
 </script>
