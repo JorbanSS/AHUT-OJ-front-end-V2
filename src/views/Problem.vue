@@ -39,10 +39,10 @@
                       {{ item.Title }}
                     </span>
                     <div class="ml-auto">
-                      <check theme="outline" size="16" fill="#00A96F" stroke-width="8" v-if="item.Status == 'AC'" />
-                      <loading-one theme="outline" size="16" fill="#EBC656" stroke-width="8"
+                      <check theme="outline" size="16" fill="#00A96F" :stroke-width="8" v-if="item.Status == 'AC'" />
+                      <loading-one theme="outline" size="16" fill="#EBC656" :stroke-width="8"
                         v-else-if="['JUDGING', 'REJUDGING', 'PENDING', 'FAILED'].includes(item.Status)" />
-                      <close theme="outline" size="16" fill="#FA0409" stroke-width="8"
+                      <close theme="outline" size="16" fill="#FA0409" :stroke-width="8"
                         v-else-if="item.Status != '' && item.Status != undefined" />
                     </div>
                   </button>
@@ -497,7 +497,7 @@ let problemList = reactive<ProblemListType>({
     };
     _getProblemListUserInfo(params)
       .then((data: any) => {
-        data.SolvedPID.forEach(PID => {
+        data.SolvedPID.forEach((PID: string) => {
           problems.forEach((item, index) => {
             if (item.PID == PID) {
               problems[index].Status = 'AC';
@@ -509,8 +509,8 @@ let problemList = reactive<ProblemListType>({
 })
 
 function refreshProblemStatus() {
-  if (contest.CID != '' && contest.CID != undefined) contest.get(false);
-  if (problemList.LID != '' && problemList.LID != undefined) problemList.getProblemListUserInfo();
+  if (contest.CID && contest.CID != undefined) contest.get(false);
+  if (problemList.LID && problemList.LID != undefined) problemList.getProblemListUserInfo();
   push.success({
     title: '已刷新题目状态',
   })
