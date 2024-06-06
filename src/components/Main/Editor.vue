@@ -25,7 +25,7 @@
     </div>
 
     <div style="height: 100vh;">
-      <vue-monaco-editor v-model:value="submit.Source" theme="vs-dark" :language="submitLanguageOptions.find(item => item.language === submit.Lang)?.language" :options="MONACO_EDITOR_OPTIONS"
+      <vue-monaco-editor v-model:value="submit.Source" theme="vs-dark" :language="submitLanguageOptions.find(item => item.language === submit.Lang)?.value" :options="MONACO_EDITOR_OPTIONS"
         @mount="handleMount" />
     </div>
   </div>

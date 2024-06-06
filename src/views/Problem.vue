@@ -24,7 +24,7 @@
               </div>
               <div class="flex gap-2 pt-2 flex-wrap">
                 <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
-                  <button tabindex="0" role="button" class="btn w-36 justify-start flex-nowrap group-hover/dropdown"
+                  <button tabindex="0" role="button" class="btn w-40 justify-start flex-nowrap group-hover/dropdown"
                     :class="{ 'btn-active': item.PID == problem.PID }" @click="$router.replace({
                       name: 'Problem',
                       params: {
@@ -35,9 +35,16 @@
                     <span>
                       {{ ConvertTools.Number2Alpha(index + 1) }}
                     </span>
-                    <span class="truncate">
+                    <span class="truncate font-medium">
                       {{ item.Title }}
                     </span>
+                    <div class="ml-auto">
+                      <check theme="outline" size="16" fill="#00A96F" stroke-width="8" v-if="item.Status == 'AC'" />
+                      <loading-one theme="outline" size="16" fill="#EBC656" stroke-width="8"
+                        v-else-if="['JUDGING', 'REJUDGING', 'PENDING', 'FAILED'].includes(item.Status)" />
+                      <close theme="outline" size="16" fill="#FA0409" stroke-width="8"
+                        v-else-if="item.Status != '' && item.Status != undefined" />
+                    </div>
                   </button>
                   <div tabindex="0"
                     class="z-[1] card card-compact w-64 shadow bg-white Border group-hover/dropdown:block hidden absolute mt-3 right-1 backdrop-blur-md bg-opacity-60">
@@ -61,6 +68,10 @@
                     </div>
                   </div>
                 </div>
+                <button class="btn" :disabled="!userDataStore.isLogin" @click="refreshProblemStatus()">
+                  <refresh theme="outline" size="16" />
+                  刷新
+                </button>
               </div>
             </div>
           </div>
@@ -76,26 +87,6 @@
               {{ problem.Title }}
             </span>
           </div>
-          <!-- <div class="flex -mr-1 -mt-1" v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
-            <button @click="$router.push({
-              name: 'ProblemData',
-              params: {
-                PID: problem.PID,
-              },
-            })" class="btn btn-sm btn-ghost whitespace-nowrap">
-              <ICONdata theme="outline" size="18" />
-              数据编辑
-            </button>
-            <button @click="$router.push({
-              name: 'EditProblem',
-              params: {
-                PID: problem.PID,
-              },
-            })" class="btn btn-sm btn-ghost whitespace-nowrap">
-              <editor theme="outline" size="18" />
-              题目编辑
-            </button>
-          </div> -->
         </div>
         <div class="flex flex-row gap-2 [&_div]:gap-1 flex-wrap" v-auto-animate>
           <div class="flex badge badge-neutral badge-lg rounded-lg h-8 whitespace-nowrap">
@@ -152,17 +143,6 @@
             v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
             <li>
               <a @click="$router.push({
-                name: 'EditProblem',
-                params: {
-                  PID: problem.PID,
-                },
-              })" class="whitespace-nowrap">
-                <editor theme="outline" size="18" />
-                题目编辑
-              </a>
-            </li>
-            <li>
-              <a @click="$router.push({
                 name: 'ProblemData',
                 params: {
                   PID: problem.PID,
@@ -170,6 +150,17 @@
               })" class="whitespace-nowrap">
                 <ICONdata theme="outline" size="18" />
                 数据编辑
+              </a>
+            </li>
+            <li>
+              <a @click="$router.push({
+                name: 'EditProblem',
+                params: {
+                  PID: problem.PID,
+                },
+              })" class="whitespace-nowrap">
+                <editor theme="outline" size="18" />
+                题目编辑
               </a>
             </li>
           </ul>
@@ -195,10 +186,11 @@
 import { onMounted, reactive, ref, watch, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Check, Disk, Editor, History, Data as ICONdata, StopwatchStart, Topic, Word, TagOne, Left, Right } from '@icon-park/vue-next';
+import { Check, Disk, Editor, History, Data as ICONdata, StopwatchStart, Topic, Word, TagOne, Left, Right, Close, LoadingOne, Refresh } from '@icon-park/vue-next';
 import { push } from 'notivue';
 import MonocoEditor from '@/components/Main/Editor.vue';
 
+import { _getProblemListUserInfo } from '@/apis/problemList';
 import { _getContest } from '@/apis/contest';
 import { _getProblem, _submitCode } from '@/apis/problem';
 import { _getProblemList } from '@/apis/problemList';
@@ -218,6 +210,16 @@ const router = useRouter();
 const route = useRoute();
 
 let showLabels = ref(false);
+
+interface problemType {
+  PID: string,
+  Title: string,
+  SubmitNum: number,
+  ACNum: number,
+  Status: string,
+}
+
+let problems = reactive<Array<problemType>>([]);
 
 const clientWidth = ref(document.documentElement.clientWidth || document.body.clientWidth);
 const leftWidth = ref(document.documentElement.clientWidth / 2);
@@ -283,7 +285,7 @@ let contest = reactive<ContestType>({
   TimeNow: 0,
   Status: 0,
 
-  get() {
+  get(showInfo: boolean = true) {
     if (this.CID == 0) return;
     _getContest({}, this.CID)
       .then((data: any) => {
@@ -294,47 +296,18 @@ let contest = reactive<ContestType>({
         this.CID = data.CID;
         this.IsPublic = data.IsPublic;
         problems = data.Data;
-        push.success({
-          title: '同步成功',
-          message: `已同步竞赛 #${this.CID}`,
-        })
+        if (showInfo) {
+          push.success({
+            title: '同步成功',
+            message: `已同步竞赛 #${this.CID}`,
+          })
+        }
       })
   },
 
   goToProblem(PID: string) {
     router.replace(`/problem/${PID}/C${this.CID}`);
     problem.PID = PID;
-  },
-})
-
-let problemList = reactive<ProblemListType>({
-  CID: 0,
-  IsPublic: 0,
-  Size: 0,
-  Title: '',
-  Description: '',
-  Problems: '',
-  UID: '',
-  Type: 0,
-  Pass: '',
-  content: '',
-
-  get() {
-    if (this.LID == 0) return;
-    _getProblemList({}, this.LID)
-      .then((data: any) => {
-        this.Title = data.Title;
-        this.BeginTime = data.BeginTime;
-        this.EndTime = data.EndTime;
-        this.Duration = ConvertTools.TimeInterval(this.BeginTime, this.EndTime);
-        this.LID = data.LID;
-        this.IsPublic = data.IsPublic;
-        problems = data.Data;
-        push.success({
-          title: '同步成功',
-          message: `已同步题单 #${this.LID}`,
-        })
-      })
   },
 })
 
@@ -448,37 +421,23 @@ let problem = reactive<ProblemType>({
   convertToMarkdown(): string {
     let res = "";
     if (problem.Description) {
-      res += "## 题目描述\n\n";
-      res += problem.Description;
+      res += "## 题目描述\n\n" + problem.Description;
     }
     if (problem.Input) {
-      res += "\n\n## 输入格式\n\n";
-      res += problem.Input;
+      res += "\n\n## 输入格式\n\n" + problem.Input;
     }
     if (problem.Output) {
-      res += "\n\n## 输出格式\n\n";
-      res += problem.Output;
+      res += "\n\n## 输出格式\n\n" + problem.Output;
     }
     if (problem.SampleInput) {
-      res += "\n\n## 样例输入\n\n";
-      res += "```\n\n" + problem.SampleInput + "\n\n```";
+      res += "\n\n## 样例输入\n\n```\n\n" + problem.SampleInput + "\n\n```";
     }
     if (problem.SampleOutput) {
-      res += "\n\n## 样例输出\n\n";
-      res += "```\n\n" + problem.SampleOutput + "\n\n```";
+      res += "\n\n## 样例输出\n\n```\n\n" + problem.SampleOutput + "\n\n```";
     }
     return res;
   }
 })
-
-interface problems {
-  PID: string,
-  Title: string,
-  SubmitNum: number,
-  ACNum: number,
-}
-
-let problems = reactive<Array<problems>>([]);
 
 function syncUrl() {
   problem.PID = route.params.PID as string;
@@ -498,16 +457,78 @@ function syncUrl() {
   }
 }
 
+let problemList = reactive<ProblemListType>({
+  CID: 0,
+  IsPublic: 0,
+  Size: 0,
+  Title: '',
+  Description: '',
+  Problems: '',
+  UID: '',
+  Type: 0,
+  Pass: '',
+  content: '',
+
+  get() {
+    if (this.LID == 0) return;
+    _getProblemList({}, this.LID)
+      .then((data: any) => {
+        this.Title = data.Title;
+        this.BeginTime = data.BeginTime;
+        this.EndTime = data.EndTime;
+        this.Duration = ConvertTools.TimeInterval(this.BeginTime, this.EndTime);
+        this.LID = data.LID;
+        this.IsPublic = data.IsPublic;
+        problems = data.Data;
+        if (userDataStore.isLogin) {
+          this.getProblemListUserInfo();
+        }
+        push.success({
+          title: '同步成功',
+          message: `已同步题单 #${this.LID}`,
+        })
+      })
+  },
+
+  getProblemListUserInfo() {
+    let params = {
+      LID: problemList.LID,
+      UID: userDataStore.UID,
+    };
+    _getProblemListUserInfo(params)
+      .then((data: any) => {
+        data.SolvedPID.forEach(PID => {
+          problems.forEach((item, index) => {
+            if (item.PID == PID) {
+              problems[index].Status = 'AC';
+            }
+          });
+        })
+      })
+  }
+})
+
+function refreshProblemStatus() {
+  if (contest.CID != '' && contest.CID != undefined) contest.get(false);
+  if (problemList.LID != '' && problemList.LID != undefined) problemList.getProblemListUserInfo();
+  push.success({
+    title: '已刷新题目状态',
+  })
+}
+
 onMounted(() => {
   syncUrl();
   problem.get();
   problem.getRecordNumber();
+  if (problemList.LID && userDataStore.isLogin) problemList.getProblemListUserInfo();
 })
 
 watch(() => route.params.PID, () => {
   problem.PID = route.params.PID as string;
   problem.get();
   problem.getRecordNumber();
+  if (contest.CID && contest.CID != undefined) contest.get();
+  if (problemList.LID && problemList.CID != undefined && userDataStore.isLogin) problemList.getProblemListUserInfo();
 })
 
 </script>

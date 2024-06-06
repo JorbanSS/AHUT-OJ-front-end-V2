@@ -57,7 +57,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Bill, Editor } from "@icon-park/vue-next";
 import { push } from 'notivue';
 
-import { _cloneProblemList, _getProblemList, _getProblemListUsersInfo, _joinProblemList } from '@/apis/problemList';
+import { _cloneProblemList, _getProblemList, _getProblemListUserInfo, _joinProblemList } from '@/apis/problemList';
 import { _getRecords } from '@/apis/record';
 import { problemListNavItems } from "@/config";
 import { type ProblemListType } from '@/interfaces/problemList';
@@ -110,8 +110,6 @@ let problemList = reactive<ProblemListType>({
     _getRecords(params)
       .then((data: any) => {
         this.RecordNumber = data.Count;
-        console.log(data);
-        
       })
   },
 
@@ -151,7 +149,7 @@ function getProblemListUsersInfo(showInfo: boolean = false) {
   let params = {
     LID: problemList.LID,
   }
-  _getProblemListUsersInfo(params)
+  _getProblemListUserInfo(params)
     .then((data: any) => {
       if (data.Msg == 'false') {
         let params = {

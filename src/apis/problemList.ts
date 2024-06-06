@@ -16,7 +16,7 @@ export const _getProblemListRanking = (params: any, LID: number) => {
 }
 
 // 获取题单用户信息
-export const _getProblemListUsersInfo = (params: any) => {
+export const _getProblemListUserInfo = (params: any) => {
   return Get('training/user', params);
 }
 
