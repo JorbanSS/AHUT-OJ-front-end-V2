@@ -1,12 +1,12 @@
 <template>
-  <div class="card shadow-lg bg-white Border container h-fit"
+  <div class="card shadow-lg bg-white Border w-full"
     v-if="props.problem.ContentType == constValStore.PROBLEM_CONTENTTYPE_PDF">
     <button class="btn w-fit ml-4 my-4" @click="downloadPdf()">
       <file-pdf theme="outline" size="18" />
       下载 PDF
     </button>
   </div>
-  <div class="card shadow-lg bg-white Border container h-fit w-full" v-else>
+  <div class="card shadow-lg bg-white Border h-fit w-full" v-else>
     <div class="flex space-x-3 ml-4 mt-4 w-full">
       <button class="btn w-fit" @click="copyMarkdown()">
         <copy theme="outline" size="18" />

@@ -1,29 +1,46 @@
 <template>
   <div class="flex flex-row overflow-x-hidden" style="height: calc(100vh - 70px);" v-auto-animate>
-    <div ref="leftPanel" class="bg-base-200 p-6 overflow-y-auto space-y-6" :style="{ width: `${leftWidth}px` }">
-      <div class="flex flex-col gap-6 mx-auto" v-if="contest.CID || problemList.LID">
+    <div ref="leftPanel" class="bg-base-200 overflow-y-auto space-y-6 py-6" :style="{ width: `${leftWidth}px` }">
+      <div class="flex flex-col gap-6 mx-6" v-if="contest.CID || problemList.LID">
         <div class="flex flex-col space-y-6" v-auto-animate>
-          <div class="flex flex-row space-x-6 mx-auto">
-            <div class="card shadow-lg Border bg-white p-4 h-fit" v-if="contest.CID || problemList.LID">
-              <div class="text-lg space-x-2 space-y-2 hover:text-blue-500 cursor-pointer" @click="$router.push({
-                name: contest.CID ? 'Contest' : 'ProblemList',
-                params: contest.CID ? { CID: contest.CID } : { LID: problemList.LID }
-              })">
-                <span>
-                  #{{ contest.CID ? contest.CID : problemList.LID }}
-                </span>
-                <span class="font-bold">
-                  {{ contest.Title ? contest.Title : problemList.Title }}
-                </span>
+          <div class="flex flex-row space-x-6">
+            <div class="card shadow-lg gap-2 Border bg-white p-4 h-fit w-full" v-if="contest.CID || problemList.LID">
+              <div class="text-lg flex gap-2 justify-between">
+                <div class="space-x-2 cursor-pointer hover:text-blue-500" @click="$router.push({
+                  name: contest.CID ? 'Contest' : 'ProblemList',
+                  params: contest.CID ? { CID: contest.CID } : { LID: problemList.LID }
+                })">
+                  <span>
+                    #{{ contest.CID ? contest.CID : problemList.LID }}
+                  </span>
+                  <span class="font-bold">
+                    {{ contest.Title ? contest.Title : problemList.Title }}
+                  </span>
+                </div>
+                <button class="btn btn-sm btn-neutral" :disabled="!userDataStore.isLogin"
+                  @click="refreshProblemStatus()">
+                  <refresh theme="outline" size="16" />
+                  刷新
+                </button>
               </div>
-              <div>
+              <div class="flex flex-col gap-0.5" v-if="contest.CID">
+                <div class="flex flex-row gap-2 justify-between">
+                  <span>
+                    {{ ConvertTools.PrintTime(contest.BeginTime, 1, 1) }}
+                  </span>
+                  <span>
+                    {{ contest.EndTime > contest.TimeNow ? '还剩 ' +
+                      ConvertTools.PrintTimeInterval(ConvertTools.TimeInterval(contest.TimeNow, contest.EndTime), 1) :
+                      ConvertTools.PrintTime(contest.EndTime, 1, 1) }}
+                  </span>
+                </div>
                 <progress class="progress w-full"
                   :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
-                  max="100" v-if="contest.CID">
+                  max="100">
                 </progress>
               </div>
               <div class="flex gap-2 pt-2 flex-wrap">
-                <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
+                <div class="group/dropdown z-20" v-for="(item, index) in problems" :key="item.PID">
                   <button tabindex="0" role="button" class="btn w-40 justify-start flex-nowrap group-hover/dropdown"
                     :class="{ 'btn-active': item.PID == problem.PID }" @click="$router.replace({
                       name: 'Problem',
@@ -35,7 +52,7 @@
                     <span>
                       {{ ConvertTools.Number2Alpha(index + 1) }}
                     </span>
-                    <span class="truncate font-medium">
+                    <span class="truncate">
                       {{ item.Title }}
                     </span>
                     <div class="ml-auto">
@@ -68,16 +85,12 @@
                     </div>
                   </div>
                 </div>
-                <button class="btn" :disabled="!userDataStore.isLogin" @click="refreshProblemStatus()">
-                  <refresh theme="outline" size="16" />
-                  刷新
-                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="card shadow-lg bg-white Border p-4 h-fit flex space-y-2">
+      <div class="card shadow-lg bg-white Border p-4 h-fit flex space-y-2 mx-6">
         <div class="flex justify-between">
           <div class="text-lg space-x-2">
             <span>
@@ -112,7 +125,7 @@
           </template>
         </div>
       </div>
-      <div class="space-y-6 w-full" v-auto-animate>
+      <div class="space-y-6 w-full px-6" v-auto-animate>
         <div class="flex justify-between space-x-6">
           <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
             <li>
@@ -176,7 +189,7 @@
         </svg>
       </div>
     </div>
-    <div class="flex bg-gray-200 overflow-hidden w-full" :style="{ width: `${rightWidth}px` }">
+    <div class="flex bg-gray-200 overflow-hidden" :style="{ width: `${rightWidth}px` }">
       <component :is="MonocoEditor" :problem="problem" :CID="contest.CID" :LID="problemList.LID" />
     </div>
   </div>
@@ -509,6 +522,10 @@ let problemList = reactive<ProblemListType>({
 })
 
 function refreshProblemStatus() {
+  getServerTime()
+    .then((res: any) => {
+      contest.TimeNow = res;
+    })
   if (contest.CID && contest.CID != undefined) contest.get(false);
   if (problemList.LID && problemList.LID != undefined) problemList.getProblemListUserInfo();
   push.success({

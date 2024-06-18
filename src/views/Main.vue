@@ -7,7 +7,9 @@
         <RouterView></RouterView>
       </div>
     </keep-alive>
-    <Footer v-if="showConfig.showFooter && route.name != 'Editor' && (route.matched.length == 0 || route.matched[0].name != 'Problem')"></Footer>
+    <Footer
+      v-if="showConfig.showFooter && route.name != 'Editor' && (route.matched.length == 0 || route.matched[0].name != 'Problem')">
+    </Footer>
     <div class="coverBox" v-if="showConfig.showCover" style="background: linear-gradient(to bottom right, #BBB, #DDD);">
       <!-- #50A3A2, #53E3A6) -->
       <ul class="bg-bubbles">
@@ -17,12 +19,12 @@
     </div>
     <component :is="Login" :init="initAction" :register="registerAction" v-if="showConfig.showLogin" />
     <component :is="Register" :init="initAction" :login="loginAction" v-if="showConfig.showRegister" />
-    <component :is="Editor" v-if="showConfig.showEditor"/>
+    <component :is="Editor" v-if="showConfig.showEditor" />
   </div>
 </template>
 
 <script lang="ts" setup name="Main">
-import { onMounted, reactive, ref, watch } from 'vue';
+import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
 
 import { push } from 'notivue';
@@ -36,10 +38,11 @@ import Editor from '@/components/Main/Editor.vue';
 import { useUserDataStore } from '@/stores/UserData';
 import { type ShowConfigType } from '@/interfaces/oj';
 import { type UserSimplifiedType } from '@/interfaces/user';
-import router from '@/routers';
+import { useWebSocketStore } from '@/stores/WebSocket';
 
 const userDataStore = useUserDataStore();
 const route = useRoute();
+const WebSocketStore = useWebSocketStore();
 
 let adminMode = ref<boolean>(false);
 
@@ -164,6 +167,42 @@ function getUserInfo() {
       })
   }
 }
+
+
+const connect = () => {
+  WebSocketStore.connectWebSocket();
+};
+
+onMounted(() => {
+  WebSocketStore.connectWebSocket();
+});
+
+onUnmounted(() => {
+  if (WebSocketStore.socket) {
+    WebSocketStore.socket.close();
+  }
+});
+
+watch(() => WebSocketStore.socketMessage, (newMessage) => {
+  handleMessage(newMessage);
+});
+
+const handleMessage = (message: any) => {
+  // Handle different types of messages
+  switch (message.type) {
+    case 'type1':
+      console.log('Handle type1 message:', message);
+      break;
+    case 'type2':
+      console.log('Handle type2 message:', message);
+      break;
+    default:
+      console.log('Handle default message:', message);
+      break;
+  }
+};
+
+const socketMessage = ref(WebSocketStore.socketMessage);
 
 onMounted(() => {
   showConfig.init();

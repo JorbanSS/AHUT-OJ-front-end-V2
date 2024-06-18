@@ -7,4 +7,6 @@ export const enum StoreNameSpace {
   UserData = "UserData",
   // 主题切换
   ThemeSwitch = "ThemeSwitch",
+  // Websocket 连接
+  WebSocket = "WebSocket",
 }
