@@ -56,8 +56,12 @@
       标签
       <input type="text" class="grow" placeholder="用英文;来分隔，赛时题目请勿加标签" v-model="problem.Label" />
     </label>
-    <div class="form-control w-72" @change="changeVisible()">
-      <label class="label cursor-pointer">
+    <div class="form-control w-72">
+      <label class="label cursor-pointer" v-if="problem.Origin != -1" @change="() => problem.useOriginPID ^= 1">
+        <span class="label-text text-base">使用源题号</span>
+        <input type="checkbox" :checked="problem.useOriginPID == 1" class="checkbox" />
+      </label>
+      <label class="label cursor-pointer" @change="changeVisible()">
         <span class="label-text text-base">可见性</span>
         <input type="checkbox" :checked="problem.Visible == 1" class="checkbox" />
       </label>
@@ -152,6 +156,7 @@ let problem = reactive<ProblemType>({
   SampleOutput: '',
   Hit: '',
   PType: 'LOCAL',
+  useOriginPID: true,
 
   add() {
     if (problem.Origin == -1 && (problem.Title == '' || problem.Description == '') || problem.Origin != -1 && problem.OriginPID == '') {
@@ -176,12 +181,15 @@ let problem = reactive<ProblemType>({
       Sample_output: problem.SampleOutput,
       Title: problem.Title,
       Visible: problem.Visible,
+      PType: 'LOCAL',
     }
-    problemTypeOptions.forEach((item: any) => {
-      if (item.ptype == problem.Origin.toString()) {
-        params.PType = item.value;
-      }
-    })
+    if (problem.useOriginPID) {
+      problemTypeOptions.forEach((item: any) => {
+        if (item.ptype == problem.Origin.toString()) {
+          params.PType = item.value;
+        }
+      })
+    }
     _addProblem(params)
       .then((data: any) => {
         problem.PID = data.PID;
@@ -209,7 +217,8 @@ let problem = reactive<ProblemType>({
 });
 
 function changeVisible() {
-  problem.Visible = 1 - problem.Visible;
+  if (problem.Visible == 0) problem.Visible = -1;
+  problem.Visible = -problem.Visible;
 }
 
 let imageUpload = reactive<ImageUploadType>({

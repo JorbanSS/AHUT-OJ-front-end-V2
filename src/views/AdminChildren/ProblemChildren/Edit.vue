@@ -95,8 +95,12 @@
       标签
       <input type="text" class="grow" placeholder="用英文;来分隔，赛时题目请勿加标签" v-model="problem.Label" />
     </label>
-    <div class="form-control w-72" @change="changeVisible()">
-      <label class="label cursor-pointer">
+    <div class="form-control w-72">
+      <label class="label cursor-pointer" v-if="problem.Origin != -1">
+        <span class="label-text text-base">使用源题号</span>
+        <input type="checkbox" :checked="problem.useOriginPID" class="checkbox" disabled />
+      </label>
+      <label class="label cursor-pointer" @change="changeVisible()">
         <span class="label-text text-base">可见性</span>
         <input type="checkbox" :checked="problem.Visible == 1" class="checkbox" />
       </label>
@@ -162,7 +166,7 @@ import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
 
 import { _deleteProblems, _editProblem, _getProblem } from '@/apis/problem';
-import { markdownToolbars, problemContentOptions, problemOriginOptions } from '@/config';
+import { markdownToolbars, problemContentOptions, problemOriginOptions, problemTypeOptions } from '@/config';
 import { FileUploadType, ImageUploadType } from '@/interfaces/common';
 import { type ProblemType } from '@/interfaces/problem';
 import { ImageUtils } from '@/utils/fileUtils';
@@ -191,6 +195,7 @@ let problem = reactive<ProblemType>({
   SampleOutput: '',
   Hit: '',
   PType: '',
+  useOriginPID: false,
 
   get() {
     _getProblem({}, problem.PID)
@@ -211,6 +216,12 @@ let problem = reactive<ProblemType>({
         problem.OriginPID = data.OriginPID;
         problem.PType = data.PType;
         problem.Visible = data.Visible;
+
+        problemTypeOptions.forEach((item: any) => {
+          if (item.ptype == problem.Origin && item.value == problem.PType) {
+            problem.useOriginPID = true;
+          }
+        })
       })
   },
 
