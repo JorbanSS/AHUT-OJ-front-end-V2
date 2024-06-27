@@ -12,8 +12,8 @@
         <copy theme="outline" size="18" />
         复制 MarkDown
       </button>
-      <a v-if="props.problem.Origin == 1 && (props.contest.CID == 0 || props.contest.CID != 0 && props.contest.EndTime < props.contest.TimeNow)"
-        :href="'https://codeforces.com/' + (OriginCID > 100000? 'gym' : 'contest') + '/' + OriginCID + '/problem/' + OriginPNO" target="_blank">
+      <a v-if="props.problem.Origin != -1 && (props.contest.CID == 0 || props.contest.CID != 0 && props.contest.EndTime < props.contest.TimeNow)"
+        :href="OriginURL" target="_blank">
         <button class="btn w-fit">
           <link-two theme="outline" size="20" />
           跳转原题
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, withDefaults, onMounted, watch } from 'vue';
+import { ref, defineProps, withDefaults, onMounted, watch, computed } from 'vue';
 
 import { push } from 'notivue';
 import { MdPreview } from 'md-editor-v3';
@@ -126,5 +126,15 @@ watch(() => props.problem.OriginPID, () => {
     }
   }
 });
+
+let OriginURL = computed(() => {
+  if (props.problem.Origin == -1) return '';
+  if (props.problem.Origin == 1) {
+    return 'https://codeforces.com/' + (props.problem.OriginCID > 100000 ? 'gym' : 'contest') + '/' + props.problem.OriginCID + '/problem/' + OriginPNO
+  }
+  if (props.problem.Origin == 2) {
+    return 'https://atcoder.jp/contests/' + props.problem.OriginPID.split('_')[0] + '/tasks/' + props.problem.OriginPID;
+  }
+})
 
 </script>

@@ -31,7 +31,7 @@
       </select>
       <label class="input input-bordered flex items-center gap-2 w-72" v-if="problem.Origin != -1">
         题号
-        <input type="text" class="grow" :placeholder="problem.Origin == 1 ? '例: 1033D' : '例: ABC128C, ARC180A'"
+        <input type="text" class="grow" :placeholder="problem.Origin == 1 ? '例: 1033D' : '例: ABC129C, ARC180A'"
           v-model="problem.OriginPID" />
       </label>
     </div>
@@ -134,6 +134,7 @@ import { FileUploadType, type ImageUploadType } from '@/interfaces/common';
 import { type ProblemType } from '@/interfaces/problem';
 import { ImageUtils } from '@/utils/fileUtils';
 import { OssUtils } from "@/utils/ossUtils";
+import { atcoderProblemFormat } from "@/utils/globalFunctions";
 
 const router = useRouter();
 
@@ -168,32 +169,32 @@ let problem = reactive<ProblemType>({
       return;
     }
     let params: any = {
-      ContentType: +problem.ContentType,
-      Description: problem.Description,
-      Hit: problem.Hit,
-      Label: problem.Label,
-      LimitMemory: problem.LimitMemory,
-      LimitTime: problem.LimitTime,
-      Origin: problem.Origin,
-      OriginPID: problem.OriginPID,
-      Input: problem.Input,
-      Output: problem.Output,
-      Sample_input: problem.Input,
-      Sample_output: problem.SampleOutput,
-      Title: problem.Title,
-      Visible: problem.Visible,
+      ContentType: +this.ContentType,
+      Description: this.Description,
+      Hit: this.Hit,
+      Label: this.Label,
+      LimitMemory: this.LimitMemory,
+      LimitTime: this.LimitTime,
+      Origin: this.Origin,
+      OriginPID: this.Origin == 2 ? atcoderProblemFormat(this.OriginPID) : this.OriginPID,
+      Input: this.Input,
+      Output: this.Output,
+      Sample_input: this.Input,
+      Sample_output: this.SampleOutput,
+      Title: this.Title,
+      Visible: this.Visible,
       PType: 'LOCAL',
     }
-    if (problem.useOriginPID) {
+    if (this.useOriginPID) {
       problemTypeOptions.forEach((item: any) => {
-        if (item.ptype == problem.Origin.toString()) {
+        if (item.ptype == this.Origin.toString()) {
           params.PType = item.value;
         }
       })
     }
     _addProblem(params)
       .then((data: any) => {
-        problem.PID = data.PID;
+        this.PID = data.PID;
         push.success({
           title: '新增成功',
           message: `题目 ID 为 ${data.PID}`,

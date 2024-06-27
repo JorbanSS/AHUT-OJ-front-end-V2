@@ -130,7 +130,6 @@ export class ConvertTools {
   }
 }
 
-
 // 字符串验证工具
 export class Validator {
   //验证用户 UID
@@ -138,7 +137,7 @@ export class Validator {
     const regex = /^[A-Z]{2,}[0-9]{6,}$/;
     return regex.test(UID);
   }
-  
+
   // 验证密码
   public static Password(password: string): boolean {
     const regex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[\W_])[a-zA-Z\d\W_]{8,20}$/;
@@ -167,28 +166,40 @@ export class Validator {
 // 获取服务器时间
 export function getServerTime() {
   return new Promise((resolve) => {
-    _getServerTime({})
-    .then((data: any) => {
+    _getServerTime({}).then((data: any) => {
       resolve(data.time);
-    })
-  })
+    });
+  });
 }
 
 // 获取排名背景颜色
-export function getRankingBackgroundColor(item: ContestRankingProblemType): string {
+export function getRankingBackgroundColor(
+  item: ContestRankingProblemType
+): string {
   const constValStore = useConstValStore();
   let baseBackgroundColor = "background-color: ";
   if (item.Status == "NULL") return "";
   if (item.IsPioneer) {
     return baseBackgroundColor + constValStore.RANKING_COLOR_FIRST_AC;
   }
-  return item.Status == "AC" ?
-    baseBackgroundColor + constValStore.RANKING_COLOR_AC :
-    baseBackgroundColor + constValStore.RANKING_COLOR_NOT_AC;
+  return item.Status == "AC"
+    ? baseBackgroundColor + constValStore.RANKING_COLOR_AC
+    : baseBackgroundColor + constValStore.RANKING_COLOR_NOT_AC;
 }
 
 // 获取头像地址
-export function getHeadURL(url: string) {
-  if (url && url.startsWith('http')) return url;
-  return url == '' ? 'https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png' : '/oss/head-images/' + url;
+export function getHeadURL(url: string): string {
+  if (url && url.startsWith("http")) return url;
+  return url == ""
+    ? "https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png"
+    : "/oss/head-images/" + url;
+}
+
+// AtCoder 格式转换
+export function atcoderProblemFormat(PID: string): string {
+  return PID.replace(/([A-Z]+)(\d+)([A-Z]*)/g, (_, p1, p2, p3) => {
+    let result = p1.toLowerCase() + p2;
+    if (p3) result += "_" + p3.toLowerCase();
+    return result;
+  });
 }
