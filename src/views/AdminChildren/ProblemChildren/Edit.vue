@@ -265,7 +265,8 @@ let problem = reactive<ProblemType>({
 });
 
 function changeVisible() {
-  problem.Visible = 1 - problem.Visible;
+  if (problem.Visible == 0) problem.Visible = -1;
+  problem.Visible = -problem.Visible;
 }
 
 let imageUpload = reactive<ImageUploadType>({
