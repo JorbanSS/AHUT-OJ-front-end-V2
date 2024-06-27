@@ -31,7 +31,8 @@
       </select>
       <label class="input input-bordered flex items-center gap-2 w-72" v-if="problem.Origin != -1">
         题号
-        <input type="text" class="grow" placeholder="例：1033A" v-model="problem.OriginPID" />
+        <input type="text" class="grow" :placeholder="problem.Origin == 1 ? '例: 1033D' : '例: ABC128C, ARC180A'"
+          v-model="problem.OriginPID" />
       </label>
     </div>
     <label class="input input-bordered flex items-center gap-2 w-[584px]" v-if="problem.Origin == -1">
