@@ -2,7 +2,7 @@
   <div v-auto-animate>
     <NavBar :login="loginAction" :logout="logoutAction" v-if="showConfig.showNavBar && route.name != 'Editor'" />
     <keep-alive>
-      <div :style="adminMode ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 22px)'" v-auto-animate
+      <div :style="adminMode ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 26px)'" v-auto-animate
         v-if="showConfig.showBody">
         <RouterView></RouterView>
       </div>

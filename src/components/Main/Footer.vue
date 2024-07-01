@@ -1,9 +1,28 @@
 <template>
-  <footer class="footer footer-center p-4 bg-white text-base-content">
-    <aside>
-      <p>Copyright © 2019 - 2024 All rights reserved.</p>
-    </aside>
-  </footer>
+  <div class="p-4 bg-white">
+    <div class="flex justify-between max-w-6xl mx-auto">
+      <p>AHUT OJ © 2022 - 2024 All rights reserved.</p>
+      <div class="flex items-center">
+        <p @click="$router.push({ name: 'About' })" class="relative cursor-pointer hover:text-blue-600">
+          关于
+        </p>
+        <template v-if="userDataStore.isLogin">
+          <span class="text-gray-500 mx-2">|</span>
+          <p @click="$router.push({ name: 'User', params: { UID: userDataStore.UID } })"
+            class="cursor-pointer hover:text-blue-400">
+            个人中心
+          </p>
+        </template>
+        <template v-if="userDataStore.isLogin && userDataStore.PermissionMap > 3">
+          <span class="text-gray-500 mx-2">|</span>
+          <p @click="$router.push({ name: 'Admin', params: { UID: userDataStore.UID } })"
+            class="cursor-pointer hover:text-blue-400">
+            管理平台
+          </p>
+        </template>
+      </div>
+    </div>
+  </div>
   <!-- <footer class="footer p-10 bg-white text-base-content">
     <aside>
       <img src="@/assets/img/icon.png" class="rounded-full w-16 h-16" />
@@ -29,7 +48,9 @@
 </template>
 
 <script lang="ts" setup>
+import { Info } from '@icon-park/vue-next';
+import { useUserDataStore } from '@/stores/UserData';
+
+const userDataStore = useUserDataStore();
 
 </script>
-
-<style scoped></style>

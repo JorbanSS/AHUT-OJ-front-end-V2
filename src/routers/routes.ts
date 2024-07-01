@@ -159,12 +159,6 @@ const routes = [
     meta: { title: BaseTitle + "加入我们" },
   },
   {
-    name: "Editor",
-    path: "/editor",
-    component: () => import("@/views/Editor.vue"),
-    meta: { title: BaseTitle + "Editor" },
-  },
-  {
     name: "Problem",
     path: "/problem/:PID/:BindID?",
     component: () => import("@/views/Problem.vue"),

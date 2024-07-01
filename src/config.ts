@@ -3,7 +3,6 @@ import {
   Caution,
   Check,
   Close,
-  Code,
   History,
   DocumentFolder,
   HardDisk,
@@ -132,8 +131,6 @@ export const navItems: Array<NavItemType> = [
   //   ],
   // },
   { title: "记录", icon: History, to: { name: "Records" } },
-  { title: "Editor", icon: Code, to: { name: "Editor" } },
-  { title: "关于", icon: Info, to: { name: "About" } },
 ];
 
 export const contestNavItems: Array<NavItemType> = [
