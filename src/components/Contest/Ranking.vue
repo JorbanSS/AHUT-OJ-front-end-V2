@@ -85,7 +85,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-auto-animate>
         <tr v-for="( item1, index ) in ranking.Ranking " :key="index">
           <th>{{ index + 1 }}</th>
           <td>{{ item1.Uname }}</td>
@@ -232,7 +232,7 @@ let ranking = reactive<ContestRankingType>({
       let penalty = 0;
       for (let j = 0; j < ranking.Ranking[i].Problems.length; j++) {
         if (ranking.Ranking[i].Problems[j].Status == "AC") {
-          penalty += ranking.Ranking[i].Problems[j].Time;
+          penalty += ranking.Ranking[i].Problems[j].Time + (ranking.Ranking[i].Problems[j].SubmitNumber - 1) * 20 * 60 * 1000;
         }
       }
       ranking.Ranking[i].Penalty = penalty;
