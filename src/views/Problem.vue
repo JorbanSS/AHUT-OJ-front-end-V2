@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row overflow-x-hidden" style="height: calc(100vh - 70px);" v-auto-animate>
-    <div ref="leftPanel" class="bg-base-200 overflow-y-auto space-y-6 py-6" :style="{ width: `${leftWidth}px` }">
-      <div class="mx-6" v-if="contest.CID || problemList.LID" v-auto-animate>
+    <div ref="leftPanel" class="bg-base-200 overflow-y-auto space-y-6 py-6 px-6" :style="{ width: `${leftWidth}px` }">
+      <div class="max-w-6xl mx-auto" v-if="contest.CID || problemList.LID" v-auto-animate>
         <div class="card shadow-lg gap-2 Border bg-white p-4 h-fit w-full">
           <div class="text-lg flex gap-2 justify-between">
             <div class="space-x-2 cursor-pointer hover:text-blue-500" @click="$router.push({
@@ -36,7 +36,8 @@
               max="100">
             </progress>
           </div>
-          <div class="grid gap-2 flex-wrap" :class="'grid-cols-' + `${gridColNumber.toString()}`">
+          <div class="grid gap-2 flex-wrap"
+            :style="`grid-template-columns: repeat(auto-fit, ${(Math.min(leftWidth, 1222) - 90) / Math.max(Math.floor((Math.min(leftWidth, 1222) - 90) / 180), 2) - 9}px)`">
             <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
               <button tabindex="0" role="button" class="btn w-full justify-start flex-nowrap group-hover/dropdown"
                 :class="{ 'btn-active': item.PID == problem.PID }" @click="$router.replace({
@@ -85,7 +86,7 @@
           </div>
         </div>
       </div>
-      <div class="card shadow-lg bg-white Border p-4 h-fit flex space-y-2 mx-6">
+      <div class="card shadow-lg bg-white Border p-4 h-fit flex space-y-2 max-w-6xl mx-auto">
         <div class="flex justify-between">
           <div class="text-lg space-x-2">
             <span>
@@ -120,7 +121,7 @@
           </template>
         </div>
       </div>
-      <div class="space-y-6 w-full px-6" v-auto-animate>
+      <div class="space-y-6 w-full max-w-6xl mx-auto" v-auto-animate>
         <div class="flex justify-between space-x-6">
           <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
             <li>
@@ -212,6 +213,7 @@ import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
 import { computed } from '@vue/reactivity';
+import { left } from '@popperjs/core';
 
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
@@ -542,10 +544,6 @@ watch(() => route.params.PID, () => {
   problem.getRecordNumber();
   if (contest.CID && contest.CID != undefined) contest.get();
   if (problemList.LID && problemList.CID != undefined && userDataStore.isLogin) problemList.getProblemListUserInfo();
-})
-
-let gridColNumber = computed(() => {
-  return Math.max(2, Math.floor(leftWidth.value / 200));
 })
 
 </script>
