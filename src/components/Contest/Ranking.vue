@@ -48,19 +48,19 @@
       </li>
     </ul>
   </div>
-  <div class="flex flex-col gap-0.5 bg-white" v-if="contest.CID && route.name == 'RankingView'">
+  <div class="flex flex-col gap-0.5 bg-white" v-if="props.contest.CID && route.name == 'RankingView'">
     <div class="flex flex-row gap-2 justify-between mx-6 text-xs font-bold text-[#566070]">
       <span>
-        {{ ConvertTools.PrintTime(contest.BeginTime, 1, 1) }}
+        {{ ConvertTools.PrintTime(props.contest.BeginTime, 1, 1) }}
       </span>
       <span>
-        {{ contest.EndTime > contest.TimeNow ? '还剩 ' +
-          ConvertTools.PrintTimeInterval(ConvertTools.TimeInterval(contest.TimeNow, contest.EndTime), 1) :
-          ConvertTools.PrintTime(contest.EndTime, 1, 1) }}
+        {{ props.contest.EndTime > timeNow ? '还剩 ' +
+          ConvertTools.PrintTimeInterval(ConvertTools.TimeInterval(timeNow, props.contest.EndTime), 1) :
+          ConvertTools.PrintTime(props.contest.EndTime, 1, 1) }}
       </span>
     </div>
-    <progress class="progress w-full rounded-none"
-      :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
+    <progress class="progress w-full"
+      :value="ConvertTools.Percentage(Math.min(props.contest.Duration, timeNow - props.contest.BeginTime), props.contest.Duration)"
       max="100">
     </progress>
   </div>
@@ -120,6 +120,7 @@ import { useConstValStore } from '@/stores/ConstVal';
 import { type ContestRankingType, type ContestType } from '@/interfaces/contest';
 import { ConvertTools, getRankingBackgroundColor } from '@/utils/globalFunctions';
 import { push } from 'notivue';
+import { _getServerTime } from '@/apis/common';
 
 const route = useRoute();
 const router = useRouter();
@@ -191,6 +192,7 @@ let ranking = reactive<ContestRankingType>({
   Count: 0,
   Ranking: [],
   get(showInfo: boolean = false) {
+    getServerTime();
     let params = {
       UseWs: false,
     };
@@ -253,6 +255,15 @@ let ranking = reactive<ContestRankingType>({
 //     console.log(currentTime.value);
 //   })
 // }, 2000);
+
+let timeNow = ref<number>(0);
+
+const getServerTime = () => {
+  _getServerTime({})
+    .then((data: any) => {
+      timeNow.value = data.time;
+    })
+}
 
 onMounted(() => {
   if (props.contest.CID == 0) {

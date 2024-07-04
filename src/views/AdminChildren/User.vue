@@ -17,7 +17,7 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="showChangePasswordModal()">
+        <div class="font-bold text-base" @click="showEditUserInfoModal()">
           <edit-one theme="outline" size="18" />
           用户编辑
         </div>
@@ -78,7 +78,7 @@
             <input type="checkbox" class="checkbox" v-model="item.problem" disabled />
           </td>
           <td class="space-x-2">
-            <button class="btn btn-sm btn-neutral" @click.stop="showChangePasswordModal(item.UID)">
+            <button class="btn btn-sm btn-neutral" @click.stop="showEditUserInfoModal(item.UID)">
               <edit-two theme="outline" size="18" />
               用户
             </button>
@@ -92,12 +92,16 @@
     </table>
     <Pagination :page="users.page" :maxPage="maxPage" :changePage="users.changePage" />
   </div>
-  <dialog id="changePasswordModal" class="modal">
+  <dialog id="editUserInfoModal" class="modal">
     <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg">修改密码</h3>
+      <h3 class="font-bold text-lg">修改用户信息</h3>
       <label class="input input-bordered flex items-center gap-2">
         UID
         <input type="text" class="grow" placeholder="" v-model="user.UID" />
+      </label>
+      <label class="input input-bordered flex items-center gap-2">
+        邮箱
+        <input type="text" class="grow" placeholder="" v-model="user.Email" />
       </label>
       <label class="input input-bordered flex items-center gap-2">
         密码
@@ -106,7 +110,7 @@
       <div class="modal-action">
         <form method="dialog">
           <button class="btn mr-2">取消修改</button>
-          <button class="btn btn-neutral" @click="user.changePassword()">确认修改</button>
+          <button class="btn btn-neutral" @click="user.edit()">确认修改</button>
         </form>
       </div>
     </div>
@@ -192,7 +196,7 @@ import { useRouter } from 'vue-router';
 import { Add, AfferentThree, DeleteOne, Peoples, Permissions, EditOne, EditTwo } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
-import { _addUser, _changePassword, _deleteUsers, _editUserPermission, _getAdmins, _getUserPermission } from "@/apis/user";
+import { _addUser, _adminEditUserInfo, _deleteUsers, _editUserPermission, _getAdmins, _getUserPermission } from "@/apis/user";
 import Pagination from "@/components/Main/Pagination.vue";
 import { useConstValStore } from '@/stores/ConstVal';
 import { type PermissionType, type UserSimplifiedType, type UserType } from '@/interfaces/user';
@@ -326,6 +330,7 @@ let users = reactive({
 
 let user = reactive<UserSimplifiedType>({
   UID: '',
+  Email: '',
   UserName: '',
   PermissionMap: 0,
   Password: '',
@@ -335,16 +340,25 @@ let user = reactive<UserSimplifiedType>({
   problem: false,
   problemList: false,
 
-  changePassword() {
+  edit() {
     let params = {
-      UID: user.UID,
-      Password: user.Password,
+      UID: this.UID,
+      Password: this.Password,
+      Email: this.Email,
     };
-    _changePassword(params)
+    if (this.UID == '' || this.Password == '' && this.Email == '') {
+      push.warning({
+        title: '信息不完整',
+      });
+      return;
+    }
+    if (this.Password == '') params.Password = this.Password;
+    if (this.Email == '') params.Email = this.Email;
+    _adminEditUserInfo(params)
       .then(() => {
         push.success({
           title: '修改成功',
-          message: `成功修改了 ${user.UID} 的密码`,
+          message: `成功修改了 ${this.UID} 的信息`,
         });
       })
     switchAllSelectedStatus(false);
@@ -465,7 +479,7 @@ function showAddUserModal() {
   addUserModal.showModal();
 }
 
-function showChangePasswordModal(UID: string = '') {
+function showEditUserInfoModal(UID: string = '') {
   user.UID = UID;
   user.UserName = user.Password = '';
   if (UID == '') {
@@ -482,7 +496,7 @@ function showChangePasswordModal(UID: string = '') {
     }
   }
   // @ts-ignore
-  changePasswordModal.showModal();
+  editUserInfoModal.showModal();
 }
 
 onMounted(() => {

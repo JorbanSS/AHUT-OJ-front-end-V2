@@ -55,8 +55,8 @@ export const _getAdmins = (params: any) => {
   return Get('admin/permission/list/', params);
 }
 
-// 管理员修改用户密码
-export const _changePassword = (data: any) => {
+// 管理员修改用户信息
+export const _adminEditUserInfo = (data: any) => {
   return Post('user/edit/', data);
 }
 

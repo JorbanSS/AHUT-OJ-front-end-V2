@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col overflow-hidden">
+  <div class="flex flex-col overflow-hidden bg-white">
     <Ranking :contest="contest" :problems="problems"></Ranking>
   </div>
 </template>
