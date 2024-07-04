@@ -53,7 +53,7 @@ let contest = reactive<ContestType>({
         contest.IsPublic = data.IsPublic;
         contest.Description = data.Description;
         contest.Problems = data.Data;
-        problems = data.Data;
+        problems.value = data.Data;
       })
   },
 
@@ -99,16 +99,15 @@ interface problemsType {
   BalloonColor: string,
 }
 
-let problems = reactive<Array<problemsType>>([])
+let problems = ref<Array<problemsType>>([])
 
 onMounted(() => {
   contest.CID = +route.params.CID;
   getServerTime()
-    .then((res: any) => {
-      TimeNow.value = res;
-    })
+  .then((res: any) => {
+    TimeNow.value = res;
+  })
   contest.get();
-  contest.getRecordNumber();
 })
 
 </script>

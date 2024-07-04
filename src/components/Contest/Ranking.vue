@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-row" :class="{ 'border-b-2': route.name == 'RankingView', 'gap-2': route.name != 'RankingView' }">
+  <div class="flex flex-row" :class="{ '-mb-1': route.name == 'RankingView', 'gap-2': route.name != 'RankingView' }">
     <div class="bg-white pl-6 pr-2 gap-2 flex items-center"
-      :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', '' : route.name == 'RankingView' }">
+      :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', '': route.name == 'RankingView' }">
       <refresh theme="outline" size="18" />
       <span class="font-bold mr-2 text-nowrap">自动更新间隔</span>
       <div class="bg-[#E8E9EA] flex p-1 rounded-xl">
@@ -16,8 +16,8 @@
     <div class="bg-white w-full flex items-center justify-center" v-if="route.name == 'RankingView'">
       <span class="font-bold text-lg">{{ props.contest.Title }}</span>
     </div>
-    <ul class="menu bg-white flex flex-row text-base font-bold w-fit flex-nowrap"
-      :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', 'pr-[104px]': route.name == 'RankingView' }">
+    <ul class="menu bg-white flex flex-row text-base font-bold w-fit flex-nowrap justify-end"
+      :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', '': route.name == 'RankingView' }">
       <li>
         <a @click="ranking.get(true)">
           <refresh theme="outline" size="18" />
@@ -48,8 +48,24 @@
       </li>
     </ul>
   </div>
+  <div class="flex flex-col gap-0.5 bg-white" v-if="contest.CID && route.name == 'RankingView'">
+    <div class="flex flex-row gap-2 justify-between mx-6 text-xs font-bold text-[#566070]">
+      <span>
+        {{ ConvertTools.PrintTime(contest.BeginTime, 1, 1) }}
+      </span>
+      <span>
+        {{ contest.EndTime > contest.TimeNow ? '还剩 ' +
+          ConvertTools.PrintTimeInterval(ConvertTools.TimeInterval(contest.TimeNow, contest.EndTime), 1) :
+          ConvertTools.PrintTime(contest.EndTime, 1, 1) }}
+      </span>
+    </div>
+    <progress class="progress w-full rounded-none"
+      :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
+      max="100">
+    </progress>
+  </div>
   <div class="bg-white shadow-lg overflow-x-auto" :class="{ 'rounded-2xl Border': route.name != 'RankingView' }"
-    :style="{'max-height': route.name == 'RankingView' ? 'calc(100vh - 58px)' : 'calc(100vh - 500px)'}">
+    :style="{ 'max-height': route.name == 'RankingView' ? 'calc(100vh - 78px)' : 'calc(100vh - 500px)' }">
     <table class="table table-zebra table-pin-rows table-pin-cols table-fixed text-center">
       <thead>
         <tr>

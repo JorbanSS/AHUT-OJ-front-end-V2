@@ -1,6 +1,5 @@
 <template>
   <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
-
     <div class="card shadow-lg Border bg-white p-6 space-y-1">
       <div class="text-xl font-bold">
         {{ contest.Title }}
@@ -136,7 +135,7 @@ let contest = reactive<ContestType>({
         contest.IsPublic = data.IsPublic;
         contest.Description = data.Description;
         contest.Problems = data.Data;
-        problems = data.Data;
+        problems.value = data.Data;
       })
   },
 
@@ -182,7 +181,7 @@ interface problemsType {
   BalloonColor: string,
 }
 
-let problems = reactive<Array<problemsType>>([])
+let problems = ref<Array<problemsType>>([])
 
 onMounted(() => {
   contest.CID = +route.params.CID;
