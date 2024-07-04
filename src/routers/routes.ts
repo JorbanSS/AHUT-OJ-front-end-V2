@@ -103,22 +103,22 @@ const routes = [
     component: () => import("@/views/Contests.vue"),
     meta: { title: BaseTitle + "比赛" },
   },
-  {
-    name: "Toolkit",
-    path: "/toolkit",
-    children: [
-      {
-        name: "RecentContests",
-        path: "recentcontests",
-        component: () => import("@/views/ToolkitsChildren/RecentContests.vue"),
-      },
-      {
-        name: "RankingList",
-        path: "rankinglist",
-        component: () => import("@/views/ToolkitsChildren/RankingList.vue"),
-      },
-    ],
-  },
+  // {
+  //   name: "Toolkit",
+  //   path: "/toolkit",
+  //   children: [
+  //     {
+  //       name: "RecentContests",
+  //       path: "recentcontests",
+  //       component: () => import("@/views/ToolkitsChildren/RecentContests.vue"),
+  //     },
+  //     {
+  //       name: "RankingList",
+  //       path: "rankinglist",
+  //       component: () => import("@/views/ToolkitsChildren/RankingList.vue"),
+  //     },
+  //   ],
+  // },
   {
     name: "Training",
     path: "/training",
@@ -159,6 +159,12 @@ const routes = [
     meta: { title: BaseTitle + "加入我们" },
   },
   {
+    name: "AskAI",
+    path: "/askai",
+    component: () => import("@/views/AskAI.vue"),
+    meta: { title: BaseTitle + "AskAI" },
+  },
+  {
     name: "Problem",
     path: "/problem/:PID/:BindID?",
     component: () => import("@/views/Problem.vue"),
@@ -187,6 +193,12 @@ const routes = [
     path: "/user/:UID",
     component: () => import("@/views/User.vue"),
     meta: { title: BaseTitle + "用户" },
+  },
+  {
+    name: "RankingView",
+    path: "/ranking/:CID",
+    component: () => import("@/views/Ranking.vue"),
+    meta: { title: BaseTitle + "排行榜" },
   },
   Admin,
   {

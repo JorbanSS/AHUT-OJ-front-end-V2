@@ -211,6 +211,12 @@ const Admin = {
           component: () =>
             import("@/views/AdminChildren/OtherChildren/UpdateLog.vue"),
         },
+        {
+          name: "AdminAskAI",
+          path: "askai",
+          component: () =>
+            import("@/views/AdminChildren/OtherChildren/AskAI.vue"),
+        },
       ],
     },
   ],

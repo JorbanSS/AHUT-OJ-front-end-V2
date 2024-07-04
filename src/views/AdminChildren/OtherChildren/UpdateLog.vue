@@ -5,13 +5,19 @@
       <li>
         <div class="font-bold text-base" @click="$router.push({ name: 'AdminOss' })">
           <memory-one theme="outline" size="18" />
-          OSS 对象存储
+          OSS
         </div>
       </li>
       <li>
         <div class="font-bold text-base btn-active">
           <notepad theme="outline" size="18" />
           更新日志
+        </div>
+      </li>
+      <li>
+        <div class="font-bold text-base" @click="$router.push({ name: 'AdminAskAI' })">
+          <smart-optimization theme="outline" size="18" />
+          AskAI
         </div>
       </li>
     </ul>
@@ -78,7 +84,7 @@
 <script lang="ts" setup name="AddProblem">
 import { onMounted, reactive } from 'vue';
 
-import { Add, DeleteOne, EditTwo, MemoryOne, Notepad } from '@icon-park/vue-next';
+import { Add, DeleteOne, EditTwo, MemoryOne, Notepad, SmartOptimization } from '@icon-park/vue-next';
 import { MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';

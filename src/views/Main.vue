@@ -1,6 +1,6 @@
 <template>
   <div v-auto-animate>
-    <NavBar :login="loginAction" :logout="logoutAction" v-if="showConfig.showNavBar && route.name != 'Editor'" />
+    <NavBar :login="loginAction" :logout="logoutAction" v-if="showConfig.showNavBar && route.name != 'Editor' && route.name != 'RankingView'" />
     <keep-alive>
       <div :style="adminMode ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 26px)'" v-auto-animate
         v-if="showConfig.showBody">
@@ -8,7 +8,7 @@
       </div>
     </keep-alive>
     <Footer
-      v-if="showConfig.showFooter && route.name != 'Editor' && (route.matched.length == 0 || route.matched[0].name != 'Problem')">
+      v-if="showConfig.showFooter && route.name != 'Editor' && route.name != 'RankingView' && (route.matched.length == 0 || route.matched[0].name != 'Problem')">
     </Footer>
     <div class="coverBox" v-if="showConfig.showCover" style="background: linear-gradient(to bottom right, #BBB, #DDD);">
       <!-- #50A3A2, #53E3A6) -->
@@ -169,40 +169,40 @@ function getUserInfo() {
 }
 
 
-const connect = () => {
-  WebSocketStore.connectWebSocket();
-};
+// const connect = () => {
+//   WebSocketStore.connectWebSocket();
+// };
 
-onMounted(() => {
-  WebSocketStore.connectWebSocket();
-});
+// onMounted(() => {
+//   WebSocketStore.connectWebSocket();
+// });
 
-onUnmounted(() => {
-  if (WebSocketStore.socket) {
-    WebSocketStore.socket.close();
-  }
-});
+// onUnmounted(() => {
+//   if (WebSocketStore.socket) {
+//     WebSocketStore.socket.close();
+//   }
+// });
 
-watch(() => WebSocketStore.socketMessage, (newMessage) => {
-  handleMessage(newMessage);
-});
+// watch(() => WebSocketStore.socketMessage, (newMessage) => {
+//   handleMessage(newMessage);
+// });
 
-const handleMessage = (message: any) => {
-  // Handle different types of messages
-  switch (message.type) {
-    case 'type1':
-      console.log('Handle type1 message:', message);
-      break;
-    case 'type2':
-      console.log('Handle type2 message:', message);
-      break;
-    default:
-      console.log('Handle default message:', message);
-      break;
-  }
-};
+// const handleMessage = (message: any) => {
+//   // Handle different types of messages
+//   switch (message.type) {
+//     case 'type1':
+//       console.log('Handle type1 message:', message);
+//       break;
+//     case 'type2':
+//       console.log('Handle type2 message:', message);
+//       break;
+//     default:
+//       console.log('Handle default message:', message);
+//       break;
+//   }
+// };
 
-const socketMessage = ref(WebSocketStore.socketMessage);
+// const socketMessage = ref(WebSocketStore.socketMessage);
 
 onMounted(() => {
   showConfig.init();

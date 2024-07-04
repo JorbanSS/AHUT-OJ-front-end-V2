@@ -1,5 +1,55 @@
 <template>
-  <div class="card bg-white Border shadow-lg overflow-x-auto" style="max-height: calc(100vh - 124px - 48px)">
+  <div class="flex flex-row" :class="{ '': route.name == 'RankingView', 'gap-2': route.name != 'RankingView' }">
+    <div class="bg-white pl-6 pr-2 gap-2 flex items-center"
+      :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', '' : route.name == 'RankingView' }">
+      <refresh theme="outline" size="18" />
+      <span class="font-bold mr-2 text-nowrap">自动更新间隔</span>
+      <div class="bg-[#E8E9EA] flex p-1 rounded-xl">
+        <div v-for="(item, index) in autoRefreshIntervals">
+          <button class="py-1 rounded-lg w-16"
+            :class="{ 'bg-[#2C3440] text-[#D7DDE4] font-bold': autoRefresh === item }" @click="autoRefresh = item">
+            {{ item === 0 ? '关闭' : item + 's' }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white w-full flex items-center justify-center" v-if="route.name == 'RankingView'">
+      <span class="font-bold text-lg">{{ props.contest.Title }}</span>
+    </div>
+    <ul class="menu bg-white flex flex-row text-base font-bold w-fit flex-nowrap"
+      :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', 'pr-[104px]': route.name == 'RankingView' }">
+      <li>
+        <a @click="ranking.get(true)">
+          <refresh theme="outline" size="18" />
+          更新数据
+        </a>
+      </li>
+      <li>
+        <a @click="() => {
+          if (route.name == 'RankingView') {
+            $router.push({
+              name: 'ContestRanking',
+              params: {
+                CID: props.contest.CID,
+              }
+            })
+          } else {
+            $router.push({
+              name: 'RankingView',
+              params: {
+                CID: props.contest.CID,
+              }
+            })
+          }
+        }">
+          <full-screen theme="outline" size="18" />
+          <span class="font-bold">{{ route.name == 'RankingView' ? '退出全屏' : '全屏显示' }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="bg-white shadow-lg overflow-x-auto" :class="{ 'rounded-2xl Border': route.name != 'RankingView' }"
+    :style="{'max-height': route.name == 'RankingView' ? 'calc(100vh - 58px)' : 'calc(100vh - 500px)'}">
     <table class="table table-zebra table-pin-rows table-pin-cols table-fixed text-center">
       <thead>
         <tr>
@@ -44,19 +94,49 @@
 </template>
 
 <script lang="ts" setup name="ContestRank">
-import { onMounted, reactive, ref } from 'vue';
+import { onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+
+import { FullScreen, Refresh } from '@icon-park/vue-next';
 
 import { _getContestRanking } from '@/apis/contest';
 import { useConstValStore } from '@/stores/ConstVal';
 import { type ContestRankingType, type ContestType } from '@/interfaces/contest';
 import { ConvertTools, getRankingBackgroundColor } from '@/utils/globalFunctions';
+import { push } from 'notivue';
 
 const route = useRoute();
 const router = useRouter();
 const constValStore = useConstValStore();
 
 let currentTime = ref<number>(0);
+
+const autoRefreshIntervals = [0, 10, 60];
+const autoRefresh = ref<number>(0);
+let intervalId: any = null;
+
+const startInterval = () => {
+  if (intervalId !== null) {
+    clearInterval(intervalId);
+  }
+  if (autoRefresh.value !== 0) {
+    intervalId = setInterval(ranking.get(), autoRefresh.value);
+  }
+};
+
+onMounted(() => {
+  startInterval();
+});
+
+onBeforeUnmount(() => {
+  if (intervalId !== null) {
+    clearInterval(intervalId);
+  }
+});
+
+watch(autoRefresh, () => {
+  startInterval();
+});
 
 type problemsType = {
   PID: string,
@@ -94,7 +174,7 @@ let props = withDefaults(defineProps<propsType>(), {
 let ranking = reactive<ContestRankingType>({
   Count: 0,
   Ranking: [],
-  get() {
+  get(showInfo: boolean = false) {
     let params = {
       UseWs: false,
     };
@@ -102,6 +182,11 @@ let ranking = reactive<ContestRankingType>({
       .then((data: any) => {
         ranking.Count = data.Size;
         ranking.Ranking = data.Data;
+        if (showInfo) {
+          push.success({
+            title: '更新成功',
+          })
+        }
       })
       .then(() => {
         this.getPenalty();

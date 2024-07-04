@@ -14,7 +14,8 @@ import {
   RankingList,
   Time,
   Topic,
-  Trophy
+  Trophy,
+  SmartOptimization,
 } from "@icon-park/vue-next";
 import { ToolbarNames } from "md-editor-v3";
 
@@ -131,6 +132,7 @@ export const navItems: Array<NavItemType> = [
   //   ],
   // },
   { title: "记录", icon: History, to: { name: "Records" } },
+  { title: "AskAI", icon: SmartOptimization, to: { name: "AskAI" } },
 ];
 
 export const contestNavItems: Array<NavItemType> = [

@@ -4,13 +4,19 @@
       <li>
         <div class="font-bold text-base btn-active">
           <memory-one theme="outline" size="18" />
-          OSS 对象存储
+          OSS
         </div>
       </li>
       <li>
         <div class="font-bold text-base" @click="$router.push({ name: 'AdminUpdateLog' })">
           <notepad theme="outline" size="18" />
           更新日志
+        </div>
+      </li>
+      <li>
+        <div class="font-bold text-base" @click="$router.push({ name: 'AdminAskAI' })">
+          <smart-optimization theme="outline" size="18" />
+          AskAI
         </div>
       </li>
     </ul>
@@ -167,7 +173,7 @@
 <script lang="ts" setup name="AdminUser">
 import { onMounted, reactive, ref } from 'vue';
 
-import { DeleteOne, FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, Notepad, PictureOne } from '@icon-park/vue-next';
+import { DeleteOne, FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, Notepad, PictureOne, SmartOptimization } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _addBuckets, _deleteBucket, _deleteObject, _getBuckets, _getObjects } from '@/apis/oss';

@@ -81,29 +81,33 @@ Axios.interceptors.response.use(
   }
 );
 
-export function Get(url: string, params: any, content = 0) {
+export function Get(url: string, params: any, content = 0, timeout = Axios.defaults.timeout) {
   return Axios.get(url, {
     params,
     headers: { "Content-Type": contentType[content] },
+    timeout: timeout,
   });
 }
 
-export function Post(url: string, data: any, content = 0) {
+export function Post(url: string, data: any, content = 0, timeout = Axios.defaults.timeout) {
   return Axios.post(url, data, {
     headers: { "Content-Type": contentType[content] },
+    timeout: timeout,
   });
 }
 
-export function Del(url: string, data: any, content = 0) {
+export function Del(url: string, data: any, content = 0, timeout = Axios.defaults.timeout) {
   return Axios.delete(url, {
     data,
     headers: { "Content-Type": contentType[content] },
+    timeout: timeout,
   });
 }
 
-export function Put(url: string, data: any, content = 0) {
+export function Put(url: string, data: any, content = 0, timeout = Axios.defaults.timeout) {
   return Axios.put(url, data, {
     headers: { "Content-Type": contentType[content] },
+    timeout: timeout,
   });
 }
 
