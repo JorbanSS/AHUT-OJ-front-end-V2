@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row Border" :class="{ '': route.name == 'RankingView', 'gap-2': route.name != 'RankingView' }">
+  <div class="flex flex-row" :class="{ 'border-b-2': route.name == 'RankingView', 'gap-2': route.name != 'RankingView' }">
     <div class="bg-white pl-6 pr-2 gap-2 flex items-center"
       :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', '' : route.name == 'RankingView' }">
       <refresh theme="outline" size="18" />
