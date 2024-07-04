@@ -121,38 +121,52 @@ import { type ContestRankingType, type ContestType } from '@/interfaces/contest'
 import { ConvertTools, getRankingBackgroundColor } from '@/utils/globalFunctions';
 import { push } from 'notivue';
 import { _getServerTime } from '@/apis/common';
+import { onUnmounted } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
 const constValStore = useConstValStore();
 
-let currentTime = ref<number>(0);
-
-const autoRefreshIntervals = [0, 10, 60];
+const autoRefreshIntervals = [0, 5, 10, 30];
 const autoRefresh = ref<number>(0);
-let intervalId: any = null;
+let timer: ReturnType<typeof setInterval> | null = null;
 
-const startInterval = () => {
-  if (intervalId !== null) {
-    clearInterval(intervalId);
+const f = () => {
+  ranking.get(true);
+};
+
+const startAutoRefresh = () => {
+  if (timer) {
+    clearInterval(timer);
   }
-  if (autoRefresh.value !== 0) {
-    intervalId = setInterval(ranking.get(), autoRefresh.value);
+  if (autoRefresh.value > 0) {
+    timer = setInterval(f, autoRefresh.value * 1000);
   }
 };
 
-onMounted(() => {
-  startInterval();
-});
+const stopAutoRefresh = () => {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
+};
 
-onBeforeUnmount(() => {
-  if (intervalId !== null) {
-    clearInterval(intervalId);
+watch(autoRefresh, (newInterval) => {
+  if (newInterval > 0) {
+    startAutoRefresh();
+  } else {
+    stopAutoRefresh();
   }
 });
 
-watch(autoRefresh, () => {
-  startInterval();
+onMounted(() => {
+  if (autoRefresh.value > 0) {
+    startAutoRefresh();
+  }
+});
+
+onUnmounted(() => {
+  stopAutoRefresh();
 });
 
 type problemsType = {
@@ -270,9 +284,6 @@ onMounted(() => {
     props.contest.CID = route.params.CID as unknown as number;
   }
   ranking.get();
-  // getServerTime().then((res: any) => {
-  //   currentTime.value = res;
-  // })
 })
 
 </script>
