@@ -85,7 +85,7 @@
           </th>
         </tr>
       </thead>
-      <tbody v-auto-animate>
+      <tbody>
         <tr v-for="( item1, index ) in ranking.Ranking " :key="index">
           <th>{{ index + 1 }}</th>
           <td>{{ item1.Uname }}</td>

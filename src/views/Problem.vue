@@ -40,7 +40,7 @@
                 </progress>
               </div>
               <div class="flex gap-2 pt-2 flex-wrap">
-                <div class="group/dropdown z-20" v-for="(item, index) in problems" :key="item.PID">
+                <div class="group/dropdown z-100" v-for="(item, index) in problems" :key="item.PID">
                   <button tabindex="0" role="button" class="btn w-40 justify-start flex-nowrap group-hover/dropdown"
                     :class="{ 'btn-active': item.PID == problem.PID }" @click="$router.replace({
                       name: 'Problem',
@@ -64,7 +64,7 @@
                     </div>
                   </button>
                   <div tabindex="0"
-                    class="z-[1] card card-compact w-64 shadow bg-white Border group-hover/dropdown:block hidden absolute mt-3 right-1 backdrop-blur-md bg-opacity-60">
+                    class="z-10 card card-compact w-64 shadow bg-white Border group-hover/dropdown:block hidden absolute mt-2 -ml-2 backdrop-blur-md bg-opacity-60">
                     <div class="card-body">
                       <h3 class="card-title">
                         <div class="text-lg space-x-2 font-normal">
