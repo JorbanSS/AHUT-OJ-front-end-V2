@@ -57,7 +57,7 @@ export const _getAdmins = (params: any) => {
 
 // 管理员修改用户信息
 export const _adminEditUserInfo = (data: any) => {
-  return Post('user/edit/', data);
+  return Post('admin/user/edit/', data);
 }
 
 // 新增用户
