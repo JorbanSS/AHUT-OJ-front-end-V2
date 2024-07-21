@@ -4,7 +4,9 @@
       <remind theme="outline" size="20" class="ml-1" />
       <div>
         <h3 class="font-bold">{{ notice.Title }}</h3>
-        <div class="text-xs">{{ ConvertTools.PrintTime(notice.UpdatedTime, 1) }}</div>
+        <div class="text-xs">
+          {{ ConvertTools.PrintTime(notice.UpdatedTime, 1) }}
+        </div>
       </div>
       <button class="btn btn-sm" @click.stop="$router.push({ name: 'AdminDashboard' })"
         v-if="userDataStore.PermissionMap > 3">
@@ -28,18 +30,20 @@
             版本更新日志
           </div>
           <button class="btn btn-sm mr-3" @click="$router.push({ name: 'AdminUpdateLog' })"
-            v-if="userDataStore.PermissionMap & constValStore.SuperAdminBit">编辑</button>
+            v-if="userDataStore.PermissionMap & constValStore.SuperAdminBit">
+            编辑
+          </button>
         </div>
         <div class="px-4 overflow-auto rounded-2xl">
           <div v-for="item in updateLogs.updateLogs" :key="item.ID">
             <div class="pb-4">
               <div class="flex items-center space-x-2">
                 <div class="font-bold">
-                  {{ item.Title.split(' Version=')[0] }}
+                  {{ item.Title.split(" Version=")[0] }}
                 </div>
                 <span v-if="item.Title.split('Version=').length > 1" class="text-white rounded-full px-2"
-                  style="background-color: #19BE6B;">
-                  {{ item.Title.split('Version=')[1] }}
+                  style="background-color: #19be6b">
+                  {{ item.Title.split("Version=")[1] }}
                 </span>
               </div>
               <div class="-mx-4 overflow-hidden">
@@ -51,29 +55,35 @@
       </div>
     </div>
   </div>
-  <dialog id="homeNotice" class="modal">
-    <div class="modal-box">
-      <h3 class="font-bold text-lg">公告：{{ notice.Title }}</h3>
-      <MdPreview editorId="homeNoticeContent" :modelValue="notice.Content" class="-mx-5" preview-only />
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button></button>
-    </form>
-  </dialog>
+  <div>
+    <dialog id="homeNotice" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">公告：{{ notice.Title }}</h3>
+        <MdPreview editorId="homeNoticeContent" :modelValue="notice.Content" class="-mx-5" preview-only />
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button></button>
+      </form>
+    </dialog>
+  </div>
 </template>
 
 <script lang="ts" setup name="Home">
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from "vue";
 
-import { Remind } from '@icon-park/vue-next';
-import { MdPreview } from 'md-editor-v3';
-import 'md-editor-v3/lib/preview.css';
+import { Remind } from "@icon-park/vue-next";
+import { MdPreview } from "md-editor-v3";
+import "md-editor-v3/lib/preview.css";
 
 import { _getBanners, _getUpdateLogs } from "@/apis/oj";
-import { type BannersType, type HomeNoticeType, type UpdateLogsType } from '@/interfaces/oj';
-import { ConvertTools } from '@/utils/globalFunctions';
-import { useUserDataStore } from '@/stores/UserData';
-import { useConstValStore } from '@/stores/ConstVal';
+import {
+  type BannersType,
+  type HomeNoticeType,
+  type UpdateLogsType,
+} from "@/interfaces/oj";
+import { ConvertTools } from "@/utils/globalFunctions";
+import { useUserDataStore } from "@/stores/UserData";
+import { useConstValStore } from "@/stores/ConstVal";
 
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
@@ -84,12 +94,12 @@ let updateLogs = reactive<UpdateLogsType>({
 });
 
 let notice = ref<HomeNoticeType>({
-  Title: '暂无公告',
-  Content: '',
+  Title: "暂无公告",
+  Content: "",
   UpdatedTime: 0,
   CreatedTime: 0,
-  UID: '',
-})
+  UID: "",
+});
 
 let banners = reactive<BannersType>({
   banners: [],
@@ -100,8 +110,8 @@ let banners = reactive<BannersType>({
       .then((data: any) => {
         banners.banners = data.Data;
         banners.Count = data.Count;
-      })
-  }
+      });
+  },
 });
 
 function getUpdateLogs() {
@@ -109,19 +119,20 @@ function getUpdateLogs() {
     .then((data: any) => {
       updateLogs.updateLogs = data.Data;
       updateLogs.count = data.Count;
-      if (updateLogs.updateLogs.filter(item => item.ID == 0).length) {
-        notice.value = updateLogs.updateLogs.filter(item => item.ID == 0)[0];
-        // @ts-ignore
-        if (updateLogs.updateLogs.filter(item => item.ID == 0)) homeNotice.showModal();
+      if (updateLogs.updateLogs.filter((item) => item.ID == 0).length) {
+        notice.value = updateLogs.updateLogs.filter((item) => item.ID == 0)[0];
+        if (updateLogs.updateLogs.filter((item) => item.ID == 0))
+          // @ts-ignore
+          homeNotice.showModal();
       }
-      updateLogs.updateLogs = updateLogs.updateLogs.filter(item => item.ID != 0);
-    })
+      updateLogs.updateLogs = updateLogs.updateLogs.filter(
+        (item) => item.ID != 0
+      );
+    });
 }
-
 
 onMounted(() => {
   getUpdateLogs();
   banners.get();
-})
-
+});
 </script>

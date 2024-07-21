@@ -14,12 +14,14 @@
         </div>
       </li>
       <li>
-        <label class="font-bold text-base" @click="$router.push({
-          name: 'EditProblem',
-          params: {
-            PID: judgeFiles.PID,
-          },
-        })">
+        <label class="font-bold text-base" @click="
+          $router.push({
+            name: 'EditProblem',
+            params: {
+              PID: judgeFiles.PID,
+              },
+            })
+          ">
           <edit-one theme="outline" size="18" />
           编辑题目
         </label>
@@ -49,7 +51,9 @@
     <table class="table table-zebra mb-4 text-center">
       <thead>
         <tr>
-          <th v-for="(item, index) in ['文件名', '类型', '大小', '操作']" :key="index">{{ item }}</th>
+          <th v-for="(item, index) in ['文件名', '类型', '大小', '操作']" :key="index">
+            {{ item }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -61,8 +65,11 @@
             {{ item.FileType }}
           </td>
           <td>
-            {{ item.FileSize >= 2048 * 1024 ? (item.FileSize / 1024 / 1024).toFixed(2) + ' MB' : ((item.FileSize + 6) /
-              1024).toFixed(2) + ' KB' }}
+            {{
+              item.FileSize >= 2048 * 1024
+                ? (item.FileSize / 1024 / 1024).toFixed(2) + " MB"
+                : ((item.FileSize + 6) / 1024).toFixed(2) + " KB"
+            }}
           </td>
           <td class="space-x-2">
             <button class="btn btn-neutral btn-sm" @click="judgeFileDetail.get(item.FileName)">
@@ -78,50 +85,65 @@
       </tbody>
     </table>
   </div>
-  <dialog id="judgeFileDetailModal" class="modal">
-    <div class="modal-box space-y-2 w-[500px]">
-      <h3 class="font-bold text-lg">
-        文件预览：{{ judgeFileDetail.FileName }}
-      </h3>
-      <!-- <button class="btn w-fit btn-sm btn-neutral" @click="copyData()">
+  <div>
+    <dialog id="judgeFileDetailModal" class="modal">
+      <div class="modal-box space-y-2 w-[500px]">
+        <h3 class="font-bold text-lg">
+          文件预览：{{ judgeFileDetail.FileName }}
+        </h3>
+        <!-- <button class="btn w-fit btn-sm btn-neutral" @click="copyData()">
         <copy theme="outline" size="18" />
         复制内容
       </button> -->
-      <div class="mockup-code card shadow-lg px-6">
-        <pre v-for="(item, index) in judgeFileDetail.FileContent.split('\n')"
-          :data-prefix="index + 1"><code>{{ item }}</code></pre>
+        <div class="mockup-code card shadow-lg px-6">
+          <pre v-for="(item, index) in judgeFileDetail.FileContent.split('\n')"
+            :data-prefix="index + 1"><code>{{ item }}</code></pre>
+        </div>
       </div>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
-  </dialog>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+  </div>
 </template>
 
 <script lang="ts" setup name="AddProblem">
-import { onMounted, reactive } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, reactive } from "vue";
+import { useRoute } from "vue-router";
 
-import { Add, Delete, DocumentFolder, EditOne, Eyes, Data as ICONdata, Upload } from '@icon-park/vue-next';
-import { push } from 'notivue';
-import useClipboard from 'vue-clipboard3';
+import {
+  Add,
+  Delete,
+  DocumentFolder,
+  EditOne,
+  Eyes,
+  Data as ICONdata,
+  Upload,
+} from "@icon-park/vue-next";
+import { push } from "notivue";
+import useClipboard from "vue-clipboard3";
 
-import { _deleteJudgeFiles, _getJudgeFile, _getJudgeFiles, _uploadJudgeFiles } from "@/apis/problem";
-import { JudgeFileDetailType, type JudgeFilesType } from '@/interfaces/problem';
+import {
+  _deleteJudgeFiles,
+  _getJudgeFile,
+  _getJudgeFiles,
+  _uploadJudgeFiles,
+} from "@/apis/problem";
+import { JudgeFileDetailType, type JudgeFilesType } from "@/interfaces/problem";
 
 const route = useRoute();
 const { toClipboard } = useClipboard();
 
 interface UploadFilesInputType {
-  files: FileList | null,
-  [item: string]: any,
+  files: FileList | null;
+  [item: string]: any;
 }
 
 function checkFileExtension(fileName: string): boolean {
-  const parts = fileName.split('.');
+  const parts = fileName.split(".");
   if (parts.length < 2) return false;
   const extension = parts[parts.length - 1];
-  return ['in', 'out', 'zip'].includes(extension);
+  return ["in", "out", "zip"].includes(extension);
 }
 
 let uploadFilesInput = reactive<UploadFilesInputType>({
@@ -131,31 +153,31 @@ let uploadFilesInput = reactive<UploadFilesInputType>({
     Array.from(files).forEach((file: any) => {
       if (checkFileExtension(file.name) == false) {
         push.error({
-          title: '文件格式错误',
-          message: '请选择 in, out, zip 格式的文件',
-        })
+          title: "文件格式错误",
+          message: "请选择 in, out, zip 格式的文件",
+        });
         return;
       }
       judgeFiles.judgeFiles.forEach((file2: any) => {
         if (file.name == file2.FileName) {
           push.warning({
-            title: '文件名重复',
+            title: "文件名重复",
             message: `${file.name} 已存在，上传将会覆盖原文件`,
-          })
+          });
         }
-      })
-    })
+      });
+    });
     uploadFilesInput.files = files;
     push.success({
-      title: '选择成功',
-    })
+      title: "选择成功",
+    });
   },
 
   upload() {
     if (uploadFilesInput.files == null || uploadFilesInput.files.length == 0) {
       push.warning({
-        title: '未选择文件',
-      })
+        title: "未选择文件",
+      });
       return;
     }
     Array.from(uploadFilesInput.files).forEach((file: any) => {
@@ -167,13 +189,17 @@ let uploadFilesInput = reactive<UploadFilesInputType>({
           judgeFiles.Count = data.Count;
         })
         .then(() => {
-          if (uploadFilesInput.files && file.name == uploadFilesInput.files[uploadFilesInput.files.length - 1].name) {
+          if (
+            uploadFilesInput.files &&
+            file.name ==
+            uploadFilesInput.files[uploadFilesInput.files.length - 1].name
+          ) {
             judgeFiles.get();
           }
-        })
-    })
+        });
+    });
     push.success({
-      title: '上传成功',
+      title: "上传成功",
       message: `上传了 ${uploadFilesInput.files.length} 个文件`,
     });
   },
@@ -188,48 +214,45 @@ const uploadFilesChangeHandle = (event: Event) => {
 
 let judgeFiles = reactive<JudgeFilesType>({
   judgeFiles: [],
-  PID: '',
+  PID: "",
   Count: 0,
 
   get(showInfo = false) {
-    _getJudgeFiles({}, judgeFiles.PID)
-      .then((data: any) => {
-        judgeFiles.judgeFiles = data.Data;
-        judgeFiles.Count = data.Count;
-        if (showInfo) {
-          push.success({
-            title: '获取成功',
-            message: `获取了题目 ${judgeFiles.PID} 的 ${judgeFiles.Count} 条数据`,
-          });
-        }
-      })
+    _getJudgeFiles({}, judgeFiles.PID).then((data: any) => {
+      judgeFiles.judgeFiles = data.Data;
+      judgeFiles.Count = data.Count;
+      if (showInfo) {
+        push.success({
+          title: "获取成功",
+          message: `获取了题目 ${judgeFiles.PID} 的 ${judgeFiles.Count} 条数据`,
+        });
+      }
+    });
   },
 
   delete(fileName: string) {
     let formData = new FormData();
     formData.append("file", fileName);
-    _deleteJudgeFiles(formData, judgeFiles.PID)
-      .then(() => {
-        push.success({
-          title: '删除成功',
-          message: `${fileName}`,
-        });
-        judgeFiles.get();
-      })
-  }
-})
+    _deleteJudgeFiles(formData, judgeFiles.PID).then(() => {
+      push.success({
+        title: "删除成功",
+        message: `${fileName}`,
+      });
+      judgeFiles.get();
+    });
+  },
+});
 
 let judgeFileDetail = reactive<JudgeFileDetailType>({
-  FileName: '',
-  FileContent: '',
+  FileName: "",
+  FileContent: "",
   get(fileName: string) {
-    _getJudgeFile({}, judgeFiles.PID, fileName)
-      .then((data: any) => {
-        this.FileName = fileName;
-        this.FileContent = data.FileContent;
-        // @ts-ignore
-        judgeFileDetailModal.showModal();
-      })
+    _getJudgeFile({}, judgeFiles.PID, fileName).then((data: any) => {
+      this.FileName = fileName;
+      this.FileContent = data.FileContent;
+      // @ts-ignore
+      judgeFileDetailModal.showModal();
+    });
   },
 });
 
@@ -237,13 +260,13 @@ async function copyData() {
   try {
     await toClipboard(judgeFileDetail.FileContent);
     push.success({
-      title: '复制成功',
-      message: '已复制文件内容到剪贴板',
-    })
+      title: "复制成功",
+      message: "已复制文件内容到剪贴板",
+    });
   } catch (e) {
     push.error({
-      title: '复制失败',
-    })
+      title: "复制失败",
+    });
   }
 }
 
@@ -251,7 +274,4 @@ onMounted(() => {
   judgeFiles.PID = route.params.PID as string;
   judgeFiles.get(true);
 });
-
 </script>
-
-<style scoped></style>

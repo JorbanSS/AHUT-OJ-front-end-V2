@@ -6,8 +6,10 @@ export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
   state: () => ({
     socket: null as WebSocket | null, // WebSocket 对象，初始值为 null
     messageQueue: [] as any[], // 消息队列，初始为空数组
-    readyState: 0, // WebSocket 连接状态，初始值为 0
+    open: false, // WebSocket 连接状态，初始值为 false
     socketMessage: "1", // 最近收到的 WebSocket 消息，初始值为 "1"
+
+    retryCount: 0, // 重试次数，初始值为 0
   }),
   getters: {
     // 定义 SET_SOCKET getter
@@ -26,25 +28,33 @@ export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
   actions: {
     // 连接 WebSocket 的方法
     connectWebSocket() {
-      const PING_INTERVAL = 5000; // 心跳间隔，单位为毫秒
-      const heartbeatMessage = { type: 0, msg: "ping" }; // 心跳消息
-      const heartbeatMessage2 = { type: 0, msg: "pong", data: ["在线设备"] }; // 心跳响应消息
-      const HOST_ADDRESS = "ws://127.0.0.1:7531"; // WebSocket 服务器地址
+      console.log("WebSocket connecting...");
+      let token = localStorage.getItem("token");
+      if (!token) {
+        return;
+      }
+      // const PING_INTERVAL = 20000; // 心跳间隔，单位为毫秒
+      // const heartbeatMessage = { type: 0, msg: "ping" }; // 心跳消息
+      const heartbeatMessage2 = { Type: 0, Data: "pong" }; // 心跳响应消息
+      const HOST_ADDRESS = `wss://oj.angriliset.top:4444/ws?token=${token}`; // WebSocket 服务器地址
+      //转发4212也可以连localhost:4212
       const socket = new WebSocket(HOST_ADDRESS); // 创建 WebSocket 对象
       let checkTask: any = null; // 心跳检查任务的计时器
-
+      this.open = true;
       // 监听连接事件
       socket.onopen = () => {
+        console.log("WebSocket connected.");
         // 启动心跳检测，确保连接存活
-        checkTask = setInterval(() => {
-          socket.send(JSON.stringify(heartbeatMessage)); // 发送心跳消息
-        }, PING_INTERVAL);
+        // checkTask = setInterval(() => {
+        //   socket.send(JSON.stringify(heartbeatMessage)); // 发送心跳消息
+        // }, PING_INTERVAL);
       };
 
       // 监听消息事件
       socket.onmessage = (event) => {
+        // console.log('WebSocket message received:', event.data);
         const message = JSON.parse(event.data); // 解析收到的消息
-        if (message.type === WebSocket.CONNECTING) {
+        if (message.Type === WebSocket.CONNECTING) {
           socket.send(JSON.stringify(heartbeatMessage2)); // 发送心跳响应消息
         } else {
           if (this.messageQueue.length > 65536) {
@@ -57,19 +67,28 @@ export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
 
       // 监听关闭事件，断线重连
       socket.onclose = () => {
+        console.log("WebSocket closed.");
+        this.init(); // 初始化状态
         if (this.socket?.readyState === WebSocket.CLOSED) {
           this.messageQueue.forEach((message) => {
             this.sendMessage(message); // 重新发送队列中的消息
           });
-          this.messageQueue = []; // 清空消息队列
         }
         if (checkTask) {
           clearInterval(checkTask); // 清除心跳计时器
         }
-        setTimeout(() => {
-          this.connectWebSocket(); // 断线重连
-        }, 3000);
-      };
+        if (this.open && this.retryCount < 3) {
+          this.retryCount++;
+          setTimeout(() => {
+            this.connectWebSocket(); // 断线重连，增加重试次数
+          }, 3000);
+        } else {
+          console.log("Reached maximum retry count.");
+          return;
+        }
+      }; //1、服务端失联
+      // (1)客户端已有连接，检测关闭，重新初始化,(2)客户端建立连接，再重试三次
+      //2、客户端失联(调用logout或关闭页面),服务端检测关闭，如果是最后一个连接，清理状态
 
       // 监听错误事件
       socket.onerror = (event) => {
@@ -78,7 +97,17 @@ export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
 
       this.SET_SOCKET(socket); // 设置 WebSocket 对象
     },
-
+    init() {
+      this.socket = null;
+      this.messageQueue = [];
+      this.socketMessage = "1";
+    },
+    initRetryCount() {
+      this.retryCount = 0;
+    },
+    initOpen() {
+      this.open = false;
+    },
     // 发送消息的方法
     sendMessage(message: string) {
       if (this.socket) {

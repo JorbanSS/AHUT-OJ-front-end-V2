@@ -62,69 +62,79 @@
       </tbody>
     </table>
   </div>
-  <dialog id="addUpdateLog" class="modal">
-    <div class="modal-box max-w-5xl">
-      <h3 class="font-bold text-lg mb-4">新增更新日志</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        标题
-        <input type="text" class="grow" v-model="updateLog.Title" />
-      </label>
-      <div class="m-6"></div>
-      <MdEditor v-model="updateLog.Content" :height="500" :toolbars="markdownToolbars" />
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消</button>
-          <button class="btn btn-neutral" @click="updateLog.add()">确认新增</button>
-        </form>
+  <div>
+    <dialog id="addUpdateLog" class="modal">
+      <div class="modal-box max-w-5xl">
+        <h3 class="font-bold text-lg mb-4">新增更新日志</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          标题
+          <input type="text" class="grow" v-model="updateLog.Title" />
+        </label>
+        <div class="m-6"></div>
+        <MdEditor v-model="updateLog.Content" :height="500" :toolbars="markdownToolbars" />
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消</button>
+            <button class="btn btn-neutral" @click="updateLog.add()">
+              确认新增
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
+    </dialog>
+  </div>
 </template>
 
 <script lang="ts" setup name="AddProblem">
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive } from "vue";
 
-import { Add, DeleteOne, EditTwo, MemoryOne, Notepad, SmartOptimization } from '@icon-park/vue-next';
-import { MdEditor } from 'md-editor-v3';
-import 'md-editor-v3/lib/style.css';
-import { push } from 'notivue';
+import {
+  Add,
+  DeleteOne,
+  EditTwo,
+  MemoryOne,
+  Notepad,
+  SmartOptimization,
+} from "@icon-park/vue-next";
+import { MdEditor } from "md-editor-v3";
+import "md-editor-v3/lib/style.css";
+import { push } from "notivue";
 
-import { _addUpdateLog, _deleteUpdateLog, _getNoticeList } from '@/apis/oj';
-import { markdownToolbars } from '@/config';
-import { UpdateLogsType, UpdateLogType } from '@/interfaces/oj';
+import { _addUpdateLog, _deleteUpdateLog, _getNoticeList } from "@/apis/oj";
+import { markdownToolbars } from "@/config";
+import { UpdateLogsType, UpdateLogType } from "@/interfaces/oj";
 
 let updateLogs = reactive<UpdateLogsType>({
-  updateLogs: new Array<UpdateLogType>,
+  updateLogs: new Array<UpdateLogType>(),
   count: 0,
   page: 1,
   limit: 20,
 
   get(showInfo: boolean = false) {
-    _getNoticeList({})
-      .then((data: any) => {
-        this.updateLogs = data.Data.filter((item: UpdateLogType) => item.ID);
-        this.count = this.updateLogs.length;
-        for (let index = 0; index < this.updateLogs.length; index++) {
-          this.updateLogs[index].Selected = false;
-        }
-        if (showInfo) {
-          push.success({
-            title: '获取成功',
-            message: `一共获取了 ${this.count} 条更新日志`,
-          })
-        }
-      })
+    _getNoticeList({}).then((data: any) => {
+      this.updateLogs = data.Data.filter((item: UpdateLogType) => item.ID);
+      this.count = this.updateLogs.length;
+      for (let index = 0; index < this.updateLogs.length; index++) {
+        this.updateLogs[index].Selected = false;
+      }
+      if (showInfo) {
+        push.success({
+          title: "获取成功",
+          message: `一共获取了 ${this.count} 条更新日志`,
+        });
+      }
+    });
   },
 
   delete(ID: number) {
-    _deleteUpdateLog({}, ID)
-      .then(() => {
-        this.get();
-        push.success({
-          title: '删除成功',
-          message: `删除了标题为 ${this.updateLogs.find((item) => item.ID == ID)!.Title} 的更新日志`,
-        });
-      })
+    _deleteUpdateLog({}, ID).then(() => {
+      this.get();
+      push.success({
+        title: "删除成功",
+        message: `删除了标题为 ${this.updateLogs.find((item) => item.ID == ID)!.Title
+          } 的更新日志`,
+      });
+    });
   },
 
   edit(ID: number) {
@@ -136,28 +146,26 @@ let updateLogs = reactive<UpdateLogsType>({
 });
 
 let updateLog = reactive({
-  Title: '',
-  Content: '',
+  Title: "",
+  Content: "",
 
   add() {
     let params = {
       Title: updateLog.Title,
       Content: updateLog.Content,
     };
-    _addUpdateLog(params)
-      .then(() => {
-        this.Content = '';
-        updateLogs.get(false);
-        push.success({
-          title: '新增成功',
-          message: `新增了标题为 ${updateLog.Title} 的更新日志`,
-        })
-      })
-  }
-})
+    _addUpdateLog(params).then(() => {
+      this.Content = "";
+      updateLogs.get(false);
+      push.success({
+        title: "新增成功",
+        message: `新增了标题为 ${updateLog.Title} 的更新日志`,
+      });
+    });
+  },
+});
 
 onMounted(() => {
   updateLogs.get(true);
-})
-
+});
 </script>

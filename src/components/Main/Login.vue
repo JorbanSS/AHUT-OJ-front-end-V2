@@ -83,9 +83,11 @@ import { push } from 'notivue';
 import { _getUserInfo, _login, _verifyEmail } from '@/apis/user';
 import { verifyModeOptions } from '@/config';
 import { useUserDataStore } from '@/stores/UserData';
+import { useWebSocketStore } from '@/stores/WebSocket';
 import { type LoginInfoType } from '@/interfaces/user';
 
 const userDataStore = useUserDataStore();
+const WebSocketStore = useWebSocketStore();
 
 let isCountingDown = ref<boolean>(false);
 let second = ref<number>(60);
@@ -129,12 +131,18 @@ let verifyMode = reactive({
   }
 })
 
+
 interface LoginParamsType {
   UID?: string;
   Pass?: string;
   Email?: string;
   Code?: string;
 }
+
+const connectWebSocket = () => {
+  WebSocketStore.connectWebSocket();
+  WebSocketStore.initRetryCount();
+};
 
 function login() {
   userDataStore.init();
@@ -196,6 +204,11 @@ function login() {
       userDataStore.updatePermissionMap(data.PermissionMap);
       getUserInfo();
       props.init();
+    }).then(() => {
+      connectWebSocket();
+    })
+    .catch((error: any) => {
+      console.log(error);
     })
 }
 

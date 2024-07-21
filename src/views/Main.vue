@@ -1,9 +1,11 @@
 <template>
   <div v-auto-animate>
-    <NavBar :login="loginAction" :logout="logoutAction" v-if="showConfig.showNavBar && route.name != 'Editor' && route.name != 'RankingView'" />
+    <NavBar :login="loginAction" :logout="logoutAction"
+      v-if="showConfig.showNavBar && route.name != 'Editor' && route.name != 'RankingView'" />
     <keep-alive>
-      <div :style="adminMode || route.name == 'RankingView' ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 26px)'" v-auto-animate
-        v-if="showConfig.showBody">
+      <div
+        :style="adminMode || route.name == 'RankingView' ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 124px - 26px)'"
+        v-auto-animate v-if="showConfig.showBody">
         <RouterView></RouterView>
       </div>
     </keep-alive>
@@ -82,11 +84,16 @@ function loginAction() {
 
 function logoutAction() {
   push.success({
-    title: '已退出登录',
-    message: `${userDataStore.UserName}，欢迎再次光临`,
+    title: "已退出登录",
+    message: `${userDataStore.UserName}，欢迎再次使用`,
   })
   showConfig.init();
   userDataStore.logout();
+  if (WebSocketStore.socket) {
+    WebSocketStore.socket.close();
+  }
+  WebSocketStore.init();
+  WebSocketStore.initOpen();
 }
 
 function initAction() {
@@ -95,10 +102,6 @@ function initAction() {
 
 function registerAction() {
   showConfig.showRegisterDialog();
-}
-
-function goToEditorAction() {
-  showConfig.showEditorDialog();
 }
 
 function autoLogin() {
@@ -168,41 +171,38 @@ function getUserInfo() {
   }
 }
 
-
-// const connect = () => {
-//   WebSocketStore.connectWebSocket();
-// };
-
 // onMounted(() => {
-//   WebSocketStore.connectWebSocket();
+//   if(userDataStore.isLogin){
+//     WebSocketStore.connectWebSocket();
+//   }
 // });
 
 // onUnmounted(() => {
 //   if (WebSocketStore.socket) {
 //     WebSocketStore.socket.close();
 //   }
-// });
+// });不需要手动关闭
 
-// watch(() => WebSocketStore.socketMessage, (newMessage) => {
-//   handleMessage(newMessage);
-// });
+watch(() => WebSocketStore.socketMessage, (newMessage) => {
+  handleMessage(newMessage);
+});
 
-// const handleMessage = (message: any) => {
-//   // Handle different types of messages
-//   switch (message.type) {
-//     case 'type1':
-//       console.log('Handle type1 message:', message);
-//       break;
-//     case 'type2':
-//       console.log('Handle type2 message:', message);
-//       break;
-//     default:
-//       console.log('Handle default message:', message);
-//       break;
-//   }
-// };
+const handleMessage = (message: any) => {
+  // Handle different types of messages
+  switch (message.type) {
+    case 'type1':
+      console.log('Handle type1 message:', message);
+      break;
+    case 'type2':
+      console.log('Handle type2 message:', message);
+      break;
+    default:
+      console.log('Handle default message:', message);
+      break;
+  }
+};
 
-// const socketMessage = ref(WebSocketStore.socketMessage);
+const socketMessage = ref(WebSocketStore.socketMessage);
 
 onMounted(() => {
   showConfig.init();

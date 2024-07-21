@@ -47,7 +47,9 @@
             {{ item.label }}
           </option>
         </select>
-        <button class="btn join-item btn-neutral" @click="objects.get(objects.bucket, objects.prefix, true)">搜索</button>
+        <button class="btn join-item btn-neutral" @click="objects.get(objects.bucket, objects.prefix, true)">
+          搜索
+        </button>
       </div>
       <div class="m-3"></div>
       <input type="file" class="file-input file-input-bordered w-full max-w-xs" multiple ref="ObjectInput"
@@ -61,31 +63,21 @@
         v-if="browserMode == constValStore.OSS_BROWSER_MODE_FOLDER">
         <thead>
           <tr>
-            <th>
-              名称
-            </th>
-            <th class="w-60">
-              修改日期
-            </th>
-            <th class="w-32">
-              类型
-            </th>
-            <th class="w-28">
-              操作
-            </th>
+            <th>名称</th>
+            <th class="w-60">修改日期</th>
+            <th class="w-32">类型</th>
+            <th class="w-28">操作</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in buckets.buckets" :key="index" @click="enterFolder(item.name)"
             class="cursor-pointer">
-            <th class="flex space-x-2" style="align-items: center;">
+            <th class="flex space-x-2" style="align-items: center">
               <folder-open theme="outline" size="18" class="pt-1" />
               <span class="pt-1">{{ item.name }}</span>
             </th>
             <td>{{ item.creationDate }}</td>
-            <td>
-              文件夹
-            </td>
+            <td>文件夹</td>
             <td>
               <button class="btn btn-sm btn-neutral" @click.stop="buckets.delete(item.name)">
                 <delete-one theme="outline" size="18" hover:fill="#EC4545" />
@@ -98,21 +90,11 @@
       <table class="table table-zebra table-fixed table-pin-rows text-center" v-else>
         <thead>
           <tr>
-            <th>
-              名称
-            </th>
-            <th class="w-60">
-              修改日期
-            </th>
-            <th class="w-32">
-              类型
-            </th>
-            <th class="w-28">
-              大小
-            </th>
-            <th class="w-28">
-              操作
-            </th>
+            <th>名称</th>
+            <th class="w-60">修改日期</th>
+            <th class="w-32">类型</th>
+            <th class="w-28">大小</th>
+            <th class="w-28">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -129,23 +111,19 @@
             </th>
             <td>{{ item.lastModified }}</td>
             <td>
-              <span v-if="objects.isImage(item.name)">
-                图片
-              </span>
-              <span v-else>
-                未知文件
-              </span>
+              <span v-if="objects.isImage(item.name)"> 图片 </span>
+              <span v-else> 未知文件 </span>
             </td>
             <td>
               <div v-if="Math.round(item.size / 1024 / 1024) > 1">
                 {{ (item.size / 1024 / 1024).toFixed(2) }} MB
               </div>
-              <div v-else>
-                {{ (item.size / 1024).toFixed(2) }} KB
-              </div>
+              <div v-else>{{ (item.size / 1024).toFixed(2) }} KB</div>
             </td>
             <td>
-              <button class="btn btn-sm btn-neutral" @click.stop="objects.delete(objects.bucket, item.name)">删除</button>
+              <button class="btn btn-sm btn-neutral" @click.stop="objects.delete(objects.bucket, item.name)">
+                删除
+              </button>
             </td>
           </tr>
         </tbody>
@@ -153,52 +131,72 @@
     </div>
   </div>
   <div class="p-3 bg-base-200"></div>
-  <dialog id="addBucketModal" class="modal">
-    <div class="modal-box">
-      <h3 class="font-bold text-lg mb-4">新建文件夹</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        文件夹名
-        <input type="text" class="grow" v-model="BucketName" />
-      </label>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2" @click="clearBucketName()">取消</button>
-          <button class="btn btn-neutral" @click="buckets.add(BucketName)">确认新增</button>
-        </form>
+  <div>
+    <dialog id="addBucketModal" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">新建文件夹</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          文件夹名
+          <input type="text" class="grow" v-model="BucketName" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2" @click="clearBucketName()">取消</button>
+            <button class="btn btn-neutral" @click="buckets.add(BucketName)">
+              确认新增
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
+    </dialog>
+  </div>
 </template>
 
 <script lang="ts" setup name="AdminUser">
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from "vue";
 
-import { DeleteOne, FileAddition, FileQuestion, FolderOpen, FolderPlus, MemoryOne, Notepad, PictureOne, SmartOptimization } from '@icon-park/vue-next';
-import { push } from 'notivue';
+import {
+  DeleteOne,
+  FileAddition,
+  FileQuestion,
+  FolderOpen,
+  FolderPlus,
+  MemoryOne,
+  Notepad,
+  PictureOne,
+  SmartOptimization,
+} from "@icon-park/vue-next";
+import { push } from "notivue";
 
-import { _addBuckets, _deleteBucket, _deleteObject, _getBuckets, _getObjects } from '@/apis/oss';
+import {
+  _addBuckets,
+  _deleteBucket,
+  _deleteObject,
+  _getBuckets,
+  _getObjects,
+} from "@/apis/oss";
 import { objectTypeOptions } from "@/config";
-import { type BucketsType, type ObjectsType } from '@/interfaces/oss';
-import { useConstValStore } from '@/stores/ConstVal';
-import { OssUtils } from '@/utils/ossUtils';
+import { type BucketsType, type ObjectsType } from "@/interfaces/oss";
+import { useConstValStore } from "@/stores/ConstVal";
+import { OssUtils } from "@/utils/ossUtils";
 
 const constValStore = useConstValStore();
 
-let BucketName = ref<string>('');
-let ObjectName = ref<string>('');
+let BucketName = ref<string>("");
+let ObjectName = ref<string>("");
 let ObjectInput = ref<File | null>(null);
 
 function clearBucketName() {
-  BucketName.value = '';
+  BucketName.value = "";
 }
 
 function clearObjectName() {
-  ObjectName.value = '';
+  ObjectName.value = "";
 }
 
 interface UploadFilesInputType {
-  files: FileList | null,
-  [item: string]: any,
+  files: FileList | null;
+  [item: string]: any;
 }
 
 let uploadObjectsInput = reactive<UploadFilesInputType>({
@@ -210,42 +208,49 @@ let uploadObjectsInput = reactive<UploadFilesInputType>({
         objects.objects.forEach((file2: any) => {
           if (file.name == file2.FileName) {
             push.warning({
-              title: '文件名重复',
+              title: "文件名重复",
               message: `${file.name} 已存在，上传将会覆盖原文件`,
-            })
+            });
           }
-        })
+        });
       }
-    })
+    });
     uploadObjectsInput.files = files;
     push.success({
-      title: '选择成功',
-    })
+      title: "选择成功",
+    });
   },
 
   upload() {
-    if (uploadObjectsInput.files == null || uploadObjectsInput.files.length == 0) {
+    if (
+      uploadObjectsInput.files == null ||
+      uploadObjectsInput.files.length == 0
+    ) {
       push.warning({
-        title: '未选择文件',
-      })
+        title: "未选择文件",
+      });
       return;
     }
     Array.from(uploadObjectsInput.files).forEach((file: any) => {
       OssUtils.uploadObject(file, objects.bucket, file.name)
         .then(() => {
           push.success({
-            title: '上传成功',
+            title: "上传成功",
             message: `${file.name}`,
-          })
+          });
         })
         .then(() => {
-          if (uploadObjectsInput.files && file.name == uploadObjectsInput.files[uploadObjectsInput.files.length - 1].name) {
+          if (
+            uploadObjectsInput.files &&
+            file.name ==
+            uploadObjectsInput.files[uploadObjectsInput.files.length - 1].name
+          ) {
             objects.get(objects.bucket);
           }
-        })
-    })
+        });
+    });
     push.success({
-      title: '上传成功',
+      title: "上传成功",
       message: `上传了 ${uploadObjectsInput.files.length} 个文件`,
     });
   },
@@ -274,7 +279,7 @@ function backToFolder() {
 }
 
 function simplifyTime(time: string) {
-  time = time.split('T')[0] + ' ' + time.split('T')[1].split('.')[0];
+  time = time.split("T")[0] + " " + time.split("T")[1].split(".")[0];
   return time;
 }
 
@@ -282,27 +287,28 @@ let buckets = reactive<BucketsType>({
   buckets: [],
 
   get(showInfo = false) {
-    _getBuckets({})
-      .then((data: any) => {
-        this.buckets = data.Buckets;
-        if (data.Buckets == null) {
-          push.success({
-            title: "获取成功",
-            message: `当前目录下为空`,
-          });
-          return;
-        }
-        for (let i = 0; i < this.buckets.length; i++) {
-          this.buckets[i].creationDate = simplifyTime(this.buckets[i].creationDate);
-        }
-        if (showInfo) {
-          push.success({
-            title: "获取成功",
-            message: `一共获取了 ${this.buckets.length} 个文件夹`,
-          });
-        }
-        browserMode.value = constValStore.OSS_BROWSER_MODE_FOLDER;
-      })
+    _getBuckets({}).then((data: any) => {
+      this.buckets = data.Buckets;
+      if (data.Buckets == null) {
+        push.success({
+          title: "获取成功",
+          message: `当前目录下为空`,
+        });
+        return;
+      }
+      for (let i = 0; i < this.buckets.length; i++) {
+        this.buckets[i].creationDate = simplifyTime(
+          this.buckets[i].creationDate
+        );
+      }
+      if (showInfo) {
+        push.success({
+          title: "获取成功",
+          message: `一共获取了 ${this.buckets.length} 个文件夹`,
+        });
+      }
+      browserMode.value = constValStore.OSS_BROWSER_MODE_FOLDER;
+    });
   },
 
   add(bucketName: string) {
@@ -317,66 +323,69 @@ let buckets = reactive<BucketsType>({
       BucketName: bucketName,
     };
     clearBucketName();
-    _addBuckets(params)
-      .then(() => {
-        push.success({
-          title: "新建成功",
-          message: `已新建文件夹 ${bucketName}`,
-        })
-        this.get();
-      })
+    _addBuckets(params).then(() => {
+      push.success({
+        title: "新建成功",
+        message: `已新建文件夹 ${bucketName}`,
+      });
+      this.get();
+    });
   },
 
   delete(bucketName: string) {
     let params = {
       BucketName: bucketName,
     };
-    _deleteBucket(params)
-      .then(() => {
-        push.success({
-          title: "删除成功",
-          message: `${bucketName}`,
-        })
-        this.get();
-      })
+    _deleteBucket(params).then(() => {
+      push.success({
+        title: "删除成功",
+        message: `${bucketName}`,
+      });
+      this.get();
+    });
   },
 });
 
 let objects = reactive<ObjectsType>({
-  bucket: '',
-  prefix: '',
+  bucket: "",
+  prefix: "",
   objects: [],
 
   get(bucket: string, prefix: string, showInfo = false) {
     let params = {
       Prefix: prefix,
     };
-    _getObjects(params, bucket)
-      .then((data: any) => {
-        this.objects = data.ObjectInfo;
-        if (data.ObjectInfo == null) {
-          push.success({
-            title: "获取成功",
-            message: `当前目录下为空`,
-          });
-          browserMode.value = constValStore.OSS_BROWSER_MODE_FILE;
-          return;
-        }
-        for (let i = 0; i < this.objects.length; i++) {
-          this.objects[i].lastModified = simplifyTime(this.objects[i].lastModified);
-        }
-        if (showInfo) {
-          push.success({
-            title: "获取成功",
-            message: `一共获取了 ${this.objects.length} 个文件`,
-          });
-        }
+    _getObjects(params, bucket).then((data: any) => {
+      this.objects = data.ObjectInfo;
+      if (data.ObjectInfo == null) {
+        push.success({
+          title: "获取成功",
+          message: `当前目录下为空`,
+        });
         browserMode.value = constValStore.OSS_BROWSER_MODE_FILE;
-      })
+        return;
+      }
+      for (let i = 0; i < this.objects.length; i++) {
+        this.objects[i].lastModified = simplifyTime(
+          this.objects[i].lastModified
+        );
+      }
+      if (showInfo) {
+        push.success({
+          title: "获取成功",
+          message: `一共获取了 ${this.objects.length} 个文件`,
+        });
+      }
+      browserMode.value = constValStore.OSS_BROWSER_MODE_FILE;
+    });
   },
 
   isImage(fileName: string): boolean {
-    return fileName.endsWith('.png') || fileName.endsWith('.jpg') || fileName.endsWith('.jpeg');
+    return (
+      fileName.endsWith(".png") ||
+      fileName.endsWith(".jpg") ||
+      fileName.endsWith(".jpeg")
+    );
   },
 
   delete(bucketName: string, objectName: string) {
@@ -384,31 +393,25 @@ let objects = reactive<ObjectsType>({
       BucketName: bucketName,
       ObjectName: objectName,
     };
-    _deleteObject(params)
-      .then(() => {
-        push.success({
-          title: "删除成功",
-          message: `${objectName}`,
-        })
-        this.get(this.bucket);
-      })
+    _deleteObject(params).then(() => {
+      push.success({
+        title: "删除成功",
+        message: `${objectName}`,
+      });
+      this.get(this.bucket);
+    });
   },
 
-  add() {
-
-  },
+  add() { },
 });
 
 function enterFolder(bucketName: string) {
-  objects.get(bucketName, '', true);
+  objects.get(bucketName, "", true);
   objects.bucket = bucketName;
 }
 
 onMounted(() => {
   buckets.get(true);
   browserMode.value = constValStore.OSS_BROWSER_MODE_FOLDER;
-})
-
+});
 </script>
-
-<style scoped></style>

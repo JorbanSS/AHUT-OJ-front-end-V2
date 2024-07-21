@@ -46,8 +46,19 @@
     <table class="table table-zebra text-center">
       <thead>
         <tr>
-          <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>
-          <th v-for="(item, index) in ['用户 ID', '用户名称', '超管', '题单', '资源', '比赛', '题目', '操作']" :key="index">
+          <th>
+            <input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()" />
+          </th>
+          <th v-for="(item, index) in [
+            '用户 ID',
+            '用户名称',
+            '超管',
+            '题单',
+            '资源',
+            '比赛',
+            '题目',
+            '操作',
+          ]" :key="index">
             {{ item }}
           </th>
         </tr>
@@ -63,7 +74,7 @@
             <div class="font-bold talbe-lg">{{ item.UserName }}</div>
           </td>
           <td>
-            <input type="checkbox" class="checkbox" v-model="item.super" disabled>
+            <input type="checkbox" class="checkbox" v-model="item.super" disabled />
           </td>
           <td>
             <input type="checkbox" class="checkbox" v-model="item.problemList" disabled />
@@ -92,114 +103,149 @@
     </table>
     <Pagination :page="users.page" :maxPage="maxPage" :changePage="users.changePage" />
   </div>
-  <dialog id="editUserInfoModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg">修改用户信息</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        UID
-        <input type="text" class="grow" placeholder="" v-model="user.UID" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        邮箱
-        <input type="text" class="grow" placeholder="" v-model="user.Email" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        密码
-        <input type="text" class="grow" placeholder="" v-model="user.Password" />
-      </label>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消修改</button>
-          <button class="btn btn-neutral" @click="user.edit()">确认修改</button>
-        </form>
-      </div>
-    </div>
-  </dialog>
-  <dialog id="addUserModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg">新增用户</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        UID
-        <input type="text" class="grow" placeholder="" v-model="user.UID" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        用户名
-        <input type="text" class="grow" placeholder="" v-model="user.UserName" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        密码
-        <input type="text" class="grow" placeholder="" v-model="user.Password" />
-      </label>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消新增</button>
-          <button class="btn btn-neutral" @click="user.addUser()">确认新增</button>
-        </form>
-      </div>
-    </div>
-  </dialog>
-  <dialog id="editPermissionModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg">修改权限</h3>
-      <div class="join">
-        <label class="input input-bordered flex items-center gap-2 join-item">
+  <div>
+    <dialog id="editUserInfoModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg">修改用户信息</h3>
+        <label class="input input-bordered flex items-center gap-2">
           UID
           <input type="text" class="grow" placeholder="" v-model="user.UID" />
         </label>
-        <button class="btn join-item btn-neutral w-20" @click="user.getPermission(true)">查询</button>
+        <label class="input input-bordered flex items-center gap-2">
+          邮箱
+          <input type="text" class="grow" placeholder="" v-model="user.Email" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          密码
+          <input type="text" class="grow" placeholder="" v-model="user.Password" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消修改</button>
+            <button class="btn btn-neutral" @click="user.edit()">
+              确认修改
+            </button>
+          </form>
+        </div>
       </div>
-      <div>
-        <table class="table table-zebra">
-          <thead>
-            <tr>
-              <th v-for="(item, index) in ['超管', '题单', '资源', '比赛', '题目']" :key="index">
-                {{ item }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <input type="checkbox" class="checkbox" v-model="permission.super" />
-              </td>
-              <td>
-                <input type="checkbox" class="checkbox" v-model="permission.problemList" />
-              </td>
-              <td>
-                <input type="checkbox" class="checkbox" v-model="permission.resource" />
-              </td>
-              <td>
-                <input type="checkbox" class="checkbox" v-model="permission.contest" />
-              </td>
-              <td>
-                <input type="checkbox" class="checkbox" v-model="permission.problem" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    </dialog>
+    <dialog id="addUserModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg">新增用户</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          UID
+          <input type="text" class="grow" placeholder="" v-model="user.UID" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          用户名
+          <input type="text" class="grow" placeholder="" v-model="user.UserName" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          密码
+          <input type="text" class="grow" placeholder="" v-model="user.Password" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消新增</button>
+            <button class="btn btn-neutral" @click="user.addUser()">
+              确认新增
+            </button>
+          </form>
+        </div>
       </div>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消修改</button>
-          <button class="btn btn-neutral" @click="user.changePermission()">确认修改</button>
-        </form>
+    </dialog>
+    <dialog id="editPermissionModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg">修改权限</h3>
+        <div class="join">
+          <label class="input input-bordered flex items-center gap-2 join-item">
+            UID
+            <input type="text" class="grow" placeholder="" v-model="user.UID" />
+          </label>
+          <button class="btn join-item btn-neutral w-20" @click="user.getPermission(true)">
+            查询
+          </button>
+        </div>
+        <div>
+          <table class="table table-zebra">
+            <thead>
+              <tr>
+                <th v-for="(item, index) in [
+                  '超管',
+                  '题单',
+                  '资源',
+                  '比赛',
+                  '题目',
+                ]" :key="index">
+                  {{ item }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input type="checkbox" class="checkbox" v-model="permission.super" />
+                </td>
+                <td>
+                  <input type="checkbox" class="checkbox" v-model="permission.problemList" />
+                </td>
+                <td>
+                  <input type="checkbox" class="checkbox" v-model="permission.resource" />
+                </td>
+                <td>
+                  <input type="checkbox" class="checkbox" v-model="permission.contest" />
+                </td>
+                <td>
+                  <input type="checkbox" class="checkbox" v-model="permission.problem" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消修改</button>
+            <button class="btn btn-neutral" @click="user.changePermission()">
+              确认修改
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
+    </dialog>
+  </div>
   <div class="p-3 bg-base-200"></div>
 </template>
 
 <script lang="ts" setup name="AdminUser">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, onMounted, reactive, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 
-import { Add, AfferentThree, DeleteOne, Peoples, Permissions, EditOne, EditTwo } from '@icon-park/vue-next';
-import { push } from 'notivue';
+import {
+  Add,
+  AfferentThree,
+  DeleteOne,
+  Peoples,
+  Permissions,
+  EditOne,
+  EditTwo,
+} from "@icon-park/vue-next";
+import { push } from "notivue";
 
-import { _addUser, _adminEditUserInfo, _deleteUsers, _editUserPermission, _getAdmins, _getUserPermission } from "@/apis/user";
+import {
+  _addUser,
+  _adminEditUserInfo,
+  _deleteUsers,
+  _editUserPermission,
+  _getAdmins,
+  _getUserPermission,
+} from "@/apis/user";
 import Pagination from "@/components/Main/Pagination.vue";
-import { useConstValStore } from '@/stores/ConstVal';
-import { type PermissionType, type UserSimplifiedType, type UserType } from '@/interfaces/user';
+import { useConstValStore } from "@/stores/ConstVal";
+import {
+  type PermissionType,
+  type UserSimplifiedType,
+  type UserType,
+} from "@/interfaces/user";
 
 const router = useRouter();
 const constValStore = useConstValStore();
@@ -233,8 +279,7 @@ let permission = reactive<PermissionType>({
 function switchAllSelectedStatus(status?: boolean) {
   if (status == undefined) {
     allSelected.value = !allSelected.value;
-  }
-  else {
+  } else {
     allSelected.value = status;
   }
   for (let i = 0; i < users.users.length; i++) {
@@ -256,33 +301,32 @@ function deleteUsers() {
   let list = getSelectedList();
   if (list.length == 0) {
     push.warning({
-      title: '操作不合法',
-      message: '尚未选择任何用户，无法删除',
-    })
+      title: "操作不合法",
+      message: "尚未选择任何用户，无法删除",
+    });
     return;
   }
   let params = {
     UIDs: list,
   };
-  _deleteUsers(params)
-    .then(() => {
-      users.getAdministrators();
-      switchAllSelectedStatus(false);
-      push.success({
-        title: '删除成功',
-        message: `一共删除了 ${list.length} 个用户`,
-      });
-    })
-};
+  _deleteUsers(params).then(() => {
+    users.getAdministrators();
+    switchAllSelectedStatus(false);
+    push.success({
+      title: "删除成功",
+      message: `一共删除了 ${list.length} 个用户`,
+    });
+  });
+}
 
 interface UserListType extends UserType {
-  Selected: boolean,
-  super: boolean,
-  resource: boolean,
-  contest: boolean,
-  problem: boolean,
-  problemList: boolean,
-};
+  Selected: boolean;
+  super: boolean;
+  resource: boolean;
+  contest: boolean;
+  problem: boolean;
+  problemList: boolean;
+}
 
 let users = reactive({
   users: Array<UserListType>(),
@@ -298,42 +342,51 @@ let users = reactive({
     let params = {
       Page: users.page - 1,
       Limit: users.limit,
-    }
-    _getAdmins(params)
-      .then((data: any) => {
-
-        users.count = data.Count;
-        users.users = data.Data;
-        for (let index = 0; index < users.users.length; index++) {
-          users.users[index].Selected = false;
-          users.users[index].UserName = data.Data[index].Uname;
-          users.users[index].PermissionMap = data.Data[index].PermissionMap;
-          users.users[index].super = (users.users[index].PermissionMap & constValStore.SuperAdminBit) != 0;
-          users.users[index].problemList = (users.users[index].PermissionMap & constValStore.ProblemListAdminBit) != 0;
-          users.users[index].resource = (users.users[index].PermissionMap & constValStore.SourceBorwserBit) != 0;
-          users.users[index].contest = (users.users[index].PermissionMap & constValStore.ContestAdminBit) != 0;
-          users.users[index].problem = (users.users[index].PermissionMap & constValStore.ProblemAdminBit) != 0;
-        }
-        users.users.forEach(user => {
-          user.super = (user.PermissionMap & constValStore.SuperAdminBit) != 0;
-          user.problemList = (user.PermissionMap & constValStore.ProblemListAdminBit) != 0;
+    };
+    _getAdmins(params).then((data: any) => {
+      users.count = data.Count;
+      users.users = data.Data;
+      for (let index = 0; index < users.users.length; index++) {
+        users.users[index].Selected = false;
+        users.users[index].UserName = data.Data[index].Uname;
+        users.users[index].PermissionMap = data.Data[index].PermissionMap;
+        users.users[index].super =
+          (users.users[index].PermissionMap & constValStore.SuperAdminBit) != 0;
+        users.users[index].problemList =
+          (users.users[index].PermissionMap &
+            constValStore.ProblemListAdminBit) !=
+          0;
+        users.users[index].resource =
+          (users.users[index].PermissionMap & constValStore.SourceBorwserBit) !=
+          0;
+        users.users[index].contest =
+          (users.users[index].PermissionMap & constValStore.ContestAdminBit) !=
+          0;
+        users.users[index].problem =
+          (users.users[index].PermissionMap & constValStore.ProblemAdminBit) !=
+          0;
+      }
+      users.users.forEach((user) => {
+        user.super = (user.PermissionMap & constValStore.SuperAdminBit) != 0;
+        user.problemList =
+          (user.PermissionMap & constValStore.ProblemListAdminBit) != 0;
+      });
+      if (showInfo) {
+        push.success({
+          title: "获取成功",
+          message: `一共获取了 ${users.count} 位管理员`,
         });
-        if (showInfo) {
-          push.success({
-            title: '获取成功',
-            message: `一共获取了 ${users.count} 位管理员`,
-          })
-        }
-      })
+      }
+    });
   },
-})
+});
 
 let user = reactive<UserSimplifiedType>({
-  UID: '',
-  Email: '',
-  UserName: '',
+  UID: "",
+  Email: "",
+  UserName: "",
   PermissionMap: 0,
-  Password: '',
+  Password: "",
   super: false,
   resource: false,
   contest: false,
@@ -346,21 +399,20 @@ let user = reactive<UserSimplifiedType>({
       Password: this.Password,
       Email: this.Email,
     };
-    if (this.UID == '' || this.Password == '' && this.Email == '') {
+    if (this.UID == "" || (this.Password == "" && this.Email == "")) {
       push.warning({
-        title: '信息不完整',
+        title: "信息不完整",
       });
       return;
     }
-    if (this.Password == '') params.Password = this.Password;
-    if (this.Email == '') params.Email = this.Email;
-    _adminEditUserInfo(params)
-      .then(() => {
-        push.success({
-          title: '修改成功',
-          message: `成功修改了 ${this.UID} 的信息`,
-        });
-      })
+    if (this.Password == "") params.Password = this.Password;
+    if (this.Email == "") params.Email = this.Email;
+    _adminEditUserInfo(params).then(() => {
+      push.success({
+        title: "修改成功",
+        message: `成功修改了 ${this.UID} 的信息`,
+      });
+    });
     switchAllSelectedStatus(false);
   },
 
@@ -368,9 +420,9 @@ let user = reactive<UserSimplifiedType>({
     let list = getSelectedList();
     if (list.length != 1) {
       push.warning({
-        title: '操作不合法',
-        message: '不选择或仅选择一位用户进行编辑',
-      })
+        title: "操作不合法",
+        message: "不选择或仅选择一位用户进行编辑",
+      });
       return;
     }
     user.UID = list[0];
@@ -380,11 +432,11 @@ let user = reactive<UserSimplifiedType>({
   },
 
   addUser() {
-    if (user.UID == '' || user.UserName == '' || user.Password == 0) {
+    if (user.UID == "" || user.UserName == "" || user.Password == 0) {
       push.warning({
-        title: '操作不合法',
-        message: '请填写完整信息',
-      })
+        title: "操作不合法",
+        message: "请填写完整信息",
+      });
       return;
     }
     let params = {
@@ -392,41 +444,39 @@ let user = reactive<UserSimplifiedType>({
       UserName: user.UserName,
       Pass: user.Password,
     };
-    _addUser(params)
-      .then(() => {
-        push.success({
-          title: '新增成功',
-          message: `成功新增用户 ${user.UID}`,
-        });
-      })
+    _addUser(params).then(() => {
+      push.success({
+        title: "新增成功",
+        message: `成功新增用户 ${user.UID}`,
+      });
+    });
   },
 
   getPermission(showInfo = false) {
-    if (user.UID == '') {
+    if (user.UID == "") {
       if (showInfo == true) {
         push.warning({
-          title: '操作不合法',
+          title: "操作不合法",
           message: `输入的用户 UID 为空`,
         });
       }
       return;
     }
 
-    _getUserPermission({}, user.UID)
-      .then((data: any) => {
-        user.PermissionMap = data.PermissionMap;
-        permission.set(user.PermissionMap);
-        push.success({
-          title: '查询成功',
-          message: `查询到了用户 UID 为 ${user.UID} 的权限列表`,
-        });
-      })
+    _getUserPermission({}, user.UID).then((data: any) => {
+      user.PermissionMap = data.PermissionMap;
+      permission.set(user.PermissionMap);
+      push.success({
+        title: "查询成功",
+        message: `查询到了用户 UID 为 ${user.UID} 的权限列表`,
+      });
+    });
   },
 
   changePermission() {
-    if (user.UID == '') {
+    if (user.UID == "") {
       push.warning({
-        title: '操作不合法',
+        title: "操作不合法",
         message: `输入的用户 UID 为空`,
       });
       return;
@@ -439,32 +489,29 @@ let user = reactive<UserSimplifiedType>({
       SuperAdmin: permission.super,
       UID: user.UID,
     };
-    _editUserPermission(params)
-      .then(() => {
-        push.success({
-          title: '修改成功',
-          message: `成功修改了 ${user.UID} 的权限`,
-        });
-      })
+    _editUserPermission(params).then(() => {
+      push.success({
+        title: "修改成功",
+        message: `成功修改了 ${user.UID} 的权限`,
+      });
+    });
     users.getAdministrators();
     switchAllSelectedStatus(false);
   },
-
 });
 
-function showEditPermissionModal(UID: string = '') {
+function showEditPermissionModal(UID: string = "") {
   user.UID = UID;
   permission.set(0);
-  if (UID == '') {
+  if (UID == "") {
     let list = getSelectedList();
     if (list.length > 1) {
       push.warning({
-        title: '操作不合法',
-        message: '不选择或仅选择一位用户进行编辑',
-      })
+        title: "操作不合法",
+        message: "不选择或仅选择一位用户进行编辑",
+      });
       return;
-    }
-    else if (list.length == 1) {
+    } else if (list.length == 1) {
       user.UID = list[0];
     }
   }
@@ -474,24 +521,23 @@ function showEditPermissionModal(UID: string = '') {
 }
 
 function showAddUserModal() {
-  user.UID = user.UserName = user.Password = '';
+  user.UID = user.UserName = user.Password = "";
   // @ts-ignore
   addUserModal.showModal();
 }
 
-function showEditUserInfoModal(UID: string = '') {
+function showEditUserInfoModal(UID: string = "") {
   user.UID = UID;
-  user.UserName = user.Password = '';
-  if (UID == '') {
+  user.UserName = user.Password = "";
+  if (UID == "") {
     let list = getSelectedList();
     if (list.length > 1) {
       push.warning({
-        title: '操作不合法',
-        message: '不选择或仅选择一位用户进行编辑',
-      })
+        title: "操作不合法",
+        message: "不选择或仅选择一位用户进行编辑",
+      });
       return;
-    }
-    else if (list.length == 1) {
+    } else if (list.length == 1) {
       user.UID = list[0];
     }
   }
@@ -501,21 +547,29 @@ function showEditUserInfoModal(UID: string = '') {
 
 onMounted(() => {
   users.getAdministrators(true);
-})
+});
 
-watch(() => users.page, () => {
-  users.getAdministrators();
-  allSelected.value = false;
-})
-
-
-watch(() => permission.super, () => {
-  if (permission.super == true) {
-    permission.set(185);
-    permission.resource = permission.contest = permission.problem = permission.problemList = true;
+watch(
+  () => users.page,
+  () => {
+    users.getAdministrators();
+    allSelected.value = false;
   }
-})
+);
+
+watch(
+  () => permission.super,
+  () => {
+    if (permission.super == true) {
+      permission.set(185);
+      permission.resource =
+        permission.contest =
+        permission.problem =
+        permission.problemList =
+        true;
+    }
+  }
+);
 
 const maxPage = computed(() => Math.ceil(users.count / users.limit));
-
 </script>

@@ -14,8 +14,16 @@
           <div class="text-md text-gray-500">UID：{{ user.UID }}</div>
         </div>
         <div class="absolute right-6 h-full flex flex-col items-end justify-end font-bold">
-          <div class="">AC:&nbsp;&nbsp;&nbsp;<span class="text-green-500">{{ user.Solved }}</span></div>
-          <div class="">Submited:&nbsp;&nbsp;&nbsp;<span class="text-blue-500">{{ user.Submited }}</span>
+          <div class="">
+            AC:&nbsp;&nbsp;&nbsp;
+            <span class="text-green-500">
+              {{ user.Solved }}
+            </span>
+          </div>
+          <div class="">
+            Submited:&nbsp;&nbsp;&nbsp;
+            <span class="text-blue-500">
+              {{ user.Submited }}</span>
           </div>
           <!-- <div class="rating">Rating:&nbsp;&nbsp;&nbsp;<span :style="getRatingColor(userInfo.Rating ? user.Rating : 0)">{{ userInfo.Rating ? userInfo.Rating : 0 }}</span></div> -->
         </div>
@@ -77,168 +85,200 @@
         </li>
       </ul>
     </div>
-
   </div>
-  <dialog id="bindCodeforcesModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg mb-4">绑定 Codeforces</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        用户名
-        <input type="text" class="grow" v-model="codeforces.ID" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        密码
-        <input type="text" class="grow" placeholder="" v-model="codeforces.Pass" />
-      </label>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消</button>
-          <button class="btn btn-neutral" @click="codeforces.bind()">绑定</button>
-        </form>
+  <div>
+    <dialog id="bindCodeforcesModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg mb-4">绑定 Codeforces</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          用户名
+          <input type="text" class="grow" v-model="codeforces.ID" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          密码
+          <input type="text" class="grow" placeholder="" v-model="codeforces.Pass" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消</button>
+            <button class="btn btn-neutral" @click="codeforces.bind()">
+              绑定
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
-  <dialog id="bindAtcoderModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg mb-4">绑定 Atcoder</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        用户名
-        <input type="text" class="grow" v-model="atcoder.ID" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        密码
-        <input type="text" class="grow" placeholder="" v-model="atcoder.Pass" />
-      </label>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消</button>
-          <button class="btn btn-neutral" @click="atcoder.bind()">绑定</button>
-        </form>
+    </dialog>
+    <dialog id="bindAtcoderModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg mb-4">绑定 Atcoder</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          用户名
+          <input type="text" class="grow" v-model="atcoder.ID" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          密码
+          <input type="text" class="grow" placeholder="" v-model="atcoder.Pass" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消</button>
+            <button class="btn btn-neutral" @click="atcoder.bind()">
+              绑定
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
-  <dialog id="bindNowcoderModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg mb-4">绑定 Nowcoder</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        用户名
-        <input type="text" class="grow" v-model="nowcoder.ID" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        密码
-        <input type="text" class="grow" placeholder="" v-model="nowcoder.Pass" />
-      </label>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消</button>
-          <button class="btn btn-neutral" @click="nowcoder.bind()">绑定</button>
-        </form>
+    </dialog>
+    <dialog id="bindNowcoderModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg mb-4">绑定 Nowcoder</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          用户名
+          <input type="text" class="grow" v-model="nowcoder.ID" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          密码
+          <input type="text" class="grow" placeholder="" v-model="nowcoder.Pass" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消</button>
+            <button class="btn btn-neutral" @click="nowcoder.bind()">
+              绑定
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
-  <dialog id="bindVirtualJudgeModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg mb-4">绑定 Virtual Judge</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        用户名
-        <input type="text" class="grow" v-model="virtualJudge.ID" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        密码
-        <input type="text" class="grow" placeholder="" v-model="virtualJudge.Pass" />
-      </label>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消</button>
-          <button class="btn btn-neutral" @click="virtualJudge.bind()">绑定</button>
-        </form>
+    </dialog>
+    <dialog id="bindVirtualJudgeModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg mb-4">绑定 Virtual Judge</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          用户名
+          <input type="text" class="grow" v-model="virtualJudge.ID" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          密码
+          <input type="text" class="grow" placeholder="" v-model="virtualJudge.Pass" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消</button>
+            <button class="btn btn-neutral" @click="virtualJudge.bind()">
+              绑定
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
-  <dialog id="editPasswordModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg mb-4">修改密码</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        旧密码
-        <input type="text" class="grow" v-model="editPass.oldPass" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        新密码
-        <input type="text" class="grow" placeholder="" v-model="editPass.newPass" />
-      </label>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消</button>
-          <button class="btn btn-neutral" @click="editPass.bind()">修改</button>
-        </form>
+    </dialog>
+    <dialog id="editPasswordModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg mb-4">修改密码</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          旧密码
+          <input type="text" class="grow" v-model="editPass.oldPass" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          新密码
+          <input type="text" class="grow" placeholder="" v-model="editPass.newPass" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消</button>
+            <button class="btn btn-neutral" @click="editPass.bind()">
+              修改
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
-  <dialog id="editHeadImageModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg mb-4">修改头像</h3>
-      <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept=".jpg,.jpeg,.png"
-        @change="headImageChangeHandle" />
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消</button>
-          <button class="btn btn-neutral" @click="headImage.uploadHeadImage()">修改</button>
-        </form>
+    </dialog>
+    <dialog id="editHeadImageModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg mb-4">修改头像</h3>
+        <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept=".jpg,.jpeg,.png"
+          @change="headImageChangeHandle" />
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消</button>
+            <button class="btn btn-neutral" @click="headImage.uploadHeadImage()">
+              修改
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
-  <dialog id="editUserInfoModal" class="modal">
-    <div class="modal-box space-y-2 w-96">
-      <h3 class="font-bold text-lg mb-4">修改用户信息</h3>
-      <label class="input input-bordered flex items-center gap-2">
-        用户名
-        <input type="text" class="grow" v-model="editUserInfo.userName" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        QQ
-        <input type="text" class="grow" v-model="editUserInfo.QQ" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        学校
-        <input type="text" class="grow" v-model="editUserInfo.School" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        专业
-        <input type="text" class="grow" v-model="editUserInfo.Major" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        班级
-        <input type="text" class="grow" v-model="editUserInfo.Class" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        入学年份
-        <input type="text" class="grow" v-model="editUserInfo.Year" />
-      </label>
-      <div class="modal-action">
-        <form method="dialog">
-          <button class="btn mr-2">取消</button>
-          <button class="btn btn-neutral" @click="editUserInfo.edit()">修改</button>
-        </form>
+    </dialog>
+    <dialog id="editUserInfoModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg mb-4">修改用户信息</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          用户名
+          <input type="text" class="grow" v-model="editUserInfo.userName" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          QQ
+          <input type="text" class="grow" v-model="editUserInfo.QQ" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          学校
+          <input type="text" class="grow" v-model="editUserInfo.School" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          专业
+          <input type="text" class="grow" v-model="editUserInfo.Major" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          班级
+          <input type="text" class="grow" v-model="editUserInfo.Class" />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          入学年份
+          <input type="text" class="grow" v-model="editUserInfo.Year" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消</button>
+            <button class="btn btn-neutral" @click="editUserInfo.edit()">
+              修改
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
-  </dialog>
+    </dialog>
+  </div>
 </template>
 
 <script lang="ts" setup name="User">
-import { onMounted, reactive, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { onMounted, reactive, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
-import { Avatar, Cattle, EmotionHappy, HorseZodiac, Info, Key, Ranking } from "@icon-park/vue-next";
-import { push } from 'notivue';
+import {
+  Avatar,
+  Cattle,
+  EmotionHappy,
+  HorseZodiac,
+  Info,
+  Key,
+  Ranking,
+} from "@icon-park/vue-next";
+import { push } from "notivue";
 
-import { _bindAtcoder, _bindCodeforces, _bindNowcoder, _bindVirtualJudge, _editHeadUrl, _editPassword, _editUserInfo, _getUserInfo } from "@/apis/user";
-import { ImageUploadType } from '@/interfaces/common';
-import { type BindType, type UserType } from '@/interfaces/user';
-import { useConstValStore } from '@/stores/ConstVal';
-import { useUserDataStore } from '@/stores/UserData';
-import { ImageUtils } from '@/utils/fileUtils';
-import { getHeadURL } from '@/utils/globalFunctions';
-import { OssUtils } from '@/utils/ossUtils';
+import {
+  _bindAtcoder,
+  _bindCodeforces,
+  _bindNowcoder,
+  _bindVirtualJudge,
+  _editHeadUrl,
+  _editPassword,
+  _editUserInfo,
+  _getUserInfo,
+} from "@/apis/user";
+import { ImageUploadType } from "@/interfaces/common";
+import { type BindType, type UserType } from "@/interfaces/user";
+import { useConstValStore } from "@/stores/ConstVal";
+import { useUserDataStore } from "@/stores/UserData";
+import { ImageUtils } from "@/utils/fileUtils";
+import { getHeadURL } from "@/utils/globalFunctions";
+import { OssUtils } from "@/utils/ossUtils";
 
 const userDataStore = useUserDataStore();
 const router = useRouter();
@@ -246,161 +286,156 @@ const route = useRoute();
 const constValStore = useConstValStore();
 
 let editPass = reactive({
-  oldPass: '',
-  newPass: '',
+  oldPass: "",
+  newPass: "",
 
   bind() {
-    if (this.oldPass == '' || this.newPass == '') {
+    if (this.oldPass == "" || this.newPass == "") {
       push.warning({
         title: "信息错误",
         message: "信息不完整",
-      })
-      this.oldPass = this.newPass = '';
+      });
+      this.oldPass = this.newPass = "";
       return;
     }
     let params = {
       OldPwd: this.oldPass,
       Pwd: this.newPass,
     };
-    this.oldPass = this.newPass = '';
-    _editPassword(params)
-      .then(() => {
-        push.success({
-          title: "修改成功",
-        })
-      })
+    this.oldPass = this.newPass = "";
+    _editPassword(params).then(() => {
+      push.success({
+        title: "修改成功",
+      });
+    });
   },
 });
 
 let codeforces = reactive<BindType>({
-  ID: '',
-  Pass: '',
+  ID: "",
+  Pass: "",
 
   bind() {
-    if (this.ID == '' || this.Pass == '') {
+    if (this.ID == "" || this.Pass == "") {
       push.warning({
         title: "信息错误",
         message: "请输入账号和密码",
-      })
-      this.ID = this.Pass = '';
+      });
+      this.ID = this.Pass = "";
       return;
     }
     let params = {
       CodeForceUser: this.ID,
       CodeForcePass: this.Pass,
     };
-    this.ID = this.Pass = '';
-    _bindCodeforces(params)
-      .then(() => {
-        push.success({
-          title: "绑定成功",
-        })
-      })
+    this.ID = this.Pass = "";
+    _bindCodeforces(params).then(() => {
+      push.success({
+        title: "绑定成功",
+      });
+    });
   },
 });
 
 let nowcoder = reactive({
-  ID: '',
-  Pass: '',
+  ID: "",
+  Pass: "",
 
   bind() {
-    if (this.ID == '' || this.Pass == '') {
+    if (this.ID == "" || this.Pass == "") {
       push.warning({
         title: "信息错误",
         message: "请输入账号和密码",
-      })
-      this.ID = this.Pass = '';
+      });
+      this.ID = this.Pass = "";
       return;
     }
     let params = {
       NowcoderUser: this.ID,
       NowcoderPass: this.Pass,
     };
-    this.ID = this.Pass = '';
-    _bindNowcoder(params)
-      .then(() => {
-        push.success({
-          title: "绑定成功",
-        })
-      })
-  }
+    this.ID = this.Pass = "";
+    _bindNowcoder(params).then(() => {
+      push.success({
+        title: "绑定成功",
+      });
+    });
+  },
 });
 
 let atcoder = reactive({
-  ID: '',
-  Pass: '',
+  ID: "",
+  Pass: "",
 
   bind() {
-    if (this.ID == '' || this.Pass == '') {
+    if (this.ID == "" || this.Pass == "") {
       push.warning({
         title: "信息错误",
         message: "请输入账号和密码",
-      })
-      this.ID = this.Pass = '';
+      });
+      this.ID = this.Pass = "";
       return;
     }
     let params = {
       AtcoderUser: this.ID,
       AtcoderPass: this.Pass,
     };
-    this.ID = this.Pass = '';
-    _bindAtcoder(params)
-      .then(() => {
-        push.success({
-          title: "绑定成功",
-        })
-      })
+    this.ID = this.Pass = "";
+    _bindAtcoder(params).then(() => {
+      push.success({
+        title: "绑定成功",
+      });
+    });
   },
 });
 
 let virtualJudge = reactive({
-  ID: '',
-  Pass: '',
+  ID: "",
+  Pass: "",
 
   bind() {
-    if (this.ID == '' || this.Pass == '') {
+    if (this.ID == "" || this.Pass == "") {
       push.warning({
         title: "信息错误",
         message: "请输入账号和密码",
-      })
-      this.ID = this.Pass = '';
+      });
+      this.ID = this.Pass = "";
       return;
     }
     let params = {
       CodeForceUser: this.ID,
       CodeForcePass: this.Pass,
     };
-    this.ID = this.Pass = '';
-    _bindVirtualJudge(params)
-      .then(() => {
-        push.success({
-          title: "绑定成功",
-        })
-      })
-  }
+    this.ID = this.Pass = "";
+    _bindVirtualJudge(params).then(() => {
+      push.success({
+        title: "绑定成功",
+      });
+    });
+  },
 });
 
 let user = reactive<UserType>({
-  UID: '',
-  UserName: '',
-  Email: '',
-  School: '',
-  Major: '',
-  Class: '',
-  Year: '',
-  QQ: '',
+  UID: "",
+  UserName: "",
+  Email: "",
+  School: "",
+  Major: "",
+  Class: "",
+  Year: "",
+  QQ: "",
   RegisterTime: 0,
-  HeadURL: '',
+  HeadURL: "",
 
   Rating: 0,
   Submited: 0,
   Solved: 0,
 
-  CodeForceUser: '',
+  CodeForceUser: "",
   CodeforceScore: 0,
-  AtcoderUser: '',
+  AtcoderUser: "",
   AtcoderScore: 0,
-  NowCoderUser: '',
+  NowCoderUser: "",
   NowCoderScore: 0,
 
   PermissionMap: 0,
@@ -442,59 +477,56 @@ let user = reactive<UserType>({
         editUserInfo.Major = this.Major;
         editUserInfo.Class = this.Class;
         editUserInfo.Year = this.Year;
-      })
+      });
   },
 });
 
 let headImage = reactive<ImageUploadType>({
   image: null,
-  blob: new Blob,
+  blob: new Blob(),
   selectImage(image: File) {
     const allowedBannerTypes = ["image/jpg", "image/jpeg", "image/png"];
     this.image = image;
     if (allowedBannerTypes.includes(image.type) == false) {
       push.error({
-        title: '图片格式错误',
-        message: '请选择 jpg 或 png 格式的图片',
-      })
+        title: "图片格式错误",
+        message: "请选择 jpg 或 png 格式的图片",
+      });
       return;
     }
     push.success({
-      title: '选择成功',
-      message: '已选择',
-    })
+      title: "选择成功",
+      message: "已选择",
+    });
   },
 
   uploadHeadImage() {
     if (headImage.image == null) {
       push.warning({
-        title: '请选择图片',
-      })
+        title: "请选择图片",
+      });
       return;
     }
     if (ImageUtils.check(headImage.image) == false) return;
-    ImageUtils.compress(headImage.image).
-      then((res: any) => {
-        headImage.blob = res;
-        // @ts-ignore
-        OssUtils.uploadHeadImage(res, user.UID)
-          .then((res: any) => {
-            let headUrl = res;
-            let params = {
-              HeadPath: headUrl,
-            }
-            _editHeadUrl(params)
-              .then(() => {
-                user.get();
-                push.success({
-                  title: '上传成功',
-                  message: '头像已上传',
-                })
-              })
-          })
-      })
-  }
-})
+    ImageUtils.compress(headImage.image).then((res: any) => {
+      headImage.blob = res;
+      // @ts-ignore
+      OssUtils.uploadHeadImage(res, user.UID).then((res: any) => {
+        let headUrl = res;
+        let params = {
+          HeadPath: headUrl,
+        };
+        _editHeadUrl(params).then(() => {
+          user.get();
+          push.success({
+            title: "上传成功",
+            message: "头像已上传",
+          });
+        });
+      });
+    });
+  },
+});
 
 const headImageChangeHandle = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -505,41 +537,40 @@ const headImageChangeHandle = (event: Event) => {
 };
 
 let editUserInfo = reactive({
-  userName: '',
-  QQ: '',
-  School: '',
-  Major: '',
-  Class: '',
-  Year: '',
+  userName: "",
+  QQ: "",
+  School: "",
+  Major: "",
+  Class: "",
+  Year: "",
 
   edit() {
     let params: any = {};
-    if (this.userName != '') params.userName = this.userName;
-    if (this.QQ != '') params.QQ = this.QQ;
-    if (this.School != '') params.School = this.School;
-    if (this.Major != '') params.Major = this.Major;
-    if (this.Class != '') params.Class = this.Class;
-    if (this.Year != '') params.Year = this.Year;
-    _editUserInfo(params)
-      .then(() => {
-        push.success({
-          title: "修改成功",
-        })
-        user.get();
-      })
+    if (this.userName != "") params.userName = this.userName;
+    if (this.QQ != "") params.QQ = this.QQ;
+    if (this.School != "") params.School = this.School;
+    if (this.Major != "") params.Major = this.Major;
+    if (this.Class != "") params.Class = this.Class;
+    if (this.Year != "") params.Year = this.Year;
+    _editUserInfo(params).then(() => {
+      push.success({
+        title: "修改成功",
+      });
+      user.get();
+    });
   },
-})
+});
 
 onMounted(() => {
-  if (typeof route.params.UID == 'string') user.UID = route.params.UID;
+  if (typeof route.params.UID == "string") user.UID = route.params.UID;
   user.get();
-})
+});
 
-watch(() => route.params.UID, () => {
-  user.UID = route.params.UID as string;
-  user.get();
-})
-
+watch(
+  () => route.params.UID,
+  () => {
+    user.UID = route.params.UID as string;
+    user.get();
+  }
+);
 </script>
-
-<style scoped></style>

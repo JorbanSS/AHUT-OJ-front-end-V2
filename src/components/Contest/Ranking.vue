@@ -258,7 +258,7 @@ let ranking = reactive<ContestRankingType>({
 
   sortRanking() {
     ranking.Ranking.sort((a: any, b: any) => {
-      if (a.ACNumber == b.ACNumber) return b.Penalty - a.Penalty;
+      if (a.ACNumber == b.ACNumber) return a.Penalty - b.Penalty;
       return b.ACNumber - a.ACNumber;
     })
   },
