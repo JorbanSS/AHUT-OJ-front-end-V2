@@ -14,7 +14,9 @@ if (import.meta.env.MODE == "production") {
   host = "/";
   port = 4433;
 } else {
-  host = "http://127.0.0.1:4433/";
+  // host = "https://47.115.211.1:4433/";
+  host = "https://angriliset.top:2024/";
+  // host = "http://127.0.0.1:4433/";
   port = 8080;
 }
 

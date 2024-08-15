@@ -73,7 +73,7 @@
             </div>
             <div class="flex items-center justify-between p-1">
               <span>记忆</span>
-              <input type="checkbox" class="toggle" disabled />
+              <input type="checkbox" class="toggle" v-model="memoryStatus" />
             </div>
           </ul>
         </div>
@@ -135,6 +135,7 @@ let availableModels = reactive<ModelList>({
 });
 
 let inputText = ref('');
+let memoryStatus = ref(true);
 const textarea = ref<HTMLTextAreaElement | null>(null);
 
 const autoExpand = () => {
@@ -161,14 +162,22 @@ let messages = reactive<ModelMessageList>({
     }
     let params = {
       ModelType: availableModels.Models[availableModels.ChoosenModel].ModelType,
-      Message: inputText.value,
+      Message: new Array<String>,
     };
     let sentMessage: ModelMessage = {
       ModelType: availableModels.Models[availableModels.ChoosenModel].ModelType,
       Message: inputText.value,
       SendByAI: false,
     };
+
+    if (memoryStatus.value) {
+      this.Messages.forEach(item => {
+        params.Message.push(item.Message);
+      });
+    }
+
     this.Messages.push(sentMessage);
+    params.Message.push(inputText.value);
     this.IsWaiting = true;
     _messageToModel(params)
       .then((data: any) => {
