@@ -44,17 +44,6 @@
       </div>
     </div>
   </div>
-  <div>
-    <dialog id="homeNotice" class="modal">
-      <div class="modal-box">
-        <h3 class="font-bold text-lg">公告：{{ notice.Title }}</h3>
-        <MdPreview editorId="homeNoticeContent" :modelValue="notice.Content" class="-mx-5" preview-only />
-      </div>
-      <form method="dialog" class="modal-backdrop">
-        <button></button>
-      </form>
-    </dialog>
-  </div>
 </template>
 
 <script lang="ts" setup name="Home">
