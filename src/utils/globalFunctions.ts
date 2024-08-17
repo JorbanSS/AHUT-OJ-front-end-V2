@@ -203,3 +203,37 @@ export function atcoderProblemFormat(PID: string): string {
     return result;
   });
 }
+
+// 颜色透明度
+export function colorOpacity(hexColor: string, opacity: number): string {
+  if (!/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(hexColor)) {
+    return 'Invalid hex color format';
+  }
+
+  let alpha = opacity / 100;
+
+  // 扩展3位十六进制颜色为6位
+  if (hexColor.length === 4) {
+    hexColor = '#' + hexColor[1] + hexColor[1] + hexColor[2] + hexColor[2] + hexColor[3] + hexColor[3];
+  }
+
+  // 将十六进制颜色转换为RGB
+  let r = parseInt(hexColor.slice(1, 3), 16);
+  let g = parseInt(hexColor.slice(3, 5), 16);
+  let b = parseInt(hexColor.slice(5, 7), 16);
+
+  // 如果alpha大于1,则减淡颜色
+  if (alpha > 1) {
+    r = Math.floor(r / alpha);
+    g = Math.floor(g / alpha);
+    b = Math.floor(b / alpha);
+  }
+
+  // 将RGB转换为RGBA并返回十六进制格式
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b)
+    .toString(16)
+    .slice(1)
+    + Math.floor(Math.min(255, alpha * 255))
+    .toString(16)
+    .padStart(2, '0');
+}

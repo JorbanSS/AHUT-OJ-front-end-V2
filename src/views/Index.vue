@@ -7,7 +7,7 @@
     </PageHeader>
 
     <div class="flex space-y-6 flex-col md:flex-row md:space-y-0 md:space-x-6">
-      <div class="carousel w-full rounded-2xl shadow-lg Border h-96">
+      <div class="carousel w-full rounded-2xl shadow-lg Border h-[440px]">
         <div class="carousel-item relative w-full" v-for="(item, index) in banners.banners" :key="index"
           :id="`slide${index}`">
           <img :src="'data:image/*;base64,' + item.ObjectData" class="w-full" alt="首页横幅" />
@@ -17,7 +17,7 @@
           </div>
         </div>
       </div>
-      <div class="min-w-96 card rounded-2xl bg-white shadow-lg Border h-96">
+      <div class="min-w-96 card rounded-2xl bg-white shadow-lg Border h-[440px] overflow-hidden">
         <div class="flex justify-between items-center">
           <div class="text-xl m-4 font-bold">
             版本更新日志
@@ -100,9 +100,6 @@ function getUpdateLogs() {
       updateLogs.count = data.Count;
       if (updateLogs.updateLogs.filter((item) => item.ID == 0).length) {
         notice.value = updateLogs.updateLogs.filter((item) => item.ID == 0)[0];
-        if (updateLogs.updateLogs.filter((item) => item.ID == 0))
-          // @ts-ignore
-          homeNotice.showModal();
       }
       updateLogs.updateLogs = updateLogs.updateLogs.filter(
         (item) => item.ID != 0

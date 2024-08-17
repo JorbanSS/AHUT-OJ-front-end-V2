@@ -35,22 +35,24 @@
                 <span class="whitespace-nowrap">LID</span>
                 <input type="text" class="grow" v-model="records.searchInfo.LID" />
               </label>
-              <select class="select select-bordered join-item" v-model="records.searchInfo.Lang">
-                <option value="0">
-                  语言不限
-                </option>
-                <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
-                  {{ item.label }}
-                </option>
-              </select>
-              <select class="select select-bordered join-item" v-model="records.searchInfo.Result">
-                <option value="">
-                  结果不限
-                </option>
-                <option v-for="item in submitStatusOptions" :value="item" :key="item">
-                  {{ item }}
-                </option>
-              </select>
+              <div class="join">
+                <select class="select select-bordered rounded-r-none rounded-tl-none" v-model="records.searchInfo.Lang">
+                  <option value="0">
+                    语言不限
+                  </option>
+                  <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
+                    {{ item.label }}
+                  </option>
+                </select>
+                <select class="select select-bordered rounded-l-none rounded-tr-none" v-model="records.searchInfo.Result">
+                  <option value="">
+                    结果不限
+                  </option>
+                  <option v-for="item in submitStatusOptions" :value="item" :key="item">
+                    {{ item }}
+                  </option>
+                </select>
+              </div>
             </div>
             <button class="btn w-full" @click="records.updateQuery()">
               <search theme="outline" size="18" />
