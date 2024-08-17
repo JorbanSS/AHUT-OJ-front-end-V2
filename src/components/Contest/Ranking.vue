@@ -1,52 +1,54 @@
 <template>
   <div class="flex flex-row" :class="{ '-mb-1': route.name == 'RankingView', 'gap-2': route.name != 'RankingView' }">
-    <div class="bg-white pl-6 pr-2 gap-2 flex items-center"
-      :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', '': route.name == 'RankingView' }">
-      <refresh theme="outline" size="18" />
-      <span class="font-bold mr-2 text-nowrap">自动更新间隔</span>
-      <div class="bg-[#E8E9EA] flex p-1 rounded-xl">
-        <div v-for="(item, index) in autoRefreshIntervals">
-          <button class="py-1 rounded-lg w-16"
-            :class="{ 'bg-[#2C3440] text-[#D7DDE4] font-bold': autoRefresh === item }" @click="autoRefresh = item">
-            {{ item === 0 ? '关闭' : item + 's' }}
-          </button>
+    <div class="bg-white pl-6 pr-2 gap-2 flex items-center justify-between w-full border-b-0"
+      :class="{ 'shadow-lg Border rounded-none': route.name != 'RankingView', '': route.name == 'RankingView' }">
+      <div class="flex flex-row items-center gap-3">
+        <refresh theme="outline" size="18" />
+        <span class="font-bold mr-2 text-nowrap">自动更新间隔</span>
+        <div class="bg-[#E8E9EA] flex p-1 rounded-xl">
+          <div v-for="(item, index) in autoRefreshIntervals">
+            <button class="py-1 rounded-lg w-16"
+              :class="{ 'bg-[#2C3440] text-[#D7DDE4] font-bold': autoRefresh === item }" @click="autoRefresh = item">
+              {{ item === 0 ? '关闭' : item + 's' }}
+            </button>
+          </div>
         </div>
       </div>
+      <span class="font-bold text-lg whitespace-nowrap" v-if="route.name == 'RankingView'">
+        {{ props.contest.Title }}
+      </span>
+      <ul class="menu bg-white flex flex-row text-base font-bold flex-nowrap border-0 shadow-none"
+        :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', '': route.name == 'RankingView' }">
+        <li>
+          <a @click="ranking.get(true)">
+            <refresh theme="outline" size="18" />
+            更新数据
+          </a>
+        </li>
+        <li>
+          <a @click="() => {
+            if (route.name == 'RankingView') {
+              $router.push({
+                name: 'ContestRanking',
+                params: {
+                  CID: props.contest.CID,
+                }
+              })
+            } else {
+              $router.push({
+                name: 'RankingView',
+                params: {
+                  CID: props.contest.CID,
+                }
+              })
+            }
+          }">
+            <full-screen theme="outline" size="18" />
+            <span class="font-bold">{{ route.name == 'RankingView' ? '退出全屏' : '全屏显示' }}</span>
+          </a>
+        </li>
+      </ul>
     </div>
-    <div class="bg-white w-full flex items-center justify-center" v-if="route.name == 'RankingView'">
-      <span class="font-bold text-lg">{{ props.contest.Title }}</span>
-    </div>
-    <ul class="menu bg-white flex flex-row text-base font-bold w-fit flex-nowrap justify-end"
-      :class="{ 'rounded-2xl shadow-lg Border': route.name != 'RankingView', '': route.name == 'RankingView' }">
-      <li>
-        <a @click="ranking.get(true)">
-          <refresh theme="outline" size="18" />
-          更新数据
-        </a>
-      </li>
-      <li>
-        <a @click="() => {
-          if (route.name == 'RankingView') {
-            $router.push({
-              name: 'ContestRanking',
-              params: {
-                CID: props.contest.CID,
-              }
-            })
-          } else {
-            $router.push({
-              name: 'RankingView',
-              params: {
-                CID: props.contest.CID,
-              }
-            })
-          }
-        }">
-          <full-screen theme="outline" size="18" />
-          <span class="font-bold">{{ route.name == 'RankingView' ? '退出全屏' : '全屏显示' }}</span>
-        </a>
-      </li>
-    </ul>
   </div>
   <div class="flex flex-col gap-0.5 bg-white" v-if="props.contest.CID && route.name == 'RankingView'">
     <div class="flex flex-row gap-2 justify-between mx-6 text-xs font-bold text-[#566070]">
@@ -64,48 +66,50 @@
       max="100">
     </progress>
   </div>
-  <div class="bg-white shadow-lg overflow-x-auto" :class="{ 'rounded-2xl Border': route.name != 'RankingView' }"
-    :style="{ 'max-height': route.name == 'RankingView' ? 'calc(100vh - 78px)' : 'calc(100vh - 500px)' }">
-    <table class="table table-zebra table-pin-rows table-pin-cols table-fixed text-center">
-      <thead>
-        <tr>
-          <th class="w-14">Place</th>
-          <th class="w-32">Name</th>
-          <th class="w-32">UID</th>
-          <th class="w-14">Solved</th>
-          <th class="w-20">Penalty</th>
-          <th v-for="(item, index1) in props.problems " :key="index1" class="w-16"
-            :style="'background-color: ' + item.BalloonColor + '; color: ' + item.BalloonColor">
-            <span style="filter: grayscale(1) contrast(999) invert(1)" v-if="item.BalloonColor != ''">
-              {{ ConvertTools.Number2Alpha(index1 + 1) }}
-            </span>
-            <span v-else class="text-black">
-              {{ ConvertTools.Number2Alpha(index1 + 1) }}
-            </span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="( item1, index ) in ranking.Ranking " :key="index">
-          <th>{{ index + 1 }}</th>
-          <td>{{ item1.Uname }}</td>
-          <td>{{ item1.UserID }}</td>
-          <td>{{ item1.ACNumber }}</td>
-          <td>{{ Math.round(item1.Penalty / 60 / 1000) }}</td>
-          <td v-for="( item2, index2 ) in item1.Problems " :key="index2" class="px-0 pb-1 pt-0"
-            :style="`${getRankingBackgroundColor(item2)};`">
-            <div class="font-bold">
+  <div class="bg-white shadow-lg rounded-2xl rounded-t-none overflow-hidden Border border-t-0">
+    <div class="bg-white overflow-x-auto"
+      :style="{ 'max-height': route.name == 'RankingView' ? 'calc(100vh - 79px)' : 'calc(100vh - 500px)' }">
+      <table class="table table-zebra table-pin-rows table-pin-cols table-fixed text-center">
+        <thead>
+          <tr>
+            <th class="w-14">Place</th>
+            <th class="w-32">Name</th>
+            <th class="w-32">UID</th>
+            <th class="w-14">Solved</th>
+            <th class="w-20">Penalty</th>
+            <th v-for="(item, index1) in props.problems " :key="index1" class="w-16"
+              :style="'background-color: ' + item.BalloonColor + '; color: ' + item.BalloonColor">
+              <span style="filter: grayscale(1) contrast(999) invert(1)" v-if="item.BalloonColor != ''">
+                {{ ConvertTools.Number2Alpha(index1 + 1) }}
+              </span>
+              <span v-else class="text-black">
+                {{ ConvertTools.Number2Alpha(index1 + 1) }}
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="( item1, index ) in ranking.Ranking " :key="index">
+            <th>{{ index + 1 }}</th>
+            <td>{{ item1.Uname }}</td>
+            <td>{{ item1.UserID }}</td>
+            <td>{{ item1.ACNumber }}</td>
+            <td>{{ Math.round(item1.Penalty / 60 / 1000) }}</td>
+            <td v-for="( item2, index2 ) in item1.Problems " :key="index2" class="px-0 pb-1 pt-0"
+              :style="`${getRankingBackgroundColor(item2)};`">
               <div class="font-bold">
-                {{ item2.Status == "NULL" ? "" : item2.Status == "AC" ? "+" : "-" }}
+                <div class="font-bold">
+                  {{ item2.Status == "NULL" ? "" : item2.Status == "AC" ? "+" : "-" }}
+                </div>
+                <div class="text-xs" v-if="item2.SubmitNumber">
+                  {{ item2.SubmitNumber }}/{{ Math.round(item2.Time / 60 / 1000) }}
+                </div>
               </div>
-              <div class="text-xs" v-if="item2.SubmitNumber">
-                {{ item2.SubmitNumber }}/{{ Math.round(item2.Time / 60 / 1000) }}
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-white Border shadow-lg overflow-hidden">
+  <div class="card bg-white Border shadow-lg overflow-hidden rounded-t-none">
     <div v-if="props.problemList.Description">
       <MdPreview :modelValue="props.problemList.Description" class="px-1 mb-4" />
     </div>

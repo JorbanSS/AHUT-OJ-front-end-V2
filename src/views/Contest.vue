@@ -1,87 +1,74 @@
 <template>
   <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
-    <div class="card shadow-lg Border bg-white p-6 space-y-1">
-      <div class="text-xl font-bold">
-        {{ contest.Title }}
-      </div>
-      <div class="flex space-x-1">
-        <div class="badge badge-neutral">
-          {{ contest.Type == 1 ? "OI" : "ICPC" }}
-        </div>
-        <div class="badge badge-neutral">
-          Offical
-        </div>
-      </div>
-      <div>
-        比赛时间：
-        {{ ConvertTools.PrintTime(contest.BeginTime, 1) }}
-        ~
-        {{ ConvertTools.PrintTime(contest.EndTime, 0) }}
-      </div>
-      <!-- <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
-        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-          <span class="countdown font-mono text-5xl">
-            <span style="--value:10;"></span>
+    <PageHeader :Title="contest.Title" :IconName="Trophy" Infomation="">
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-row gap-2 justify-between text-sm font-bold text-gray-600">
+          <span>
+            {{ ConvertTools.PrintTime(contest.BeginTime, 1, 1) }}
           </span>
-          hours
-        </div>
-        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-          <span class="countdown font-mono text-5xl">
-            <span style="--value:24;"></span>
+          <div class="[&_span]:badge [&_span]:mr-1 [&_span]:font-bold [&_span]:text-white">
+            <span :style="contest.Type == 1 ? 'background-color: #8F43AC;' : 'background-color: #E37E27;'">
+              {{ contest.Type == 1 ? 'ICPC' : 'OI' }}
+            </span>
+            <span :style="contest.IsPublic == 1 ? 'background-color: #21700E;' : 'background-color: #E44D3D;'">
+              {{ contest.IsPublic == 1 ? '公开' : '加密' }}
+            </span>
+          </div>
+          <span>
+            {{ contest.EndTime > contest.TimeNow ? '还剩 ' +
+              ConvertTools.PrintTimeInterval(ConvertTools.TimeInterval(contest.TimeNow, contest.EndTime), 1) :
+              ConvertTools.PrintTime(contest.EndTime, 1, 1) }}
           </span>
-          min
         </div>
-        <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
-          <span class="countdown font-mono text-5xl">
-            <span style="--value:45;"></span>
-          </span>
-          sec
+        <progress class="progress w-full"
+          :value="ConvertTools.Percentage(Math.min(contest.Duration, TimeNow - contest.BeginTime), contest.Duration)"
+          max="100"></progress>
+      </div>
+    </PageHeader>
+
+    <div>
+      <ul
+        class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold justify-between w-full rounded-b-none">
+        <div class="flex flex-col sm:flex-row">
+          <li v-for="item in contestNavItems" :key="item.title">
+            <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'"
+              :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(7).toLowerCase() }">
+              <component :is="item.icon" theme="outline" size="18" />
+              {{ item.title }}
+              <div class="badge badge-neutral" v-if="item.title == '记录'">{{ contest.RecordNumber }}</div>
+            </RouterLink>
+          </li>
         </div>
-      </div> -->
-      <progress class="progress w-full"
-        :value="ConvertTools.Percentage(Math.min(contest.Duration, TimeNow - contest.BeginTime), contest.Duration)"
-        max="100"></progress>
-    </div>
-    <div class="flex space-x-2">
-      <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit">
-        <li v-for="item in contestNavItems" :key="item.title">
-          <RouterLink :to="item.to" v-if="typeof item.to != 'undefined'"
-            :class="{ 'btn-active': route.path.split('/')[3].toLowerCase() == item.to.name.substring(7).toLowerCase() }">
-            <component :is="item.icon" theme="outline" size="18" />
-            {{ item.title }}
-            <div class="badge badge-neutral" v-if="item.title == '记录'">{{ contest.RecordNumber }}</div>
-          </RouterLink>
-        </li>
+        <div class="flex flex-col sm:flex-row" v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
+          <li>
+            <a @click="contest.cloneToProblemList()">
+              <bill theme="outline" size="18" />
+              克隆为题单
+            </a>
+          </li>
+          <li>
+            <a>
+              <party-balloon theme="outline" size="18" />
+              气球提示
+            </a>
+          </li>
+          <li>
+            <a @click="$router.push({
+              name: 'EditContest',
+              params: {
+                CID: contest.CID,
+              }
+            })">
+              <editor theme="outline" size="18" />
+              比赛编辑
+            </a>
+          </li>
+        </div>
       </ul>
-      <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold w-fit mx-auto"
-        v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
-        <li>
-          <a @click="contest.cloneToProblemList()">
-            <bill theme="outline" size="18" />
-            克隆为题单
-          </a>
-        </li>
-        <li>
-          <a>
-            <party-balloon theme="outline" size="18" />
-            气球提示
-          </a>
-        </li>
-        <li>
-          <a @click="$router.push({
-            name: 'EditContest',
-            params: {
-              CID: contest.CID,
-            }
-          })">
-            <editor theme="outline" size="18" />
-            比赛编辑
-          </a>
-        </li>
-      </ul>
+
+      <RouterView :contest="contest" :problems="problems">
+      </RouterView>
     </div>
-    <RouterView :contest="contest" :problems="problems">
-    </RouterView>
   </div>
 </template>
 
@@ -89,7 +76,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Bill, Editor, PartyBalloon } from '@icon-park/vue-next';
+import { Bill, Editor, PartyBalloon, Trophy } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _cloneToProblemList, _getContest } from '@/apis/contest';
@@ -99,6 +86,7 @@ import { type ContestType } from '@/interfaces/contest';
 import { useConstValStore } from '@/stores/ConstVal';
 import { useUserDataStore } from '@/stores/UserData';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
+import PageHeader from '@/components/Main/PageHeader.vue';
 
 const constValStore = useConstValStore();
 const userDataStore = useUserDataStore();
@@ -125,16 +113,17 @@ let contest = reactive<ContestType>({
   RecordNumber: 0,
 
   get() {
-    _getContest({}, contest.CID)
+    _getContest({}, this.CID)
       .then((data: any) => {
-        contest.Title = data.Title;
-        contest.BeginTime = data.BeginTime;
-        contest.EndTime = data.EndTime;
-        contest.Duration = ConvertTools.TimeInterval(contest.BeginTime, contest.EndTime);
-        contest.CID = data.CID;
-        contest.IsPublic = data.IsPublic;
-        contest.Description = data.Description;
-        contest.Problems = data.Data;
+        this.Title = data.Title;
+        this.BeginTime = data.BeginTime;
+        this.EndTime = data.EndTime;
+        this.Duration = ConvertTools.TimeInterval(this.BeginTime, this.EndTime);
+        this.CID = data.CID;
+        this.IsPublic = data.IsPublic;
+        this.Description = data.Description;
+        this.Problems = data.Data;
+        this.Type = data.Type;
         problems.value = data.Data;
       })
   },

@@ -1,5 +1,5 @@
 <template>
-  <div class="card shadow-lg Border bg-white">
+  <div class="card shadow-lg Border bg-white rounded-t-none">
     <table class="table table-zebra mb-4">
       <thead>
         <tr>

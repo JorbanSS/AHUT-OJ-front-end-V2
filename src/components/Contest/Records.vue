@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <div class="card bg-white shadow-lg Border p-4 mx-auto">
+    <div class="card bg-white shadow-lg Border p-4 mx-auto rounded-t-none">
       <div class="join">
         <select class="select select-bordered join-item" v-model="records.searchInfo.PID">
           <option value="">
