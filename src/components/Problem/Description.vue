@@ -6,7 +6,7 @@
       下载 PDF
     </button>
   </div>
-  <div class="card shadow-lg bg-white Border h-fit w-full" v-else>
+  <div class="card shadow-lg bg-white Border h-fit w-full rounded-t-none" v-else>
     <div class="flex space-x-3 ml-4 mt-4 w-full">
       <button class="btn w-fit" @click="copyMarkdown()">
         <copy theme="outline" size="18" />

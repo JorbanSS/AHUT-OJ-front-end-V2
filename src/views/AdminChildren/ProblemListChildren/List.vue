@@ -24,25 +24,6 @@
       </li>
     </ul>
   </div>
-  <div class="card bg-white shadow-lg Border mx-auto max-w-5xl">
-    <div class="text-2xl p-6">
-      <div class="join">
-        <div>
-          <div>
-            <input class="input input-bordered join-item" placeholder="Search" />
-          </div>
-        </div>
-        <select class="select select-bordered join-item">
-          <option disabled selected>Filter</option>
-          <option>Local</option>
-          <option>CodeForces</option>
-          <option>AtCoder</option>
-        </select>
-        <button class="btn join-item btn-neutral">搜索</button>
-      </div>
-    </div>
-  </div>
-  <div class="m-6"></div>
   <div class="bg-white card shadow-lg Border mx-auto max-w-5xl">
     <table class="table table-zebra text-center">
       <thead>
@@ -133,7 +114,6 @@ let problemLists = reactive<ProblemListsType>({
   page: 1,
   limit: 20,
   UID: '',
-  searchInfo: {},
 
   get(showInfo = false) {
     let params = {

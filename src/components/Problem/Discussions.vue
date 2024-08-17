@@ -2,7 +2,7 @@
   <div>
     <div class="space-y-6">
       <div>
-        <button class="btn btn-neutral btn-lg w-full rounded-2xl" onclick="newDiscussionModal.showModal()"
+        <button class="btn btn-neutral btn-lg w-full rounded-2xl rounded-t-none" onclick="newDiscussionModal.showModal()"
           :disabled="userDataStore.isLogin == false">
           <add theme="outline" size="22" />
           <span class="text-lg">新建话题</span>

@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <div class="card bg-white shadow-lg Border p-4 mx-auto">
+    <div class="card bg-white shadow-lg Border p-4 mx-auto rounded-t-none">
       <div class="join">
         <div
           class="space-y-2 [&_label]:input [&_label]:input-bordered [&_label]:flex [&_label]:items-center [&_label]:gap-2 [&_label_span]:whitespace-nowrap  [&_label_span]:text-sm">

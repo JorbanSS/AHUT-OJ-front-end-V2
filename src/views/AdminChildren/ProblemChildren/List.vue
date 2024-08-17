@@ -142,7 +142,10 @@ let problems = reactive<ProblemsType>({
   count: 0,
   page: 1,
   limit: 20,
-  searchInfo: {},
+  searchInfo: {
+    Label: '',
+    PType: '',
+  },
 
   get(showInfo: boolean = false) {
     let params = {
