@@ -1,15 +1,21 @@
 <template>
   <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
-    <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto w-fit">
-      <div class="join w-fit">
-        <label class="input input-bordered flex items-center gap-2 join-item">
-          <span class="whitespace-nowrap">题单号</span>
-          <input type="text" class="grow w-60" v-model="problemLists.searchInfo.LID" />
-        </label>
-        <button class="btn join-item btn-neutral"
-          @click="problemLists.goToProblemList(problemLists.searchInfo.LID)">跳转</button>
+    <PageHeader Title="题单" :IconName="Bill"
+      :Infomation="`收录了共 ${problemLists.count} 个题单，以供 ACM 集训队训练、赛后补题、程序设计赛竞赛公选课、C 语言程序设计必修课、算法设计与分析必修课使用。`">
+      <div class="flex justify-center">
+        <div class="join">
+          <label class="input input-bordered flex items-center gap-2 join-item">
+            <span class="whitespace-nowrap text-sm">题单号</span>
+            <input type="text" class="grow" v-model="problemLists.searchInfo.LID" />
+          </label>
+          <button class="btn join-item" @click="problemLists.goToProblemList(problemLists.searchInfo.LID)">
+            <go-on theme="outline" size="18" />
+            <span>跳转</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </PageHeader>
+
     <div class="bg-white card shadow-lg Border">
       <div class="overflow-x-hidden rounded-t-2xl">
         <table class="table table-zebra table-pin-rows">
@@ -27,13 +33,12 @@
             </tr>
           </thead>
           <tbody v-auto-animate>
-            <tr v-for="item in problemLists.problemLists" :key="item.LID"
-              @click="$router.push({
-                name: 'ProblemList',
-                params: {
-                  LID: item.LID,
-                }
-              });" class="cursor-pointer">
+            <tr v-for="item in problemLists.problemLists" :key="item.LID" @click="$router.push({
+              name: 'ProblemList',
+              params: {
+                LID: item.LID,
+              }
+            });" class="cursor-pointer">
               <th class="hidden md:table-cell">
                 {{ item.LID }}
               </th>
@@ -47,18 +52,20 @@
                     {{ labelItem.value }}
                   </span>
                 </template>
-                <span class="badge text-white whitespace-nowrap mr-1 font-bold" v-if="item.Title.endsWith('(By Clone)')" style="background-color: #4398DA;">Cloned</span>
+                <span class="badge text-white whitespace-nowrap mr-1 font-bold" v-if="item.Title.endsWith('(By Clone)')"
+                  style="background-color: #4398DA;">Cloned</span>
               </td>
               <td class="hidden md:table-cell">
                 {{ ConvertTools.PrintTime(item.StartTime, 1) }}
               </td>
               <td class="hidden md:table-cell">
-                <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页" @click.stop="$router.push({
-                  name: 'User',
-                  params: {
-                    UID: item.UID
-                  }
-                })">
+                <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页"
+                  @click.stop="$router.push({
+                    name: 'User',
+                    params: {
+                      UID: item.UID
+                    }
+                  })">
                   {{ item.UID }}
                 </span>
               </td>
@@ -75,6 +82,7 @@
 import { computed, onMounted, reactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { Bill, GoOn } from "@icon-park/vue-next";
 import { push } from 'notivue';
 
 import { _getProblemLists } from '@/apis/problemList';
@@ -82,6 +90,7 @@ import Pagination from "@/components/Main/Pagination.vue";
 import { problemListLabelOptions } from '@/config';
 import { type ProblemListSimplifiedType, type ProblemListsType } from '@/interfaces/problemList';
 import { ConvertTools } from '@/utils/globalFunctions';
+import PageHeader from '@/components/Main/PageHeader.vue';
 
 const router = useRouter();
 

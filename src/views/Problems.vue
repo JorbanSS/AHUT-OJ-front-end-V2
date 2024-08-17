@@ -1,40 +1,44 @@
 <template>
   <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
-    <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto w-fit">
-      <div class="join w-fit">
-        <label class="input input-bordered flex items-center gap-2 join-item">
-          <span class="whitespace-nowrap text-sm">题号</span>
-          <input type="text" class="grow w-60" v-model="problems.searchInfo.PID" />
-        </label>
-        <button class="btn join-item btn-neutral" @click="problems.goToProblem(problems.searchInfo.PID)">跳转</button>
-      </div>
-      <div class="collapse bg-base-200 collapse-arrow rounded-lg">
-        <input type="checkbox" />
-        <div class="collapse-title text-md font-bold">
-          高级筛选
-          <div class="badge badge-neutral">{{ filterNumber }}</div>
+    <PageHeader Title="题库" :IconName="DocumentFolder"
+      :Infomation="`收录了共 ${problems.count} 条题目，包含自主命题、LOJ、Codeforces 和 Atcoder 等知名 OJ 的题目。`">
+      <div class="flex flex-col gap-3">
+        <div class="flex justify-center">
+          <div class="join">
+            <label class="input input-bordered flex items-center gap-2 join-item">
+              <span class="whitespace-nowrap text-sm">题号</span>
+              <input type="text" class="grow" v-model="problems.searchInfo.PID" />
+            </label>
+            <button class="btn join-item" @click="problems.goToProblem(problems.searchInfo.PID)">
+              <go-on theme="outline" size="18" />
+              <span>跳转</span>
+            </button>
+          </div>
         </div>
-        <div class="collapse-content space-y-2">
-          <div
-            class="space-y-2 [&_label]:input [&_label]:input-bordered [&_label]:flex [&_label]:items-center [&_label]:gap-2 [&_label_span]:whitespace-nowrap [&_label_span]:text-sm">
-            <label>
-              <span>标题</span>
+        <div class="flex justify-center gap-2 flex-col md:flex-row">
+          <div class="join md:join-horizontal join-vertical">
+            <label class="input input-bordered flex items-center gap-2 join-item">
+              <span class="whitespace-nowrap">标题</span>
               <input type="text" class="grow" v-model="problems.searchInfo.Keyword" />
             </label>
-            <label>
-              <span>标签</span>
+            <label class="input input-bordered flex items-center gap-2 join-item">
+              <span class="whitespace-nowrap">标签</span>
               <input type="text" class="grow" v-model="problems.searchInfo.Label" />
             </label>
+            <select class="select select-bordered join-item" v-model="problems.searchInfo.PType">
+              <option v-for="item in problemTypeOptions" :value="item.value" :key="item.value">
+                {{ item.label }}
+              </option>
+            </select>
           </div>
-          <select class="select select-bordered join-item" v-model="problems.searchInfo.PType">
-            <option v-for="item in problemTypeOptions" :value="item.value" :key="item.value">
-              {{ item.label }}
-            </option>
-          </select>
-          <button class="btn join-item btn-neutral w-full" @click="problems.get(true)">搜索</button>
+          <button class="btn md:join-item md:w-24 w-full" @click="problems.get(true)">
+            <search theme="outline" size="18" />
+            <span>搜索</span>
+          </button>
         </div>
       </div>
-    </div>
+    </PageHeader>
+    
     <div class="bg-white card shadow-lg Border">
       <div class="overflow-x-hidden rounded-t-2xl">
         <table class="table table-zebra table-pin-rows">
@@ -56,8 +60,7 @@
               params: {
                 PID: item.PID,
               },
-            })"
-              class="cursor-pointer">
+            })" class="cursor-pointer">
               <th>
                 {{ item.PID }}
               </th>
@@ -87,6 +90,7 @@
 <script lang="ts" setup name="Problems">
 import { computed, onMounted, reactive, watch } from 'vue';
 
+import { DocumentFolder, Search, GoOn } from "@icon-park/vue-next";
 import { push } from "notivue";
 import { useRouter } from 'vue-router';
 
@@ -95,6 +99,7 @@ import Pagination from "@/components/Main/Pagination.vue";
 import { problemTypeOptions } from '@/config';
 import { type ProblemSimplifiedType, type ProblemsType } from '@/interfaces/problem';
 import { ConvertTools } from '@/utils/globalFunctions';
+import PageHeader from '@/components/Main/PageHeader.vue';
 
 const router = useRouter();
 

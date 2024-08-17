@@ -1,14 +1,21 @@
 <template>
   <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
-    <div class="flex space-y-4 card bg-white shadow-lg Border p-4 mx-auto w-fit">
-      <div class="join w-fit">
-        <label class="input input-bordered flex items-center gap-2 join-item">
-          <span class="whitespace-nowrap">比赛号</span>
-          <input type="text" class="grow w-60" v-model="contests.searchInfo.CID" />
-        </label>
-        <button class="btn join-item btn-neutral" @click="contests.goToContest(contests.searchInfo.CID)">跳转</button>
+    <PageHeader Title="比赛" :IconName="Trophy"
+      :Infomation="`收录了共 ${contests.count} 场比赛，以供 ACM 新生选拔赛、ACM 集训队选拔赛、程序设计赛竞赛公选课使用。`">
+      <div class="flex justify-center">
+        <div class="join">
+          <label class="input input-bordered flex items-center gap-2 join-item">
+            <span class="whitespace-nowrap text-sm">比赛号</span>
+            <input type="text" class="grow" v-model="contests.searchInfo.CID" />
+          </label>
+          <button class="btn join-item" @click="contests.goToContest(contests.searchInfo.CID)">
+            <go-on theme="outline" size="18" />
+            <span>跳转</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </PageHeader>
+
     <div class="bg-white card shadow-lg Border">
       <div class="overflow-x-hidden rounded-t-2xl">
         <table class="table table-zebra table-pin-rows">
@@ -80,12 +87,14 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { Trophy, GoOn } from "@icon-park/vue-next";
 import { push } from 'notivue';
 
 import { _getContests } from '@/apis/contest';
 import Pagination from "@/components/Main/Pagination.vue";
 import { type ContestSimplifiedType, type ContestsType } from '@/interfaces/contest';
 import { ConvertTools, getServerTime } from '@/utils/globalFunctions';
+import PageHeader from '@/components/Main/PageHeader.vue';
 
 const router = useRouter();
 

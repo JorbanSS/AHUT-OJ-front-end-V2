@@ -1,31 +1,11 @@
 <template>
   <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
-    <div class="Border rounded-2xl shadow-lg bg-white p-4">
-      <div class="flex justify-center flex-col">
-        <div class="flex justify-center items-center gap-2">
-          <remind theme="outline" size="20" class="ml-1" />
-          <h3 class="font-bold text-lg">{{ notice.Title }}</h3>
-          <button class="btn btn-sm" @click.stop="$router.push({ name: 'AdminDashboard' })"
-            v-if="userDataStore.PermissionMap > 3">
-            编辑
-          </button>
-        </div>
-        <div class="my-1"></div>
-        <div class="">
-          <div class="text-center">
-            <div v-for='item in notice.Content.split("\n")'>
-              {{ item }}
-            </div>
-            <template v-if="notice.UpdatedTime">
-              <div class="my-2"></div>
-              <div class="text-xs">
-                {{ ConvertTools.PrintTime(notice.UpdatedTime, 1) }}
-              </div>
-            </template>
-          </div>
-        </div>
-      </div>
-    </div>
+    <PageHeader :Title="notice.Title" :IconName="Remind" :Infomation="notice.Content">
+      <span class="text-xs text-center" v-if="notice.UpdatedTime">
+        {{ ConvertTools.PrintTime(notice.UpdatedTime, 1) }}
+      </span>
+    </PageHeader>
+
     <div class="flex space-y-6 flex-col md:flex-row md:space-y-0 md:space-x-6">
       <div class="carousel w-full rounded-2xl shadow-lg Border h-96">
         <div class="carousel-item relative w-full" v-for="(item, index) in banners.banners" :key="index"
@@ -39,13 +19,9 @@
       </div>
       <div class="min-w-96 card rounded-2xl bg-white shadow-lg Border h-96">
         <div class="flex justify-between items-center">
-          <div class="text-lg m-4 font-bold">
+          <div class="text-xl m-4 font-bold">
             版本更新日志
           </div>
-          <button class="btn btn-sm mr-3" @click="$router.push({ name: 'AdminUpdateLog' })"
-            v-if="userDataStore.PermissionMap & constValStore.SuperAdminBit">
-            编辑
-          </button>
         </div>
         <div class="px-4 overflow-auto rounded-2xl">
           <div v-for="item in updateLogs.updateLogs" :key="item.ID">
@@ -97,6 +73,7 @@ import {
 import { ConvertTools } from "@/utils/globalFunctions";
 import { useUserDataStore } from "@/stores/UserData";
 import { useConstValStore } from "@/stores/ConstVal";
+import PageHeader from "@/components/Main/PageHeader.vue";
 
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
