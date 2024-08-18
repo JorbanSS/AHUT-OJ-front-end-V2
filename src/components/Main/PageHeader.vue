@@ -1,14 +1,16 @@
 <template>
-  <div class="Border rounded-2xl shadow-lg bg-white p-6">
+  <div class="Border rounded-2xl shadow-lg bg-white p-6 w-full">
     <div class="flex flex-col gap-3">
       <div class="flex justify-center">
         <component :is="props.IconName" theme="outline" size="32" />
       </div>
       <span class="font-bold text-xl text-center">{{ props.Title }}</span>
       <div v-if="props.Infomation">
-        <div class="text-center" v-for='item in props.Infomation.split("\n")'>
-          {{ item }}
-        </div>
+        <template v-for='item in props.Infomation.split("\n")'>
+          <div class="text-center" v-for='item2 in item.split("\\n")'>
+            {{ item2 }}
+          </div>
+        </template>
       </div>
       <slot></slot>
     </div>

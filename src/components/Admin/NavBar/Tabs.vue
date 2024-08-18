@@ -29,10 +29,9 @@ import { Toolkit } from '@icon-park/vue-next';
 
 import { adminNavItems } from '@/config';
 import { useThemeSwitchStore } from '@/stores/ThemeSwitch';
+import { computed } from 'vue';
 
 const route = useRoute();
 const ThemeSwitchStore = useThemeSwitchStore();
 
 </script>
-
-<style scoped></style>

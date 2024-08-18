@@ -2,18 +2,6 @@
   <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
     <PageHeader Title="比赛" :IconName="Trophy"
       :Infomation="`收录了共 ${contests.count} 场比赛，以供 ACM 新生选拔赛、ACM 集训队选拔赛、程序设计赛竞赛公选课使用。`">
-      <div class="flex justify-center">
-        <div class="join">
-          <label class="input input-bordered flex items-center gap-2 join-item">
-            <span class="whitespace-nowrap text-sm">比赛号</span>
-            <input type="text" class="grow" v-model="contests.searchInfo.CID" />
-          </label>
-          <button class="btn join-item" @click="contests.goToContest(contests.searchInfo.CID)">
-            <go-on theme="outline" size="18" />
-            <span>跳转</span>
-          </button>
-        </div>
-      </div>
     </PageHeader>
 
     <div class="bg-white card shadow-lg Border">
@@ -38,7 +26,14 @@
               name: 'Contest',
               params: {
                 CID: item.CID,
-              }
+              },
+              query: {
+                IsPublic: item.IsPublic,
+                Title: item.Title,
+                BeginTime: item.BeginTime,
+                EndTime: item.EndTime,
+                Type: item.Type,
+              },
             })" :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': !item.Status }">
               <td class="font-bold talbe-lg whitespace-nowrap hidden md:table-cell"
                 :style="'color: ' + ContestStatus[item.Status].color">
@@ -141,22 +136,6 @@ let contests = reactive<ContestsType>({
       else if (item.BeginTime > TimeNow.value) item.Status = 0;
       else item.Status = 1;
     })
-  },
-
-  goToContest(CID: string) {
-    if (CID == "") {
-      push.warning({
-        title: "无法跳转",
-        message: "未填写比赛号",
-      })
-      return;
-    };
-    router.push({
-      name: 'Contest',
-      params: {
-        CID: CID,
-      },
-    });
   },
 
   changePage(page: number) {

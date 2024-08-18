@@ -207,14 +207,21 @@ export function atcoderProblemFormat(PID: string): string {
 // 颜色透明度
 export function colorOpacity(hexColor: string, opacity: number): string {
   if (!/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(hexColor)) {
-    return 'Invalid hex color format';
+    return "Invalid hex color format";
   }
 
   let alpha = opacity / 100;
 
   // 扩展3位十六进制颜色为6位
   if (hexColor.length === 4) {
-    hexColor = '#' + hexColor[1] + hexColor[1] + hexColor[2] + hexColor[2] + hexColor[3] + hexColor[3];
+    hexColor =
+      "#" +
+      hexColor[1] +
+      hexColor[1] +
+      hexColor[2] +
+      hexColor[2] +
+      hexColor[3] +
+      hexColor[3];
   }
 
   // 将十六进制颜色转换为RGB
@@ -230,10 +237,45 @@ export function colorOpacity(hexColor: string, opacity: number): string {
   }
 
   // 将RGB转换为RGBA并返回十六进制格式
-  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b)
-    .toString(16)
-    .slice(1)
-    + Math.floor(Math.min(255, alpha * 255))
-    .toString(16)
-    .padStart(2, '0');
+  return (
+    "#" +
+    ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1) +
+    Math.floor(Math.min(255, alpha * 255))
+      .toString(16)
+      .padStart(2, "0")
+  );
+}
+
+export function generateRandomString(length: number): string {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
+export function generatePassword(length: number): string {
+  const numbers = "0123456789";
+  const upperCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const characters = numbers + upperCharacters;
+
+  let array = new Array<number>;
+  let result = "";
+
+  for (let i = 0; i < length - Math.floor(length / 2); i++) {
+    array.push(Math.random() * numbers.length);
+  }
+  for (let i = 0; i < Math.floor(length / 2); i++) {
+    array.push(Math.random() * upperCharacters.length + numbers.length);
+  }
+
+  array.sort(() => 0.5 - Math.random());
+
+  for (let i = 0; i < length; i ++) {
+    result += characters.charAt(array[i]);
+  }
+
+  return result;
 }

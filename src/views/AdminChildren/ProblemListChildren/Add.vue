@@ -36,7 +36,7 @@
     </div> -->
   </div>
   <div class="m-6"></div>
-  <div class="card bg-white shadow-lg Border max-w-5xl mx-auto pb-6">
+  <div class="card bg-white shadow-lg Border max-w-5xl mx-auto overflow-hidden">
     <div class="text-2xl px-6 pt-6">
       <div class="join">
         <input class="input input-bordered join-item" placeholder="题号" v-model="problem.PID" />

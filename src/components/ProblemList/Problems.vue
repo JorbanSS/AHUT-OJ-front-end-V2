@@ -1,6 +1,6 @@
 <template>
-  <div class="card shadow-lg Border bg-white rounded-t-none">
-    <table class="table table-zebra mb-4">
+  <div class="card shadow-lg Border bg-white rounded-t-none overflow-hidden">
+    <table class="table table-zebra">
       <thead>
         <tr>
           <th v-for="(item, index) in ['通过状态', '题号', '题目名称', '通过率', '通过数/提交数']" :key="index">

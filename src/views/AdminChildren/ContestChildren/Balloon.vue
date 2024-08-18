@@ -19,6 +19,9 @@
           params: {
             CID: contest.CID,
           },
+          query: {
+            isPrivate: (contest.IsPublic == -1).toString(),
+          }
         })">
           <edit-one theme="outline" size="18" />
           编辑比赛
@@ -43,6 +46,13 @@
           name: 'Contest',
           params: {
             CID: contest.CID,
+          },
+          query: {
+            IsPublic: contest.IsPublic,
+            Title: contest.Title,
+            BeginTime: contest.BeginTime,
+            EndTime: contest.EndTime,
+            Type: contest.Type,
           },
         })">
           <go-on theme="outline" size="18" />
@@ -109,7 +119,11 @@ interface ProblemsWithBalloonType {
 let contest = reactive({
   Problems: new Array<ProblemsWithBalloonType>,
   CID: 0,
+  IsPublic: 0,
   Title: '',
+  BeginTime: 0,
+  EndTime: 0,
+  Type: 0,
 
   get() {
     _getContest({}, contest.CID)
@@ -117,6 +131,10 @@ let contest = reactive({
         contest.Title = data.Title;
         contest.CID = data.CID;
         contest.Problems = data.Data;
+        contest.IsPublic = data.IsPublic;
+        contest.BeginTime = data.BeginTime;
+        contest.EndTime = data.EndTime;
+        contest.Type = data.Type;
       })
   },
 

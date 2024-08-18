@@ -64,6 +64,15 @@
               <PartyBalloon theme="outline" size="18" class="-mx-0.5" />
               气球
             </button>
+            <button class="btn btn-sm btn-neutral" @click.stop="$router.push({
+              name: 'AdminCodeReviewProblemSelect',
+              params: {
+                CID: item.CID,
+              }
+            })">
+              <Audit theme="outline" size="18" class="-mx-0.5" />
+              审阅
+            </button>
           </td>
         </tr>
       </tbody>
@@ -76,7 +85,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { Add, DeleteOne, EditTwo, PartyBalloon, Trophy } from '@icon-park/vue-next';
+import { Add, Audit, DeleteOne, EditTwo, PartyBalloon, Trophy } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _deleteContests, _getContests } from '@/apis/contest';

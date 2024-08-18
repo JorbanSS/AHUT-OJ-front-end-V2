@@ -16,6 +16,7 @@ import {
   Topic,
   Trophy,
   SmartOptimization,
+  Audit,
 } from "@icon-park/vue-next";
 import { ToolbarNames } from "md-editor-v3";
 
@@ -28,7 +29,20 @@ export const problemListLabelOptions = [
 ];
 
 export const submitStatusOptions = [
-  'AC', 'WA', 'TLE', 'MLE', 'RE', 'PE', 'OLE', 'CE', 'REJUDGING', 'JUDGING', 'PENDING', 'DENIAL_JUDGE', 'JUDGE_TIMEOUT', 'FAILED'
+  "AC",
+  "WA",
+  "TLE",
+  "MLE",
+  "RE",
+  "PE",
+  "OLE",
+  "CE",
+  "REJUDGING",
+  "JUDGING",
+  "PENDING",
+  "DENIAL_JUDGE",
+  "JUDGE_TIMEOUT",
+  "FAILED",
 ];
 
 export const submitStatusColor: Record<string, string> = {
@@ -49,20 +63,20 @@ export const submitStatusColor: Record<string, string> = {
 };
 
 export const submitInfo: SubmitInfoType = {
-  'AC': { label: "Accepted", icon: Check },
-  'WA': { label: "Wrong Answer", icon: Close },
-  'TLE': { label: "Time Limit Exceeded", icon: Time },
-  'MLE': { label: "Memory Limit Exceeded", icon: HardDisk },
-  'PENDING': { label: "Pending", icon: LoadingOne },
-  'JUDGING': { label: "Judging", icon: LoadingOne },
-  'REJUDGING': { label: "Rejudging", icon: Caution },
-  'RE': { label: "Runtime Error", icon: Caution },
-  'PE': { label: "Presentation Error", icon: Caution },
-  'OLE': { label: "Output Limit Exceeded", icon: Caution },
-  'CE': { label: "Compile Error", icon: Caution },
-  'JUDGE_TIMEOUT': { label: "Judge Timeout", icon: Caution },
-  'DENIAL_JUDGE': { label: "Denial Judge", icon: Caution },
-  'FAILED': { label: "Failed", icon: Caution },
+  AC: { label: "Accepted", icon: Check },
+  WA: { label: "Wrong Answer", icon: Close },
+  TLE: { label: "Time Limit Exceeded", icon: Time },
+  MLE: { label: "Memory Limit Exceeded", icon: HardDisk },
+  PENDING: { label: "Pending", icon: LoadingOne },
+  JUDGING: { label: "Judging", icon: LoadingOne },
+  REJUDGING: { label: "Rejudging", icon: Caution },
+  RE: { label: "Runtime Error", icon: Caution },
+  PE: { label: "Presentation Error", icon: Caution },
+  OLE: { label: "Output Limit Exceeded", icon: Caution },
+  CE: { label: "Compile Error", icon: Caution },
+  JUDGE_TIMEOUT: { label: "Judge Timeout", icon: Caution },
+  DENIAL_JUDGE: { label: "Denial Judge", icon: Caution },
+  FAILED: { label: "Failed", icon: Caution },
 };
 
 export const verifyModeOptions = [
@@ -107,15 +121,30 @@ export const objectTypeOptions = [
 export const editorLanguageOptions = [
   { label: "C", value: "c", compiler: "C17 (gcc 12.2.0)", language: 1 },
   { label: "C++", value: "cpp", compiler: "C++17 (g++ 12.2.0)", language: 4 },
-  { label: "Java", value: "java", compiler: "Java17 (OpenJDK 17.0.10 64bit)", language: 5 },
+  {
+    label: "Java",
+    value: "java",
+    compiler: "Java17 (OpenJDK 17.0.10 64bit)",
+    language: 5,
+  },
   { label: "Python", value: "py", compiler: "Python3 (3.10.13)", language: 6 },
 ];
 
 export const submitLanguageOptions = [
   { label: "C", value: "c", compiler: "C17 (gcc 12.2.0)", language: 1 },
   { label: "C++", value: "cpp", compiler: "C++17 (g++ 12.2.0)", language: 4 },
-  { label: "Java", value: "java", compiler: "Java17 (OpenJDK 17.0.10 64bit)", language: 5 },
-  { label: "Python", value: "python", compiler: "Python3 (3.10.13)", language: 6 },
+  {
+    label: "Java",
+    value: "java",
+    compiler: "Java17 (OpenJDK 17.0.10 64bit)",
+    language: 5,
+  },
+  {
+    label: "Python",
+    value: "python",
+    compiler: "Python3 (3.10.13)",
+    language: 6,
+  },
 ];
 
 export const navItems: Array<NavItemType> = [
@@ -155,6 +184,7 @@ export const adminNavItems: Array<NavItemType> = [
   { title: "题库", icon: DocumentFolder, to: { name: "AdminProblem" } },
   { title: "题单", icon: Bill, to: { name: "AdminProblemList" } },
   { title: "比赛", icon: Trophy, to: { name: "AdminContest" } },
+  { title: "审阅", icon: Audit, to: { name: "AdminCodeReview" } },
   { title: "训练", icon: Muscle, to: { name: "AdminTraining" } },
   { title: "用户", icon: Peoples, to: { name: "AdminUser" } },
   { title: "杂项", icon: MoreTwo, to: { name: "AdminOther" } },

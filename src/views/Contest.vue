@@ -26,7 +26,7 @@
       </div>
     </PageHeader>
 
-    <div>
+    <div v-if="contest.passwordVerified">
       <ul
         class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold justify-between w-full rounded-b-none">
         <div class="flex flex-col sm:flex-row">
@@ -69,6 +69,15 @@
       <RouterView :contest="contest" :problems="problems">
       </RouterView>
     </div>
+
+    <div v-else>
+      <PageHeader Title="验证密码" :IconName="Key" Infomation="当前比赛受密码保护，请输入密码">
+        <div class="join flex justify-center">
+          <input class="input input-bordered join-item" placeholder="比赛密码" v-model="contest.Pass" />
+          <button class="btn join-item" @click="contest.verifyPassword()">提交</button>
+        </div>
+      </PageHeader>
+    </div>
   </div>
 </template>
 
@@ -76,7 +85,7 @@
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Bill, Editor, PartyBalloon, Trophy } from '@icon-park/vue-next';
+import { Bill, Editor, PartyBalloon, Trophy, Key } from '@icon-park/vue-next';
 import { push } from 'notivue';
 
 import { _cloneToProblemList, _getContest } from '@/apis/contest';
@@ -111,10 +120,16 @@ let contest = reactive<ContestType>({
   Status: 0,
 
   RecordNumber: 0,
+  passwordVerified: false,
 
-  get() {
-    _getContest({}, this.CID)
+  get(password: string = '') {
+    let param: any = {};
+    if (password != '') param.Pass = password;
+
+    _getContest(param, this.CID)
       .then((data: any) => {
+        if (data.Code) return;
+
         this.Title = data.Title;
         this.BeginTime = data.BeginTime;
         this.EndTime = data.EndTime;
@@ -125,6 +140,8 @@ let contest = reactive<ContestType>({
         this.Problems = data.Data;
         this.Type = data.Type;
         problems.value = data.Data;
+
+        this.passwordVerified = true;
       })
   },
 
@@ -158,6 +175,17 @@ let contest = reactive<ContestType>({
           },
         });
       })
+  },
+
+  verifyPassword() {
+    if (this.Pass == '' || this.Pass == null) {
+      push.warning({
+        title: "密码不能为空",
+      });
+      return;
+    }
+
+    this.get(this.Pass);
   }
 })
 
@@ -178,7 +206,14 @@ onMounted(() => {
     .then((res: any) => {
       TimeNow.value = res;
     })
-  contest.get();
+  if (route.query.IsPublic == '1') {
+    contest.get();
+  } else {
+    contest.Title = route.query.Title as string;
+    contest.Type = parseInt(route.query.Type as string);
+    contest.BeginTime = parseInt(route.query.BeginTime as string);
+    contest.EndTime = parseInt(route.query.EndTime as string);
+  }
   contest.getRecordNumber();
 })
 

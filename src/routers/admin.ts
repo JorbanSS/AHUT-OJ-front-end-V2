@@ -219,6 +219,41 @@ const Admin = {
         },
       ],
     },
+    {
+      name: "AdminCodeReview",
+      path: "codereview",
+      component: () => import("@/views/AdminChildren/CodeReview.vue"),
+      redirect: { name: "AdminCodeReviewTips" },
+      beforeEnter: (
+        // @ts-ignore
+        to: RouteLocationNormalized,
+        // @ts-ignore
+        from: RouteLocationNormalized,
+        next: NavigationGuardNext
+      ) => {
+        if (needAdminCertificate()) next();
+      },
+      children: [
+        {
+          name: "AdminCodeReviewTips",
+          path: "tips",
+          component: () =>
+            import("@/views/AdminChildren/CodeReviewChildren/Tips.vue"),
+        },
+        {
+          name: "AdminCodeReviewProblemSelect",
+          path: "problemselect/:CID",
+          component: () =>
+            import("@/views/AdminChildren/CodeReviewChildren/ProblemSelect.vue"),
+        },
+        {
+          name: "AdminCodeReviewRecordList",
+          path: "recordlist/:CID/:PID",
+          component: () =>
+            import("@/views/AdminChildren/CodeReviewChildren/RecordList.vue"),
+        },
+      ],
+    },
   ],
 };
 

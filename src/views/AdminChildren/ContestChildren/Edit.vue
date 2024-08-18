@@ -44,6 +44,13 @@
           params: {
             CID: contest.CID,
           },
+          query: {
+            IsPublic: contest.IsPublic,
+            Title: contest.Title,
+            BeginTime: contest.BeginTime,
+            EndTime: contest.EndTime,
+            Type: contest.Type,
+          },
         })">
           <go-on theme="outline" size="18" />
           跳转比赛
@@ -71,15 +78,18 @@
       <!-- <option value="2">AtCoder</option>
         <option value="3">Virtual Judge</option> -->
     </select>
-    <div class="form-control w-72" @change="contest.changePublic()">
-      <label class="label cursor-pointer">
-        <span class="label-text text-base">可见性</span>
-        <input type="checkbox" :checked="contest.IsPublic == 1" class="checkbox" />
+    <div class="form-control w-72">
+      <label class="label cursor-pointer" @change="contest.changePassword()">
+        <div class="label-text text-base flex gap-2">
+          <span>使用密码</span>
+          <span class="font-bold text-gray-600" v-show="contest.IsPublic == -1">{{ contest.Pass }}</span>
+        </div>
+        <input type="checkbox" :checked="contest.IsPublic == -1" class="checkbox" />
       </label>
     </div>
   </div>
   <div class="m-6"></div>
-  <div class="card bg-white shadow-lg Border max-w-5xl mx-auto pb-6">
+  <div class="card bg-white shadow-lg Border max-w-5xl mx-auto overflow-hidden">
     <div class="text-2xl px-6 pt-6">
       <div class="join">
         <input class="input input-bordered join-item" placeholder="题号" v-model="problem.PID" />
@@ -141,7 +151,7 @@ import { _editContest, _getContest } from "@/apis/contest";
 import { _getProblem } from "@/apis/problem";
 import { useUserDataStore } from '@/stores/UserData';
 import { type ContestType } from '@/interfaces/contest';
-import { ConvertTools } from '@/utils/globalFunctions';
+import { ConvertTools, generatePassword } from '@/utils/globalFunctions';
 
 const userDataStore = useUserDataStore();
 const router = useRouter();
@@ -280,6 +290,14 @@ let contest = reactive<ContestType>({
           message: `比赛 ID 为 ${contest.CID}`,
         });
       })
+  },
+
+  changePassword() {
+    contest.IsPublic = -contest.IsPublic;
+
+    if (contest.IsPublic == -1) {
+      contest.Pass = generatePassword(6);
+    }
   }
 })
 
