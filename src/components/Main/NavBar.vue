@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar border-b bg-white fixed top-0 z-[100] backdrop-blur-md bg-opacity-60">
+  <div class="navbar bg-white">
     <div class="navbar-start">
       <div class="dropdown">
         <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -8,43 +8,39 @@
           </svg>
         </div>
         <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-          <Tabs />
+          <NavigationBarTabs />
         </ul>
       </div>
-      <RouterLink :to="{ name: 'Index' }">
-        <a class="btn btn-ghost text-xl">AHUT OJ</a>
+      <RouterLink :to="{ name: 'RecentContests' }">
+        <a class="btn btn-ghost text-xl">
+          AHUT OJ
+          <div class="badge badge-neutral">爬虫专项</div>
+        </a>
       </RouterLink>
     </div>
     <div class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1 text-base font-bold font-sans">
-        <Tabs />
+        <NavigationBarTabs />
       </ul>
     </div>
     <div class="navbar-end">
-      <!-- <label class="swap swap-rotate pr-4">
-        <input type="checkbox" :value="ThemeSwitchStore.theme" @click="ThemeSwitchStore.switchTheme()" />
+      <label class="swap swap-rotate pr-4">
+        <input type="checkbox" />
         <SunOne theme="outline" size="24" class="swap-off fill-current" />
         <moon theme="outline" size="22" class="swap-on fill-current" />
-      </label> -->
-      <div v-if="userDataStore.isLogin">
+      </label>
+      <!-- <div>
         <div class="dropdown dropdown-bottom dropdown-end">
           <div tabindex="0" role="button" class="btn">
-            <img :src="getHeadURL(userDataStore.HeadURL)" class="select-none avatar h-10 w-10 -ml-2 rounded-full"
-              draggable="false" />
-            <!-- <div class="badge badge-neutral" v-if="userDataStore.PermissionMap > 3">OP</div> -->
-            <span class="-mr-1">{{ userDataStore.UserName }}</span>
+            <div class="badge badge-neutral" v-if="userDataStore.PermissionMap > 3">OP</div>
+            {{ userDataStore.UserName }}
           </div>
           <ul tabindex="0" class="dropdown-content z-[1] menu shadow bg-white rounded-box w-36 Border font-bold">
-            <li><a @click="$router.push({
-              name: 'User',
-              params: {
-                UID: userDataStore.UID,
-              },
-            })">
+            <li><a @click="router.push(`/user/${userDataStore.UID}`)">
                 <people theme="outline" size="18" />
                 个人中心
               </a></li>
-            <li v-if="userDataStore.PermissionMap > 3"><a @click="$router.replace({ name: 'Admin' })">
+            <li v-if="userDataStore.PermissionMap > 3"><a @click="router.replace('/admin')">
                 <setting-config theme="outline" size="18" />
                 管理平台
               </a></li>
@@ -54,33 +50,19 @@
               </a></li>
           </ul>
         </div>
-      </div>
-      <a class="btn" v-else @click="props.login">登录</a>
+      </div> -->
+      <a class="btn">登录</a>
     </div>
   </div>
-  <div class="pb-[70px]"></div>
 </template>
 
 <script lang="ts" setup>
 import { reactive } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 
 import { Logout, Moon, People, SettingConfig, SunOne } from '@icon-park/vue-next';
+import NavigationBarTabs from './NavBarChildren/NavigationBarTabs.vue';
 
-import { getHeadURL } from '@/utils/globalFunctions';
-import { useUserDataStore } from '@/stores/UserData';
-import Tabs from './NavBar/Tabs.vue';
-
-const userDataStore = reactive(useUserDataStore());
-
-interface propsType {
-  login?: Function;
-  logout?: Function;
-};
-
-let props = withDefaults(defineProps<propsType>(), {
-  login: () => { },
-  logout: () => { },
-});
+const router = useRouter();
 
 </script>

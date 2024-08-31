@@ -39,3 +39,11 @@ export interface FileUploadType {
 //   count: number,            // 文件数量
 //   [item: string]: any,      // 其他属性
 // }
+
+export interface MapNumberNumber {
+  [key: number]: number,
+}
+
+export interface MapStringNumber {
+  [key: string]: number,
+}
