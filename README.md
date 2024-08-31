@@ -1,20 +1,20 @@
 # AHUT OJ front-end V2
 
-A crawl front-end.
+An online judge front-end.
 
 ## 相关仓库
 
-前端部分 [AHUT OJ front-end V2](https://github.com/JorbanSS/AHUT-OJ-front-end-V2)
+第一代前端 [ahutoj-view](https://github.com/ximoyuxiao/ahutoj-view)
 
 后端部分 [ahutoj](https://github.com/ximoyuxiao/ahutoj/tree/docker)
-
-爬虫后端部分 [AHUT_Crawl](https://github.com/JorbanSS/AHUT_Crawl)
 
 ## 技术架构
 
 技术周边: [Node.js](https://nodejs.org/en) \ [Vue 3](https://cn.vuejs.org/) \ [Vite](https://cn.vitejs.dev/) \ [TypeScript](https://www.typescriptlang.org/) \ Scss \ Pinia \ Axios \ Vue-Router
 
 UI: [tailwindcss](https://www.tailwindcss.cn/) \ [daisyUI](https://daisyui.com/) \ [IconPark](https://iconpark.oceanengine.com/official)
+
+Plugin: [md-editor-v3](https://imzbf.github.io/md-editor-v3/zh-CN/index)
 
 ## 配置环境
 
@@ -70,10 +70,14 @@ pnpm install
 4. 使用 Vite 构建
 
 ```sh
-pnpm create vite@latest
+pnpm init vite@latest
 
 pnpm install  # 补全依赖
+
+touch .gitignore
 ```
+
+将 `node_modules/` 放入 `.gitignore`
 
 5. 安装其余环境
 
@@ -84,7 +88,7 @@ pnpm install pinia
 
 pnpm install sass
 
-# pnpm install vite-plugin-vue-setup-extend -D
+pnpm install vite-plugin-vue-setup-extend -D
 
 pnpm install axios
 
@@ -115,35 +119,21 @@ export default {
     extend: {},
   },
   plugins: [],
-}
+};
 ```
 
-`vite.config.ts` 文件内配置 `preprocessorOptions`
-
-```ts
-export default defineConfig({
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: '@import "@/assets/scss/base.scss";',
-      },
-    },
-  },
-})
-```
-
-`main.ts` 文件内引入 `tailwind.scss` 文件
-
-```ts
-@import "./tailwind.scss";
-```
-
-创建 `tailwind.scss` 文件
+创建 `tailwind.css` 文件
 
 ```css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+```
+
+`main.ts` 中添加
+
+```sh
+import "./assets/scss/tailwind.css";
 ```
 
 2. 安装 daisyUI
@@ -157,64 +147,87 @@ pnpm i -D daisyui@latest
 ```js
 module.exports = {
   plugins: [require("daisyui")],
-}
+};
 ```
 
 3. 安装其余组件
 
 ```sh
+pnpm install md-editor-v3
+
 pnpm install @icon-park/vue-next --save
 
 pnpm i notivue
 
-pnpm install apexcharts --save
+pnpm install v-calendar@next @popperjs/core
 
-pnpm install --save vue3-apexcharts
+pnpm install vue-draggable-plus
 
-# pnpm install v-calendar@next @popperjs/core
+pnpm i image-conversion --save
 
-# pnpm install vue-draggable-plus
+pnpm add vue-gtag-next
 
-# pnpm i image-conversion --save
+pnpm i @guolao/vue-monaco-editor
 
-# pnpm add vue-gtag-next
+pnpm install --save vue-clipboard3
 
-# pnpm i @guolao/vue-monaco-editor
+pnpm install --save canvas-confetti  # 五彩纸屑
+pnpm i --save-dev @types/canvas-confetti
 
-# pnpm install --save vue-clipboard3
+pnpm install spark-md5
 
-# pnpm install --save canvas-confetti  # 五彩纸屑
-# pnpm i --save-dev @types/canvas-confetti
+pnpm install @types/spark-md5 -D
 
-# pnpm install spark-md5
-# pnpm install @types/spark-md5 -D
+pnpm install xlsx
 ```
 
-新建 `base.scss` 文件
+`main.ts` 中添加
 
-`base.scss` 中添加
+```ts
+import "@icon-park/vue/styles/index.css";
+```
 
-```scss
-@import '@icon-park/vue/styles/index.css';
+`vite.config.ts` 中添加
+
+```ts
+import vueJsx from "@vitejs/plugin-vue-jsx";
+
+export default defineConfig({
+  plugins: [vueJsx()],
+});
 ```
 
 4. 安装 AutoAnimate
 
 ```sh
-# pnpm install @formkit/auto-animate
+pnpm install @formkit/auto-animate
 ```
 
 使用 `v-auto-animate` 作用于其父元素对象上
 
-## 其他一些琐碎的 
+## 其他一些琐碎的
 
 在 `vite.config.ts` 添加如下语句以支持 `<script lang="ts" setup name="Main">` 中 `name=""` 的语法
 
 ```ts
-// import VueSetupExtend from 'vite-plugin-vue-setup-extend'
+import VueSetupExtend from "vite-plugin-vue-setup-extend";
 ```
 
 修改如下来实现用 `@/` 访问项目根目录
+
+`vite.config.ts` 添加如下
+
+```ts
+{
+  export default defineConfig({
+    resolve: {
+      alias: {
+        "@": "/src",
+      },
+    },
+  });
+}
+```
 
 `tsconfig.json` 添加如下
 
@@ -227,19 +240,6 @@ pnpm install --save vue3-apexcharts
     }
   }
 }
-```
-
-`vite.config.ts` 添加如下
-
-```ts
-export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      '@': '/src'
-    }
-  }
-})
 ```
 
 ## 运行项目
