@@ -83,9 +83,16 @@
             修改密码
           </div>
         </li>
+        <li>
+          <div class="font-bold text-base" onclick="AddGroupModal.showModal()">
+            <people-plus theme="outline" size="18" />
+            加入小组
+          </div>
+        </li>
       </ul>
     </div>
   </div>
+
   <div>
     <dialog id="bindCodeforcesModal" class="modal">
       <div class="modal-box space-y-2 w-96">
@@ -244,11 +251,31 @@
         </div>
       </div>
     </dialog>
+    
+    <!-- 组 -->
+    <dialog id="AddGroupModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg mb-4">加入小组</h3>
+        <label class="input input-bordered flex items-center gap-2">
+          邀请码
+          <input type="text" class="grow" v-model="JoinGroup.InviteCode" />
+        </label>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">取消</button>
+            <button class="btn btn-neutral" @click="JoinGroup.add()">
+              加入
+            </button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+    <!-- 组 -->
   </div>
 </template>
 
 <script lang="ts" setup name="User">
-import { onMounted, reactive, watch } from "vue";
+import { onMounted, reactive, watch, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import {
@@ -259,6 +286,7 @@ import {
   Info,
   Key,
   Ranking,
+  PeoplePlus,
 } from "@icon-park/vue-next";
 import { push } from "notivue";
 
@@ -279,6 +307,7 @@ import { useUserDataStore } from "@/stores/UserData";
 import { ImageUtils } from "@/utils/fileUtils";
 import { getHeadURL } from "@/utils/globalFunctions";
 import { OssUtils } from "@/utils/ossUtils";
+import { _JoinGroup } from "@/apis/group";
 
 const userDataStore = useUserDataStore();
 const router = useRouter();
@@ -559,6 +588,39 @@ let editUserInfo = reactive({
       user.get();
     });
   },
+});
+
+//组
+let JoinGroup = ref({
+  GID: 1,
+  GroupName: '',
+  GroupTask: '',
+  UID: 1,
+  CreatTime: 0,
+  InviteCode: '',
+
+  add() {
+    if (JoinGroup.value.InviteCode == '') {
+      push.warning({
+        title: '信息错误',
+        message: '请填写邀请码',
+      })
+      return;
+    }
+
+    let params: any = {
+      InviteCode: this.InviteCode,
+    };
+
+    _JoinGroup(params)
+      .then(() => {
+        push.success({
+          title: '提示',
+          message: "加入成功",
+        });
+      });
+    this.InviteCode = '';
+  }
 });
 
 onMounted(() => {

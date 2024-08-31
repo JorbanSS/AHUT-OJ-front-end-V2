@@ -73,11 +73,11 @@
           </div>
         </label>
         <div class="m-1"></div>
-        <button class="btn btn-neutral" @click="$router.push({ name: 'AddProblem' })">
+        <button class="btn btn-neutral" @click="$router.push({ name: 'AddGroup' })">
           新增小组
         </button>
         <div class="m-1"></div>
-        <button class="btn btn-neutral">
+        <button class="btn btn-neutral" @click="$router.push({ name: 'GroupList' })">
           管理小组
         </button>
       </div>

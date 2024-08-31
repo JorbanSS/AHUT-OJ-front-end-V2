@@ -1,158 +1,160 @@
 <template>
   <div class="flex flex-row overflow-x-hidden" style="height: calc(100vh - 70px);" v-auto-animate>
     <div ref="leftPanel" class="bg-base-200 overflow-y-auto px-6" :style="{ width: `${leftWidth}px` }">
-      <MainContainer v-auto-animate>
-        <div>
 
-          <Card class="rounded-b-none" v-if="contest.CID || problemList.LID">
-            <div class="flex flex-col gap-2">
-              <div class="text-lg flex gap-2 justify-between">
-                <div class="space-x-2 cursor-pointer hover:text-blue-500" @click="$router.push({
-                  name: contest.CID ? 'Contest' : 'ProblemList',
-                  params: contest.CID ? { CID: contest.CID } : { LID: problemList.LID }
-                })">
-                  <span>
-                    #{{ contest.CID ? contest.CID : problemList.LID }}
-                  </span>
-                  <span class="font-bold">
-                    {{ contest.Title ? contest.Title : problemList.Title }}
-                  </span>
-                </div>
-                <button class="btn btn-sm btn-neutral" :disabled="!userDataStore.isLogin"
-                  @click="refreshProblemStatus()">
-                  <refresh theme="outline" size="16" />
-                  刷新
-                </button>
-              </div>
-              <div class="flex flex-col gap-0.5" v-if="contest.CID">
-                <div class="flex flex-row gap-2 justify-between">
-                  <span>
-                    {{ ConvertTools.PrintTime(contest.BeginTime, 1, 1) }}
-                  </span>
-                  <span>
-                    {{ contest.EndTime > contest.TimeNow ? '还剩 ' +
-                      ConvertTools.PrintTimeInterval(ConvertTools.TimeInterval(contest.TimeNow, contest.EndTime), 1) :
-                      ConvertTools.PrintTime(contest.EndTime, 1, 1) }}
-                  </span>
-                </div>
-                <progress class="progress w-full"
-                  :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
-                  max="100">
-                </progress>
-              </div>
-              <div class="grid gap-2 flex-wrap"
-                :style="`grid-template-columns: repeat(auto-fit, ${(Math.min(leftWidth, 1222) - 90) / Math.max(Math.floor((Math.min(leftWidth, 1222) - 90) / 180), 2) - 9}px)`">
-                <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
-                  <button tabindex="0" role="button" class="btn w-full justify-start flex-nowrap group-hover/dropdown"
-                    :class="{ 'btn-active': item.PID == problem.PID }" @click="$router.replace({
-                      name: 'Problem',
-                      params: {
-                        PID: item.PID,
-                        BindID: contest.CID ? 'C' + contest.CID : 'L' + problemList.LID,
-                      },
-                    })">
+      <MainContainer>
+
+        <Col v-auto-animate>
+
+          <Col class="gap-0">
+
+            <Card class="rounded-b-none p-6" v-if="contest.CID || problemList.LID">
+              <div class="flex flex-col gap-2">
+                <div class="text-lg flex gap-2 justify-between">
+                  <div class="space-x-2 cursor-pointer hover:text-blue-500" @click="$router.push({
+                    name: contest.CID ? 'Contest' : 'ProblemList',
+                    params: contest.CID ? { CID: contest.CID } : { LID: problemList.LID }
+                  })">
                     <span>
-                      {{ ConvertTools.Number2Alpha(index + 1) }}
+                      #{{ contest.CID ? contest.CID : problemList.LID }}
                     </span>
-                    <span class="truncate">
-                      {{ item.Title }}
+                    <span class="font-bold">
+                      {{ contest.Title ? contest.Title : problemList.Title }}
                     </span>
-                    <div class="ml-auto -mr-1">
-                      <check theme="outline" size="16" fill="#00A96F" :stroke-width="8" v-if="item.Status == 'AC'" />
-                      <loading-one theme="outline" size="16" fill="#EBC656" :stroke-width="8"
-                        v-else-if="['JUDGING', 'REJUDGING', 'PENDING', 'FAILED'].includes(item.Status)" />
-                      <close theme="outline" size="16" fill="#FA0409" :stroke-width="8"
-                        v-else-if="item.Status != '' && item.Status != undefined" />
-                    </div>
+                  </div>
+                  <button class="btn btn-sm btn-neutral" :disabled="!userDataStore.isLogin" @click="refreshProblemStatus()">
+                    <refresh theme="outline" size="16" />
+                    刷新
                   </button>
-                  <div tabindex="0"
-                    class="z-10 card card-compact w-64 shadow bg-white Border group-hover/dropdown:block hidden absolute mt-2 -ml-2 backdrop-blur-md bg-opacity-60">
-                    <div class="card-body">
-                      <h3 class="card-title">
-                        <div class="text-lg space-x-2 font-normal">
-                          <span>
-                            {{ item.PID }}
-                          </span>
-                          <span class="font-bold">
-                            {{ item.Title }}
-                          </span>
-                        </div>
-                      </h3>
-                      <p>
-                        AC 率
-                        <progress class="progress progress-success w-20 mx-2"
-                          :value="ConvertTools.Percentage(item.ACNum, item.SubmitNum)" max="100"></progress>
-                        {{ item.ACNum }} / {{ item.SubmitNum }}
-                      </p>
+                </div>
+                <div class="flex flex-col gap-0.5" v-if="contest.CID">
+                  <div class="flex flex-row gap-2 justify-between">
+                    <span>
+                      {{ ConvertTools.PrintTime(contest.BeginTime, 1, 1) }}
+                    </span>
+                    <span>
+                      {{ contest.EndTime > contest.TimeNow ? '还剩 ' +
+                        ConvertTools.PrintTimeInterval(ConvertTools.TimeInterval(contest.TimeNow, contest.EndTime), 1) :
+                        ConvertTools.PrintTime(contest.EndTime, 1, 1) }}
+                    </span>
+                  </div>
+                  <progress class="progress w-full"
+                    :value="ConvertTools.Percentage(Math.min(contest.Duration, contest.TimeNow - contest.BeginTime), contest.Duration)"
+                    max="100">
+                  </progress>
+                </div>
+                <div class="grid gap-2 flex-wrap"
+                  :style="`grid-template-columns: repeat(auto-fit, ${(Math.min(leftWidth, 1222) - 90) / Math.max(Math.floor((Math.min(leftWidth, 1222) - 90) / 180), 2) - 9}px)`">
+                  <div class="group/dropdown" v-for="(item, index) in problems" :key="item.PID">
+                    <button tabindex="0" role="button" class="btn w-full justify-start flex-nowrap group-hover/dropdown"
+                      :class="{ 'btn-active': item.PID == problem.PID }" @click="$router.replace({
+                        name: 'Problem',
+                        params: {
+                          PID: item.PID,
+                          BindID: contest.CID ? 'C' + contest.CID : 'L' + problemList.LID,
+                        },
+                      })">
+                      <span>
+                        {{ ConvertTools.Number2Alpha(index + 1) }}
+                      </span>
+                      <span class="truncate">
+                        {{ item.Title }}
+                      </span>
+                      <div class="ml-auto -mr-1">
+                        <check theme="outline" size="16" fill="#00A96F" :stroke-width="8" v-if="item.Status == 'AC'" />
+                        <loading-one theme="outline" size="16" fill="#EBC656" :stroke-width="8"
+                          v-else-if="['JUDGING', 'REJUDGING', 'PENDING', 'FAILED'].includes(item.Status)" />
+                        <close theme="outline" size="16" fill="#FA0409" :stroke-width="8"
+                          v-else-if="item.Status != '' && item.Status != undefined" />
+                      </div>
+                    </button>
+                    <div tabindex="0"
+                      class="z-10 card card-compact w-64 shadow bg-white Border group-hover/dropdown:block hidden absolute mt-2 -ml-2 backdrop-blur-md bg-opacity-60">
+                      <div class="card-body">
+                        <h3 class="card-title">
+                          <div class="text-lg space-x-2 font-normal">
+                            <span>
+                              {{ item.PID }}
+                            </span>
+                            <span class="font-bold">
+                              {{ item.Title }}
+                            </span>
+                          </div>
+                        </h3>
+                        <p>
+                          AC 率
+                          <progress class="progress progress-success w-20 mx-2"
+                            :value="ConvertTools.Percentage(item.ACNum, item.SubmitNum)" max="100"></progress>
+                          {{ item.ACNum }} / {{ item.SubmitNum }}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </Card>
+            </Card>
 
-          <Card :class="{ 'rounded-t-none': contest.CID || problemList.LID }">
-            <div class="flex justify-between">
-              <div class="text-lg space-x-2">
-                <span>
-                  {{ problem.PID }}
-                </span>
-                <span class="font-bold">
-                  {{ problem.Title }}
-                </span>
+            <Card class="p-6" :class="{ 'rounded-t-none': contest.CID || problemList.LID }">
+              <div class="flex justify-between">
+                <div class="text-lg space-x-2">
+                  <span>
+                    {{ problem.PID }}
+                  </span>
+                  <span class="font-bold">
+                    {{ problem.Title }}
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="flex flex-row gap-2 [&_div]:gap-1 flex-wrap" v-auto-animate>
-              <div class="flex badge badge-neutral badge-lg rounded-lg h-8 whitespace-nowrap">
-                <stopwatch-start theme="outline" size="17" />
-                <span>{{ problem.LimitTime }} ms</span>
+              <div class="flex flex-row gap-2 [&_div]:gap-1 flex-wrap" v-auto-animate>
+                <div class="flex badge badge-neutral badge-lg rounded-lg h-8 whitespace-nowrap">
+                  <stopwatch-start theme="outline" size="17" />
+                  <span>{{ problem.LimitTime }} ms</span>
+                </div>
+                <div class="flex badge badge-neutral badge-lg rounded-lg h-8 whitespace-nowrap">
+                  <disk theme="outline" size="16" />
+                  <span>{{ problem.LimitMemory }} MB</span>
+                </div>
+                <div class="flex badge badge-neutral badge-lg rounded-lg h-8 whitespace-nowrap cursor-pointer"
+                  @click="showLabels = !showLabels" v-if="problem.Label">
+                  <tag-one theme="outline" />
+                  <span class="select-none">题目标签</span>
+                  <ICONleft theme="outline" size="18" v-if="showLabels" />
+                  <right theme="outline" size="18" v-else />
+                </div>
+                <template v-if="showLabels">
+                  <span class="badge badge-neutral badge-md rounded-lg h-8 whitespace-nowrap"
+                    v-for="(label, index) in problem.Label.split(/;| /)" :key="index" v-if="problem.Label != ''">
+                    {{ label }}
+                  </span>
+                </template>
+                <template v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
+                  <button class="btn btn-sm btn-neutral" @click="$router.push({
+                    name: 'ProblemData',
+                    params: {
+                      PID: problem.PID,
+                    },
+                  })">
+                    <ICONdata theme="outline" size="16" />
+                    <span class="whitespace-nowrap font-normal">数据编辑</span>
+                  </button>
+                  <button class="btn btn-sm btn-neutral" @click="$router.push({
+                    name: 'EditProblem',
+                    params: {
+                      PID: problem.PID,
+                    },
+                  })">
+                    <editor theme="outline" size="16" />
+                    <span class="whitespace-nowrap font-normal">题目编辑</span>
+                  </button>
+                </template>
               </div>
-              <div class="flex badge badge-neutral badge-lg rounded-lg h-8 whitespace-nowrap">
-                <disk theme="outline" size="16" />
-                <span>{{ problem.LimitMemory }} MB</span>
-              </div>
-              <div class="flex badge badge-neutral badge-lg rounded-lg h-8 whitespace-nowrap cursor-pointer"
-                @click="showLabels = !showLabels" v-if="problem.Label">
-                <tag-one theme="outline" />
-                <span class="select-none">题目标签</span>
-                <ICONleft theme="outline" size="18" v-if="showLabels" />
-                <right theme="outline" size="18" v-else />
-              </div>
-              <template v-if="showLabels">
-                <span class="badge badge-neutral badge-md rounded-lg h-8 whitespace-nowrap"
-                  v-for="(label, index) in problem.Label.split(/;| /)" :key="index" v-if="problem.Label != ''">
-                  {{ label }}
-                </span>
-              </template>
-              <template v-if="userDataStore.PermissionMap & constValStore.ContestAdminBit">
-                <button class="btn btn-sm btn-neutral" @click="$router.push({
-                  name: 'ProblemData',
-                  params: {
-                    PID: problem.PID,
-                  },
-                })">
-                  <ICONdata theme="outline" size="16" />
-                  <span class="whitespace-nowrap font-normal">数据编辑</span>
-                </button>
-                <button class="btn btn-sm btn-neutral" @click="$router.push({
-                  name: 'EditProblem',
-                  params: {
-                    PID: problem.PID,
-                  },
-                })">
-                  <editor theme="outline" size="16" />
-                  <span class="whitespace-nowrap font-normal">题目编辑</span>
-                </button>
-              </template>
-            </div>
-          </Card>
+            </Card>
 
-        </div>
+          </Col>
 
-        <div class="">
-          <div class="flex justify-between space-x-6">
-            <ul
-              class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold rounded-b-none w-full">
+          <Col class="gap-0">
+
+            <ul class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold rounded-b-none w-full">
               <li>
                 <a @click="$router.replace({ name: 'ProblemDescription' })"
                   :class="{ 'btn-active': route.name == 'ProblemDescription' }">
@@ -177,13 +179,15 @@
                 </a>
               </li>
             </ul>
-          </div>
 
-          <RouterView :problem="problem"></RouterView>
+            <RouterView :problem="problem"></RouterView>
 
-        </div>
+          </Col>
+
+        </Col>
 
       </MainContainer>
+
     </div>
 
     <div class="bg-base-200 hover:bg-gray-300 duration-300 w-2 flex items-center justify-center cursor-col-resize"
@@ -194,9 +198,11 @@
         </svg>
       </div>
     </div>
+
     <div class="flex bg-gray-200 overflow-hidden" :style="{ width: `${rightWidth}px` }">
       <component :is="MonocoEditor" :problem="problem" :CID="contest.CID" :LID="problemList.LID" />
     </div>
+
   </div>
 </template>
 

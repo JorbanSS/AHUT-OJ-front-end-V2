@@ -6,7 +6,7 @@ import {
   needProblemListAdminCertificate,
   needSourceBorwserAdminCertificate,
   needSuperAdminCertificate,
-  needGroupAdminCertificate
+  needGroupAdminCertificate,
 } from "./guard.ts";
 
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
@@ -197,6 +197,12 @@ const Admin = {
           path: "list",
           component: () =>
             import("@/views/AdminChildren/GroupChildren/List.vue"),
+        },
+        {
+          name: "EditGroup",
+          path: "edit",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/Edit.vue"),
         },
       ],
     },

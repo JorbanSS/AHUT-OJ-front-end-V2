@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card class="p-6">
     <div class="flex flex-col gap-3">
       <div class="flex justify-center">
         <component :is="props.IconName" theme="outline" size="32" />

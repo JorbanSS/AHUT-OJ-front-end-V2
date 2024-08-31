@@ -52,22 +52,8 @@
       <!-- 更新日志 -->
     </Container>
 
-    <!-- 组 -->
-    <div
-      class="flex space-y-6 flex-col  md:space-y-0 md:space-x-6 carousel bg-white w-full rounded-2xl shadow-lg Border"
-      style="justify-content: space-around">
-      <div style="text-align: center; font-size: 20px;">
-        <strong>班级小组</strong>
-      </div>
-      <div class="flex" style="justify-content: space-around;">
-        <button class="btn basis-1/8">加入组</button>
-        <button class="btn basis-1/8">组做题情况</button>
-      </div>
-    </div>
-    <!-- 组 -->
-
   </MainContainer>
-  
+
 </template>
 
 <script lang="ts" setup name="Home">
@@ -87,7 +73,8 @@ import { ConvertTools } from "@/utils/globalFunctions";
 import { useUserDataStore } from "@/stores/UserData";
 import { useConstValStore } from "@/stores/ConstVal";
 import PageHeader from "@/components/Main/PageHeader.vue";
-
+import { push } from 'notivue';
+import { _JoinGroup } from "@/apis/group";
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
 
@@ -130,6 +117,39 @@ function getUpdateLogs() {
       );
     });
 }
+
+//组
+let JoinGroup = ref({
+  GID: 1,
+  GroupName: '',
+  GroupTask: '',
+  UID: 1,
+  CreatTime: 0,
+  InviteCode: '',
+
+  add() {
+    // console.log(this.GroupName)
+    if (JoinGroup.value.InviteCode == '') {
+      push.error({
+        title: '信息错误',
+        message: '请填写邀请码',
+      })
+      return;
+    }
+    let params: any = {
+      InviteCode: this.InviteCode,
+    }
+    
+    _JoinGroup(params)
+      .then(() => {
+        push.success({
+          title: '提示',
+          message: "加入成功",
+        });
+      })
+      this.InviteCode=''
+  }
+});
 
 onMounted(() => {
   getUpdateLogs();

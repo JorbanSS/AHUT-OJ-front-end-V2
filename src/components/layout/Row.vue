@@ -1,14 +1,15 @@
 <template>
-  <Col class="max-w-6xl mx-auto py-6">
+  <div class="flex gap-6 flex-col md:flex-row">
     <slot></slot>
-  </Col>
+  </div>
 </template>
 
 <script lang="ts">
+
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'MainContainer',
+  name: 'Row',
 });
 
 </script>

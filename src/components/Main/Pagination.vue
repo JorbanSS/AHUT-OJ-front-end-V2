@@ -1,5 +1,5 @@
 <template>
-  <Container class="justify-center">
+  <Row class="justify-center">
     <template v-if="props.maxPage">
       <div class="join">
         <button class="join-item btn" @click="props.changePage(1)">
@@ -17,20 +17,21 @@
         <button class="join-item btn" @click="props.changePage(props.maxPage)">
           <double-right theme="outline" size="20" />
         </button>
-  
+
       </div>
 
       <div class="join">
-        <input class="input input-bordered join-item w-20" v-model="toPage" type="number" min="1" :max="props.maxPage" />
+        <input class="input input-bordered join-item w-20" v-model="toPage" type="number" min="1"
+          :max="props.maxPage" />
         <button class="btn join-item" @click="props.changePage(toPage)">跳转</button>
       </div>
     </template>
 
     <span class="pt-4 pb-6 mx-auto" v-else>
-    无结果
-  </span>
+      无结果
+    </span>
 
-  </Container>
+  </Row>
 </template>
 
 <script lang="ts" setup>
