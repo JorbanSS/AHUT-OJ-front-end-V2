@@ -1,4 +1,7 @@
+import { _getServerTime } from "@/apis/common";
+import { useConstValStore } from "@/stores/ConstVal";
 import { TimeIntervalType, TimeType } from "@/interfaces/common";
+import { ContestRankingProblemType } from "@/interfaces/contest";
 
 // 转换工具
 export class ConvertTools {
@@ -158,14 +161,121 @@ export class Validator {
     const regex = /^[a-zA-Z\d]{6}$/;
     return regex.test(code);
   }
+}
 
-  // 验证入学年份
-  public static Year(year: string): boolean {
-    const regex = /^\d{4}$/;
-    return (
-      regex.test(year) &&
-      Number(year) >= 2000 &&
-      Number(year) <= new Date().getFullYear()
-    );
+// 获取服务器时间
+export function getServerTime() {
+  return new Promise((resolve) => {
+    _getServerTime({}).then((data: any) => {
+      resolve(data.time);
+    });
+  });
+}
+
+// 获取排名背景颜色
+export function getRankingBackgroundColor(
+  item: ContestRankingProblemType
+): string {
+  const constValStore = useConstValStore();
+  let baseBackgroundColor = "background-color: ";
+  if (item.Status == "NULL") return "";
+  if (item.IsPioneer) {
+    return baseBackgroundColor + constValStore.RANKING_COLOR_FIRST_AC;
   }
+  return item.Status == "AC"
+    ? baseBackgroundColor + constValStore.RANKING_COLOR_AC
+    : baseBackgroundColor + constValStore.RANKING_COLOR_NOT_AC;
+}
+
+// 获取头像地址
+export function getHeadURL(url: string): string {
+  if (url && url.startsWith("http")) return url;
+  return url == ""
+    ? "https://cdn.pixabay.com/photo/2017/01/10/03/54/avatar-1968236_1280.png"
+    : "/oss/head-images/" + url;
+}
+
+// AtCoder 格式转换
+export function atcoderProblemFormat(PID: string): string {
+  return PID.replace(/([A-Z]+)(\d+)([A-Z]*)/g, (_, p1, p2, p3) => {
+    let result = p1.toLowerCase() + p2;
+    if (p3) result += "_" + p3.toLowerCase();
+    return result;
+  });
+}
+
+// 颜色透明度
+export function colorOpacity(hexColor: string, opacity: number): string {
+  if (!/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(hexColor)) {
+    return "Invalid hex color format";
+  }
+
+  let alpha = opacity / 100;
+
+  // 扩展3位十六进制颜色为6位
+  if (hexColor.length === 4) {
+    hexColor =
+      "#" +
+      hexColor[1] +
+      hexColor[1] +
+      hexColor[2] +
+      hexColor[2] +
+      hexColor[3] +
+      hexColor[3];
+  }
+
+  // 将十六进制颜色转换为RGB
+  let r = parseInt(hexColor.slice(1, 3), 16);
+  let g = parseInt(hexColor.slice(3, 5), 16);
+  let b = parseInt(hexColor.slice(5, 7), 16);
+
+  // 如果alpha大于1,则减淡颜色
+  if (alpha > 1) {
+    r = Math.floor(r / alpha);
+    g = Math.floor(g / alpha);
+    b = Math.floor(b / alpha);
+  }
+
+  // 将RGB转换为RGBA并返回十六进制格式
+  return (
+    "#" +
+    ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1) +
+    Math.floor(Math.min(255, alpha * 255))
+      .toString(16)
+      .padStart(2, "0")
+  );
+}
+
+export function generateRandomString(length: number): string {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
+export function generatePassword(length: number): string {
+  const numbers = "0123456789";
+  const upperCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const characters = numbers + upperCharacters;
+
+  let array = new Array<number>;
+  let result = "";
+
+  for (let i = 0; i < length - Math.floor(length / 2); i++) {
+    array.push(Math.random() * numbers.length);
+  }
+  for (let i = 0; i < Math.floor(length / 2); i++) {
+    array.push(Math.random() * upperCharacters.length + numbers.length);
+  }
+
+  array.sort(() => 0.5 - Math.random());
+
+  for (let i = 0; i < length; i ++) {
+    result += characters.charAt(array[i]);
+  }
+
+  return result;
 }

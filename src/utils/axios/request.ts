@@ -3,17 +3,21 @@ import { push } from "notivue";
 
 import httpErrorHandler from "./httpErrorHandler";
 
+// axios.defaults.baseURL = "https://angriliset.top:2024/api/notice/images";
+// axios.defaults.baseURL = '/api/';
+// axios.defaults.baseURL = "/";
+
 export let host: string;
 export let port: number;
 
-const DEFAULT_TIMEOUT = 2000;
-
 if (import.meta.env.MODE == "production") {
   host = "/";
-  // port = 4433;
+  port = 4433;
 } else {
-  host = "http://127.0.0.1:8000/";
-  // port = 8000;
+  // host = "https://47.115.211.1:4433/";
+  // host = "https://angriliset.top:2024/";
+  host = "http://127.0.0.1:4433/";
+  port = 8080;
 }
 
 // 请求头
@@ -28,7 +32,8 @@ const requestBaseURL = "api/";
 // 创建 axios 请求实例
 const Axios = axios.create({
   baseURL: host,
-  timeout: DEFAULT_TIMEOUT, // 请求 2s 超时
+  // baseURL: "https://angriliset.top:2024",
+  timeout: 2000, // 请求 2s 超时
   withCredentials: false, // 跨域请求是否需要携带 cookie
 });
 
@@ -78,7 +83,7 @@ Axios.interceptors.response.use(
   }
 );
 
-export function Get(url: string, params: any, content = 0, timeout: number = DEFAULT_TIMEOUT) {
+export function Get(url: string, params: any, content = 0, timeout = Axios.defaults.timeout) {
   return Axios.get(url, {
     params,
     headers: { "Content-Type": contentType[content] },
@@ -86,14 +91,14 @@ export function Get(url: string, params: any, content = 0, timeout: number = DEF
   });
 }
 
-export function Post(url: string, data: any, content = 0, timeout: number = DEFAULT_TIMEOUT) {
+export function Post(url: string, data: any, content = 0, timeout = Axios.defaults.timeout) {
   return Axios.post(url, data, {
     headers: { "Content-Type": contentType[content] },
     timeout: timeout,
   });
 }
 
-export function Del(url: string, data: any, content = 0, timeout: number = DEFAULT_TIMEOUT) {
+export function Del(url: string, data: any, content = 0, timeout = Axios.defaults.timeout) {
   return Axios.delete(url, {
     data,
     headers: { "Content-Type": contentType[content] },
@@ -101,7 +106,7 @@ export function Del(url: string, data: any, content = 0, timeout: number = DEFAU
   });
 }
 
-export function Put(url: string, data: any, content = 0, timeout: number = DEFAULT_TIMEOUT) {
+export function Put(url: string, data: any, content = 0, timeout = Axios.defaults.timeout) {
   return Axios.put(url, data, {
     headers: { "Content-Type": contentType[content] },
     timeout: timeout,
