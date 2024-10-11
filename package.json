@@ -5,18 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build": " vite build"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
-    "@guolao/vue-monaco-editor": "^1.5.1",
+    "@guolao/vue-monaco-editor": "^1.5.4",
     "@icon-park/vue-next": "^1.4.2",
     "@popperjs/core": "^2.11.8",
+    "@vavt/md-editor-extension": "^3.0.0",
     "axios": "^1.6.8",
     "canvas-confetti": "^1.9.2",
     "image-conversion": "^2.1.1",
-    "md-editor-v3": "^4.12.2",
+    "md-editor-v3": "^4.20.4",
     "notivue": "^2.2.1",
     "pdfobject": "^2.3.0",
     "pinia": "^2.1.7",
@@ -38,12 +39,13 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "autoprefixer": "^10.4.19",
     "daisyui": "^4.7.3",
+    "express": "^4.21.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
     "vite": "^5.1.4",
     "vite-plugin-vue-setup-extend": "^0.4.0",
-    "vue-tsc": "^1.8.27"
+    "vue-tsc": "^2.1.6"
   }
 }

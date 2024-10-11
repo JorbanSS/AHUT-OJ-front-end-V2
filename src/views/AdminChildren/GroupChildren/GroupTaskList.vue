@@ -4,17 +4,11 @@
         <li>
           <div class="font-bold text-base btn-active">
             <edit-one theme="outline" size="18" />
-            编辑小组
+           小组任务列表
           </div>
         </li>
       </ul>
       <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
-        <li>
-          <div class="font-bold text-base" @click="group.edit()">
-            <edit-one theme="outline" size="18" />
-            提交编辑
-          </div>
-        </li>
         <li>
           <div class="font-bold text-base" @click="$router.push({
             name: 'GroupList',
@@ -25,51 +19,7 @@
         </li>
       </ul>
     </div>
-    <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
-      <label class="input input-bordered flex items-center gap-2 w-[584px]">
-        小组名称
-        <input type="text" class="grow" placeholder="" v-model="group.GroupName">
-      </label>
-      <!-- <div class="form-control w-72" @change="changePublic()">
-        <label class="label cursor-pointer">
-          <span class="label-text text-base">可见性</span>
-          <input type="checkbox" :checked="problemList.IsPublic == 1" class="checkbox" />
-        </label>
-      </div> -->
-    </div>
-    <div class="m-6"></div>
     <div class="card bg-white shadow-lg Border max-w-5xl mx-auto overflow-hidden">
-      <div class="text-2xl px-6 pt-6">
-        <div class="join flex" style="justify-content:space-evenly">
-          <button class="btn join-item btn-neutral" @click.stop="$router.push({
-              name: 'ProblemListAddTask',
-              params: {
-                GID: group.GID,
-              }
-            })">
-              添加题单
-            </button>
-            <button class="btn join-item btn-neutral" @click.stop="$router.push({
-              name: 'ProblemAddTask',
-              params: {
-                GID: group.GID,
-              }
-            })">
-              
-              添加题目
-            </button>
-            <button class="btn join-item btn-neutral" @click.stop="$router.push({
-              name: 'ContestAddTask',
-              params: {
-                GID: group.GID,
-                LID: 0
-              }
-            })">
-              
-              添加比赛
-            </button>
-        </div>
-      </div>
       <VueDraggable ref="el" v-model="taskList" target=".sort-target" :animation="200" class="select-none">
         <table class="table table-zebra text-center">
           <thead>
@@ -101,65 +51,12 @@
                   删除
                 </button> -->
                 <button class="btn btn-neutral btn-sm" @click="task.gotoano(item.type,item.ID)" v-if="item.UID!=group.UID" :disabled="item.type==1">
-                  <setting theme="outline" size="24"/>
+                    <setting-two theme="outline" size="24"/>
                   编辑
                 </button>
-                
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </VueDraggable> 
-    </div>
-    <div class="m-6"></div>
-    <div class="card bg-white shadow-lg Border max-w-5xl mx-auto overflow-hidden">
-      <div class="text-2xl px-6 pt-6">
-        <div class="join">
-          <input class="input input-bordered join-item" placeholder="学生ID" v-model="user.UID" />
-          <button class="btn join-item btn-neutral" @click="user.add()">添加成员</button>
-          <!-- <button class="btn join-item btn-neutral"  style="border-radius: 0px;margin-left: 10px;">Excel文档导入 -->
-            <!-- <input  type='file' accept='.xlsx, .xls' @onChange="onImportExcel()" /> -->
-            <input type="file" @change="onImportExcel" style="margin-left: 10px;" class="file-input file-input-bordered w-full max-w-xs" accept='.xlsx, .xls' />
-          <!-- </button> -->
-        </div>
-      </div>
-      <VueDraggable ref="el" v-model="list" target=".sort-target" :animation="200" class="select-none">
-        <table class="table table-zebra text-center">
-          <thead>
-            <tr>
-              <th>序号</th>
-              <th>ID</th>
-              <th>学生名称</th>
-              <th>身份</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody class="sort-target">
-            <tr v-for="(item, index) in list" :key="item.UID" class="cursor-pointer" v-auto-animate>
-              <th class="w-32">
-                {{ index + 1 }}
-              </th>
-              <th class="w-48">
-                {{ item.UID }}
-              </th>
-              <td class="w-48">
-                {{ item.UserName }}
-              </td>
-              <td class="w-48">
-                {{ item.UID==group.UID?"组长":"成员" }}
-              </td>
-              <td class="flex justify-center space-x-2">
-                <button class="btn btn-neutral btn-sm" @click="user.delete(index)" v-if="item.UID!=group.UID" :disabled="IsTrace">
-                  <delete-one theme="outline" size="16" />
-                  删除
-                </button>
-                <button class="btn btn-neutral btn-sm" @click="group.trace(item.UID)" v-if="item.UID!=group.UID" :disabled="IsTrace">
-                  <delete-one theme="outline" size="16" />
-                  转让
-                </button>
-                <button class="btn btn-neutral btn-sm" v-if="item.UID==group.UID" disabled>
-                  <delete-one theme="outline" size="16" />
-                  不可操作
+                <button class="btn btn-neutral btn-sm" @click="showlog()" v-if="item.UID!=group.UID">
+                    <doc-detail theme="outline" size="24"/>
+                  做题情况
                 </button>
               </td>
             </tr>
@@ -167,7 +64,7 @@
         </table>
       </VueDraggable> 
     </div>
-    <div class="mt-6"></div>
+  
 
   </template>
   
@@ -175,10 +72,9 @@
   import { onMounted, reactive, ref } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { _getUserInfo } from '@/apis/user';
-  import { Add, Bill, DeleteOne, EditTwo, GoOn,SettingThree,Setting} from '@icon-park/vue-next';
+  import { Add, Bill, DeleteOne, EditOne, GoOn,SettingTwo,DocDetail } from '@icon-park/vue-next';
   import { MdEditor } from 'md-editor-v3';
   import 'md-editor-v3/lib/style.css';
-  import * as XLSX from 'xlsx'
   import { push } from 'notivue';
   import { _editContest, _getContest } from "@/apis/contest";
   import { VueDraggable } from 'vue-draggable-plus';
@@ -322,6 +218,7 @@
       for(let i =0;i<taskCIDList.value.length;i++){
         _getContest({}, taskCIDList.value[i])
       .then((data: any) => {
+        // console.log(data)
         taskList.value.push(
           {
           type:2,
@@ -428,7 +325,7 @@
         let arr = data.GroupTask.split(";")
         if(arr!=""){
             arr.forEach((element:any) => {
-          if(element.charAt(0)=='C')taskCIDList.value.push(+element.slice(1));
+              if(element.charAt(0)=='C')taskCIDList.value.push(+element.slice(1));
           else if(element.charAt(0)=='P'&&element.charAt(1)!='P')taskPIDList.value.push(element.slice(1));
           else if(element.charAt(0)=='L')taskLIDList.value.push(+element.slice(1));
           else taskPIDList.value.push(element.slice(1));
@@ -448,41 +345,9 @@
             });
         })
           }
-          //小组任务id处理
-          if(route.params.PID!=0&&taskPIDList.value.indexOf(route.params.PID)==-1){
-    if(route.params.PID == parseInt(route.params.PID)){ 
-         // 使用parseFloat也可以
-         taskPIDList.value.push(+route.params.PID)
-         if(group.value.GroupTask=="")group.value.GroupTask+="PP"+route.params.PID;
-         else group.value.GroupTask+=";PP"+route.params.PID;
-    }else{
-    // fasle
-         taskPIDList.value.push(route.params.PID)
-         if(group.value.GroupTask=="")group.value.GroupTask+="P"+route.params.PID;
-         else group.value.GroupTask+=";P"+route.params.PID;
-    }
-
-      taskPID.value = route.params.PID+"";
-      console.log(taskPID.value)
-    }
-    if(route.params.CID!=0&&taskCIDList.value.indexOf(+route.params.CID)==-1){
-      taskCIDList.value.push(+route.params.CID);
-      taskCID.value = route.params.CID+"";
-      if(group.value.GroupTask=="")group.value.GroupTask+="C"+route.params.CID;
-         else group.value.GroupTask+=";C"+route.params.CID;
-      console.log(taskCID.value)
-    }
-    if(route.params.LID!=0&&taskLIDList.value.indexOf(+route.params.LID)==-1){
-      taskLIDList.value.push(+route.params.LID)
-      taskLID.value = route.params.LID+"";
-      if(group.value.GroupTask=="")group.value.GroupTask+="L"+route.params.LID;
-         else group.value.GroupTask=group.value.GroupTask+";L"+route.params.LID;
-      console.log(taskLID.value)
-    }
-    console.log(group.value.GroupTask)
-    console.log(taskPIDList.value)
-    console.log(taskCIDList.value)
-    console.log(taskLIDList.value)
+        // console.log(taskPIDList.value)
+        // console.log(taskCIDList.value)
+        // console.log(taskLIDList.value)
     task.value.getAllTasks() 
         })
     },
@@ -495,76 +360,12 @@
         });
     }
   })
-
-  //excel导入
-  //导入excel
- let onImportExcel = Event => {
-    // 获取上传的文件对象
-    const file = Event;
-    const { files } = file.target;
-    // 通过FileReader对象读取文件
-    const fileReader = new FileReader();
-    fileReader.onload = event => {
-        try {
-            const { result } = event.target;
-            // 以二进制流方式读取得到整份excel表格对象
-            const workbook = XLSX.read(result, { type: 'binary' });
-            // 存储获取到的数据
-            let data = [];
-            // 遍历每张工作表进行读取（这里默认只读取第一张表）
-            for (const sheet in workbook.Sheets) {
-            // esline-disable-next-line
-            if (workbook.Sheets.hasOwnProperty(sheet)) {
-                // 利用 sheet_to_json 方法将 excel 转成 json 数据
-                data = data.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
-                // break; // 如果只取第一张表，就取消注释这行
-            }
-        }
-        // 最终获取到并且格式化后的 json 数据
-        const uploadData = data.map(item=> {
-            return {
-                id : String(item['UID']),
-                name : item['UserName'],
-            }
-        })
-        // console.log(uploadData)//这里得到了后端需要的json数据，调用接口传给后端就行了
-        push.success({
-            title: '提示',
-            message: '上传文件成功',
-          }); //这里用了antd中的message组件
-          for(let i = 0;i<uploadData.length;i++){
-            let flag = true;
-            for (let item in list.value) {
-        if (list.value[item].UID == uploadData[i].id+"") {
-          flag=false;
-          break;
-        }
-            }
-            if(flag){
-              list.value.push({
-            UID: uploadData[i].id+"",
-            UserName: uploadData[i].name,
-          });
-          listadd.value.push({
-            UID: uploadData[i].id+"",
-            UserName: uploadData[i].name,
-          });
-            }
-          }
-        } catch (e) {
-            // 这里可以抛出文件类型错误不正确的相关提示
-            push.warning({
-            title: '提示',
-            message: '文件信息不正确',
-          });
-        }
-    };
-    // 以二进制方式打开文件
-    fileReader.readAsBinaryString(files[0]);
-}
-
-
-  
+  const showlog = ()=>{
+    push.warning({
+          title: '提示',
+          message: '制作中,如需添加任务请在小组编辑页面',
+        });
+  }
 
   onMounted(() => {
     // console.log(+route.params.GID)
@@ -574,38 +375,4 @@
    
   })
   
-  
   </script>
-
-  <style>
-.upload_wrap {
-  display: inline-block;
-  position: relative;
-  width: 94px;
-  padding: 3px 5px;
-  overflow: hidden;
-}
-
-.file_uploader {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  outline: none;
-  opacity: 0;
-  background-color: transparent;
-}
-
-.upload_text {
-  display: inline-block;
-  margin-left: 5px;
-}
-
-.upload_tip {
-  display: inline-block;
-  margin-left: 10px;
-  color: #999;
-}
-
-</style>

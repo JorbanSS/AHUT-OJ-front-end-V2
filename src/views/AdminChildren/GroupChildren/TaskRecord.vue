@@ -1,0 +1,219 @@
+<template>
+
+    <MainContainer>
+  
+      <Card class="overflow-hidden">
+  
+        <Col class="gap-0">
+  
+          <Card role="alert" class="alert border-b-0 text-white font-bold border-0 rounded-b-none"
+            :style="'background-color: ' + colorOpacity(submitStatusColor[record.Result], 25) + '; ' + 'color: ' + colorOpacity(submitStatusColor[record.Result], 125)"
+            v-if="record.Result != ''">
+            <component :is="submitInfo[record.Result].icon" theme="outline" size="24" />
+            <span class="text-lg">{{ submitInfo[record.Result].label }}</span>
+            <span class="text-xl">{{ ConvertTools.Percentage(record.PassSample, record.SampleNumber) }}&nbsp;分</span>
+          </Card>
+          <Card class="rounded-t-none border-t-0">
+            <table class="table table-zebra text-center">
+              <thead>
+                <tr>
+                  <th v-for="(item, index) in ['提交号', '题号', '提交者', '用时', '内存', '语言', '提交时间']" :key="index">
+                    {{ item }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th class="font-bold talbe-lg">
+                    {{ record.SID }}
+                  </th>
+                  <td>
+                    <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目" @click="$router.push({
+                      name: 'Problem',
+                      params: {
+                        PID: record.PID,
+                      },
+                    })">
+                      {{ record.PID }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="查看用户主页"
+                      @click="$router.push({
+                        name: 'User',
+                        params: {
+                          UID: record.UID,
+                        },
+                      })">
+                      {{ record.UID }}
+                    </span>
+                  </td>
+                  <td>
+                    {{ record.UseTime }} ms
+                  </td>
+                  <td>
+                    {{ Math.ceil(record.UseMemory / 1024 / 1024) }} MB
+                  </td>
+                  <td>
+                    {{ constValStore.SUBMIT_LANG[record.Lang] }}
+                  </td>
+                  <td>
+                    {{ ConvertTools.PrintTime(record.SubmitTime, 1, 1) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </Card>
+  
+        </Col>
+  
+      </Card>
+  
+      <Card v-if="record.ErrInfo != null && record.ErrInfo != ''">
+        <div class="mockup-code">
+          <pre><code>{{ record.ErrInfo }}</code></pre>
+        </div>
+      </Card>
+  
+      <Card>
+  
+        <button class="btn w-fit btn-sm btn-ghost ml-2" @click="copyData()">
+          <copy theme="outline" size="18" />
+          复制代码
+        </button>
+        <div class="mockup-code">
+          <pre v-for="(item, index) in record.Source.split('\n')" :data-prefix="index + 1"><code>{{ item }}</code></pre>
+        </div>
+  
+      </Card>
+  
+    </MainContainer>
+  
+  </template>
+  
+  <script lang="ts" setup name="Code">
+  import { onMounted, onUnmounted, ref } from 'vue';
+  import { useRoute } from 'vue-router';
+  
+  import { Copy } from '@icon-park/vue-next';
+  import confetti from 'canvas-confetti';
+  import { push } from 'notivue';
+  import useClipboard from 'vue-clipboard3';
+  
+  import { colorOpacity } from '@/utils/globalFunctions';
+  import { _getRecord } from '@/apis/record';
+  import { submitInfo, submitStatusColor } from '@/config';
+  import { type RecordType } from '@/interfaces/record';
+  import { useConstValStore } from '@/stores/ConstVal';
+  import { ConvertTools } from '@/utils/globalFunctions';
+  
+  const { toClipboard } = useClipboard();
+  const constValStore = useConstValStore();
+  const route = useRoute();
+  
+  let record = ref<RecordType>({
+    SID: 0,
+    PID: '',
+    UID: '',
+    Result: '',
+    UseTime: 0,
+    UseMemory: 0,
+    Lang: 0,
+    SubmitTime: 0,
+    Source: '',
+    ErrInfo: '',
+    SampleNumber: 0,
+    PassSample: 0,
+    UpdateNumber: 0,
+    autoUpdateTimeout: null,
+  
+    get() {
+      _getRecord({}, record.value.SID)
+        .then((data: any) => {
+          record.value.PID = data.PID;
+          record.value.UID = data.UID;
+          record.value.Result = data.Result;
+          record.value.UseTime = data.UseTime;
+          record.value.UseMemory = data.UseMemory;
+          record.value.Lang = data.Lang;
+          record.value.SubmitTime = data.SubmitTime;
+          record.value.Source = data.Source;
+          record.value.ErrInfo = data.ErrInfo;
+          record.value.SampleNumber = data.SampleNumber;
+          record.value.PassSample = data.PassSample;
+        })
+        .then(() => {
+          if (record.value.Result == 'AC') startConfetti();
+          if (record.value.Result === 'JUDGING' || record.value.Result == 'REJUDGING' || record.value.Result == 'PENDING') {
+            if (record.value.UpdateNumber <= 10) {
+              this.autoUpdate();
+            } else {
+              push.error({
+                title: '获取失败',
+                message: '获取记录状态超时，请尝试刷新页面',
+              });
+            }
+          }
+        })
+    },
+  
+    autoUpdate() {
+      this.autoUpdateTimeout = setTimeout(() => {
+        this.UpdateNumber++;
+        this.get();
+      }, this.UpdateNumber / 3 * 1000 + 500);
+    }
+  })
+  
+  function startConfetti() {
+    let end = Date.now() + (1.3 * 1000); // 时间为2秒
+    let colors = ['#bb0000', '#ffffff']; // 颜色数组
+  
+    function frame() {
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: colors
+      });
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: colors
+      });
+  
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    }
+    frame();
+  }
+  
+  async function copyData() {
+    try {
+      await toClipboard(record.value.Source);
+      push.success({
+        title: '复制成功',
+        message: '已复制文件内容到剪贴板',
+      })
+    } catch (e) {
+      push.error({
+        title: '复制失败',
+      })
+    }
+  }
+  
+  onMounted(() => {
+    clearTimeout(record.value.Source);
+    record.value.SID = +route.params.SID;
+    record.value.get();
+  })
+  
+  onUnmounted(() => {
+    clearTimeout(record.value.autoUpdate);
+  });
+  
+  </script>

@@ -591,11 +591,12 @@ let editUserInfo = reactive({
 });
 
 //组
+//加入组
 let JoinGroup = ref({
   GID: 1,
   GroupName: '',
   GroupTask: '',
-  UID: 1,
+  UID: '',
   CreatTime: 0,
   InviteCode: '',
 
@@ -618,7 +619,7 @@ let JoinGroup = ref({
           title: '提示',
           message: "加入成功",
         });
-      });
+      })
     this.InviteCode = '';
   }
 });

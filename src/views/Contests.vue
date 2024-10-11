@@ -8,7 +8,7 @@
 
     <Card class="p-0 overflow-hidden">
 
-      <Container direction="column">
+      <Col>
 
         <table class="table table-zebra table-pin-rows">
           <thead>
@@ -79,7 +79,7 @@
 
         <Pagination :page="contests.page" :maxPage="maxPage" :changePage="contests.changePage" class="pb-6" />
 
-      </Container>
+      </Col>
 
     </Card>
 

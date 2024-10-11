@@ -1,5 +1,7 @@
 <template>
-  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+
+  <MainContainer>
+
     <PageHeader Title="题库" :IconName="DocumentFolder"
       :Infomation="`收录了共 ${problems.count} 条题目，包含自主命题、LOJ、Codeforces 和 Atcoder 等知名 OJ 的题目。`">
       <div class="flex flex-col gap-3">
@@ -38,9 +40,10 @@
         </div>
       </div>
     </PageHeader>
-    
-    <div class="bg-white card shadow-lg Border">
-      <div class="overflow-x-hidden rounded-t-2xl">
+
+    <Card class="overflow-x-hidden">
+      <Col>
+
         <table class="table table-zebra table-pin-rows">
           <thead>
             <tr>
@@ -81,10 +84,15 @@
             </tr>
           </tbody>
         </table>
-      </div>
-      <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" />
-    </div>
-  </div>
+
+        <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" class="pb-6" />
+        
+      </Col>
+
+    </Card>
+
+  </MainContainer>
+
 </template>
 
 <script lang="ts" setup name="Problems">

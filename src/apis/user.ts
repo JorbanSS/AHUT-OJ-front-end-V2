@@ -10,14 +10,18 @@ export const _register = (data: any) => {
   return Post('auth/register/', data);
 }
 
+export const _forgetPass = (data:any) =>{
+  return Post('user/forget/pass/',data)
+}
+
 // Code 验证
 export const _codeVerify = (data: any) => {
-  return Post('auth/codeverify', data);
+  return Post('auth/codeverify/', data);
 }
 
 // 链接验证
 export const _urlVerify = (params: any) => {
-  return Get('auth/urlverify/', params);
+  return Get('auth/urlverify', params);
 }
 
 // 验证邮箱
@@ -52,7 +56,7 @@ export const _deleteUsers = (data: any) => {
 
 // 获取管理员列表
 export const _getAdmins = (params: any) => {
-  return Get('admin/permission/list/', params);
+  return Get('admin/permission/list', params);
 }
 
 // 管理员修改用户信息
@@ -82,17 +86,12 @@ export const _bindNowcoder = (data: any) => {
 
 // 绑定 Virtual Judge
 export const _bindVirtualJudge = (data: any) => {
-  return Post('user/vjudgeBind', data);
-}
-
-// 忘记密码
-export const _forgetPassword = (data: any) => {
-  return Post('admin/user/forget/pass', data);
+  return Post('user/vjudgeBind/', data);
 }
 
 // 获取在线用户列表
 export const _getUsersOnline = (data: any) => {
-  return Post('admin/user/forget/pass', data);
+  return Post('admin/user/forget/pass/', data);
 }
 
 // 修改密码
@@ -103,4 +102,10 @@ export const _editPassword = (data: any) => {
 // 修改用户头像 URL
 export const _editHeadUrl = (data: any) => {
   return Post('user/editHead/', data);
+}
+
+
+//获取用户列表
+export const _getUsers =(data :any) =>{
+  return Get('admin/users/',data);
 }

@@ -48,6 +48,7 @@ export interface ShowConfigType {
   showCover: boolean,           // 显示遮罩
   showLogin: boolean,           // 显示登录页面
   showRegister: boolean,        // 显示注册页面
+  showForget: boolean           // 显示忘记密码页面
   showBody: boolean,            // 显示主体内容
   showEditor: boolean,          // 显示编辑器
   [item: string]: any,          // 其他属性

@@ -131,6 +131,36 @@ const routes = [
     component: () => import("@/views/Records.vue"),
     meta: { title: BaseTitle + "记录" },
   },
+  // 小组
+  {
+    name: "MyGroup",
+    path: "/problemlist/:LID",
+    redirect: { name: "GroupPeople" },
+    component: () => import("@/views/MyGroup.vue"),
+    meta: { title: BaseTitle + "小组" },
+    children: [
+      {
+        name: "GroupPeople",
+        path: "people",
+        component: () => import("@/components/Group/People.vue"),
+      },
+      {
+        name: "GroupRanking",
+        path: "ranking",
+        component: () => import("@/components/Group/Ranking.vue"),
+      },
+      {
+        name: "GroupRecords",
+        path: "records",
+        component: () => import("@/components/Group/Records.vue"),
+      },
+      {
+        name: "GroupDiscussions",
+        path: "discussions",
+        component: () => import("@/components/Group/Discussions.vue"),
+      },
+    ],
+  },
   {
     name: "Record",
     path: "/record/:SID",

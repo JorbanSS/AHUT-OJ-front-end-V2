@@ -40,18 +40,19 @@ import { Add, Disk, DocumentFolder, StopwatchStart } from '@icon-park/vue-next';
 import 'md-editor-v3/lib/style.css';
 import { push } from 'notivue';
 import { _AddGroup } from '@/apis/group';
-import { useUserDataStore } from '@/stores/UserData'
+// import { useUserDataStore } from '@/stores/UserData'
 const router = useRouter();
-const userDataStore = useUserDataStore();
+// const userDataStore = useUserDataStore();
 let group = ref({
-  GID: '',
+  GID: 1,
   GroupName: '',
   GroupTask: '',
-  UID: userDataStore.UID,
+  UID: 1,
   CreatTime: 0,
-  InviteCode: 0,
+  InviteCode: '',
 
   add() {
+    // console.log(this.GroupName)
     if (group.value.GroupName == '') {
       push.error({
         title: '信息错误',
@@ -61,15 +62,15 @@ let group = ref({
     }
     let params: any = {
       GroupName: this.GroupName,
-      UID: this.UID
     }
 
     _AddGroup(params)
       .then((data: any) => {
-        this.GID = data.PID;
+        // console.log(data)
+        this.GID = data.GID;
         push.success({
           title: '新增成功',
-          message: `小组 ID 为 ${data.PID}`,
+          message: `小组 ID 为 ${data.GID}`,
         });
       })
   }

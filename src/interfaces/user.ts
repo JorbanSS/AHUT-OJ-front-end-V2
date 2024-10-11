@@ -48,6 +48,12 @@ export interface RegisterInfoType {
   VerifyCode: string,           // 验证码
 }
 
+export interface ForgetPasswordInfoType {
+  Pass: string,                 // 密码
+  Email: string,                // 邮箱
+  VerifyCode: string,           // 验证码
+}
+
 export interface PermissionType {
   map: number,              // 权限 bit
   super: boolean,           // 超管
@@ -65,3 +71,5 @@ export interface BindType {
   bind: Function,             // 绑定
   [item: string]: any,        // 其他属性
 }
+
+

@@ -26,8 +26,9 @@
       <div class="cover"></div>
     </div>
     
-    <component :is="Login" :init="initAction" :register="registerAction" v-if="showConfig.showLogin" />
-    <component :is="Register" :init="initAction" :login="loginAction" v-if="showConfig.showRegister" />
+    <component :is="Login" :init="initAction" :register="registerAction" :forget="forgetAction" v-if="showConfig.showLogin" />
+    <component :is="Register" :init="initAction" :login="loginAction" :forget="forgetAction" v-if="showConfig.showRegister" />
+    <component :is="ForgetPass" :init = "initAction" :login="loginAction" :register="registerAction" v-if="showConfig.showForget"/>
     <component :is="Editor" v-if="showConfig.showEditor" />
 
   </div>
@@ -45,6 +46,7 @@ import Footer from '@/components/Main/Footer.vue';
 import Login from '@/components/Main/Login.vue';
 import NavBar from '@/components/Main/NavBar.vue';
 import Register from '@/components/Main/Register.vue';
+import ForgetPass from '@/components/Main/ForgetPass.vue';
 import Editor from '@/components/Main/Editor.vue';
 import { useUserDataStore } from '@/stores/UserData';
 import { type ShowConfigType } from '@/interfaces/oj';
@@ -60,30 +62,36 @@ let adminMode = ref<boolean>(false);
 let showConfig = reactive<ShowConfigType>({
   showNavBar: true,
   showFooter: true,
+  showBody: true,
   showCover: false,
   showLogin: false,
   showRegister: false,
-  showBody: true,
   showEditor: false,
+  showForget: false,
 
   init() {
     this.showNavBar = this.showFooter = this.showBody = true;
-    this.showCover = this.showLogin = this.showRegister = this.showEditor = false;
+    this.showCover = this.showLogin = this.showRegister = this.showEditor = this.showForget = false;
   },
 
   showLoginDialog() {
-    this.showNavBar = this.showFooter = this.showRegister = this.showBody = this.showEditor = false;
     this.showCover = this.showLogin = true;
+    this.showNavBar = this.showFooter = this.showRegister = this.showBody = this.showEditor = this.showForget = false;
   },
 
   showRegisterDialog() {
     this.showCover = this.showRegister = true;
-    this.showNavBar = this.showFooter = this.showLogin = this.showBody = this.showEditor = false;
+    this.showNavBar = this.showFooter = this.showLogin = this.showBody = this.showEditor = this.showForget = false;
+  },
+
+  showForgetDialog(){
+    this.showCover = this.showForget = true;
+    this.showNavBar = this.showFooter = this.showRegister = this.showBody = this.showEditor = this.showLogin = false;
   },
 
   showEditorDialog() {
     this.showEditor = true;
-    this.showNavBar = this.showFooter = this.showLogin = this.showRegister = this.showBody = this.showCover = false;
+    this.showNavBar = this.showFooter = this.showLogin = this.showRegister = this.showBody = this.showCover = this.showForget = false;
   },
 })
 
@@ -111,6 +119,10 @@ function initAction() {
 
 function registerAction() {
   showConfig.showRegisterDialog();
+}
+
+function forgetAction(){
+  showConfig.showForgetDialog();
 }
 
 function autoLogin() {

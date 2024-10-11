@@ -53,6 +53,8 @@
       </li>
     </ul>
   </div>
+
+  
   <div class="bg-white card shadow-lg Border mx-auto max-w-5xl">
     <table class="table table-zebra text-center">
       <thead>
@@ -257,6 +259,8 @@ import {
   type UserSimplifiedType,
   type UserType,
 } from "@/interfaces/user";
+import { ProblemSimplifiedType, ProblemsType } from "@/interfaces/problem";
+import { _getProblems } from "@/apis/problem";
 
 const router = useRouter();
 const constValStore = useConstValStore();
@@ -267,6 +271,70 @@ let allSelected = ref<boolean>(false);
 function switchSelectedStatus(index: number) {
   users.users[index].Selected = !users.users[index].Selected;
 }
+
+let problems = reactive<ProblemsType>({
+  problems: Array<ProblemSimplifiedType>(),
+  count: 0,
+  page: 1,
+  limit: 20,
+  searchInfo: {
+    PID: '',
+    Label: '',
+    PType: '',
+    Keyword: '',
+  },
+
+  get(showInfo: boolean = false) {
+    let params = {
+      Page: problems.page - 1,
+      Limit: problems.limit,
+      PType: problems.searchInfo.PType,
+      Label: problems.searchInfo.Label,
+      Keyword: problems.searchInfo.Keyword,
+    }
+    _getProblems(params)
+      .then((data: any) => {
+        problems.count = data.Count;
+        problems.problems = data.Data;
+      })
+      .then(() => {
+        if (showInfo) {
+          push.success({
+            title: '获取成功',
+            message: `一共获取了 ${problems.count} 道题目`,
+          })
+        }
+      })
+  },
+
+  goToProblem(PID: string) {
+    if (PID == "") {
+      push.warning({
+        title: "无法跳转",
+        message: "未填写题号",
+      })
+      return;
+    };
+    router.push({
+      name: 'Problem',
+      params: {
+        PID: PID,
+      },
+    });
+  },
+
+  changePage(page: number) {
+    if (1 <= page && page <= maxPage.value) problems.page = page;
+  },
+})
+
+let AdminUserSearcher ={
+  limit: 10,
+
+
+}
+
+
 
 let permission = reactive<PermissionType>({
   map: 0,
@@ -390,6 +458,9 @@ let users = reactive({
       }
     });
   },
+
+
+
 });
 
 let user = reactive<UserSimplifiedType>({

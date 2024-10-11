@@ -2,7 +2,7 @@ import { Get, Post, Put, Del } from "@/utils/axios/request";
 
 // 开放关闭模型的使用
 export const _switchModelAccess = (params: any) => {
-  return Put('tool/chat/', params);
+  return Put('tool/chat', params);
 }
 
 // 获取模型列表

@@ -174,7 +174,7 @@ const Admin = {
     {
       name: "AdminGroup",
       path: "group",
-      redirect: { name: "AddGroup" },
+      redirect: { name: "GroupList" },
       component: () => import("@/views/AdminChildren/Group.vue"),
       beforeEnter: (
         // @ts-ignore
@@ -200,10 +200,64 @@ const Admin = {
         },
         {
           name: "EditGroup",
-          path: "edit",
+          path: "edit/:GID/:PID/:CID/:LID",
           component: () =>
             import("@/views/AdminChildren/GroupChildren/Edit.vue"),
         },
+        {
+          name: "ContestAddTask",
+          path: "contestaddtask/:GID/:LID",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/ContestAddTask.vue"),
+        },
+        {
+          name: "ProblemAddTask",
+          path: "problemaddtask:GID",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/ProblemAddTask.vue"),
+        },
+        {
+          name: "ProblemListAddTask",
+          path: "problemlistaddtask:GID",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/ProblemListTaskAdd.vue"),
+        },
+        {
+          name: "ProblemListTaskEdit",
+          path: "ProblemListTaskEdit/:GID/:LID",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/ProblemListTaskEdit.vue"),
+        },
+        {
+          name: "ContestTaskEdit",
+          path: "ContestTaskEdit/:GID/:CID",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/ContestTaskEdit.vue"),
+        },
+        {
+          name: "GroupTaskList",
+          path: "GroupTaskList/:GID",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/GroupTaskList.vue"),
+        },
+        {
+          name: "GroupProgress",
+          path: "GroupProgress/:GID",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/GroupProgress.vue"),
+        },
+        {
+          name: "GroupTaskProblemRecord",
+          path: "GroupTaskProblemRecord/:SID",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/TaskRecord.vue"),
+        },
+        {
+          name: "ProblemListSelect",
+          path: "ProblemListSelect:GID",
+          component: () =>
+            import("@/views/AdminChildren/GroupChildren/ProblemListSelect.vue"),
+        }
       ],
     },
     {

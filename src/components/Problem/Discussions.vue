@@ -202,7 +202,6 @@ let newDiscussion = reactive<NewDiscussionType>({
     }
     let params = {
       PID: route.params.PID,
-      UID: userDataStore.UID,
       SID: 0,
       Title: this.Title,
       Text: this.Text,
@@ -331,7 +330,6 @@ let discussions = reactive<DiscussionsType>({
       SID: SID,
       Text: commentText,
       Title: "",
-      UID: userDataStore.UID,
     };
     _addComment(params).then(() => {
       push.success({

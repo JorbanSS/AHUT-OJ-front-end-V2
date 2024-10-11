@@ -97,7 +97,7 @@
   <div class="mt-6"></div>
   <div class="mx-auto p-6 card shadow-lg Border bg-white space-y-4 text-base whitespace-nowrap max-w-5xl">
     <span class="text-base">题单描述（含题单简介、题目说明、每题的出题人）</span>
-    <MdEditor v-model="problemList.Description" :height="500" />
+    <MdEditor v-model="problemList.Description"  :height="500" />
   </div>
 </template>
 

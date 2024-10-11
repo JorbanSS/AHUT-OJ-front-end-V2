@@ -5,7 +5,7 @@
         <close theme="outline" size="24" />
       </button>
       <span class="flex justify-center font-bold text-3xl pb-6">
-        AHUT OJ
+        注册界面
       </span>
       <label class="input input-bordered flex items-center gap-2 whitespace-nowrap">
         姓名
@@ -42,7 +42,7 @@
       <div class="flex space-x-4 justify-center">
         <a class="link link-hover" @click="props.login()">登录账户</a>
         <span>|</span>
-        <a class="link link-hover">忘记密码</a>
+        <a class="link link-hover" @click="props.forget()">忘记密码</a>
       </div>
       <button class="btn btn-neutral w-full text-lg" @click="register()">注册</button>
     </div>
@@ -63,12 +63,13 @@ import { useConstValStore } from '@/stores/ConstVal';
 interface propsType {
   init?: Function;
   login?: Function;
-  register?: Function;
+  forget?:Function;
 };
 
 let props = withDefaults(defineProps<propsType>(), {
   init: () => { },
   login: () => { },
+  forget: () => { },
 });
 
 let registerInfo = reactive<RegisterInfoType>({
@@ -200,9 +201,9 @@ function sendVerifyCode() {
 
   let params = {
     Email: registerInfo.Email,
-    UID: registerInfo.UID,
     Uname: registerInfo.UserName,
-    Method: 1,
+    Method: useConstValStore().EMAIL_VERIFY_CODE,
+    Type: useConstValStore().CODE_VERIFY_REGISTER,
   }
 
   _verifyEmail(params)

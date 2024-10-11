@@ -42,7 +42,7 @@ export const _getJudgeFiles = (params: any, PID: string) => {
 
 // 上传判题文件
 export const _uploadJudgeFiles = (data: any, PID: string) => {
-  return Post(`file/${PID}`, data, 2);
+  return Post(`file/${PID}/`, data, 2);
 }
 
 // 删除判题文件

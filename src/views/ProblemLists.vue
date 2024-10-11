@@ -1,5 +1,7 @@
 <template>
-  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+
+  <MainContainer>
+
     <PageHeader Title="题单" :IconName="Bill"
       :Infomation="`收录了共 ${problemLists.count} 个题单，以供 ACM 集训队训练、赛后补题、程序设计赛竞赛公选课、C 语言程序设计必修课、算法设计与分析必修课使用。`">
       <div class="flex justify-center">
@@ -16,8 +18,8 @@
       </div>
     </PageHeader>
 
-    <div class="bg-white card shadow-lg Border">
-      <div class="overflow-x-hidden rounded-t-2xl">
+    <Card class="p-0 overflow-x-hidden">
+      <Col class="p-0">
         <table class="table table-zebra table-pin-rows">
           <thead>
             <tr>
@@ -72,10 +74,15 @@
             </tr>
           </tbody>
         </table>
-      </div>
-      <Pagination :page="problemLists.page" :maxPage="maxPage" :changePage="problemLists.changePage" />
-    </div>
-  </div>
+
+        <Pagination :page="problemLists.page" :maxPage="maxPage" :changePage="problemLists.changePage" class="pb-6" />
+
+      </Col>
+
+    </Card>
+
+  </MainContainer>
+
 </template>
 
 <script lang="ts" setup name="ProblemLists">
@@ -112,6 +119,7 @@ let problemLists = reactive<ProblemListsType>({
     };
     _getProblemLists(params)
       .then((data: any) => {
+        // console.log(data)
         problemLists.count = data.Size;
         problemLists.problemLists = data.Data;
         if (showInfo) {

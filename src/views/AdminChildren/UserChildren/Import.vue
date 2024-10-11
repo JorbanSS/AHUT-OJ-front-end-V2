@@ -21,6 +21,7 @@
       </li>
     </ul>
   </div>
+  
   <div class="bg-white card shadow-lg Border mx-auto max-w-5xl">
     <div class="p-6">
       <table class="table table-zebra text-center">

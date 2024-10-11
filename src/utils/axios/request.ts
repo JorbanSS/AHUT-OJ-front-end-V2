@@ -39,7 +39,8 @@ const Axios = axios.create({
 Axios.interceptors.request.use(
   config => {
     let token = localStorage.getItem("token");
-    if (token && config.headers) config.headers.Authorization = token;
+    console.log(token)
+        if (token && config.headers) config.headers.Authorization = token;
     config.url = requestBaseURL + config.url;
     return config;
   },

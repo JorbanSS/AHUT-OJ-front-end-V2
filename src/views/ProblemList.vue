@@ -1,5 +1,7 @@
 <template>
-  <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
+  
+  <MainContainer>
+
     <PageHeader :Title="problemList.Title" :IconName="Bill" Infomation="">
       <div class="flex justify-center">
         <template v-for="labelItem in problemListLabelOptions">
@@ -16,7 +18,7 @@
       </div>
     </PageHeader>
 
-    <div>
+    <Col class="gap-0">
       <div class="flex space-x-2">
         <ul
           class="menu bg-white flex flex-row rounded-box Border shadow-lg text-base font-bold justify-between w-full rounded-b-none">
@@ -53,8 +55,10 @@
       </div>
       <RouterView :problemList="problemList" :problems="problems">
       </RouterView>
-    </div>
-  </div>
+    </Col>
+
+  </MainContainer>
+
 </template>
 
 <script lang="ts" setup name="problemList">

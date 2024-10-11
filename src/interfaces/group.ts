@@ -21,10 +21,19 @@ export interface GroupTask {
   ID: number;
 };
 
-export interface GroupTasks {
-  GID: number;
+export interface taskType {
+  type:number,
+  ID:string,
+  GID:number,
+  GroupName:string
+  typestr:["题目","比赛","题单"],
+  Name: string,
+  [item: string]: any,
+};
+
+export interface GroupTasksList {
+  groupTasksList: Array<taskType>;
   count: number;
-  tasks: Array<GroupTask>;
 
   [item: string]: any;
-};
+}
