@@ -13,12 +13,6 @@
           用户列表
         </div>
       </li>
-      <li>
-        <div class="font-bold text-base" @click="$router.push({ name: 'ImportUsers' })">
-          <afferent-three theme="outline" size="18" />
-          导入
-        </div>
-      </li>
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
@@ -43,12 +37,6 @@
         <div class="font-bold text-base hover:text-red-500" @click="deleteUsers()">
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除用户
-        </div>
-      </li>
-      <li>
-        <div class="font-bold text-base" @click="$router.push({ name: 'ImportUsers' })">
-          <afferent-three theme="outline" size="18" />
-          导入
         </div>
       </li>
     </ul>

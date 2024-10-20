@@ -14,10 +14,6 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base btn-active">
-          <afferent-three theme="outline" size="18" />
-          导入
-        </div>
       </li>
     </ul>
   </div>

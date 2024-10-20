@@ -22,6 +22,7 @@
         </template>
       </div>
     </div>
+    <a href="https://beian.miit.gov.cn/" target="_blank" class=" center" >皖ICP备2024064046号-1</a>
   </div>
   <!-- <footer class="footer p-10 bg-white text-base-content">
     <aside>

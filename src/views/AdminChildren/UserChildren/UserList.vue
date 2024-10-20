@@ -13,12 +13,6 @@
           用户列表
         </div>
       </li>
-      <li>
-        <div class="font-bold text-base" @click="$router.push({ name: 'ImportUsers' })">
-          <afferent-three theme="outline" size="18" />
-          导入
-        </div>
-      </li>
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
@@ -43,6 +37,12 @@
         <div class="font-bold text-base hover:text-red-500" @click="deleteUsers()">
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除用户
+        </div>
+      </li>
+      <li>
+        <div class="font-bold text-base" @click="$router.push({ name: 'ImportUsers' })">
+          <afferent-three theme="outline" size="18" />
+          导入
         </div>
       </li>
     </ul> 
@@ -170,6 +170,7 @@
         </div>
       </div>
     </dialog>
+    
     <dialog id="addUserModal" class="modal">
       <div class="modal-box space-y-2 w-96">
         <h3 class="font-bold text-lg">新增用户</h3>
@@ -195,6 +196,7 @@
         </div>
       </div>
     </dialog>
+
     <dialog id="editPermissionModal" class="modal">
       <div class="modal-box space-y-2 w-96">
         <h3 class="font-bold text-lg">修改权限</h3>
@@ -358,7 +360,7 @@ let permission = reactive<PermissionType>({
     this.problem = (this.map & constValStore.ProblemAdminBit) != 0;
     this.admin = (this.map & constValStore.AdminBit) != 0;
   },
-});
+}); 
 
 function switchAllSelectedStatus(status?: boolean) {
   if (status == undefined) {
@@ -468,7 +470,7 @@ let users = reactive({
 let userList=reactive({
   users: Array<UserListType>(),
   page:1,
-  limit: 20,
+  limit: 10,
   count: 0,
   userName:"",
   userID:"",
@@ -477,12 +479,14 @@ let userList=reactive({
   },
   getUserList(showInfo:boolean=false){
     let params = {
-      Page: users.page - 1,
-      Limit: users.limit,
+      Page: 1,
+      Limit: 10,
       Token:null
     };
     
     _getUsers(params).then((data:any)=>{
+      console.log(data);
+      
       if(data==null){
         push.warning({
           title: "获取失败",
@@ -504,7 +508,8 @@ let userList=reactive({
     this.getUserList(true);
     this.userID='';
     this.userName='';
-  }
+  },
+  
 
 })
 

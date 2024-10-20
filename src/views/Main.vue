@@ -45,6 +45,7 @@ import { _getUserInfo, _getUserPermission } from '@/apis/user';
 import Footer from '@/components/Main/Footer.vue';
 import Login from '@/components/Main/Login.vue';
 import NavBar from '@/components/Main/NavBar.vue';
+import ConfirmModdal from "@/components/Main/ConfirmModal.vue"
 import Register from '@/components/Main/Register.vue';
 import ForgetPass from '@/components/Main/ForgetPass.vue';
 import Editor from '@/components/Main/Editor.vue';

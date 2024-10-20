@@ -1,5 +1,4 @@
 <template>
-
   <MainContainer>
     <PageHeader :Title="notice.Title" :IconName="Remind" :Infomation="notice.Content">
       <span class="text-xs text-center" v-if="notice.UpdatedTime">
@@ -11,7 +10,7 @@
     <Card class="p-6" v-if="groupTasksList.groupTasksList.length==0" style="text-align: center;">
         <Strong>暂无组任务</Strong>
     </Card>
-
+    
     <Card class="p-6 overflow-auto h-[330px]" v-else style="text-align: center;">
       <Strong>小组任务</Strong>
       <VueDraggable ref="el" v-model="groupTasksList.groupTasksList" target=".sort-target" :animation="200" class="select-none">
@@ -130,8 +129,7 @@ import { push } from 'notivue';
 import { _JoinGroup } from "@/apis/group";
 import { GroupList, GroupTasksList } from "@/interfaces/group";
 import { _getProblemLists } from "@/apis/problemList";
-import { ProblemListsType, ProblemListSimplifiedType } from "@/interfaces/problemList";
-import { data } from "v-calendar/dist/types/tests/unit/util/dayData.js";
+
 const userDataStore = useUserDataStore();
 const constValStore = useConstValStore();
 const router = useRouter();
@@ -216,7 +214,7 @@ let group = ref({
           group.value.groupList[x].GroupTask = data.GroupTask
           if(group.value.groupList[x].GroupTask!=""){
           let arr = group.value.groupList[x].GroupTask.split(";")
-        if(arr!=""){
+        if(arr.length > 0){
           let taskPIDList = ref([])
           let taskCIDList = ref([])
           let taskLIDList = ref([])

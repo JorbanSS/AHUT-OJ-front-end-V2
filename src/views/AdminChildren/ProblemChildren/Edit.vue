@@ -347,7 +347,7 @@ let problemPdf = reactive<FileUploadType>({
     })
   },
 
-  uploadProblemPdf() {
+  uploadProblemPdf() { 
     if (this.file == null) {
       push.warning({
         title: '请选择文件',

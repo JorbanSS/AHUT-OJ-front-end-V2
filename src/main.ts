@@ -9,7 +9,7 @@ import VueGtag from "vue-gtag-next";
 
 import App from "./App.vue";
 import router from "./routers";
-import GlobalComponents from "@/components/layout/index";
+import GlobalComponents from "@/components/Layout/index";
 
 import "notivue/animations.css";
 import "notivue/notifications.css";

@@ -17,7 +17,7 @@
         <label class="font-bold text-base" @click="
           $router.push({
             name: 'EditProblem',
-            params: {
+            params: { 
               PID: judgeFiles.PID,
               },
             })
@@ -43,9 +43,34 @@
     </ul>
   </div>
   <div class="mx-auto Border card shadow-lg bg-white p-6 max-w-5xl">
-    <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept=".zip,.in,.out" multiple
-      @change="uploadFilesChangeHandle" />
+    <div class="space-x-2 ">
+        <input type="file" class="file-input file-input-bordered w-full max-w-xs" accept=".zip,.in,.out" multiple
+          @change="uploadFilesChangeHandle" />
+            <button class="btn btn-neutral " @click="judgeFiles.DeleteAllInfo()">
+                <delete theme="outline" size="18" />
+                  删除所有
+              </button>
+      </div>
+  </div>  
+  <div>
+    
+    <dialog id="deleteListInfoModal" class="modal">
+      <div class="modal-box space-y-2 w-96">
+        <h3 class="font-bold text-lg">是否要删除所有数据</h3>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2" >取消删除</button>
+            <button class="btn btn-neutral" @click="judgeFiles.DeleteAll">
+              确认删除
+            </button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
   </div>
+ 
+
   <div class="m-6"></div>
   <div class="mx-auto Border card shadow-lg bg-white max-w-5xl">
     <table class="table table-zebra mb-4 text-center">
@@ -172,7 +197,6 @@ let uploadFilesInput = reactive<UploadFilesInputType>({
       title: "选择成功",
     });
   },
-
   upload() {
     if (uploadFilesInput.files == null || uploadFilesInput.files.length == 0) {
       push.warning({
@@ -212,10 +236,15 @@ const uploadFilesChangeHandle = (event: Event) => {
   }
 };
 
+function showDeleteInfoModal() {
+  // @ts-ignore
+  deleteListInfoModal.showModal();
+}
 let judgeFiles = reactive<JudgeFilesType>({
   judgeFiles: [],
   PID: "",
   Count: 0,
+  DeleteInfo: false,
 
   get(showInfo = false) {
     _getJudgeFiles({}, judgeFiles.PID).then((data: any) => {
@@ -229,8 +258,21 @@ let judgeFiles = reactive<JudgeFilesType>({
       }
     });
   },
+  
+  DeleteAllInfo(){
+    showDeleteInfoModal();
+},
+DeleteAll(){
+  this.judgeFiles.forEach((item)=>{
+      // console.log(item.FileName);
+      this.delete(item.FileName);
+    })
+},
 
-  delete(fileName: string) {
+
+  delete(fileName: any) {
+    // console.log(fileName);
+    
     let formData = new FormData();
     formData.append("file", fileName);
     _deleteJudgeFiles(formData, judgeFiles.PID).then(() => {
