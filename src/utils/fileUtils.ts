@@ -185,7 +185,7 @@ export class FileUtils {
       sheetname: string;
     },
     exportData: any[],
-    exportStyle: (worksheet: XLSX.WorkSheet) => void = () => {}
+    exportStyle: (worksheet: XLSX.WorkSheet) => any =  () => {}
   ) {
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const colWidths = exportData.reduce((widths, row) => {
@@ -212,9 +212,10 @@ export class FileUtils {
       }
     }
     //默认字体，填充，边界，对齐
-    exportStyle(worksheet);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, exportConfig.sheetname);
-    XLSX.writeFile(workbook, exportConfig.filename);
+    exportStyle(worksheet).then(() => {
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, exportConfig.sheetname);
+      XLSX.writeFile(workbook, exportConfig.filename);
+    });
   }
 }

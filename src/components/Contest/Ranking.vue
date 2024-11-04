@@ -205,7 +205,7 @@ import { useRoute, useRouter } from "vue-router";
 import { FullScreen, Refresh } from "@icon-park/vue-next";
 
 import { _getContestRanking } from "@/apis/contest";
-// import { _getRandomColor } from "@/apis/public";
+import { _getRandomColor } from "@/apis/public";
 import { useConstValStore } from "@/stores/ConstVal";
 import XLSX from "xlsx-js-style";
 import {
@@ -371,8 +371,8 @@ let onExportExcel = () => {
     const userproblem = user.Problems.map((problem, index) => {
       const alphaIndex = ConvertTools.Number2Alpha(index + 1);
       return {
-        [`${alphaIndex}`]: `${problem.Status == null ? "" : problem.Status}`,
-        [`${alphaIndex}time`]: `${problem.Time}`,
+        [`${alphaIndex}`]: `${problem.Status == "NULL" ? "" : problem.Status}`,
+        [`${alphaIndex}1`]: `${problem.Time == 0 ? "" : problem.Time}`,
       };
     });
     const mergedProblems = userproblem.reduce((acc, curr) => {
@@ -388,7 +388,7 @@ let onExportExcel = () => {
     };
   });
   //格式
-  const exportStyle = (worksheet: XLSX.WorkSheet) => {
+  const exportStyle = async (worksheet: XLSX.WorkSheet) => {
     const problemStartIndex = 4;
     const range = XLSX.utils.decode_range(worksheet["!ref"]);
     let mergeArr = [];
@@ -405,6 +405,8 @@ let onExportExcel = () => {
       });
     }
     worksheet["!merges"] = mergeArr;
+
+    const asyncOperations = [];
     for (let C = range.s.c; C <= range.e.c; C++) {
       for (let R = range.s.r; R <= range.e.r; R++) {
         const cellAddress = XLSX.utils.encode_cell({ c: C, r: R });
@@ -418,18 +420,20 @@ let onExportExcel = () => {
         }
         if (R === 0) {
           if (C >= problemStartIndex) {
-            // _getRandomColor({}).then((data) => {
-            //   let color = data.data.color;
-            //   if (color) {
-            //     let rgbColor = color.replace(/^#/, "");
-            //     cell.s = {
-            //       ...cell.s, // 这里要加上默认的字体格式，如果没有重载的话
-            //       fill: {
-            //         fgColor: { rgb: rgbColor },
-            //       },
-            //     };
-            //   }
-            // });
+            asyncOperations.push(
+              _getRandomColor().then((data) => {
+                let color = data.data.color;
+                if (color) {
+                  let rgbColor = color.replace(/^#/, "").toLowerCase();
+                  cell.s = {
+                    ...cell.s, // 这里要加上默认的字体格式，如果没有重载的话
+                    fill: {
+                      fgColor: { rgb: rgbColor },
+                    },
+                  };
+                }
+              })
+            );
           }
         }
         if (R > 0 && C >= problemStartIndex) {
@@ -439,6 +443,7 @@ let onExportExcel = () => {
         }
       }
     }
+    await Promise.all(asyncOperations);
   };
   FileUtils.exportExcel(
     { filename: "ranking.xlsx", sheetname: "Rank" },
