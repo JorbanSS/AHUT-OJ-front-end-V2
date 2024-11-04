@@ -1,12 +1,10 @@
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import VueSetupExtend from 'vite-plugin-vue-setup-extend';
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import VueSetupExtend from "vite-plugin-vue-setup-extend";
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    VueSetupExtend(),
-  ],
+  plugins: [vue(), VueSetupExtend()],
+
   server: {
     // host: '0.0.0.0',
     hmr: true,
@@ -23,7 +21,7 @@ export default defineConfig({
     //   }
     // },
   },
-  base: '/',
+  base: "/",
   css: {
     preprocessorOptions: {
       scss: {
@@ -33,7 +31,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': '/src',
+      "@": "/src",
     },
   },
-})
+});

@@ -107,5 +107,5 @@ export const _editHeadUrl = (data: any) => {
 
 //获取用户列表
 export const _getUsers =(data :any) =>{
-  return Get('admin/users/',data); 
+  return Get('admin/users',data); 
 }

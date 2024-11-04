@@ -31,7 +31,7 @@
     "vue-gtag-next": "^1.14.0",
     "vue-router": "^4.3.0",
     "vuedraggable": "^4.1.0",
-    "xlsx": "^0.18.5"
+    "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.6.4",

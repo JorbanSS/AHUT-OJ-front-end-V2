@@ -194,7 +194,7 @@ export const adminNavItems: Array<NavItemType> = [
   { title: "比赛", icon: Trophy, to: { name: "AdminContest" } },
   { title: "审阅", icon: Audit, to: { name: "AdminCodeReview" } },
   { title: "训练", icon: Muscle, to: { name: "AdminTraining" } },
-  { title: "用户", icon: Peoples, to: { name: "AdminUser" } },
+  { title: "用户", icon: Peoples, to: { name: "UserList" } },
   { title: "小组", icon: Peoples, to: { name: "AdminGroup" } },
   { title: "杂项", icon: MoreTwo, to: { name: "AdminOther" } },
 ];

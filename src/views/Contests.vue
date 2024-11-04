@@ -31,13 +31,13 @@
               params: {
                 CID: item.CID,
               },
-              query: {
-                IsPublic: item.IsPublic,
-                Title: item.Title,
-                BeginTime: item.BeginTime,
-                EndTime: item.EndTime,
-                Type: item.Type,
-              },
+              // query: {
+              //   IsPublic: item.IsPublic,
+              //   Title: item.Title,
+              //   BeginTime: item.BeginTime,
+              //   EndTime: item.EndTime,
+              //   Type: item.Type,
+              // },
             })" :class="{ 'cursor-pointer': item.Status, 'cursor-not-allowed': !item.Status }">
               <td class="font-bold talbe-lg whitespace-nowrap hidden md:table-cell"
                 :style="'color: ' + ContestStatus[item.Status].color">

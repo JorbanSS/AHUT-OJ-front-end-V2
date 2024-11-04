@@ -2,99 +2,123 @@
   <div class="m-6 flex justify-center space-x-2">
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
+        <div
+          class="font-bold text-base"
+          @click="$router.push({ name: 'UserList' })"
+        >
+          <peoples theme="outline" size="18" />
+          用户列表
+        </div>
+      </li>
+      <li>
         <div class="font-bold text-base btn-active">
           <peoples theme="outline" size="18" />
           管理员列表
         </div>
       </li>
-      <li>
-        <div class="font-bold text-base" @click="$router.push({ name: 'UserList' })">
-          <peoples theme="outline" size="18" />
-          用户列表
-        </div>
-      </li>
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
-      <li>
-        <div class="font-bold text-base" @click="showAddUserModal()">
-          <add theme="outline" size="18" />
-          新增用户
-        </div>
-      </li>
-      <li>
-        <div class="font-bold text-base" @click="showEditUserInfoModal()">
-          <edit-one theme="outline" size="18" />
-          用户编辑
-        </div>
-      </li>
       <li>
         <div class="font-bold text-base" @click="showEditPermissionModal()">
           <permissions theme="outline" size="18" />
           修改权限
         </div>
       </li>
-      <li>
-        <div class="font-bold text-base hover:text-red-500" @click="deleteUsers()">
-          <delete-one theme="outline" size="18" hover:fill="#EC4545" />
-          删除用户
-        </div>
-      </li>
     </ul>
   </div>
 
-  
   <div class="bg-white card shadow-lg Border mx-auto max-w-5xl">
     <table class="table table-zebra text-center">
       <thead>
         <tr>
           <th>
-            <input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()" />
+            <input
+              type="checkbox"
+              :checked="allSelected"
+              class="checkbox"
+              @click="switchAllSelectedStatus()"
+            />
           </th>
-          <th v-for="(item, index) in [
-            '用户 ID',
-            '用户名称',
-            '超管',
-            '题单',
-            '资源',
-            '比赛',
-            '题目',
-            '操作',
-          ]" :key="index">
+          <th
+            v-for="(item, index) in [
+              '用户 ID',
+              '用户名称',
+              '超管',
+              '题单',
+              '资源',
+              '比赛',
+              '题目',
+              '操作',
+            ]"
+            :key="index"
+          >
             {{ item }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in users.users" :key="item.UID" @click="switchSelectedStatus(index)"
-          class="cursor-pointer">
+        <tr
+          v-for="(item, index) in users.users"
+          :key="item.UID"
+          @click="switchSelectedStatus(index)"
+          class="cursor-pointer"
+        >
           <td>
-            <input type="checkbox" :checked="item.Selected == true" class="checkbox" />
+            <input
+              type="checkbox"
+              :checked="item.Selected == true"
+              class="checkbox"
+            />
           </td>
           <th>{{ item.UID }}</th>
           <td>
             <div class="font-bold talbe-lg">{{ item.UserName }}</div>
           </td>
           <td>
-            <input type="checkbox" class="checkbox" v-model="item.super" disabled />
+            <input
+              type="checkbox"
+              class="checkbox"
+              v-model="item.super"
+              disabled
+            />
           </td>
           <td>
-            <input type="checkbox" class="checkbox" v-model="item.problemList" disabled />
+            <input
+              type="checkbox"
+              class="checkbox"
+              v-model="item.problemList"
+              disabled
+            />
           </td>
           <td>
-            <input type="checkbox" class="checkbox" v-model="item.resource" disabled />
+            <input
+              type="checkbox"
+              class="checkbox"
+              v-model="item.resource"
+              disabled
+            />
           </td>
           <td>
-            <input type="checkbox" class="checkbox" v-model="item.contest" disabled />
+            <input
+              type="checkbox"
+              class="checkbox"
+              v-model="item.contest"
+              disabled
+            />
           </td>
           <td>
-            <input type="checkbox" class="checkbox" v-model="item.problem" disabled />
+            <input
+              type="checkbox"
+              class="checkbox"
+              v-model="item.problem"
+              disabled
+            />
           </td>
           <td class="space-x-2">
-            <button class="btn btn-sm btn-neutral" @click.stop="showEditUserInfoModal(item.UID)">
-              <edit-two theme="outline" size="18" />
-              用户
-            </button>
-            <button class="btn btn-sm btn-neutral" @click.stop="showEditPermissionModal(item.UID)">
+            <button
+              class="btn btn-sm btn-neutral"
+              @click.stop="showEditPermissionModal(item.UID)"
+            >
               <permissions theme="outline" size="18" />
               权限
             </button>
@@ -102,59 +126,13 @@
         </tr>
       </tbody>
     </table>
-    <Pagination :page="users.page" :maxPage="maxPage" :changePage="users.changePage" />
+    <Pagination
+      :page="users.page"
+      :maxPage="maxPage"
+      :changePage="users.changePage"
+    />
   </div>
   <div>
-    <dialog id="editUserInfoModal" class="modal">
-      <div class="modal-box space-y-2 w-96">
-        <h3 class="font-bold text-lg">修改用户信息</h3>
-        <label class="input input-bordered flex items-center gap-2">
-          UID
-          <input type="text" class="grow" placeholder="" v-model="user.UID" />
-        </label>
-        <label class="input input-bordered flex items-center gap-2">
-          邮箱
-          <input type="text" class="grow" placeholder="" v-model="user.Email" />
-        </label>
-        <label class="input input-bordered flex items-center gap-2">
-          密码
-          <input type="text" class="grow" placeholder="" v-model="user.Password" />
-        </label>
-        <div class="modal-action">
-          <form method="dialog">
-            <button class="btn mr-2">取消修改</button>
-            <button class="btn btn-neutral" @click="user.edit()">
-              确认修改
-            </button>
-          </form>
-        </div>
-      </div>
-    </dialog>
-    <dialog id="addUserModal" class="modal">
-      <div class="modal-box space-y-2 w-96">
-        <h3 class="font-bold text-lg">新增用户</h3>
-        <label class="input input-bordered flex items-center gap-2">
-          UID
-          <input type="text" class="grow" placeholder="" v-model="user.UID" />
-        </label>
-        <label class="input input-bordered flex items-center gap-2">
-          用户名
-          <input type="text" class="grow" placeholder="" v-model="user.UserName" />
-        </label>
-        <label class="input input-bordered flex items-center gap-2">
-          密码
-          <input type="text" class="grow" placeholder="" v-model="user.Password" />
-        </label>
-        <div class="modal-action">
-          <form method="dialog">
-            <button class="btn mr-2">取消新增</button>
-            <button class="btn btn-neutral" @click="user.addUser()">
-              确认新增
-            </button>
-          </form>
-        </div>
-      </div>
-    </dialog>
     <dialog id="editPermissionModal" class="modal">
       <div class="modal-box space-y-2 w-96">
         <h3 class="font-bold text-lg">修改权限</h3>
@@ -163,7 +141,10 @@
             UID
             <input type="text" class="grow" placeholder="" v-model="user.UID" />
           </label>
-          <button class="btn join-item btn-neutral w-20" @click="user.getPermission(true)">
+          <button
+            class="btn join-item btn-neutral w-20"
+            @click="user.getPermission(true)"
+          >
             查询
           </button>
         </div>
@@ -171,13 +152,16 @@
           <table class="table table-zebra">
             <thead>
               <tr>
-                <th v-for="(item, index) in [
-                  '超管',
-                  '题单',
-                  '资源',
-                  '比赛',
-                  '题目',
-                ]" :key="index">
+                <th
+                  v-for="(item, index) in [
+                    '超管',
+                    '题单',
+                    '资源',
+                    '比赛',
+                    '题目',
+                  ]"
+                  :key="index"
+                >
                   {{ item }}
                 </th>
               </tr>
@@ -185,19 +169,39 @@
             <tbody>
               <tr>
                 <td>
-                  <input type="checkbox" class="checkbox" v-model="permission.super" />
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    v-model="permission.super"
+                  />
                 </td>
                 <td>
-                  <input type="checkbox" class="checkbox" v-model="permission.problemList" />
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    v-model="permission.problemList"
+                  />
                 </td>
                 <td>
-                  <input type="checkbox" class="checkbox" v-model="permission.resource" />
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    v-model="permission.resource"
+                  />
                 </td>
                 <td>
-                  <input type="checkbox" class="checkbox" v-model="permission.contest" />
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    v-model="permission.contest"
+                  />
                 </td>
                 <td>
-                  <input type="checkbox" class="checkbox" v-model="permission.problem" />
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    v-model="permission.problem"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -221,15 +225,7 @@
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
-import {
-  Add,
-  AfferentThree,
-  DeleteOne,
-  Peoples,
-  Permissions,
-  EditOne,
-  EditTwo,
-} from "@icon-park/vue-next";
+import { Peoples, Permissions } from "@icon-park/vue-next";
 import { push } from "notivue";
 
 import {
@@ -247,8 +243,6 @@ import {
   type UserSimplifiedType,
   type UserType,
 } from "@/interfaces/user";
-import { ProblemSimplifiedType, ProblemsType } from "@/interfaces/problem";
-import { _getProblems } from "@/apis/problem";
 
 const router = useRouter();
 const constValStore = useConstValStore();
@@ -260,69 +254,9 @@ function switchSelectedStatus(index: number) {
   users.users[index].Selected = !users.users[index].Selected;
 }
 
-let problems = reactive<ProblemsType>({
-  problems: Array<ProblemSimplifiedType>(),
-  count: 0,
-  page: 1,
-  limit: 20,
-  searchInfo: {
-    PID: '',
-    Label: '',
-    PType: '',
-    Keyword: '',
-  },
-
-  get(showInfo: boolean = false) {
-    let params = {
-      Page: problems.page - 1,
-      Limit: problems.limit,
-      PType: problems.searchInfo.PType,
-      Label: problems.searchInfo.Label,
-      Keyword: problems.searchInfo.Keyword,
-    }
-    _getProblems(params)
-      .then((data: any) => {
-        problems.count = data.Count;
-        problems.problems = data.Data;
-      })
-      .then(() => {
-        if (showInfo) {
-          push.success({
-            title: '获取成功',
-            message: `一共获取了 ${problems.count} 道题目`,
-          })
-        }
-      })
-  },
-
-  goToProblem(PID: string) {
-    if (PID == "") {
-      push.warning({
-        title: "无法跳转",
-        message: "未填写题号",
-      })
-      return;
-    };
-    router.push({
-      name: 'Problem',
-      params: {
-        PID: PID,
-      },
-    });
-  },
-
-  changePage(page: number) {
-    if (1 <= page && page <= maxPage.value) problems.page = page;
-  },
-})
-
-let AdminUserSearcher ={
-  limit: 10,
-
-
-}
-
-
+// let AdminUserSearcher ={
+//   limit: 10,
+// }
 
 let permission = reactive<PermissionType>({
   map: 0,
@@ -362,28 +296,6 @@ function getSelectedList() {
     }
   }
   return list;
-}
-
-function deleteUsers() {
-  let list = getSelectedList();
-  if (list.length == 0) {
-    push.warning({
-      title: "操作不合法",
-      message: "尚未选择任何用户，无法删除",
-    });
-    return;
-  }
-  let params = {
-    UIDs: list,
-  };
-  _deleteUsers(params).then(() => {
-    users.getAdministrators();
-    switchAllSelectedStatus(false);
-    push.success({
-      title: "删除成功",
-      message: `一共删除了 ${list.length} 个用户`,
-    });
-  });
 }
 
 interface UserListType extends UserType {
@@ -446,9 +358,6 @@ let users = reactive({
       }
     });
   },
-
-
-
 });
 
 let user = reactive<UserSimplifiedType>({
@@ -590,31 +499,6 @@ function showEditPermissionModal(UID: string = "") {
   editPermissionModal.showModal();
 }
 
-function showAddUserModal() {
-  user.UID = user.UserName = user.Password = "";
-  // @ts-ignore
-  addUserModal.showModal();
-}
-
-function showEditUserInfoModal(UID: string = "") {
-  user.UID = UID;
-  user.UserName = user.Password = "";
-  if (UID == "") {
-    let list = getSelectedList();
-    if (list.length > 1) {
-      push.warning({
-        title: "操作不合法",
-        message: "不选择或仅选择一位用户进行编辑",
-      });
-      return;
-    } else if (list.length == 1) {
-      user.UID = list[0];
-    }
-  }
-  // @ts-ignore
-  editUserInfoModal.showModal();
-}
-
 onMounted(() => {
   users.getAdministrators(true);
 });
@@ -636,7 +520,7 @@ watch(
         permission.contest =
         permission.problem =
         permission.problemList =
-        true;
+          true;
     }
   }
 );

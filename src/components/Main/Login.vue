@@ -7,7 +7,9 @@
       >
         <close theme="outline" size="24" />
       </button>
-      <span class="flex justify-center font-bold text-3xl pb-6"> 登陆界面 </span>
+      <span class="flex justify-center font-bold text-3xl pb-6">
+        登陆界面
+      </span>
       <div class="flex justify-center">
         <ul class="menu bg-white lg:menu-horizontal rounded-box font-bold">
           <li
@@ -172,7 +174,7 @@ function startCountDown() {
 interface propsType {
   init?: Function;
   register?: Function;
-  forget?:Function;
+  forget?: Function;
 }
 
 let props = withDefaults(defineProps<propsType>(), {
@@ -282,6 +284,7 @@ function sendLoginRequest(params: any) {
       localStorage.setItem("UID", data.UID);
       localStorage.setItem("saveLoginStatus", loginInfo.Save.toString());
       localStorage.setItem("permissionMap", data.PermissionMap.toString());
+      localStorage.setItem("expireTime", data.ExpTime);
       sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
       userDataStore.login(data);
       userDataStore.updatePermissionMap(data.PermissionMap);

@@ -1,58 +1,95 @@
 <template>
-
   <div v-auto-animate>
-
-    <NavBar :login="loginAction" :logout="logoutAction"
-      v-if="showConfig.showNavBar && route.name != 'Editor' && route.name != 'RankingView'">
+    <NavBar
+      :login="loginAction"
+      :logout="logoutAction"
+      v-if="
+        showConfig.showNavBar &&
+        route.name != 'Editor' &&
+        route.name != 'RankingView'
+      "
+    >
     </NavBar>
 
     <keep-alive>
       <div
-        :style="adminMode || route.name == 'RankingView' ? 'min-height: calc(100vh)' : 'min-height: calc(100vh - 126px)'"
-        v-auto-animate v-if="showConfig.showBody">
+        :style="
+          adminMode || route.name == 'RankingView'
+            ? 'min-height: calc(100vh)'
+            : 'min-height: calc(100vh - 126px)'
+        "
+        v-auto-animate
+        v-if="showConfig.showBody"
+      >
         <RouterView></RouterView>
       </div>
     </keep-alive>
 
     <Footer
-      v-if="showConfig.showFooter && route.name != 'Editor' && route.name != 'RankingView' && (route.matched.length == 0 || route.matched[0].name != 'Problem')">
+      v-if="
+        showConfig.showFooter &&
+        route.name != 'Editor' &&
+        route.name != 'RankingView' &&
+        (route.matched.length == 0 || route.matched[0].name != 'Problem')
+      "
+    >
     </Footer>
 
-    <div class="coverBox" v-if="showConfig.showCover" style="background: linear-gradient(to bottom right, #BBB, #DDD);">
+    <div
+      class="coverBox"
+      v-if="showConfig.showCover"
+      style="background: linear-gradient(to bottom right, #bbb, #ddd)"
+    >
       <!-- #50A3A2, #53E3A6) -->
       <ul class="bg-bubbles">
         <li v-for="i in 10" :key="i"></li>
       </ul>
       <div class="cover"></div>
     </div>
-    
-    <component :is="Login" :init="initAction" :register="registerAction" :forget="forgetAction" v-if="showConfig.showLogin" />
-    <component :is="Register" :init="initAction" :login="loginAction" :forget="forgetAction" v-if="showConfig.showRegister" />
-    <component :is="ForgetPass" :init = "initAction" :login="loginAction" :register="registerAction" v-if="showConfig.showForget"/>
+
+    <component
+      :is="Login"
+      :init="initAction"
+      :register="registerAction"
+      :forget="forgetAction"
+      v-if="showConfig.showLogin"
+    />
+    <component
+      :is="Register"
+      :init="initAction"
+      :login="loginAction"
+      :forget="forgetAction"
+      v-if="showConfig.showRegister"
+    />
+    <component
+      :is="ForgetPass"
+      :init="initAction"
+      :login="loginAction"
+      :register="registerAction"
+      v-if="showConfig.showForget"
+    />
     <component :is="Editor" v-if="showConfig.showEditor" />
-
   </div>
-
 </template>
 
 <script lang="ts" setup name="Main">
-import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
-import { RouterView, useRoute } from 'vue-router';
+import { onMounted, onUnmounted, reactive, ref, watch } from "vue";
+import { RouterView, useRoute } from "vue-router";
 
-import { push } from 'notivue';
+import { push } from "notivue";
 
-import { _getUserInfo, _getUserPermission } from '@/apis/user';
-import Footer from '@/components/Main/Footer.vue';
-import Login from '@/components/Main/Login.vue';
-import NavBar from '@/components/Main/NavBar.vue';
-import ConfirmModdal from "@/components/Main/ConfirmModal.vue"
-import Register from '@/components/Main/Register.vue';
-import ForgetPass from '@/components/Main/ForgetPass.vue';
-import Editor from '@/components/Main/Editor.vue';
-import { useUserDataStore } from '@/stores/UserData';
-import { type ShowConfigType } from '@/interfaces/oj';
-import { type UserSimplifiedType } from '@/interfaces/user';
-import { useWebSocketStore } from '@/stores/WebSocket';
+import { _getUserInfo, _getUserPermission } from "@/apis/user";
+import { _getServerTime } from "@/apis/common";
+import Footer from "@/components/Main/Footer.vue";
+import Login from "@/components/Main/Login.vue";
+import NavBar from "@/components/Main/NavBar.vue";
+import Register from "@/components/Main/Register.vue";
+import ForgetPass from "@/components/Main/ForgetPass.vue";
+import Editor from "@/components/Main/Editor.vue";
+import { useUserDataStore } from "@/stores/UserData";
+import { type ShowConfigType } from "@/interfaces/oj";
+import { type UserSimplifiedType } from "@/interfaces/user";
+import { useWebSocketStore } from "@/stores/WebSocket";
 
 const userDataStore = useUserDataStore();
 const route = useRoute();
@@ -72,29 +109,59 @@ let showConfig = reactive<ShowConfigType>({
 
   init() {
     this.showNavBar = this.showFooter = this.showBody = true;
-    this.showCover = this.showLogin = this.showRegister = this.showEditor = this.showForget = false;
+    this.showCover =
+      this.showLogin =
+      this.showRegister =
+      this.showEditor =
+      this.showForget =
+        false;
   },
 
   showLoginDialog() {
     this.showCover = this.showLogin = true;
-    this.showNavBar = this.showFooter = this.showRegister = this.showBody = this.showEditor = this.showForget = false;
+    this.showNavBar =
+      this.showFooter =
+      this.showRegister =
+      this.showBody =
+      this.showEditor =
+      this.showForget =
+        false;
   },
 
   showRegisterDialog() {
     this.showCover = this.showRegister = true;
-    this.showNavBar = this.showFooter = this.showLogin = this.showBody = this.showEditor = this.showForget = false;
+    this.showNavBar =
+      this.showFooter =
+      this.showLogin =
+      this.showBody =
+      this.showEditor =
+      this.showForget =
+        false;
   },
 
-  showForgetDialog(){
+  showForgetDialog() {
     this.showCover = this.showForget = true;
-    this.showNavBar = this.showFooter = this.showRegister = this.showBody = this.showEditor = this.showLogin = false;
+    this.showNavBar =
+      this.showFooter =
+      this.showRegister =
+      this.showBody =
+      this.showEditor =
+      this.showLogin =
+        false;
   },
 
   showEditorDialog() {
     this.showEditor = true;
-    this.showNavBar = this.showFooter = this.showLogin = this.showRegister = this.showBody = this.showCover = this.showForget = false;
+    this.showNavBar =
+      this.showFooter =
+      this.showLogin =
+      this.showRegister =
+      this.showBody =
+      this.showCover =
+      this.showForget =
+        false;
   },
-})
+});
 
 function loginAction() {
   showConfig.showLoginDialog();
@@ -104,7 +171,7 @@ function logoutAction() {
   push.success({
     title: "已退出登录",
     message: `${userDataStore.UserName}，欢迎再次使用`,
-  })
+  });
   showConfig.init();
   userDataStore.logout();
   if (WebSocketStore.socket) {
@@ -122,7 +189,7 @@ function registerAction() {
   showConfig.showRegisterDialog();
 }
 
-function forgetAction(){
+function forgetAction() {
   showConfig.showForgetDialog();
 }
 
@@ -131,6 +198,7 @@ function autoLogin() {
   let UID = localStorage.getItem("UID");
   let saveLoginStatus = localStorage.getItem("saveLoginStatus");
   let permissionMap = localStorage.getItem("permissionMap");
+  let expireTime = localStorage.getItem("expireTime");
   let userInfoString = sessionStorage.getItem("userInfo");
 
   if (permissionMap) userDataStore.updatePermissionMap(+permissionMap);
@@ -140,7 +208,8 @@ function autoLogin() {
     if (UID && userInfo.UID == UID) {
       userDataStore.getUserPermission(UID);
       userDataStore.loginSimplified(userInfo);
-    } else {  // 数据不同步
+    } else {
+      // 数据不同步
       userDataStore.init();
       return;
     }
@@ -149,47 +218,61 @@ function autoLogin() {
   }
 
   if (saveLoginStatus == "true" && token) {
-    _getUserInfo({})
+    _getServerTime({})
+      .then((data: any) => {
+        if (expireTime && data.time <= expireTime) {//如果有expireTime就可以明确判断是过期了，没有就别管了，然后后端来报错吧
+          console.error(`expirtTime:${expireTime},serverTime::${data.time}`)
+          userDataStore.init();
+          return Promise.reject();
+        } else {
+          return _getUserInfo({});
+        }
+      })
       .then((data: any) => {
         userDataStore.getUserPermission(data.UID);
         userDataStore.login(data);
         showConfig.init();
         push.success({
-          title: '登录成功',
+          title: "登录成功",
           message: `${data.UserName}，欢迎回来`,
-        })
+        });
       })
-  } else {
-    userDataStore.init();
+      .catch(() => {
+        push.info({
+          title: "登陆过期",
+          message: `请重新登陆`,
+        });
+      });
   }
 }
 
-watch(() => route.path, () => {
-  let page = route.path.split('/')[1];
-  if (page == 'admin') {
-    showConfig.showNavBar = false;
-    showConfig.showFooter = false;
-    showConfig.showCover = false;
-    showConfig.showLogin = false;
-    showConfig.showRegister = false;
-    showConfig.showBody = true;
-    adminMode.value = true;
+watch(
+  () => route.path,
+  () => {
+    let page = route.path.split("/")[1];
+    if (page == "admin") {
+      showConfig.showNavBar = false;
+      showConfig.showFooter = false;
+      showConfig.showCover = false;
+      showConfig.showLogin = false;
+      showConfig.showRegister = false;
+      showConfig.showBody = true;
+      adminMode.value = true;
+    } else {
+      adminMode.value = false;
+      showConfig.init();
+    }
   }
-  else {
-    adminMode.value = false;
-    showConfig.init();
-  }
-})
+);
 
 function getUserInfo() {
   let params = {
     UID: localStorage.getItem("UID"),
   };
   if (params.UID && params.UID != "") {
-    _getUserInfo(params)
-      .then((data: any) => {
-        userDataStore.login(data);
-      })
+    _getUserInfo(params).then((data: any) => {
+      userDataStore.login(data);
+    });
   }
 }
 
@@ -205,21 +288,24 @@ function getUserInfo() {
 //   }
 // });不需要手动关闭
 
-watch(() => WebSocketStore.socketMessage, (newMessage) => {
-  handleMessage(newMessage);
-});
+watch(
+  () => WebSocketStore.socketMessage,
+  (newMessage) => {
+    handleMessage(newMessage);
+  }
+);
 
 const handleMessage = (message: any) => {
   // Handle different types of messages
   switch (message.type) {
-    case 'type1':
-      console.log('Handle type1 message:', message);
+    case "type1":
+      console.log("Handle type1 message:", message);
       break;
-    case 'type2':
-      console.log('Handle type2 message:', message);
+    case "type2":
+      console.log("Handle type2 message:", message);
       break;
     default:
-      console.log('Handle default message:', message);
+      console.log("Handle default message:", message);
       break;
   }
 };
@@ -231,7 +317,6 @@ onMounted(() => {
   autoLogin();
   getUserInfo();
 });
-
 </script>
 
 <style lang="scss" scoped>
