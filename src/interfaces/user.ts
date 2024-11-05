@@ -72,4 +72,12 @@ export interface BindType {
   [item: string]: any,        // 其他属性
 }
 
+export interface AddUserType {
+  UID: string;
+  UserName: string;
+  Pass: string;
+}
+//tip: 这里加item是为了让一个成员具有类的一些方法
+
+// export type AddUsersType = AddUserItem[];
 

@@ -29,6 +29,9 @@ dependencies:
   image-conversion:
     specifier: ^2.1.1
     version: 2.1.1
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   md-editor-v3:
     specifier: ^4.20.4
     version: 4.20.4(@codemirror/view@6.34.1)(@lezer/common@1.2.2)(vue@3.4.38)
@@ -79,6 +82,9 @@ devDependencies:
   '@types/canvas-confetti':
     specifier: ^1.6.4
     version: 1.6.4
+  '@types/lodash':
+    specifier: ^4.17.13
+    version: 4.17.13
   '@types/spark-md5':
     specifier: ^3.0.4
     version: 3.0.4
@@ -1091,9 +1097,8 @@ packages:
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
     dev: false
 
-  /@types/lodash@4.17.7:
-    resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
-    dev: false
+  /@types/lodash@4.17.13:
+    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
 
   /@types/markdown-it@14.1.2:
     resolution: {integrity: sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==}
@@ -2948,7 +2953,7 @@ packages:
       vue: ^3.2.0
     dependencies:
       '@popperjs/core': 2.11.8
-      '@types/lodash': 4.17.7
+      '@types/lodash': 4.17.13
       '@types/resize-observer-browser': 0.1.11
       date-fns: 2.30.0
       date-fns-tz: 2.0.1(date-fns@2.30.0)

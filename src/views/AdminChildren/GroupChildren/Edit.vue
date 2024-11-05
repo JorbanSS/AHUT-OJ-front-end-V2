@@ -54,7 +54,7 @@
     <div class="text-2xl px-6 pt-6">
       <div class="join flex" style="justify-content: space-evenly">
         <button
-          class="btn join-item btn-neutral"
+          class="btn btn-neutral"
           @click.stop="
             $router.push({
               name: 'ProblemListAddTask',
@@ -67,7 +67,7 @@
           添加题单
         </button>
         <button
-          class="btn join-item btn-neutral"
+          class="btn btn-neutral"
           @click.stop="
             $router.push({
               name: 'ProblemAddTask',
@@ -80,7 +80,7 @@
           添加题目
         </button>
         <button
-          class="btn join-item btn-neutral"
+          class="btn btn-neutral"
           @click.stop="
             $router.push({
               name: 'ContestAddTask',

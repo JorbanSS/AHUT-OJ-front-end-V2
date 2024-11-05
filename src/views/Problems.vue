@@ -108,6 +108,7 @@ import { problemTypeOptions } from '@/config';
 import { type ProblemSimplifiedType, type ProblemsType } from '@/interfaces/problem';
 import { ConvertTools } from '@/utils/globalFunctions';
 import PageHeader from '@/components/Main/PageHeader.vue';
+import { debounce } from 'lodash'
 
 const router = useRouter();
 
@@ -125,14 +126,15 @@ let problems = reactive<ProblemsType>({
     Keyword: '',
   },
 
-  get(showInfo: boolean = false) {
+  get: debounce((showInfo: boolean = false) => {
     let params = {
       Page: problems.page - 1,
       Limit: problems.limit,
       PType: problems.searchInfo.PType,
       Label: problems.searchInfo.Label,
       Keyword: problems.searchInfo.Keyword,
-    }
+    };
+
     _getProblems(params)
       .then((data: any) => {
         problems.count = data.Count;
@@ -143,10 +145,10 @@ let problems = reactive<ProblemsType>({
           push.success({
             title: '获取成功',
             message: `一共获取了 ${problems.count} 道题目`,
-          })
+          });
         }
-      })
-  },
+      });
+  }, 500), 
 
   goToProblem(PID: string) {
     if (PID == "") {

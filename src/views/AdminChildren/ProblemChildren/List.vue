@@ -9,7 +9,10 @@
         </div>
       </li>
       <li>
-        <div class="font-bold text-base" @click="$router.push({ name: 'AddProblem' })">
+        <div
+          class="font-bold text-base"
+          @click="$router.push({ name: 'AddProblem' })"
+        >
           <add theme="outline" size="18" />
           新增题目
         </div>
@@ -17,7 +20,10 @@
     </ul>
     <ul class="menu rounded-box bg-white lg:menu-horizontal Border">
       <li>
-        <div class="font-bold text-base hover:text-red-500" @click="problems.delete()">
+        <div
+          class="font-bold text-base hover:text-red-500"
+          @click="problems.delete()"
+        >
           <delete-one theme="outline" size="18" hover:fill="#EC4545" />
           删除题目
         </div>
@@ -40,14 +46,27 @@
     <div class="join w-fit">
       <label class="input input-bordered flex items-center gap-2 join-item">
         <span class="whitespace-nowrap">标签</span>
-        <input type="text" class="grow w-32" v-model="problems.searchInfo.Label" />
+        <input
+          type="text"
+          class="grow w-32"
+          v-model="problems.searchInfo.Label"
+        />
       </label>
-      <select class="select select-bordered join-item" v-model="problems.searchInfo.PType">
-        <option v-for="item in problemTypeOptions" :value="item.value" :key="item.value">
+      <select
+        class="select select-bordered join-item"
+        v-model="problems.searchInfo.PType"
+      >
+        <option
+          v-for="item in problemTypeOptions"
+          :value="item.value"
+          :key="item.value"
+        >
           {{ item.label }}
         </option>
       </select>
-      <button class="btn join-item btn-neutral" @click="problems.get(true)">搜索</button>
+      <button class="btn join-item btn-neutral" @click="problems.get(true)">
+        搜索
+      </button>
     </div>
   </div>
   <div class="mt-6"></div>
@@ -55,38 +74,66 @@
     <table class="table table-zebra text-center">
       <thead>
         <tr>
-          <th><input type="checkbox" :checked="allSelected" class="checkbox" @click="switchAllSelectedStatus()"></th>
-          <th v-for="(item, index) in ['题号', '题目名称', '编辑操作']" :key="index">
+          <th>
+            <input
+              type="checkbox"
+              :checked="allSelected"
+              class="checkbox"
+              @click="switchAllSelectedStatus()"
+            />
+          </th>
+          <th
+            v-for="(item, index) in ['题号', '题目名称', '编辑操作']"
+            :key="index"
+          >
             {{ item }}
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in problems.problems" :key="item.PID" @click="switchSelectedStatus(index)"
-          class="cursor-pointer">
+        <tr
+          v-for="(item, index) in problems.problems"
+          :key="item.PID"
+          @click="switchSelectedStatus(index)"
+          class="cursor-pointer"
+        >
           <td>
-            <input type="checkbox" :checked="item.Selected == true" class="checkbox" />
+            <input
+              type="checkbox"
+              :checked="item.Selected == true"
+              class="checkbox"
+            />
           </td>
           <th>{{ item.PID }}</th>
           <td>
             <div class="font-bold talbe-lg">{{ item.Title }}</div>
           </td>
           <td class="space-x-2">
-            <button class="btn btn-sm btn-neutral" @click.stop="$router.push({
-              name: 'EditProblem',
-              params: {
-                PID: item.PID,
-              },
-            })">
+            <button
+              class="btn btn-sm btn-neutral"
+              @click.stop="
+                $router.push({
+                  name: 'EditProblem',
+                  params: {
+                    PID: item.PID,
+                  },
+                })
+              "
+            >
               <edit-two theme="outline" size="18" />
               题目
             </button>
-            <button class="btn btn-sm btn-neutral" @click.stop="$router.push({
-              name: 'ProblemData',
-              params: {
-                PID: item.PID,
-              },
-            })">
+            <button
+              class="btn btn-sm btn-neutral"
+              @click.stop="
+                $router.push({
+                  name: 'ProblemData',
+                  params: {
+                    PID: item.PID,
+                  },
+                })
+              "
+            >
               <ICONdata theme="outline" size="18" />
               数据
             </button>
@@ -94,20 +141,36 @@
         </tr>
       </tbody>
     </table>
-    <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" />
+    <Pagination
+      :page="problems.page"
+      :maxPage="maxPage"
+      :changePage="problems.changePage"
+    />
   </div>
 </template>
 
 <script lang="ts" setup name="AddProblem">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from "vue";
 
-import { Add, AfferentThree, DeleteOne, DocumentFolder, EditTwo, EfferentThree, Data as ICONdata } from '@icon-park/vue-next';
-import { push } from 'notivue';
+import {
+  Add,
+  AfferentThree,
+  DeleteOne,
+  DocumentFolder,
+  EditTwo,
+  EfferentThree,
+  Data as ICONdata,
+} from "@icon-park/vue-next";
+import { push } from "notivue";
 
 import { _deleteProblems, _exportProblems, _getProblems } from "@/apis/problem";
 import Pagination from "@/components/Main/Pagination.vue";
-import { problemTypeOptions } from '@/config';
-import { type ProblemSimplifiedType, type ProblemsType } from '@/interfaces/problem';
+import { problemTypeOptions } from "@/config";
+import {
+  type ProblemSimplifiedType,
+  type ProblemsType,
+} from "@/interfaces/problem";
+import { debounce } from "lodash";
 
 let allSelected = ref<boolean>(false);
 
@@ -134,41 +197,40 @@ function getSelectedList() {
 }
 
 interface ProblemsListType extends ProblemSimplifiedType {
-  Selected: boolean,
-};
+  Selected: boolean;
+}
 
 let problems = reactive<ProblemsType>({
-  problems: new Array<ProblemsListType>,
+  problems: new Array<ProblemsListType>(),
   count: 0,
   page: 1,
   limit: 20,
   searchInfo: {
-    Label: '',
-    PType: '',
+    Label: "",
+    PType: "",
   },
 
-  get(showInfo: boolean = false) {
+  get: debounce((showInfo: boolean = false) => {
     let params = {
       Page: problems.page - 1,
       Limit: problems.limit,
       PType: problems.searchInfo.PType,
       Label: problems.searchInfo.Label,
-    }
-    _getProblems(params)
-      .then((data: any) => {
-        problems.count = data.Count;
-        problems.problems = data.Data;
-        for (let index = 0; index < problems.problems.length; index++) {
-          problems.problems[index].Selected = false;
-        }
-        if (showInfo) {
-          push.success({
-            title: '获取成功',
-            message: `一共获取了 ${problems.count} 道题目`,
-          })
-        }
-      })
-  },
+    };
+    _getProblems(params).then((data: any) => {
+      problems.count = data.Count;
+      problems.problems = data.Data;
+      for (let index = 0; index < problems.problems.length; index++) {
+        problems.problems[index].Selected = false;
+      }
+      if (showInfo) {
+        push.success({
+          title: "获取成功",
+          message: `一共获取了 ${problems.count} 道题目`,
+        });
+      }
+    });
+  }, 500),
 
   changePage(page: number) {
     if (1 <= page && page <= maxPage.value) problems.page = page;
@@ -178,69 +240,69 @@ let problems = reactive<ProblemsType>({
     let list = getSelectedList();
     if (list.length == 0) {
       push.warning({
-        title: '操作不合法',
-        message: '尚未选择任何题目，无法删除',
-      })
+        title: "操作不合法",
+        message: "尚未选择任何题目，无法删除",
+      });
       return;
     }
     let params = {
       PIDs: list,
     };
-    _deleteProblems(params)
-      .then(() => {
-        this.get();
-        switchAllSelectedStatus(false);
-        push.success({
-          title: '删除成功',
-          message: `一共删除了 ${list.length} 个题目`,
-        });
-      })
+    _deleteProblems(params).then(() => {
+      this.get();
+      switchAllSelectedStatus(false);
+      push.success({
+        title: "删除成功",
+        message: `一共删除了 ${list.length} 个题目`,
+      });
+    });
   },
 
   export() {
     let list = getSelectedList();
     if (list.length == 0) {
       push.warning({
-        title: '操作不合法',
-        message: '尚未选择任何题目，无法导出',
-      })
+        title: "操作不合法",
+        message: "尚未选择任何题目，无法导出",
+      });
       return;
     }
-    let listStr = '';
+    let listStr = "";
     for (let i = 0; i < list.length; i++) {
-      if (i) listStr += ',';
+      if (i) listStr += ",";
       listStr += list[i];
     }
     let params = {
       PIDs: listStr,
     };
-    _exportProblems(params)
-      .then((data: any) => {
-        switchAllSelectedStatus(false);
-        const blob = new Blob([JSON.stringify(data, null, '\t')]);
-        const url = window.URL.createObjectURL(blob);
-        let fileName = listStr + '.json';
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = fileName;
-        link.click();
-        push.success({
-          title: '导出成功',
-          message: `一共导出了 ${list.length} 个题目`,
-        });
-      })
+    _exportProblems(params).then((data: any) => {
+      switchAllSelectedStatus(false);
+      const blob = new Blob([JSON.stringify(data, null, "\t")]);
+      const url = window.URL.createObjectURL(blob);
+      let fileName = listStr + ".json";
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      push.success({
+        title: "导出成功",
+        message: `一共导出了 ${list.length} 个题目`,
+      });
+    });
   },
-})
+});
 
 onMounted(() => {
   problems.get(true);
-})
+});
 
-watch(() => problems.page, () => {
-  problems.get();
-  allSelected.value = false;
-})
+watch(
+  () => problems.page,
+  () => {
+    problems.get();
+    allSelected.value = false;
+  }
+);
 
 const maxPage = computed(() => Math.ceil(problems.count / problems.limit));
-
 </script>

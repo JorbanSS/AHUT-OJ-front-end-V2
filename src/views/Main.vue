@@ -220,8 +220,9 @@ function autoLogin() {
   if (saveLoginStatus == "true" && token) {
     _getServerTime({})
       .then((data: any) => {
-        if (expireTime && data.time <= expireTime) {//如果有expireTime就可以明确判断是过期了，没有就别管了，然后后端来报错吧
-          console.error(`expirtTime:${expireTime},serverTime::${data.time}`)
+        if (expireTime && data.time <= expireTime) {
+          //如果有expireTime就可以明确判断是过期了，没有就别管了，然后后端来报错吧
+          console.error(`expirtTime:${expireTime},serverTime::${data.time}`);
           userDataStore.init();
           return Promise.reject();
         } else {

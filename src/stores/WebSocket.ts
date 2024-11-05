@@ -36,7 +36,7 @@ export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
       // const PING_INTERVAL = 20000; // 心跳间隔，单位为毫秒
       // const heartbeatMessage = { type: 0, msg: "ping" }; // 心跳消息
       const heartbeatMessage2 = { Type: 0, Data: "pong" }; // 心跳响应消息
-      const HOST_ADDRESS = `wss://oj.angriliset.top:4444/ws?token=${token}`; // WebSocket 服务器地址
+      const HOST_ADDRESS = `wss://127.0.0.1/ws?token=${token}`; // WebSocket 服务器地址
       //转发4212也可以连localhost:4212
       const socket = new WebSocket(HOST_ADDRESS); // 创建 WebSocket 对象
       let checkTask: any = null; // 心跳检查任务的计时器
@@ -118,81 +118,3 @@ export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
     },
   },
 });
-
-// import { defineStore } from 'pinia';
-// import { StoreNameSpace } from './StoreNameSpace';
-
-// export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
-//   state: () => ({
-//     sockets: {} as Record<string, WebSocket | null>, // WebSocket 对象，以页面标识符为键
-//     messageQueues: {} as Record<string, any[]>, // 消息队列，以页面标识符为键
-//     readyStates: {} as Record<string, number>, // WebSocket 连接状态，以页面标识符为键
-//     socketMessages: {} as Record<string, string>, // 最近收到的 WebSocket 消息，以页面标识符为键
-//   }),
-//   getters: {
-//     getSocket: (state) => (page: string) => state.sockets[page],
-//     getSocketMessage: (state) => (page: string) => state.socketMessages[page],
-//   },
-//   actions: {
-//     connectWebSocket(page: string, hostAddress: string) {
-//       const PING_INTERVAL = 5000;
-//       const heartbeatMessage = { type: 0, msg: 'ping' };
-//       const heartbeatMessageResp = { type: 0, msg: 'pong', data: ['在线设备'] };
-//       const socket = new WebSocket(hostAddress);
-//       let checkTask: any = null;
-
-//       socket.onopen = () => {
-//         checkTask = setInterval(() => {
-//           socket.send(JSON.stringify(heartbeatMessage));
-//         }, PING_INTERVAL);
-//       };
-
-//       socket.onmessage = (event) => {
-//         const message = JSON.parse(event.data);
-//         if (message.type === WebSocket.CONNECTING) {
-//           socket.send(JSON.stringify(heartbeatMessageResp));
-//         } else {
-//           if (!this.messageQueues[page]) {
-//             this.messageQueues[page] = [];
-//           }
-//           if (this.messageQueues[page].length > 65536) {
-//             this.messageQueues[page] = [];
-//           }
-//           this.socketMessages[page] = message;
-//         }
-//       };
-
-//       socket.onclose = () => {
-//         if (this.sockets[page]?.readyState === WebSocket.CLOSED) {
-//           if (this.messageQueues[page]) {
-//             this.messageQueues[page].forEach((message) => {
-//               this.sendMessage(page, message);
-//             });
-//             this.messageQueues[page] = [];
-//           }
-//         }
-//         if (checkTask) {
-//           clearInterval(checkTask);
-//         }
-//         setTimeout(() => {
-//           this.connectWebSocket(page, hostAddress);
-//         }, 3000);
-//       };
-
-//       socket.onerror = (event) => {
-//         console.log('WebSocket error:', event);
-//       };
-
-//       this.sockets[page] = socket;
-//     },
-
-//     sendMessage(page: string, message: string) {
-//       const socket = this.sockets[page];
-//       if (socket) {
-//         socket.send(message);
-//       } else {
-//         console.error('Socket is not connected.');
-//       }
-//     },
-//   },
-// });

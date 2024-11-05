@@ -179,6 +179,7 @@ import { objectTypeOptions } from "@/config";
 import { type BucketsType, type ObjectsType } from "@/interfaces/oss";
 import { useConstValStore } from "@/stores/ConstVal";
 import { OssUtils } from "@/utils/ossUtils";
+import { debounce } from "lodash";
 
 const constValStore = useConstValStore();
 
@@ -351,12 +352,12 @@ let objects = reactive<ObjectsType>({
   prefix: "",
   objects: [],
 
-  get(bucket: string, prefix: string, showInfo = false) {
+  get:debounce((bucket: string, prefix: string, showInfo = false)=> {
     let params = {
       Prefix: prefix,
     };
     _getObjects(params, bucket).then((data: any) => {
-      this.objects = data.ObjectInfo;
+      objects.objects = data.ObjectInfo;
       if (data.ObjectInfo == null) {
         push.success({
           title: "获取成功",
@@ -365,20 +366,20 @@ let objects = reactive<ObjectsType>({
         browserMode.value = constValStore.OSS_BROWSER_MODE_FILE;
         return;
       }
-      for (let i = 0; i < this.objects.length; i++) {
-        this.objects[i].lastModified = simplifyTime(
-          this.objects[i].lastModified
+      for (let i = 0; i < objects.objects.length; i++) {
+        objects.objects[i].lastModified = simplifyTime(
+          objects.objects[i].lastModified
         );
       }
       if (showInfo) {
         push.success({
           title: "获取成功",
-          message: `一共获取了 ${this.objects.length} 个文件`,
+          message: `一共获取了 ${objects.objects.length} 个文件`,
         });
       }
       browserMode.value = constValStore.OSS_BROWSER_MODE_FILE;
     });
-  },
+  },500),
 
   isImage(fileName: string): boolean {
     return (

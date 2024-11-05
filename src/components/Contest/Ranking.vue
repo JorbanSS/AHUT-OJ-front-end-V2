@@ -220,7 +220,7 @@ import { push } from "notivue";
 import { _getServerTime } from "@/apis/common";
 import { onUnmounted } from "vue";
 import { FileUtils } from "@/utils/fileUtils";
-
+import { debounce } from "lodash";
 const route = useRoute();
 // const router = useRouter();
 const constValStore = useConstValStore();
@@ -365,7 +365,7 @@ let ranking = reactive<ContestRankingType>({
   },
 });
 
-let onExportExcel = () => {
+let onExportExcel = debounce(() => {
   //数据
   const data = ranking.Ranking.map((user) => {
     const userproblem = user.Problems.map((problem, index) => {
@@ -450,7 +450,7 @@ let onExportExcel = () => {
     data,
     exportStyle
   ); //注意！！！这里后缀必须是xlsx，不然没有样式😡
-};
+}, 1000);
 
 // setInterval(() => {
 //   getServerTime().then(() => {

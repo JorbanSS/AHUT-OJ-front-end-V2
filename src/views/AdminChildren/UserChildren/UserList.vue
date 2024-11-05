@@ -187,7 +187,7 @@
       </div>
     </dialog>
   </div>
-  <div class="p-3 bg-base-200"></div>
+  <!-- <div class="p-3 bg-base-200"></div> -->
 </template>
 
 <script lang="ts" setup>
@@ -213,6 +213,7 @@ import { UserType, UserSimplifiedType } from "@/interfaces/user";
 import router from "@/routers";
 import { push } from "notivue";
 import { useConstValStore } from "@/stores/ConstVal";
+import { debounce } from "lodash";
 
 const constValStore = useConstValStore();
 let allSelected = ref<boolean>(false);
@@ -309,10 +310,10 @@ let users = reactive({
       }
     });
   },
-  userSearch() {
-    this.getUserList(true);
-    this.userInfo = "";
-  },
+  userSearch: debounce(() => {
+    users.getUserList(true);
+    users.userInfo = "";
+  }, 500),
 });
 
 let user = reactive<UserSimplifiedType>({
