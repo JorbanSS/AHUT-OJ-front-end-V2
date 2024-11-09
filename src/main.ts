@@ -2,7 +2,6 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 
 import { autoAnimatePlugin } from "@formkit/auto-animate/vue";
-import { install as VueMonacoEditorPlugin } from "@guolao/vue-monaco-editor";
 import { createNotivue } from "notivue";
 import VCalendar from "v-calendar";
 import VueGtag from "vue-gtag-next";
@@ -41,12 +40,6 @@ if (import.meta.env.MODE == "production") {
     },
   });
 }
-app.use(VueMonacoEditorPlugin, {
-  paths: {
-    vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs",
-  },
-  "vs/nls": { availableLanguages: { "*": "de" } },
-});
 
 app.use(GlobalComponents);
 

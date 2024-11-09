@@ -69,3 +69,10 @@ export interface ContestNoticeType extends HomeNoticeType {
   CID: number,                // 比赛 CID
   [item: string]: any,        // 其他属性
 }
+
+export interface EditorLanguageOption {
+  label: string;
+  value: string;
+  compiler: string;
+  language: number;
+}

@@ -1,20 +1,21 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { StoreNameSpace } from "./StoreNameSpace";
+import ReconnectingWebSocket from "reconnecting-websocket";
 
 export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
   state: () => ({
-    socket: null as WebSocket | null, // WebSocket 对象，初始值为 null
+    socket: null as ReconnectingWebSocket | null, // WebSocket 对象，初始值为 null
     messageQueue: [] as any[], // 消息队列，初始为空数组
     open: false, // WebSocket 连接状态，初始值为 false
     socketMessage: "1", // 最近收到的 WebSocket 消息，初始值为 "1"
 
-    retryCount: 0, // 重试次数，初始值为 0
+    // retryCount: 0, // 重试次数，初始值为 0
   }),
   getters: {
     // 定义 SET_SOCKET getter
     SET_SOCKET(state) {
-      return (socket: WebSocket) => {
+      return (socket: ReconnectingWebSocket) => {
         state.socket = socket; // 更新 socket 状态
       };
     },
@@ -36,10 +37,10 @@ export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
       // const PING_INTERVAL = 20000; // 心跳间隔，单位为毫秒
       // const heartbeatMessage = { type: 0, msg: "ping" }; // 心跳消息
       const heartbeatMessage2 = { Type: 0, Data: "pong" }; // 心跳响应消息
-      const HOST_ADDRESS = `wss://127.0.0.1/ws?token=${token}`; // WebSocket 服务器地址
+      const HOST_ADDRESS = `ws://127.0.0.1:4212/ws?token=${token}`; // WebSocket 服务器地址
       //转发4212也可以连localhost:4212
-      const socket = new WebSocket(HOST_ADDRESS); // 创建 WebSocket 对象
-      let checkTask: any = null; // 心跳检查任务的计时器
+      const socket = new ReconnectingWebSocket(HOST_ADDRESS); // 创建 WebSocket 对象
+      // let checkTask: any = null; // 心跳检查任务的计时器
       this.open = true;
       // 监听连接事件
       socket.onopen = () => {
@@ -66,27 +67,27 @@ export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
       };
 
       // 监听关闭事件，断线重连
-      socket.onclose = () => {
-        console.log("WebSocket closed.");
-        this.init(); // 初始化状态
-        if (this.socket?.readyState === WebSocket.CLOSED) {
-          this.messageQueue.forEach((message) => {
-            this.sendMessage(message); // 重新发送队列中的消息
-          });
-        }
-        if (checkTask) {
-          clearInterval(checkTask); // 清除心跳计时器
-        }
-        if (this.open && this.retryCount < 3) {
-          this.retryCount++;
-          setTimeout(() => {
-            this.connectWebSocket(); // 断线重连，增加重试次数
-          }, 3000);
-        } else {
-          console.log("Reached maximum retry count.");
-          return;
-        }
-      }; //1、服务端失联
+      // socket.onclose = () => {
+      //   console.log("WebSocket closed.");
+      //   this.init(); // 初始化状态
+      //   if (this.socket?.readyState === WebSocket.CLOSED) {
+      //     this.messageQueue.forEach((message) => {
+      //       this.sendMessage(message); // 重新发送队列中的消息
+      //     });
+      //   }
+      //   if (checkTask) {
+      //     clearInterval(checkTask); // 清除心跳计时器
+      //   }
+      //   if (this.open && this.retryCount < 3) {
+      //     this.retryCount++;
+      //     setTimeout(() => {
+      //       this.connectWebSocket(); // 断线重连，增加重试次数
+      //     }, 3000);
+      //   } else {
+      //     console.log("Reached maximum retry count.");
+      //     return;
+      //   }
+      // }; //1、服务端失联
       // (1)客户端已有连接，检测关闭，重新初始化,(2)客户端建立连接，再重试三次
       //2、客户端失联(调用logout或关闭页面),服务端检测关闭，如果是最后一个连接，清理状态
 
@@ -102,9 +103,9 @@ export const useWebSocketStore = defineStore(StoreNameSpace.WebSocket, {
       this.messageQueue = [];
       this.socketMessage = "1";
     },
-    initRetryCount() {
-      this.retryCount = 0;
-    },
+    // initRetryCount() {
+    //   this.retryCount = 0;
+    // },
     initOpen() {
       this.open = false;
     },

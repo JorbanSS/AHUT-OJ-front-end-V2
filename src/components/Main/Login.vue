@@ -206,11 +206,6 @@ interface LoginParamsType {
   Code?: string;
 }
 
-const connectWebSocket = () => {
-  WebSocketStore.connectWebSocket();
-  WebSocketStore.initRetryCount();
-};
-
 function login() {
   userDataStore.init();
 
@@ -291,9 +286,6 @@ function sendLoginRequest(params: any) {
       getUserInfo();
       props.init();
     })
-    .then(() => {
-      connectWebSocket();
-    });
 }
 
 function sendVerifyCode() {

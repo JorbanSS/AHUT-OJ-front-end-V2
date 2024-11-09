@@ -289,27 +289,27 @@ function getUserInfo() {
 //   }
 // });不需要手动关闭
 
-watch(
-  () => WebSocketStore.socketMessage,
-  (newMessage) => {
-    handleMessage(newMessage);
-  }
-);
+// watch(
+//   () => WebSocketStore.socketMessage,
+//   (newMessage) => {
+//     handleMessage(newMessage);
+//   }
+// );
 
-const handleMessage = (message: any) => {
-  // Handle different types of messages
-  switch (message.type) {
-    case "type1":
-      console.log("Handle type1 message:", message);
-      break;
-    case "type2":
-      console.log("Handle type2 message:", message);
-      break;
-    default:
-      console.log("Handle default message:", message);
-      break;
-  }
-};
+// const handleMessage = (message: any) => {
+//   // Handle different types of messages
+//   switch (message.type) {
+//     case "type1":
+//       console.log("Handle type1 message:", message);
+//       break;
+//     case "type2":
+//       console.log("Handle type2 message:", message);
+//       break;
+//     default:
+//       console.log("Handle default message:", message);
+//       break;
+//   }
+// };
 
 const socketMessage = ref(WebSocketStore.socketMessage);
 
@@ -317,6 +317,7 @@ onMounted(() => {
   showConfig.init();
   autoLogin();
   getUserInfo();
+  WebSocketStore.connectWebSocket();
 });
 </script>
 

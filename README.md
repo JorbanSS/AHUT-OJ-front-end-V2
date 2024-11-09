@@ -167,7 +167,7 @@ pnpm i image-conversion --save
 
 pnpm add vue-gtag-next
 
-pnpm i @guolao/vue-monaco-editor
+# pnpm i @guolao/vue-monaco-editor
 
 pnpm install --save vue-clipboard3
 
