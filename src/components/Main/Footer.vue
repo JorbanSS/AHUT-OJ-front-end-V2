@@ -2,27 +2,45 @@
   <div class="p-4 bg-white">
     <div class="flex justify-between max-w-6xl mx-auto">
       <p>AHUT OJ © 2022 - 2024 All rights reserved.</p>
+      <a href="https://beian.miit.gov.cn/" target="_blank" class="center"
+        >皖ICP备2024064046号-1</a
+      >
       <div class="flex items-center">
-        <p @click="$router.push({ name: 'About' })" class="relative cursor-pointer hover:text-blue-600">
+        <p
+          @click="$router.push({ name: 'About' })"
+          class="relative cursor-pointer hover:text-blue-600"
+        >
           关于
         </p>
         <template v-if="userDataStore.isLogin">
           <span class="text-gray-500 mx-2">|</span>
-          <p @click="$router.push({ name: 'User', params: { UID: userDataStore.UID } })"
-            class="cursor-pointer hover:text-blue-400">
+          <p
+            @click="
+              $router.push({ name: 'User', params: { UID: userDataStore.UID } })
+            "
+            class="cursor-pointer hover:text-blue-400"
+          >
             个人中心
           </p>
         </template>
-        <template v-if="userDataStore.isLogin && userDataStore.PermissionMap > 3">
+        <template
+          v-if="userDataStore.isLogin && userDataStore.PermissionMap > 3"
+        >
           <span class="text-gray-500 mx-2">|</span>
-          <p @click="$router.push({ name: 'Admin', params: { UID: userDataStore.UID } })"
-            class="cursor-pointer hover:text-blue-400">
+          <p
+            @click="
+              $router.push({
+                name: 'Admin',
+                params: { UID: userDataStore.UID },
+              })
+            "
+            class="cursor-pointer hover:text-blue-400"
+          >
             管理平台
           </p>
         </template>
       </div>
     </div>
-    <a href="https://beian.miit.gov.cn/" target="_blank" class=" center" >皖ICP备2024064046号-1</a>
   </div>
   <!-- <footer class="footer p-10 bg-white text-base-content">
     <aside>
@@ -49,9 +67,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Info } from '@icon-park/vue-next';
-import { useUserDataStore } from '@/stores/UserData';
+import { Info } from "@icon-park/vue-next";
+import { useUserDataStore } from "@/stores/UserData";
 
 const userDataStore = useUserDataStore();
-
 </script>

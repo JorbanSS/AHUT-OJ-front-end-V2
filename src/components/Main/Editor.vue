@@ -93,6 +93,7 @@ import { push } from "notivue";
 import { editorLanguageOptions, submitLanguageOptions } from "@/config";
 import { useUserDataStore } from "@/stores/UserData";
 import { useConstValStore } from "@/stores/ConstVal";
+import { host } from "@/stores/WebSocket"
 
 import { _submitCode } from "@/apis/problem";
 import { ProblemType } from "@/interfaces/problem";
@@ -224,7 +225,7 @@ const configureEditor = (
 };
 
 const changeLang = (lang: string) => {
-  const serverUri = `ws://localhost:4212/ws/${lang}`;
+  const serverUri = `${host}/${lang}`;
   const ls = languageServer({
     serverUri,
     workspaceFolders: [],

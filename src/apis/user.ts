@@ -91,7 +91,7 @@ export const _bindVirtualJudge = (data: any) => {
 
 // 获取在线用户列表
 export const _getUsersOnline = (data: any) => {
-  return Post('admin/user/forget/pass/', data);
+  return Get('user/status/list', data);
 }
 
 // 修改密码

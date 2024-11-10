@@ -266,7 +266,7 @@ let problem = reactive<ProblemType>({
     };
     _deleteProblems(params)
       .then(() => {
-        router.push({ name: 'ProblemList' });
+        router.push({ name: 'Problems' });
         push.success({
           title: '删除成功',
           message: `一共删除了 1 个题目`,

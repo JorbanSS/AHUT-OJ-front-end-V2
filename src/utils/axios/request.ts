@@ -14,8 +14,6 @@ if (import.meta.env.MODE == "production") {
   host = "/";
 } else {
   host = "http://127.0.0.1:4433/";
-  // host = "https://47.115.211.1:4433/";
-  // host = "https://angriliset.top:2024/";
 }
 
 // 请求头
@@ -37,25 +35,25 @@ const Axios = axios.create({
 
 // 全局 http request 拦截
 Axios.interceptors.request.use(
-  config => {
+  (config) => {
     let token = localStorage.getItem("token");
     // console.log(token)
-        if (token && config.headers) config.headers.Authorization = token;
+    if (token && config.headers) config.headers.Authorization = token;
     config.url = requestBaseURL + config.url;
     return config;
   },
-  err => {
+  (err) => {
     push.error({
       title: `Error: ${err.response.data.Code}`,
       message: err.response.data.Msg,
-    })
+    });
     return Promise.reject(err.response);
   }
 );
 
 // 全局 http response 拦截
 Axios.interceptors.response.use(
-  res => {
+  (res) => {
     let data = res.data;
     if (data.Code == 0) {
       return data;
@@ -67,22 +65,27 @@ Axios.interceptors.response.use(
       return Promise.reject(data);
     }
   },
-  err => {
+  (err) => {
     push.error({
       title: `Error: ${err.name}`,
       message: err.message,
-    })
+    });
     httpErrorHandler(err).then((msg) => {
       push.error({
         title: "请求错误",
         message: msg,
       });
-    })
+    });
     return Promise.reject(err.response);
   }
 );
 
-export function Get(url: string, params: any, content = 0, timeout = Axios.defaults.timeout) {
+export function Get(
+  url: string,
+  params: any,
+  content = 0,
+  timeout = Axios.defaults.timeout
+) {
   return Axios.get(url, {
     params,
     headers: { "Content-Type": contentType[content] },
@@ -90,14 +93,24 @@ export function Get(url: string, params: any, content = 0, timeout = Axios.defau
   });
 }
 
-export function Post(url: string, data: any, content = 0, timeout = Axios.defaults.timeout) {
+export function Post(
+  url: string,
+  data: any,
+  content = 0,
+  timeout = Axios.defaults.timeout
+) {
   return Axios.post(url, data, {
     headers: { "Content-Type": contentType[content] },
     timeout: timeout,
   });
 }
 
-export function Del(url: string, data: any, content = 0, timeout = Axios.defaults.timeout) {
+export function Del(
+  url: string,
+  data: any,
+  content = 0,
+  timeout = Axios.defaults.timeout
+) {
   return Axios.delete(url, {
     data,
     headers: { "Content-Type": contentType[content] },
@@ -105,7 +118,12 @@ export function Del(url: string, data: any, content = 0, timeout = Axios.default
   });
 }
 
-export function Put(url: string, data: any, content = 0, timeout = Axios.defaults.timeout) {
+export function Put(
+  url: string,
+  data: any,
+  content = 0,
+  timeout = Axios.defaults.timeout
+) {
   return Axios.put(url, data, {
     headers: { "Content-Type": contentType[content] },
     timeout: timeout,

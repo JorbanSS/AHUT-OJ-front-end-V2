@@ -386,19 +386,13 @@ interface UserType {
   const  getTrace=()=>{
         //获取组进度
         for(let i = 0;i<group.value.groupList.length;i++){
-          _GetTraceGroup({ "UIDs":[]},group.value.groupList[i].GID+"").then((data:any)=>{
-                // console.log(data)
-                // console.log(i+""+data.Trace[list.value[i].UID].PIDTrace);
-                // console.log(i+""+data.Trace[list.value[i].UID].CIDTrace);
-                // console.log(i+""+data.Trace[list.value[i].UID].LIDTrace);
-                // console.log(data.Trace[list.value[i].UID].PIDTrace);                
+          _GetTraceGroup({ "UIDs":[]},group.value.groupList[i].GID+"").then((data:any)=>{          
                 user.value.CIDTrace = user.value.CIDTrace.concat(data.Trace[user.value.UID].CIDTrace||[])||[]
                 user.value.PIDTrace = user.value.PIDTrace.concat(data.Trace[user.value.UID].PIDTrace||[])||[]
                 user.value.LIDTrace = user.value.LIDTrace.concat(data.Trace[user.value.UID].LIDTrace||[])||[]
                 user.value.count+=data.Trace[user.value.UID].CIDTrace.length||0
                 user.value.count+=data.Trace[user.value.UID].PIDTrace.length||0
                 user.value.count+=data.Trace[user.value.UID].LIDTrace.length||0           
-            // console.log(list.value);
         })
         }
     }

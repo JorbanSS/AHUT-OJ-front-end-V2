@@ -273,19 +273,19 @@ function login() {
 }
 
 function sendLoginRequest(params: any) {
-  _login(params)
-    .then((data: any) => {
-      localStorage.setItem("token", data.Token);
-      localStorage.setItem("UID", data.UID);
-      localStorage.setItem("saveLoginStatus", loginInfo.Save.toString());
-      localStorage.setItem("permissionMap", data.PermissionMap.toString());
-      localStorage.setItem("expireTime", data.ExpTime);
-      sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
-      userDataStore.login(data);
-      userDataStore.updatePermissionMap(data.PermissionMap);
-      getUserInfo();
-      props.init();
-    })
+  _login(params).then((data: any) => {
+    localStorage.setItem("token", data.Token);
+    localStorage.setItem("UID", data.UID);
+    localStorage.setItem("saveLoginStatus", loginInfo.Save.toString());
+    localStorage.setItem("permissionMap", data.PermissionMap.toString());
+    localStorage.setItem("expireTime", data.ExpTime);
+    sessionStorage.setItem("userInfo", JSON.stringify(data.userInfo));
+    userDataStore.login(data);
+    userDataStore.updatePermissionMap(data.PermissionMap);
+    getUserInfo();
+    props.init();
+    WebSocketStore.connectWebSocket();
+  });
 }
 
 function sendVerifyCode() {

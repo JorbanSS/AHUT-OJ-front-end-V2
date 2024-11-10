@@ -178,7 +178,6 @@ function logoutAction() {
     WebSocketStore.socket.close();
   }
   WebSocketStore.init();
-  WebSocketStore.initOpen();
 }
 
 function initAction() {
@@ -277,17 +276,11 @@ function getUserInfo() {
   }
 }
 
-// onMounted(() => {
-//   if(userDataStore.isLogin){
-//     WebSocketStore.connectWebSocket();
-//   }
-// });
-
-// onUnmounted(() => {
-//   if (WebSocketStore.socket) {
-//     WebSocketStore.socket.close();
-//   }
-// });不需要手动关闭
+onUnmounted(() => {
+  if (WebSocketStore.socket) {
+    WebSocketStore.socket.close();
+  }
+});
 
 // watch(
 //   () => WebSocketStore.socketMessage,
@@ -311,7 +304,7 @@ function getUserInfo() {
 //   }
 // };
 
-const socketMessage = ref(WebSocketStore.socketMessage);
+// const socketMessage = ref(WebSocketStore.socketMessage);
 
 onMounted(() => {
   showConfig.init();

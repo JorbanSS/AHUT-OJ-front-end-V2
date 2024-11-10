@@ -1,17 +1,41 @@
 <template>
   <div class="m-6 flex flex-col gap-6 max-w-6xl mx-auto">
-    <PageHeader Title="训练" :IconName="Muscle" Infomation="展示个人 Codeforces、Nowcoder、Atcoder 历史数据，以供 ACM 集训队进行及时的训练反馈。">
+    <PageHeader
+      Title="训练"
+      :IconName="Muscle"
+      Infomation="展示个人 Codeforces、Nowcoder、Atcoder 历史数据，以供 ACM 集训队进行及时的训练反馈。"
+    >
     </PageHeader>
 
     <div class="bg-white card shadow-lg Border">
       <div class="flex justify-between items-center p-6">
-        <ul class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box font-bold w-fit">
-          <li v-for="item in recentContestsOriginOptions" :key="item.value" :value="item.value">
-            <a :class="{ 'btn-active': item.value == recentContests.searchInfo.OJ }"
-              @click="recentContests.searchInfo.OJ = item.value">{{ item.label }}
-              <div class="badge badge-neutral badge-sm" v-if="item.value == 'All'">{{ recentContests.Count }}</div>
-              <div class="badge badge-neutral badge-sm" v-else>{{ recentContests.RecentContests.filter(contest =>
-                contest.OJ == item.value).length }}</div>
+        <ul
+          class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box font-bold w-fit"
+        >
+          <li
+            v-for="item in recentContestsOriginOptions"
+            :key="item.value"
+            :value="item.value"
+          >
+            <a
+              :class="{
+                'btn-active': item.value == recentContests.searchInfo.OJ,
+              }"
+              @click="recentContests.searchInfo.OJ = item.value"
+              >{{ item.label }}
+              <div
+                class="badge badge-neutral badge-sm"
+                v-if="item.value == 'All'"
+              >
+                {{ recentContests.Count }}
+              </div>
+              <div class="badge badge-neutral badge-sm" v-else>
+                {{
+                  recentContests.RecentContests.filter(
+                    (contest) => contest.OJ == item.value
+                  ).length
+                }}
+              </div>
             </a>
           </li>
         </ul>
@@ -26,22 +50,40 @@
           </button>
         </div>
       </div>
-      <div class="overflow-x-hidden rounded-b-2xl" style="max-height: calc(100vh - 124px - 150px)">
+      <div
+        class="overflow-x-hidden rounded-b-2xl"
+        style="max-height: calc(100vh - 124px - 150px)"
+      >
         <table class="table table-zebra">
           <thead>
             <tr>
-              <th v-if="recentContests.searchInfo.OJ == 'All'">
-                平台
-              </th>
-              <th v-for="(item, index) in ['比赛名称', '标签', '赛制', '开始时间', '时长']" :key="index">
+              <th v-if="recentContests.searchInfo.OJ == 'All'">平台</th>
+              <th
+                v-for="(item, index) in [
+                  '比赛名称',
+                  '标签',
+                  '赛制',
+                  '开始时间',
+                  '时长',
+                ]"
+                :key="index"
+              >
                 {{ item }}
               </th>
             </tr>
           </thead>
           <tbody v-auto-animate>
             <tr
-              v-for="item in recentContests.RecentContests.filter(item => item.OJ == recentContests.searchInfo.OJ || recentContests.searchInfo.OJ == 'All')"
-              :key="item.CID" @click="recentContests.goToContest(item.URL)" target="_blank" class="cursor-pointer">
+              v-for="item in recentContests.RecentContests.filter(
+                (item) =>
+                  item.OJ == recentContests.searchInfo.OJ ||
+                  recentContests.searchInfo.OJ == 'All'
+              )"
+              :key="item.CID"
+              @click="recentContests.goToContest(item.URL)"
+              target="_blank"
+              class="cursor-pointer"
+            >
               <th v-if="recentContests.searchInfo.OJ == 'All'">
                 {{ item.OJ }}
               </th>
@@ -49,9 +91,13 @@
                 <span class="font-bold talbe-lg">{{ item.Title }}</span>
               </td>
               <td class="space-x-1 space-y-0.5 whitespace-nowrap">
-                <span class="badge badge-neutral badge-md font-bold"
-                  v-for="(label, index) in item.Label.split(/;/).filter(item => item != '' && item != '/')"
-                  :key="index">
+                <span
+                  class="badge badge-neutral badge-md font-bold"
+                  v-for="(label, index) in item.Label.split(/;/).filter(
+                    (item) => item != '' && item != '/'
+                  )"
+                  :key="index"
+                >
                   {{ label }}
                 </span>
               </td>
@@ -68,7 +114,8 @@
           </tbody>
         </table>
         <div class="p-3 text-center font-bold">
-          原有方案已于 2024 年 5 月 12 日完工,&nbsp;但因为 Python 性能不佳且占据大量内存,&nbsp;待重写
+          原有方案已于 2024 年 5 月 12 日完工,&nbsp;但因为 Python
+          性能不佳且占据大量内存,&nbsp;待重写
         </div>
       </div>
     </div>
@@ -78,36 +125,45 @@
         <div class="flex space-x-6">
           <div class="w-40">
             <div class="mb-2 flex justify-between">
-              <div class="font-bold">
-                Codeforces
-              </div>
-              <div>
-                {{ ratingRank.Calculation.Codeforces }}'
-              </div>
+              <div class="font-bold">Codeforces</div>
+              <div>{{ ratingRank.Calculation.Codeforces }}'</div>
             </div>
-            <input type="range" min="0" max="100" v-model="ratingRank.Calculation.Codeforces" class="range" step="20" />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              v-model="ratingRank.Calculation.Codeforces"
+              class="range"
+              step="20"
+            />
           </div>
           <div class="w-40">
             <div class="mb-2 flex justify-between">
-              <div class="font-bold">
-                Nowcoder
-              </div>
-              <div>
-                {{ ratingRank.Calculation.Nowcoder }}'
-              </div>
+              <div class="font-bold">Nowcoder</div>
+              <div>{{ ratingRank.Calculation.Nowcoder }}'</div>
             </div>
-            <input type="range" min="0" max="100" v-model="ratingRank.Calculation.Nowcoder" class="range" step="20" />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              v-model="ratingRank.Calculation.Nowcoder"
+              class="range"
+              step="20"
+            />
           </div>
           <div class="w-40">
             <div class="mb-2 flex justify-between">
-              <div class="font-bold">
-                Atcoder
-              </div>
-              <div>
-                {{ ratingRank.Calculation.Atcoder }}'
-              </div>
+              <div class="font-bold">Atcoder</div>
+              <div>{{ ratingRank.Calculation.Atcoder }}'</div>
             </div>
-            <input type="range" min="0" max="100" v-model="ratingRank.Calculation.Atcoder" class="range" step="20" />
+            <input
+              type="range"
+              min="0"
+              max="100"
+              v-model="ratingRank.Calculation.Atcoder"
+              class="range"
+              step="20"
+            />
           </div>
         </div>
         <div class="join">
@@ -121,11 +177,24 @@
           </button>
         </div>
       </div>
-      <div class="overflow-x-hidden rounded-b-2xl" style="max-height: calc(100vh - 124px - 160px)">
+      <div
+        class="overflow-x-hidden rounded-b-2xl"
+        style="max-height: calc(100vh - 124px - 160px)"
+      >
         <table class="table table-zebra text-center">
           <thead>
             <tr>
-              <th v-for="(item, index) in ['排名', '用户名', '综合 Rating', 'Codeforces', 'Nowcoder', 'Atcoder']" :key="index">
+              <th
+                v-for="(item, index) in [
+                  '排名',
+                  '用户名',
+                  '综合 Rating',
+                  'Codeforces',
+                  'Nowcoder',
+                  'Atcoder',
+                ]"
+                :key="index"
+              >
                 {{ item }}
               </th>
             </tr>
@@ -144,37 +213,48 @@
                 {{ item.Rating.toFixed(1) }}
               </th>
               <th>
-                <div class="tooltip" :data-tip="item.CodeforcesID" v-if="item.CodeforcesID"
-                  :class="{ 'cursor-pointer text-blue-500': item.CodeforcesID != '' }"
-                  @click="$router.push({ name: 'CodeforcesStatistics', params: { CFID: item.CodeforcesID } })">
-                  {{ item.CodeforcesRating }} (Max. {{ item.CodeforcesMaxRating }})
+                <div
+                  class="tooltip"
+                  :data-tip="item.CodeforcesID"
+                  v-if="item.CodeforcesID"
+                  :class="{
+                    'cursor-pointer text-blue-500': item.CodeforcesID != '',
+                  }"
+                  @click="
+                    $router.push({
+                      name: 'CodeforcesStatistics',
+                      params: { CFID: item.CodeforcesID },
+                    })
+                  "
+                >
+                  {{ item.CodeforcesRating }} (Max.
+                  {{ item.CodeforcesMaxRating }})
                 </div>
-                <div v-else>
-                  -
-                </div>
+                <div v-else>-</div>
               </th>
               <td>
-                <div class="tooltip" :data-tip="item.NowcoderID" v-if="item.NowcoderID">
+                <div
+                  class="tooltip"
+                  :data-tip="item.NowcoderID"
+                  v-if="item.NowcoderID"
+                >
                   {{ item.NowcoderRating }} (Max. {{ item.NowcoderMaxRating }})
                 </div>
-                <div v-else>
-                  -
-                </div>
+                <div v-else>-</div>
               </td>
               <td>
-                <div class="tooltip" :data-tip="item.AtcoderID" v-if="item.AtcoderID">
+                <div
+                  class="tooltip"
+                  :data-tip="item.AtcoderID"
+                  v-if="item.AtcoderID"
+                >
                   {{ item.AtcoderRating }} (Max. {{ item.AtcoderMaxRating }})
                 </div>
-                <div v-else>
-                  -
-                </div>
+                <div v-else>-</div>
               </td>
             </tr>
           </tbody>
         </table>
-        <div class="p-3 text-center font-bold">
-          原有方案已于 2024 年 5 月 12 日完工,&nbsp;但因为 Python 性能不佳且占据大量内存,&nbsp;待重写
-        </div>
       </div>
     </div>
 
@@ -210,7 +290,9 @@
               <div class="stat-figure text-secondary">
                 <div class="avatar online">
                   <div class="w-16 rounded-full">
-                    <img src="https://userpic.codeforces.org/2831557/title/be6ab3f7c88febd5.jpg" />
+                    <img
+                      src="https://userpic.codeforces.org/2831557/title/be6ab3f7c88febd5.jpg"
+                    />
                   </div>
                 </div>
               </div>
@@ -238,18 +320,28 @@
 </template>
 
 <script lang="ts" setup name="Training">
-import { onMounted, reactive, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, reactive, watch } from "vue";
+import { useRoute } from "vue-router";
 
 import { DownloadTwo, Muscle, Refresh, Code } from "@icon-park/vue-next";
-import { push } from 'notivue';
+import { push } from "notivue";
 
-import { _getRecentContests, _scrapeRecentContests, _getRatingRank, _scrapeRating } from '@/apis/training';
-import PageHeader from '@/components/Main/PageHeader.vue';
-import { recentContestLabelOptions, recentContestsOriginOptions, ratingRankOriginOptions } from '@/config';
-import { RecentContestsType, RatingRankType } from '@/interfaces/training';
-import { useUserDataStore } from '@/stores/UserData';
-import { ConvertTools } from '@/utils/globalFunctions';
+import {
+  _getRecentContests,
+  _scrapeRecentContests,
+  _getRatingRank,
+  _scrapeRating,
+} from "@/apis/training";
+import { _getUsersOnline } from "@/apis/user";
+import PageHeader from "@/components/Main/PageHeader.vue";
+import {
+  recentContestLabelOptions,
+  recentContestsOriginOptions,
+  ratingRankOriginOptions,
+} from "@/config";
+import { RecentContestsType, RatingRankType } from "@/interfaces/training";
+import { useUserDataStore } from "@/stores/UserData";
+import { ConvertTools } from "@/utils/globalFunctions";
 
 const userDataStore = useUserDataStore();
 const route = useRoute();
@@ -261,45 +353,45 @@ let recentContests = reactive<RecentContestsType>({
   Limit: 20,
 
   searchInfo: {
-    OJ: 'All',
+    OJ: "All",
   },
 
   get() {
-    _getRecentContests({})
-      .then((data: any) => {
-        this.RecentContests = data.RecentContests.filter((item: any) => item.Duration <= 43200000);
-        this.RecentContests.sort((a, b) => a.StartTime - b.StartTime);
-        this.Count = this.RecentContests.length;
-        this.Page = data.Page;
-        this.Limit = data.Limit;
-        this.RecentContests.forEach((item: any) => {
-          item.Label = '';
-          recentContestLabelOptions.forEach((labelOption: any) => {
-            if (item.Title.includes(labelOption.label)) item.Label += labelOption.value + ';';
-          })
-        })
-        push.success({
-          title: '获取成功',
-          message: `一共获取了 ${this.Count} 个比赛`,
-        })
-      })
+    _getRecentContests({}).then((data: any) => {
+      this.RecentContests = data.RecentContests.filter(
+        (item: any) => item.Duration <= 43200000
+      );
+      this.RecentContests.sort((a, b) => a.StartTime - b.StartTime);
+      this.Count = this.RecentContests.length;
+      this.Page = data.Page;
+      this.Limit = data.Limit;
+      this.RecentContests.forEach((item: any) => {
+        item.Label = "";
+        recentContestLabelOptions.forEach((labelOption: any) => {
+          if (item.Title.includes(labelOption.label))
+            item.Label += labelOption.value + ";";
+        });
+      });
+      push.success({
+        title: "获取成功",
+        message: `一共获取了 ${this.Count} 个比赛`,
+      });
+    });
   },
 
   goToContest(url: string) {
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   },
 
   scrape() {
-    _scrapeRecentContests({})
-      .then(() => {
-        push.info({
-          title: '请求成功',
-          message: '正在重新获取近期比赛',
-        })
-      })
+    _scrapeRecentContests({}).then(() => {
+      push.info({
+        title: "请求成功",
+        message: "正在重新获取近期比赛",
+      });
+    });
   },
-
-})
+});
 
 let ratingRank = reactive<RatingRankType>({
   RatingRank: [],
@@ -316,46 +408,59 @@ let ratingRank = reactive<RatingRankType>({
         ratingRank.RatingRank = data.RatingRank;
         ratingRank.Count = data.Count;
         push.success({
-          'title': '获取成功',
-          'message': `一共获取了 ${this.Count} 位用户评分`
-        })
+          title: "获取成功",
+          message: `一共获取了 ${this.Count} 位用户评分`,
+        });
       })
       .then(() => {
         ratingRank.calculateRating();
-      })
+      });
   },
 
   scrape() {
-    _scrapeRating({})
-      .then(() => {
-        push.info({
-          title: '请求成功',
-          message: '正在重新获取用户评分',
-        })
-      })
+    _scrapeRating({}).then(() => {
+      push.info({
+        title: "请求成功",
+        message: "正在重新获取用户评分",
+      });
+    });
   },
 
   calculateRating() {
-    let sum = Number(this.Calculation.Codeforces) + Number(this.Calculation.Nowcoder) + Number(this.Calculation.Atcoder);
+    let sum =
+      Number(this.Calculation.Codeforces) +
+      Number(this.Calculation.Nowcoder) +
+      Number(this.Calculation.Atcoder);
     ratingRank.RatingRank.forEach((item: any) => {
       if (sum == 0) item.Rating = 0;
-      else item.Rating = item.CodeforcesRating * this.Calculation.Codeforces / sum
-        + item.NowcoderRating * this.Calculation.Nowcoder / sum
-        + item.AtcoderRating * this.Calculation.Atcoder / sum;
-    })
+      else
+        item.Rating =
+          (item.CodeforcesRating * this.Calculation.Codeforces) / sum +
+          (item.NowcoderRating * this.Calculation.Nowcoder) / sum +
+          (item.AtcoderRating * this.Calculation.Atcoder) / sum;
+    });
     ratingRank.RatingRank.sort((a: any, b: any) => b.Rating - a.Rating);
-  }
-})
+  },
+});
 
 onMounted(() => {
   // recentContests.get();
   // ratingRank.get();
+  _getUsersOnline({
+    Page: 1,
+    Limit: 20,
+  }).then((data) => {
+    console.log(data);
+  });
 });
 
-watch(() => ratingRank.Calculation, () => {
-  ratingRank.calculateRating();
-}, {
-  deep: true,
-})
-
+watch(
+  () => ratingRank.Calculation,
+  () => {
+    ratingRank.calculateRating();
+  },
+  {
+    deep: true,
+  }
+);
 </script>
