@@ -3,7 +3,7 @@ import { push } from "notivue";
 import SparkMD5 from "spark-md5";
 import XLSX from "xlsx-js-style";
 import { Post } from "@/utils/axios/request";
-import { ConvertTools } from "@/utils/globalFunctions";
+// import { ConvertTools } from "@/utils/globalFunctions";
 
 export class ImageUtils {
   public static check(image: File): boolean {

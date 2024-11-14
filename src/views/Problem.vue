@@ -1,14 +1,15 @@
 <template>
   <div
-    class="flex flex-row overflow-x-hidden"
+    class="flex flex-col md:flex-row overflow-x-hidden"
     style="height: calc(100vh - 70px)"
     v-auto-animate
   >
     <div
       ref="leftPanel"
-      class="bg-base-200 overflow-y-auto px-6"
-      :style="{ width: `${leftWidth}px` }"
+      class="bg-base-200 overflow-y-auto pl-6"
+      :style="{ width: isSmallScreen ? '100%' : `${leftWidth}px` }"
     >
+      <!-- <div ref="leftPanel" class="bg-base-200 overflow-y-auto pl-6"> -->
       <MainContainer>
         <Col v-auto-animate>
           <Col class="gap-0">
@@ -327,7 +328,7 @@
     </div>
 
     <div
-      class="bg-base-200 hover:bg-gray-300 duration-300 w-2 flex items-center justify-center cursor-col-resize"
+      class="bg-base-200 hover:bg-gray-300 duration-300 w-2 flex items-center justify-center cursor-col-resize px-1"
       @mousedown="startDragging"
     >
       <div class="">
@@ -349,9 +350,10 @@
     </div>
 
     <div
-      class="flex bg-gray-200 overflow-hidden"
-      :style="{ width: `${rightWidth}px` }"
+      class="flex bg-base-200"
+      :style="{ width: isSmallScreen ? '100%' : `${rightWidth}px` }"
     >
+      <!-- <div class="bg-base-200"> -->
       <component
         :is="CMEditor"
         :problem="problem"
@@ -418,11 +420,10 @@ interface problemType {
 
 let problems = reactive<Array<problemType>>([]);
 
-const clientWidth = ref(
-  document.documentElement.clientWidth || document.body.clientWidth
-);
-const leftWidth = ref(document.documentElement.clientWidth / 2);
-const rightWidth = ref(document.documentElement.clientWidth / 2);
+const clientWidth = ref(window.innerWidth);
+const leftWidth = ref(clientWidth.value / 2);
+const rightWidth = ref(clientWidth.value / 2);
+const isSmallScreen = ref(clientWidth.value <= 768);
 
 let isDragging = false;
 
@@ -437,30 +438,40 @@ const stopDragging = () => {
 let intervalId: any = null;
 
 const onMouseMove = (event: { clientX: number }) => {
-  if (!isDragging) return;
+  if (!isDragging || isSmallScreen.value) return;
   const newWidth = event.clientX;
-  leftWidth.value = Math.min(Math.max(newWidth, 382));
+  leftWidth.value = Math.min(Math.max(newWidth, 382), clientWidth.value - 382);
   rightWidth.value = clientWidth.value - leftWidth.value;
+};
+
+const updateWidths = () => {
+  const newVal = document.documentElement.clientWidth;
+  isSmallScreen.value = newVal <= 768;
+  clientWidth.value = newVal;
+
+  if (isSmallScreen.value) {
+    leftWidth.value = newVal;
+    rightWidth.value = newVal;
+  } else {
+    leftWidth.value = Math.floor(
+      (leftWidth.value * newVal) / clientWidth.value
+    );
+    rightWidth.value = newVal - leftWidth.value;
+  }
 };
 
 onMounted(() => {
   window.addEventListener("mousemove", onMouseMove);
   window.addEventListener("mouseup", stopDragging);
-  intervalId = setInterval(() => {
-    let newVal = document.documentElement.clientWidth;
-    if (newVal != clientWidth.value) {
-      leftWidth.value = Math.floor(
-        (leftWidth.value * newVal) / clientWidth.value
-      );
-      rightWidth.value = newVal - leftWidth.value;
-      clientWidth.value = newVal;
-    }
-  }, 300);
+  window.addEventListener("resize", updateWidths); // 监听屏幕调整大小
+
+  intervalId = setInterval(updateWidths, 300); // 定期检查宽度变化
 });
 
 onUnmounted(() => {
   window.removeEventListener("mousemove", onMouseMove);
   window.removeEventListener("mouseup", stopDragging);
+  window.removeEventListener("resize", updateWidths);
   clearInterval(intervalId);
 });
 

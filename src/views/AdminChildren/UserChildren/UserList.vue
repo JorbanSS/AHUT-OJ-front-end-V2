@@ -209,7 +209,7 @@ import {
   _editUserPermission,
   _getUsers,
 } from "@/apis/user";
-import { UserType, UserSimplifiedType } from "@/interfaces/user";
+import { UserType, UserSimplifiedType, AddUsersType } from "@/interfaces/user";
 import router from "@/routers";
 import { push } from "notivue";
 import { useConstValStore } from "@/stores/ConstVal";
@@ -359,11 +359,13 @@ let user = reactive<UserSimplifiedType>({
       });
       return;
     }
-    let params = {
-      UID: user.UID,
-      UserName: user.UserName,
-      Pass: user.Password,
-    };
+    let params: AddUsersType = [
+      {
+        UID: user.UID,
+        UserName: user.UserName,
+        Pass: user.Password,
+      },
+    ];
     _addUser(params).then(() => {
       push.success({
         title: "新增成功",

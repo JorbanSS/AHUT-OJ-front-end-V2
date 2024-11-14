@@ -83,7 +83,7 @@
               "
             >
               <edit-two theme="outline" size="18" />
-              比赛
+              编辑
             </button>
             <button
               class="btn btn-sm btn-neutral"

@@ -7,10 +7,97 @@
     >
     </PageHeader>
 
+    <div class="flex flex-row gap-3">
+      <div class="bg-white card shadow-lg Border w-[40%]">
+        <div
+          class="overflow-x-hidden rounded-b-2xl"
+          style="max-height: calc(100vh - 124px - 150px)"
+        >
+          <table class="table table-zebra">
+            <thead>
+              <th v-for="(item, index) in ['在线用户ID']" :key="index">
+                {{ item }}
+              </th>
+            </thead>
+            <tbody v-auto-animate>
+              <tr v-if="UIDs.length === 0">
+                <td>只有你在线！🥰</td>
+              </tr>
+              <tr v-else v-for="(uid, index) in UIDs" :key="index">
+                <td>{{ uid }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card bg-white Border shadow-lg w-[60%] p-3">
+        <div class="stats shadow-lg Border">
+          <div class="flex">
+            <div class="stats shadow">
+              <div class="stat">
+                <div class="stat-figure text-primary">
+                  <cattle theme="outline" size="28" />
+                </div>
+                <div class="stat-title">NowCoder</div>
+                <div class="stat-value text-primary">3200</div>
+                <div class="stat-desc flex">
+                  <to-top theme="outline" size="14" />
+                  max. 3600
+                </div>
+              </div>
+
+              <div class="stat">
+                <div class="stat-figure text-secondary">
+                  <Ranking theme="outline" size="28" />
+                </div>
+                <div class="stat-title">CodeForces</div>
+                <div class="stat-value text-secondary">3500</div>
+                <div class="stat-desc flex">
+                  <to-top theme="outline" size="14" />
+                  max. 3900
+                </div>
+              </div>
+
+              <div class="stat">
+                <div class="stat-figure text-secondary">
+                  <div class="avatar online">
+                    <div class="rounded-full">
+                      <img
+                        src="https://userpic.codeforces.org/2831557/title/be6ab3f7c88febd5.jpg"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="stat-value">No.1</div>
+                <div class="stat-title">{{ userDataStore.UserName }}</div>
+                <div class="stat-desc text-secondary">
+                  Owned 12 xcpc awards.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4 p-4">
+          <div class="flex gap-4 items-center">
+            <div class="skeleton w-16 h-16 rounded-full shrink-0"></div>
+            <div class="flex flex-col gap-4">
+              <div class="skeleton h-4 w-20"></div>
+              <div class="skeleton h-4 w-28"></div>
+            </div>
+          </div>
+          <div class="skeleton h-12 w-full"></div>
+          <div class="skeleton h-32 w-full"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="bg-white card shadow-lg Border">
-      <div class="flex justify-between items-center p-6">
+      <div
+        class="flex justify-between items-center p-6 sm:flex-row sm:space-x-3"
+      >
         <ul
-          class="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box font-bold w-fit"
+          class="menu menu-vertical md:menu-horizontal bg-base-200 rounded-box font-bold w-fit"
         >
           <li
             v-for="item in recentContestsOriginOptions"
@@ -39,7 +126,7 @@
             </a>
           </li>
         </ul>
-        <div class="join">
+        <div class="join flex-col sm:flex-row">
           <button class="btn join-item" @click="recentContests.get()">
             <refresh theme="outline" size="18" />
             刷新列表
@@ -121,8 +208,8 @@
     </div>
 
     <div class="bg-white card shadow-lg Border">
-      <div class="flex justify-between items-center p-6">
-        <div class="flex space-x-6">
+      <div class="items-center p-6 inline-block">
+        <div class="flex flex-col md:flex-row md:space-x-6">
           <div class="w-40">
             <div class="mb-2 flex justify-between">
               <div class="font-bold">Codeforces</div>
@@ -165,16 +252,6 @@
               step="20"
             />
           </div>
-        </div>
-        <div class="join">
-          <button class="btn join-item" @click="ratingRank.get()">
-            <refresh theme="outline" size="18" />
-            刷新列表
-          </button>
-          <button class="btn join-item" @click="ratingRank.scrape()">
-            <DownloadTwo theme="outline" size="18" />
-            重新拉取
-          </button>
         </div>
       </div>
       <div
@@ -257,70 +334,11 @@
         </table>
       </div>
     </div>
-
-    <div class="card bg-white Border shadow-lg p-6">
-      <div class="stats mx-auto shadow-lg Border">
-        <div class="flex">
-          <div class="stats shadow">
-            <div class="stat">
-              <div class="stat-figure text-primary">
-                <cattle theme="outline" size="28" />
-              </div>
-              <div class="stat-title">NowCoder</div>
-              <div class="stat-value text-primary">3200</div>
-              <div class="stat-desc flex">
-                <to-top theme="outline" size="14" />
-                max. 3600
-              </div>
-            </div>
-
-            <div class="stat">
-              <div class="stat-figure text-secondary">
-                <Ranking theme="outline" size="28" />
-              </div>
-              <div class="stat-title">CodeForces</div>
-              <div class="stat-value text-secondary">3500</div>
-              <div class="stat-desc flex">
-                <to-top theme="outline" size="14" />
-                max. 3900
-              </div>
-            </div>
-
-            <div class="stat">
-              <div class="stat-figure text-secondary">
-                <div class="avatar online">
-                  <div class="w-16 rounded-full">
-                    <img
-                      src="https://userpic.codeforces.org/2831557/title/be6ab3f7c88febd5.jpg"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="stat-value">No.1</div>
-              <div class="stat-title">{{ userDataStore.UserName }}</div>
-              <div class="stat-desc text-secondary">Owned 12 xcpc awards.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex flex-col gap-4">
-        <div class="flex gap-4 items-center">
-          <div class="skeleton w-16 h-16 rounded-full shrink-0"></div>
-          <div class="flex flex-col gap-4">
-            <div class="skeleton h-4 w-20"></div>
-            <div class="skeleton h-4 w-28"></div>
-          </div>
-        </div>
-        <div class="skeleton h-12 w-full"></div>
-        <div class="skeleton h-32 w-full"></div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script lang="ts" setup name="Training">
-import { onMounted, reactive, watch } from "vue";
+import { onMounted, reactive, watch, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import { DownloadTwo, Muscle, Refresh, Code } from "@icon-park/vue-next";
@@ -442,15 +460,15 @@ let ratingRank = reactive<RatingRankType>({
     ratingRank.RatingRank.sort((a: any, b: any) => b.Rating - a.Rating);
   },
 });
-
+const UIDs = ref<string[]>([]);
 onMounted(() => {
   // recentContests.get();
   // ratingRank.get();
   _getUsersOnline({
     Page: 1,
     Limit: 20,
-  }).then((data) => {
-    console.log(data);
+  }).then((data: any) => {
+    UIDs.value = data.UIDs;
   });
 });
 

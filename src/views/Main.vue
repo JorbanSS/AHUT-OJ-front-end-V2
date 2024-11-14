@@ -225,7 +225,7 @@ function autoLogin() {
           userDataStore.init();
           return Promise.reject();
         } else {
-          return _getUserInfo({});
+          return {};
         }
       })
       .then((data: any) => {

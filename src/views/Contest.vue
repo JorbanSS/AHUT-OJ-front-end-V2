@@ -109,6 +109,21 @@
               比赛编辑
             </a>
           </li>
+          <li>
+            <a
+              @click="
+                $router.push({
+                  name: 'EditContest',
+                  params: {
+                    CID: contest.CID,
+                  },
+                })
+              "
+            >
+              <editor theme="outline" size="18" />
+              比赛监考
+            </a>
+          </li>
         </div>
       </ul>
 

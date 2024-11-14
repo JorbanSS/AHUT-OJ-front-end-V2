@@ -77,7 +77,8 @@ export interface AddUserType {
   UserName: string;
   Pass: string;
 }
+
 //tip: 这里加item是为了让一个成员具有类的一些方法
 
-// export type AddUsersType = AddUserItem[];
+export type AddUsersType = AddUserType[];
 

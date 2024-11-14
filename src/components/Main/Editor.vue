@@ -1,7 +1,10 @@
 <template>
   <div class="overflow-hidden bg-white shandow-lg w-full">
     <div class="flex justify-between items-center w-full p-2">
-      <div class="flex items-center gap-2">
+      <div
+        ref="optionsRef"
+        class="flex items-center gap-2 flex-row sm:flex-col md:flex-row max-h-28 flex-wrap overflow-auto"
+      >
         <button
           class="btn"
           @click="$router.push({ name: 'Index' })"
@@ -10,53 +13,59 @@
           <left theme="outline" size="24" />
           <span class="text-lg">AHUT OJ Editor</span>
         </button>
-        <span>编辑器选项</span>
-        <select
-          class="select select-bordered w-40 max-w-xs text-base"
-          v-model="editorLanguage"
-          @change="updateLanguage"
-        >
-          <option
-            v-for="item in editorLanguageOptions"
-            :value="item"
-            :key="item.language"
+        <div class="flex flex-col md:flex-row">
+          <span class="p-2">编译器选项</span>
+          <select
+            class="select select-bordered w-40 max-w-xs text-base"
+            v-model="editorLanguage"
+            @change="updateLanguage"
           >
-            {{ item.compiler }}
-          </option>
-        </select>
-        <span>字体大小</span>
-        <label class="input input-bordered flex items-center gap-2">
-          <input
-            type="number"
-            class="grow w-20"
-            placeholder="20"
-            v-model="selectedFontSize"
-            min="10"
-            max="30"
-            @change="changeFontSize(`${selectedFontSize}px`)"
-          />
-        </label>
-        <span>Tab大小</span>
-        <select
-          class="select select-bordered w-40 max-w-xs text-base"
-          v-model="selectedTabSize"
-        >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="4">4</option>
-          <option value="8">8</option>
-        </select>
-      </div>
-      <div class="flex items-center gap-2">
-        <button
-          class="btn btn-success text-white"
-          @click="submitCode()"
-          :disabled="userDataStore.UID == '' || submit.Source == ''"
-          v-if="$route.matched.length && $route.matched[0].name === 'Problem'"
-        >
-          <code-one theme="outline" size="22" />
-          <span class="text-lg">评测</span>
-        </button>
+            <option
+              v-for="item in editorLanguageOptions"
+              :value="item"
+              :key="item.language"
+            >
+              {{ item.compiler }}
+            </option>
+          </select>
+        </div>
+        <div class="flex flex-col md:flex-row">
+          <span class="p-2">字体大小</span>
+          <label class="input input-bordered flex items-center gap-2">
+            <input
+              type="number"
+              class="grow w-20"
+              placeholder="20"
+              v-model="selectedFontSize"
+              min="10"
+              max="30"
+              @change="changeFontSize(`${selectedFontSize}px`)"
+            />
+          </label>
+        </div>
+        <div class="flex flex-col md:flex-row">
+          <span class="p-2">Tab大小</span>
+          <select
+            class="select select-bordered w-40 max-w-xs text-base"
+            v-model="selectedTabSize"
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="8">8</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            class="btn btn-success text-white"
+            @click="submitCode()"
+            :disabled="userDataStore.UID == '' || submit.Source == ''"
+            v-if="$route.matched.length && $route.matched[0].name === 'Problem'"
+          >
+            <code-one theme="outline" size="22" />
+            <span class="text-lg">评测</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -69,7 +78,7 @@
       :extensions="baseExtensions"
       :tab-size="selectedTabSize"
       @ready="onEditorReady"
-      :style="{ height: '91%' }"
+      :style="{ height: editorHeight }"
       class="flex-1"
     >
     </Codemirror>
@@ -84,7 +93,17 @@
 </template>
 
 <script lang="ts" setup name="Editor">
-import { onMounted, reactive, ref, shallowRef, watch, watchEffect } from "vue";
+import {
+  onMounted,
+  onUnmounted,
+  computed,
+  reactive,
+  ref,
+  shallowRef,
+  watch,
+  watchEffect,
+  nextTick,
+} from "vue";
 import { useRouter } from "vue-router";
 
 import { Left, CodeOne } from "@icon-park/vue-next";
@@ -93,7 +112,7 @@ import { push } from "notivue";
 import { editorLanguageOptions, submitLanguageOptions } from "@/config";
 import { useUserDataStore } from "@/stores/UserData";
 import { useConstValStore } from "@/stores/ConstVal";
-import { host } from "@/stores/WebSocket"
+import { host } from "@/stores/WebSocket";
 
 import { _submitCode } from "@/apis/problem";
 import { ProblemType } from "@/interfaces/problem";
@@ -199,7 +218,37 @@ function submitCode() {
     });
   });
 }
+// 自适应
+const optionsRef = ref<HTMLDivElement | null>(null);
+const isSmallScreen = ref(window.innerWidth <= 768);
+const dynamicEditorHeight = ref("300px"); // 用于动态更新高度
 
+const editorHeight = computed(() => dynamicEditorHeight.value);
+
+const updateEditorHeight = () => {
+  dynamicEditorHeight.value = isSmallScreen.value
+    ? "280px"
+    : `${window.innerHeight - optionsRef.value.clientHeight - 110}px`;
+  // console.log(window.innerHeight, dynamicEditorHeight.value);
+};
+
+const handleResize = () => {
+  isSmallScreen.value = window.innerWidth <= 768;
+  updateEditorHeight();
+};
+
+onMounted(() => {
+  nextTick(() => {
+    updateEditorHeight(); // 初始调用，确保 optionsRef 已正确赋值
+  });
+  window.addEventListener("resize", handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleResize);
+});
+
+// Lsp 相关
 const compartments = new Map<string, Compartment>();
 
 const getCompartment = (key: string) => {
