@@ -47,13 +47,6 @@
           params: {
             CID: contest.CID,
           },
-          query: {
-            IsPublic: contest.IsPublic,
-            Title: contest.Title,
-            BeginTime: contest.BeginTime,
-            EndTime: contest.EndTime,
-            Type: contest.Type,
-          },
         })">
           <go-on theme="outline" size="18" />
           跳转比赛

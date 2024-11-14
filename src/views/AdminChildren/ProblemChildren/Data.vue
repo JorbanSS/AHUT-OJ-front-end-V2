@@ -260,7 +260,7 @@ let judgeFiles = reactive<JudgeFilesType>({
   },
   
   DeleteAllInfo(){
-    showDeleteInfoModal();
+  showDeleteInfoModal();
 },
 DeleteAll(){
   this.judgeFiles.forEach((item)=>{

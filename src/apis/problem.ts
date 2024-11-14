@@ -32,7 +32,7 @@ export const _submitCode = (data: any) => {
 
 // 导出题目集
 export const _exportProblems = (params: any) => {
-  return Get("file/json/download", params);
+  return Get("file/json/download", params, 20000);
 };
 
 // 获取判题文件列表
@@ -42,7 +42,7 @@ export const _getJudgeFiles = (params: any, PID: string) => {
 
 // 上传判题文件
 export const _uploadJudgeFiles = (data: any, PID: string) => {
-  return Post(`file/${PID}/`, data, 2, 20);
+  return Post(`file/${PID}/`, data, 2, 20000);
 };
 
 // 删除判题文件
@@ -52,5 +52,5 @@ export const _deleteJudgeFiles = (data: any, PID: string) => {
 
 // 判题文件预览
 export const _getJudgeFile = (params: any, PID: string, fileName: string) => {
-  return Get(`file/${PID}/${fileName}`, params);
+  return Get(`file/${PID}/${fileName}`, params, 20000);
 };

@@ -149,6 +149,12 @@ const Admin = {
           component: () =>
             import("@/views/AdminChildren/ContestChildren/Edit.vue"),
         },
+        // {
+        //   name: "MontorContest",
+        //   path: "montor/:CID",
+        //   component: () =>
+        //     import("@/views/AdminChildren/ContestChildren/Montor.vue"),
+        // },
         {
           name: "EditBalloon",
           path: "balloon/:CID",
@@ -220,13 +226,17 @@ const Admin = {
           name: "ProblemListAddTask",
           path: "problemlistaddtask:GID",
           component: () =>
-            import("@/views/AdminChildren/GroupChildren/ProblemListTaskAdd.vue"),
+            import(
+              "@/views/AdminChildren/GroupChildren/ProblemListTaskAdd.vue"
+            ),
         },
         {
           name: "ProblemListTaskEdit",
           path: "ProblemListTaskEdit/:GID/:LID",
           component: () =>
-            import("@/views/AdminChildren/GroupChildren/ProblemListTaskEdit.vue"),
+            import(
+              "@/views/AdminChildren/GroupChildren/ProblemListTaskEdit.vue"
+            ),
         },
         {
           name: "ContestTaskEdit",
@@ -257,7 +267,7 @@ const Admin = {
           path: "ProblemListSelect:GID",
           component: () =>
             import("@/views/AdminChildren/GroupChildren/ProblemListSelect.vue"),
-        }
+        },
       ],
     },
     {

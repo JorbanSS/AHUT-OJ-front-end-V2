@@ -228,7 +228,7 @@ const editorHeight = computed(() => dynamicEditorHeight.value);
 const updateEditorHeight = () => {
   dynamicEditorHeight.value = isSmallScreen.value
     ? "280px"
-    : `${window.innerHeight - optionsRef.value.clientHeight - 110}px`;
+    : `${window.innerHeight - optionsRef.value!.clientHeight - 110}px`;
   // console.log(window.innerHeight, dynamicEditorHeight.value);
 };
 
@@ -339,7 +339,7 @@ const selectedLang = ref(editorLanguage.value);
 const selectedFontSize = ref("20");
 const selectedTabSize = ref(2);
 
-const onEditorReady = (payload) => {
+const onEditorReady = (payload: any) => {
   view = payload.view;
   changeLang(selectedLang.value);
   changeFontSize(`${selectedFontSize.value}px`);

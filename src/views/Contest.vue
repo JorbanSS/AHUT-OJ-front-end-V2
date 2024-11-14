@@ -113,14 +113,14 @@
             <a
               @click="
                 $router.push({
-                  name: 'EditContest',
+                  name: 'MontorContest',
                   params: {
                     CID: contest.CID,
                   },
                 })
               "
             >
-              <editor theme="outline" size="18" />
+              <camera-four theme="outline" size="18" />
               比赛监考
             </a>
           </li>
@@ -154,7 +154,14 @@
 import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { Bill, Editor, Key, PartyBalloon, Trophy } from "@icon-park/vue-next";
+import {
+  Bill,
+  Editor,
+  Key,
+  PartyBalloon,
+  Trophy,
+  CameraFour,
+} from "@icon-park/vue-next";
 import { push } from "notivue";
 
 import {
@@ -197,7 +204,10 @@ let contest = reactive<ContestType>({
 
   get(password: string = "") {
     let param: any = {};
-    if (password != "") param.Pass = password;
+    if (password != "") {
+      param.Pass = password;
+      this.Pass = password;
+    }
 
     _getContest(param, this.CID).then((data: any) => {
       if (data.Code) return;

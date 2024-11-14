@@ -110,6 +110,9 @@
                               ? 'C' + contest.CID
                               : 'L' + problemList.LID,
                           },
+                          query: {
+                            Pass: pass,
+                          },
                         })
                       "
                     >
@@ -408,6 +411,8 @@ const constValStore = useConstValStore();
 const router = useRouter();
 const route = useRoute();
 
+let pass = "";
+
 let showLabels = ref(false);
 
 interface problemType {
@@ -499,7 +504,7 @@ let contest = reactive<ContestType>({
 
   get(showInfo: boolean = true) {
     if (this.CID == 0) return;
-    _getContest({}, this.CID).then((data: any) => {
+    _getContest({ Pass: pass }, this.CID).then((data: any) => {
       this.Title = data.Title;
       this.BeginTime = data.BeginTime;
       this.EndTime = data.EndTime;
@@ -546,7 +551,7 @@ let problem = reactive<ProblemType>({
   RecordNumber: 0,
 
   get() {
-    _getProblem({}, problem.PID)
+    _getProblem({ CID: contest.CID, Pass: pass }, problem.PID)
       .then((data: any) => {
         this.Accepted = data.Accepted;
         this.ContestType = data.ContestType;
@@ -653,6 +658,7 @@ let problem = reactive<ProblemType>({
 
 function syncUrl() {
   problem.PID = route.params.PID as string;
+  pass = route.query.Pass as string;
   if (route.params.BindID) {
     let bindID = route.params.BindID as string;
     if (bindID.startsWith("C")) {
@@ -741,6 +747,7 @@ watch(
   () => route.params.PID,
   () => {
     problem.PID = route.params.PID as string;
+    pass = route.query.Pass as string;
     problem.get();
     problem.getRecordNumber();
     if (contest.CID && contest.CID != undefined) contest.get();
