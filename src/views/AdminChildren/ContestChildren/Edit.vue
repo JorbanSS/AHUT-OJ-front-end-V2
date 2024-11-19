@@ -103,7 +103,7 @@
         <option value="3">Virtual Judge</option> -->
     </select>
     <div class="form-control w-72">
-      <label class="label cursor-pointer" @change="contest.changePassword()">
+      <label class="label cursor-pointer">
         <div class="label-text text-base flex gap-2">
           <span>使用密码</span>
           <span
@@ -126,7 +126,7 @@
       <div class="join">
         <input
           class="input input-bordered join-item"
-          placeholder="题号"
+          placeholder="题号(字母大写)"
           v-model="problem.PID"
         />
         <button class="btn join-item btn-neutral" @click="problem.add()">

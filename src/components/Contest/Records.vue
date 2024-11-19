@@ -22,7 +22,7 @@
           <option value="0">
             语言不限
           </option>
-          <option v-for="item in submitLanguageOptions" :value="item.value" :key="item.value">
+          <option v-for="item in submitLanguageOptions" :value="item.language" :key="item.language">
             {{ item.label }}
           </option>
         </select>

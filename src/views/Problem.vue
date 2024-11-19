@@ -652,6 +652,9 @@ let problem = reactive<ProblemType>({
     if (problem.SampleOutput) {
       res += "\n\n## 样例输出\n\n```\n\n" + problem.SampleOutput + "\n\n```";
     }
+    if (problem.Hit) {
+      res += "\n\n## 提示 \n\n```\n\n" + problem.Hit + "\n\n```";
+    }
     return res;
   },
 });

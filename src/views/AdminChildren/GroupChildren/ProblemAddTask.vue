@@ -272,10 +272,13 @@ let problems = reactive<ProblemsType>({
       const blob = new Blob([JSON.stringify(data, null, "\t")]);
       const url = window.URL.createObjectURL(blob);
       let fileName = listStr + ".json";
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = fileName;
-      link.click();
+      const downloadElement = document.createElement("a");
+      downloadElement.href = url;
+      downloadElement.download = fileName;
+      document.body.appendChild(downloadElement);
+      downloadElement.click();
+      document.body.removeChild(downloadElement);
+      window.URL.revokeObjectURL(url);
       push.success({
         title: "导出成功",
         message: `一共导出了 ${list.length} 个题目`,

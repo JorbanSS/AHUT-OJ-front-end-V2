@@ -55,6 +55,11 @@ Axios.interceptors.request.use(
 Axios.interceptors.response.use(
   (res) => {
     let data = res.data;
+    // 检查是否是文件下载请求
+    if (res.config.responseType === 'blob') {
+      return data;
+    }
+
     if (data.Code == 0) {
       return data;
     } else {
@@ -84,13 +89,18 @@ export function Get(
   url: string,
   params: any,
   content = 0,
-  timeout = Axios.defaults.timeout
+  timeout = Axios.defaults.timeout,
+  isBlob = false
 ) {
-  return Axios.get(url, {
+  let req = {
     params,
     headers: { "Content-Type": contentType[content] },
     timeout: timeout,
-  });
+  };
+  if (isBlob) {
+    req.responseType = "blob";
+  }
+  return Axios.get(url, req);
 }
 
 export function Post(

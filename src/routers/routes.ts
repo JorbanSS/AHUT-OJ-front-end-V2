@@ -94,8 +94,14 @@ const routes = [
         name: "ContestDiscussions",
         path: "discussions",
         component: () => import("@/components/Contest/Discussions.vue"),
-      },
+      }
     ],
+  },
+  {
+    name: "ScrollRank",
+    path: "/ScrollRank/:CID",
+    component: () => import("@/components/Contest/ScrollBoard.vue"),
+    meta: { title: BaseTitle + "滚榜" },
   },
   {
     name: "Contests",

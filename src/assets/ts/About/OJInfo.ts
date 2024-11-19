@@ -67,8 +67,12 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf8')
 for line in sys.stdin:
     a = line.split()
     print(int(a[0]) + int(a[1]))
-    \`\`\`
+\`\`\`
 
+## 编译选项
+C: \`gcc %s -o %s/main 2>%s/err.txt\`
+C++: \`g++ %s -o %s/main 2>%s/err.txt\`
+Java: \`javac %s  -classpath %s/Main.class 2>%s/err.txt\`
 `;
 
 export default MD_OJInfo;

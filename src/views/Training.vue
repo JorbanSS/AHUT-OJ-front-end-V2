@@ -350,6 +350,7 @@ import {
   _getRatingRank,
   _scrapeRating,
 } from "@/apis/training";
+import { _getPublicRecentContests } from "@/apis/public";
 import { _getUsersOnline } from "@/apis/user";
 import PageHeader from "@/components/Main/PageHeader.vue";
 import {
@@ -375,21 +376,41 @@ let recentContests = reactive<RecentContestsType>({
   },
 
   get() {
-    _getRecentContests({}).then((data: any) => {
-      this.RecentContests = data.RecentContests.filter(
-        (item: any) => item.Duration <= 43200000
-      );
-      this.RecentContests.sort((a, b) => a.StartTime - b.StartTime);
-      this.Count = this.RecentContests.length;
-      this.Page = data.Page;
-      this.Limit = data.Limit;
-      this.RecentContests.forEach((item: any) => {
-        item.Label = "";
-        recentContestLabelOptions.forEach((labelOption: any) => {
-          if (item.Title.includes(labelOption.label))
-            item.Label += labelOption.value + ";";
-        });
+    // _getRecentContests({}).then((data: any) => {
+    //   this.RecentContests = data.RecentContests.filter(
+    //     (item: any) => item.Duration <= 43200000
+    //   );
+    //   this.RecentContests.sort((a, b) => a.StartTime - b.StartTime);
+    //   this.Count = this.RecentContests.length;
+    //   this.Page = data.Page;
+    //   this.Limit = data.Limit;
+    //   this.RecentContests.forEach((item: any) => {
+    //     item.Label = "";
+    //     recentContestLabelOptions.forEach((labelOption: any) => {
+    //       if (item.Title.includes(labelOption.label))
+    //         item.Label += labelOption.value + ";";
+    //     });
+    //   });
+    //   push.success({
+    //     title: "获取成功",
+    //     message: `一共获取了 ${this.Count} 个比赛`,
+    //   });
+    // });
+    _getPublicRecentContests().then((data: any) => {
+      this.RecentContests = data.map((contest) => {
+        // console.log(contest.endTimeStamp - contest.startTimeStamp);
+        return {
+          CID: contest.link.split("/").pop() || "", // 假设比赛 ID 是链接的最后一个部分
+          Title: contest.name,
+          Type: contest.oiContest ? "OI" : "ACM",
+          StartTime: contest.startTimeStamp,
+          Duration: (contest.endTimeStamp - contest.startTimeStamp) * 1000,
+          OJ: contest.oj,
+          URL: contest.link,
+          Label: contest.status,
+        };
       });
+      this.Count = this.RecentContests.length;
       push.success({
         title: "获取成功",
         message: `一共获取了 ${this.Count} 个比赛`,
@@ -462,7 +483,7 @@ let ratingRank = reactive<RatingRankType>({
 });
 const UIDs = ref<string[]>([]);
 onMounted(() => {
-  // recentContests.get();
+  recentContests.get();
   // ratingRank.get();
   _getUsersOnline({
     Page: 1,

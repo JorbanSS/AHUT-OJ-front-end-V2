@@ -44,6 +44,17 @@
         }"
       >
         <li>
+          <a @click="()=>{
+            $router.push({
+                    name: 'ScrollRank',
+                    params: {
+                      CID: props.contest.CID,
+                    },
+                  })
+          }"><application-effect theme="filled" size="24" fill="#000000"/> 
+          滚榜 </a>
+         </li>
+        <li>
           <a @click="ranking.get(true)">
             <refresh theme="outline" size="18" />
             更新数据
@@ -202,10 +213,10 @@
 import { onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { FullScreen, Refresh } from "@icon-park/vue-next";
+import { FullScreen, Refresh,ApplicationEffect} from "@icon-park/vue-next";
 
 import { _getContestRanking } from "@/apis/contest";
-import { _getRandomColor } from "@/apis/public";
+import { _getPublicRandomColor } from "@/apis/public";
 import { useConstValStore } from "@/stores/ConstVal";
 import XLSX from "xlsx-js-style";
 import {
@@ -421,7 +432,7 @@ let onExportExcel = debounce(() => {
         if (R === 0) {
           if (C >= problemStartIndex) {
             asyncOperations.push(
-              _getRandomColor().then((data) => {
+              _getPublicRandomColor().then((data) => {
                 let color = data.data.color;
                 if (color) {
                   let rgbColor = color.replace(/^#/, "").toLowerCase();

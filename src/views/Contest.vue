@@ -110,6 +110,12 @@
             </a>
           </li>
           <li>
+            <a @click="contest.exportContestProblems()">
+              <database-download theme="outline" size="18" />
+              备份
+            </a>
+          </li>
+          <li>
             <a
               @click="
                 $router.push({
@@ -161,6 +167,7 @@ import {
   PartyBalloon,
   Trophy,
   CameraFour,
+  DatabaseDownload,
 } from "@icon-park/vue-next";
 import { push } from "notivue";
 
@@ -170,6 +177,7 @@ import {
   _getBaseContest,
 } from "@/apis/contest";
 import { _getRecords } from "@/apis/record";
+import { _exportContestProblems } from "@/apis/problem";
 import PageHeader from "@/components/Main/PageHeader.vue";
 import { contestNavItems } from "@/config";
 import { type ContestType } from "@/interfaces/contest";
@@ -255,6 +263,39 @@ let contest = reactive<ContestType>({
         },
       });
     });
+  },
+
+  exportContestProblems() {
+    let problemsStr = "";
+    for (let i = 0; i < problems.value.length; i++) {
+      if (i) problemsStr += ",";
+      problemsStr += problems.value[i].PID;
+    }
+    let params = {
+      PIDs: problemsStr,
+    };
+    const fileName = problemsStr + ".zip";
+    _exportContestProblems(params)
+      .then((data: any) => {
+        const blob = new Blob([data], { type: "application/zip" });
+        const url = window.URL.createObjectURL(blob);
+        const downloadElement = document.createElement("a");
+        downloadElement.href = url;
+        downloadElement.download = fileName;
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement);
+        window.URL.revokeObjectURL(url);
+        push.success({
+          title: "导出成功",
+        });
+      })
+      .catch((error) => {
+        console.error("Download failed", error);
+        push.error({
+          title: "导出失败",
+        });
+      });
   },
 
   verifyPassword() {

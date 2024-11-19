@@ -225,11 +225,12 @@ function autoLogin() {
           userDataStore.init();
           return Promise.reject();
         } else {
-          return {};
+          return _getUserInfo({});
         }
       })
       .then((data: any) => {
         userDataStore.getUserPermission(data.UID);
+        console.log(data);
         userDataStore.login(data);
         showConfig.init();
         push.success({

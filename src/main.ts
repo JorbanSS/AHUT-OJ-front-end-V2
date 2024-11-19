@@ -15,6 +15,7 @@ import "notivue/notifications.css";
 import "v-calendar/style.css";
 import "./assets/scss/tailwind.scss";
 
+
 const app = createApp(App);
 const store = createPinia();
 const notivue = createNotivue({

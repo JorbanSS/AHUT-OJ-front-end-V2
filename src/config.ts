@@ -102,7 +102,7 @@ export const problemTypeOptions = [
 ];
 
 export const problemContentOptions = [
-  { label: "PlainText", value: -1 },
+  { label: "FormatMD", value: -1 },
   { label: "MarkDown", value: 1 },
   { label: "PDF", value: 2 },
 ];
@@ -174,7 +174,7 @@ export const contestNavItems: Array<NavItemType> = [
   { title: "题目", icon: DocumentFolder, to: { name: "ContestProblems" } },
   { title: "排名", icon: RankingList, to: { name: "ContestRanking" } },
   { title: "记录", icon: History, to: { name: "ContestRecords" } },
-  { title: "讨论", icon: Topic, to: { name: "ContestDiscussions" } },
+  { title: "讨论", icon: Topic, to: { name: "ContestDiscussions" } }
 ];
 
 export const problemListNavItems: Array<NavItemType> = [

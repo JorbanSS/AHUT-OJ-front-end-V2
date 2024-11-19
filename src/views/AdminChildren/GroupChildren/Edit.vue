@@ -459,7 +459,7 @@ let group = ref({
       GroupName: this.GroupName,
       GroupTask: this.GroupTask,
     };
-    console.log(params);
+    // console.log(params);
     for (let i = 0; i < listadd.value.length; i++) {
       let params2 = {
         GID: this.GID,

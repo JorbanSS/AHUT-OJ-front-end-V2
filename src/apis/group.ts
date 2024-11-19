@@ -2,7 +2,7 @@ import { Get, Post, Del } from "@/utils/axios/request";
 
 // 新增小组
 export const _AddGroup = (data: any) => {
-  console.log(data);
+  // console.log(data);
   return Post("user/group/add/", data);
 };
 
