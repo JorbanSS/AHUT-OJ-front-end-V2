@@ -2,19 +2,19 @@
   <Row class="justify-center sm:flex-row">
     <template v-if="props.maxPage">
       <div class="join">
-        <button class="join-item btn" @click="props.changePage(1)">
+        <button class="join-item btn" @click="wrapChangePage(1)">
           <double-left theme="outline" size="20" />
         </button>
-        <button class="join-item btn" @click="props.changePage(props.page - 1)">
+        <button class="join-item btn" @click="wrapChangePage(props.page - 1)">
           <left theme="outline" size="20" />
         </button>
         <button class="join-item btn">
           {{ props.page }} / {{ props.maxPage }}
         </button>
-        <button class="join-item btn" @click="props.changePage(props.page + 1)">
+        <button class="join-item btn" @click="wrapChangePage(props.page + 1)">
           <right theme="outline" size="20" />
         </button>
-        <button class="join-item btn" @click="props.changePage(props.maxPage)">
+        <button class="join-item btn" @click="wrapChangePage(props.maxPage)">
           <double-right theme="outline" size="20" />
         </button>
       </div>
@@ -27,7 +27,7 @@
           min="1"
           :max="props.maxPage"
         />
-        <button class="btn join-item" @click="props.changePage(toPage)">
+        <button class="btn join-item" @click="wrapChangePage(toPage)">
           跳转
         </button>
       </div>
@@ -40,6 +40,10 @@
 <script lang="ts" setup>
 import { DoubleLeft, DoubleRight, Left, Right } from "@icon-park/vue-next";
 import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const router = useRouter();
 
 let toPage = ref();
 
@@ -54,4 +58,8 @@ let props = withDefaults(defineProps<propsType>(), {
   maxPage: 0,
   changePage: () => {},
 });
+const wrapChangePage = (toPage: number) => {
+  let pg = props.changePage(toPage);
+  router.push({ query: { ...route.query, Page: pg } }); //增加历史栈的query
+};
 </script>

@@ -149,12 +149,6 @@ const Admin = {
           component: () =>
             import("@/views/AdminChildren/ContestChildren/Edit.vue"),
         },
-        // {
-        //   name: "MontorContest",
-        //   path: "montor/:CID",
-        //   component: () =>
-        //     import("@/views/AdminChildren/ContestChildren/Montor.vue"),
-        // },
         {
           name: "EditBalloon",
           path: "balloon/:CID",
@@ -374,6 +368,35 @@ const Admin = {
           path: "recordlist/:CID/:PID",
           component: () =>
             import("@/views/AdminChildren/CodeReviewChildren/RecordList.vue"),
+        },
+      ],
+    },
+    {
+      name: "AdminMonitor",
+      path: "monitor",
+      component: () => import("@/views/AdminChildren/Monitor.vue"),
+      redirect: { name: "MonitorCamera" },
+      beforeEnter: (
+        // @ts-ignore
+        to: RouteLocationNormalized,
+        // @ts-ignore
+        from: RouteLocationNormalized,
+        next: NavigationGuardNext
+      ) => {
+        if (needAdminCertificate()) next();
+      },
+      children: [
+        {
+          name: "MonitorCamera",
+          path: "camera",
+          component: () =>
+            import("@/views/AdminChildren/MonitorChildren/Camera.vue"),
+        },
+        {
+          name: "MonitorVideo",
+          path: "video",
+          component: () =>
+            import("@/views/AdminChildren/MonitorChildren/Video.vue"),
         },
       ],
     },

@@ -3,7 +3,7 @@
   <div class="pb-6"></div>
 </template>
 
-<script lang="ts" setup name="AdminOther">
+<script lang="ts" setup name="CodeReview">
 
 </script>
 

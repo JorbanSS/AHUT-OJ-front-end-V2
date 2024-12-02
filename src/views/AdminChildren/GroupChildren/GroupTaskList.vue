@@ -201,9 +201,6 @@ let user = reactive<UserType>({
 });
 
 //小组任务
-let taskPID = ref<string>("");
-let taskCID = ref<string>("");
-let taskLID = ref<string>("");
 let taskPIDList = ref([]);
 let taskCIDList = ref([]);
 let taskLIDList = ref([]);

@@ -16,7 +16,9 @@ import {
   Topic,
   Trophy,
   SmartOptimization,
+  PeoplesTwo,
   Audit,
+  CameraFour,
 } from "@icon-park/vue-next";
 import { ToolbarNames } from "md-editor-v3";
 
@@ -174,7 +176,7 @@ export const contestNavItems: Array<NavItemType> = [
   { title: "题目", icon: DocumentFolder, to: { name: "ContestProblems" } },
   { title: "排名", icon: RankingList, to: { name: "ContestRanking" } },
   { title: "记录", icon: History, to: { name: "ContestRecords" } },
-  { title: "讨论", icon: Topic, to: { name: "ContestDiscussions" } }
+  { title: "讨论", icon: Topic, to: { name: "ContestDiscussions" } },
 ];
 
 export const problemListNavItems: Array<NavItemType> = [
@@ -197,9 +199,10 @@ export const adminNavItems: Array<NavItemType> = [
   { title: "题单", icon: Bill, to: { name: "AdminProblemList" } },
   { title: "比赛", icon: Trophy, to: { name: "AdminContest" } },
   { title: "审阅", icon: Audit, to: { name: "AdminCodeReview" } },
+  { title: "监考", icon: CameraFour, to: { name: "AdminMonitor" } },
   { title: "训练", icon: Muscle, to: { name: "AdminTraining" } },
   { title: "用户", icon: Peoples, to: { name: "UserList" } },
-  { title: "小组", icon: Peoples, to: { name: "AdminGroup" } },
+  { title: "小组", icon: PeoplesTwo, to: { name: "AdminGroup" } },
   { title: "杂项", icon: MoreTwo, to: { name: "AdminOther" } },
 ];
 

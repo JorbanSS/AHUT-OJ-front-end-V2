@@ -58,7 +58,7 @@ import { useUserDataStore } from '@/stores/UserData';
 import { getHeadURL } from '@/utils/globalFunctions';
 import Tabs from './NavBar/Tabs.vue';
 
-const userDataStore = reactive(useUserDataStore());
+const userDataStore = useUserDataStore();
 
 interface propsType {
   login?: Function;

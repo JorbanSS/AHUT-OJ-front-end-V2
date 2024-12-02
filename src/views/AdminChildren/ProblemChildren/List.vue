@@ -171,8 +171,9 @@ import {
   type ProblemsType,
 } from "@/interfaces/problem";
 import { debounce } from "lodash";
-
+import { useRoute } from "vue-router";
 let allSelected = ref<boolean>(false);
+const route = useRoute();
 
 function switchSelectedStatus(index: number) {
   problems.problems[index].Selected = !problems.problems[index].Selected;
@@ -234,6 +235,7 @@ let problems = reactive<ProblemsType>({
 
   changePage(page: number) {
     if (1 <= page && page <= maxPage.value) problems.page = page;
+    return problems.page;
   },
 
   delete() {
@@ -297,8 +299,9 @@ onMounted(() => {
 });
 
 watch(
-  () => problems.page,
+  () => route.query.Page,
   () => {
+    problems.page = Number(route.query.Page) || 1;
     problems.get();
     allSelected.value = false;
   }

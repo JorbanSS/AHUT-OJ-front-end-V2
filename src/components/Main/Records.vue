@@ -41,12 +41,18 @@
               {{ item.SID }}
             </th>
             <td v-if="props.showPID">
-              <span class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer" data-tip="跳转题目" @click="$router.push({
-                name: 'Problem',
-                params: {
-                  PID: item.PID
-                }
-              })">
+              <span
+                class="font-bold text-blue-500 tooltip hover:text-blue-400 cursor-pointer"
+                data-tip="跳转题目"
+                @click="
+                  $router.push({
+                    name: 'Problem',
+                    params: {
+                      PID: item.PID,
+                    },
+                  })
+                "
+              >
                 {{ item.PID }}
               </span>
             </td>
@@ -139,6 +145,7 @@ let props = withDefaults(defineProps<propsType>(), {
 
 function changePage(page: number) {
   if (1 <= page && page <= maxPage.value) props.records.page = page;
+  return props.records.page;
 }
 
 const maxPage = computed(() =>

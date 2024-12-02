@@ -112,22 +112,7 @@
           <li>
             <a @click="contest.exportContestProblems()">
               <database-download theme="outline" size="18" />
-              备份
-            </a>
-          </li>
-          <li>
-            <a
-              @click="
-                $router.push({
-                  name: 'MontorContest',
-                  params: {
-                    CID: contest.CID,
-                  },
-                })
-              "
-            >
-              <camera-four theme="outline" size="18" />
-              比赛监考
+              数据备份
             </a>
           </li>
         </div>

@@ -24,6 +24,7 @@
     "codemirror-languageserver": "^1.11.0",
     "events": "^3.3.0",
     "image-conversion": "^2.1.1",
+    "livekit-client": "^2.7.0",
     "lodash": "^4.17.21",
     "md-editor-v3": "^4.20.4",
     "notivue": "^2.2.1",

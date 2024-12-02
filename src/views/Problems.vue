@@ -1,17 +1,27 @@
 <template>
-
   <MainContainer>
-
-    <PageHeader Title="题库" :IconName="DocumentFolder"
-      :Infomation="`收录了共 ${problems.count} 条题目，包含自主命题、LOJ、Codeforces 和 Atcoder 等知名 OJ 的题目。`">
+    <PageHeader
+      Title="题库"
+      :IconName="DocumentFolder"
+      :Infomation="`收录了共 ${problems.count} 条题目，包含自主命题、LOJ、Codeforces 和 Atcoder 等知名 OJ 的题目。`"
+    >
       <div class="flex flex-col gap-3">
         <div class="flex justify-center">
           <div class="join">
-            <label class="input input-bordered flex items-center gap-2 join-item">
+            <label
+              class="input input-bordered flex items-center gap-2 join-item"
+            >
               <span class="whitespace-nowrap text-sm">题号</span>
-              <input type="text" class="grow" v-model="problems.searchInfo.PID" />
+              <input
+                type="text"
+                class="grow"
+                v-model="problems.searchInfo.PID"
+              />
             </label>
-            <button class="btn join-item" @click="problems.goToProblem(problems.searchInfo.PID)">
+            <button
+              class="btn join-item"
+              @click="problems.goToProblem(problems.searchInfo.PID)"
+            >
               <go-on theme="outline" size="18" />
               <span>跳转</span>
             </button>
@@ -19,21 +29,43 @@
         </div>
         <div class="flex justify-center gap-2 flex-col md:flex-row">
           <div class="join md:join-horizontal join-vertical">
-            <label class="input input-bordered flex items-center gap-2 join-item">
+            <label
+              class="input input-bordered flex items-center gap-2 join-item"
+            >
               <span class="whitespace-nowrap">标题</span>
-              <input type="text" class="grow" v-model="problems.searchInfo.Keyword" />
+              <input
+                type="text"
+                class="grow"
+                v-model="problems.searchInfo.Keyword"
+              />
             </label>
-            <label class="input input-bordered flex items-center gap-2 join-item">
+            <label
+              class="input input-bordered flex items-center gap-2 join-item"
+            >
               <span class="whitespace-nowrap">标签</span>
-              <input type="text" class="grow" v-model="problems.searchInfo.Label" />
+              <input
+                type="text"
+                class="grow"
+                v-model="problems.searchInfo.Label"
+              />
             </label>
-            <select class="select select-bordered join-item" v-model="problems.searchInfo.PType">
-              <option v-for="item in problemTypeOptions" :value="item.value" :key="item.value">
+            <select
+              class="select select-bordered join-item"
+              v-model="problems.searchInfo.PType"
+            >
+              <option
+                v-for="item in problemTypeOptions"
+                :value="item.value"
+                :key="item.value"
+              >
                 {{ item.label }}
               </option>
             </select>
           </div>
-          <button class="btn md:join-item md:w-24 w-full" @click="problems.get(true)">
+          <button
+            class="btn md:join-item md:w-24 w-full"
+            @click="problems.get(true)"
+          >
             <search theme="outline" size="18" />
             <span>搜索</span>
           </button>
@@ -43,27 +75,36 @@
 
     <Card class="overflow-x-hidden">
       <Col>
-
         <table class="table table-zebra table-pin-rows">
           <thead>
             <tr>
-              <template v-for="[title, style] in [
-                ['题号'],
-                ['题目名称'],
-                ['标签', 'hidden md:table-cell'],
-                ['通过率', 'hidden sm:table-cell']
-              ]" :key="title">
+              <template
+                v-for="[title, style] in [
+                  ['题号'],
+                  ['题目名称'],
+                  ['标签', 'hidden md:table-cell'],
+                  ['通过率', 'hidden sm:table-cell'],
+                ]"
+                :key="title"
+              >
                 <th :class="style">{{ title }}</th>
               </template>
             </tr>
           </thead>
           <tbody v-auto-animate>
-            <tr v-for="item in problems.problems" :key="item.PID" @click="$router.push({
-              name: 'Problem',
-              params: {
-                PID: item.PID,
-              },
-            })" class="cursor-pointer">
+            <tr
+              v-for="item in problems.problems"
+              :key="item.PID"
+              @click="
+                $router.push({
+                  name: 'Problem',
+                  params: {
+                    PID: item.PID,
+                  },
+                })
+              "
+              class="cursor-pointer"
+            >
               <th>
                 {{ item.PID }}
               </th>
@@ -71,48 +112,65 @@
                 <span class="font-bold talbe-lg Nowarp">{{ item.Title }}</span>
               </td>
               <td class="space-y-0.5 hidden md:table-cell">
-                <span class="badge badge-neutral mr-1 font-bold"
-                  v-for="(label, index) in item.Label.split(/;| /).filter(item => item != '' && item != '/')"
-                  :key="index">
+                <span
+                  class="badge badge-neutral mr-1 font-bold"
+                  v-for="(label, index) in item.Label.split(/;| /).filter(
+                    (item) => item != '' && item != '/'
+                  )"
+                  :key="index"
+                >
                   {{ label }}
                 </span>
               </td>
               <td class="hidden sm:table-cell">
-                <progress class="progress progress-success w-20"
-                  :value="ConvertTools.Percentage(item.Accepted, item.Submit)" max="100"></progress>
+                <progress
+                  class="progress progress-success w-20"
+                  :value="ConvertTools.Percentage(item.Accepted, item.Submit)"
+                  max="100"
+                ></progress>
               </td>
             </tr>
           </tbody>
         </table>
 
-        <Pagination :page="problems.page" :maxPage="maxPage" :changePage="problems.changePage" class="pb-6" />
-        
+        <Pagination
+          :page="problems.page"
+          :maxPage="maxPage"
+          :changePage="problems.changePage"
+          class="pb-6"
+        />
       </Col>
-
     </Card>
-
   </MainContainer>
-
 </template>
 
 <script lang="ts" setup name="Problems">
-import { computed, onMounted, reactive, watch } from 'vue';
+import { computed, onMounted, reactive, watch } from "vue";
 
 import { DocumentFolder, Search, GoOn } from "@icon-park/vue-next";
 import { push } from "notivue";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
-import { _getProblems } from '@/apis/problem';
+import { _getProblems } from "@/apis/problem";
 import Pagination from "@/components/Main/Pagination.vue";
-import { problemTypeOptions } from '@/config';
-import { type ProblemSimplifiedType, type ProblemsType } from '@/interfaces/problem';
-import { ConvertTools } from '@/utils/globalFunctions';
-import PageHeader from '@/components/Main/PageHeader.vue';
-import { debounce } from 'lodash'
+import { problemTypeOptions } from "@/config";
+import {
+  type ProblemSimplifiedType,
+  type ProblemsType,
+} from "@/interfaces/problem";
+import { ConvertTools } from "@/utils/globalFunctions";
+import PageHeader from "@/components/Main/PageHeader.vue";
+import { debounce } from "lodash";
 
 const router = useRouter();
 
-const filterNumber = computed(() => Number(problems.searchInfo.PID != '') + Number(problems.searchInfo.Label != '') + Number(problems.searchInfo.PType != '') + Number(problems.searchInfo.Keyword != ''))
+const filterNumber = computed(
+  () =>
+    Number(problems.searchInfo.PID != "") +
+    Number(problems.searchInfo.Label != "") +
+    Number(problems.searchInfo.PType != "") +
+    Number(problems.searchInfo.Keyword != "")
+);
 
 let problems = reactive<ProblemsType>({
   problems: Array<ProblemSimplifiedType>(),
@@ -120,10 +178,10 @@ let problems = reactive<ProblemsType>({
   page: 1,
   limit: 20,
   searchInfo: {
-    PID: '',
-    Label: '',
-    PType: '',
-    Keyword: '',
+    PID: "",
+    Label: "",
+    PType: "",
+    Keyword: "",
   },
 
   get: debounce((showInfo: boolean = false) => {
@@ -143,23 +201,23 @@ let problems = reactive<ProblemsType>({
       .then(() => {
         if (showInfo) {
           push.success({
-            title: '获取成功',
+            title: "获取成功",
             message: `一共获取了 ${problems.count} 道题目`,
           });
         }
       });
-  }, 500), 
+  }, 500),
 
   goToProblem(PID: string) {
     if (PID == "") {
       push.warning({
         title: "无法跳转",
         message: "未填写题号",
-      })
+      });
       return;
-    };
+    }
     router.push({
-      name: 'Problem',
+      name: "Problem",
       params: {
         PID: PID,
       },
@@ -168,17 +226,20 @@ let problems = reactive<ProblemsType>({
 
   changePage(page: number) {
     if (1 <= page && page <= maxPage.value) problems.page = page;
+    return problem.page;
   },
-})
+});
 
 onMounted(() => {
   problems.get(true);
-})
+});
 
-watch(() => problems.page, () => {
-  problems.get();
-})
+watch(
+  () => problems.page,
+  () => {
+    problems.get();
+  }
+);
 
 const maxPage = computed(() => Math.ceil(problems.count / problems.limit));
-
 </script>

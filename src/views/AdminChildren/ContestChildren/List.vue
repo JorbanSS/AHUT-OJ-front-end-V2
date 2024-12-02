@@ -146,6 +146,8 @@ import {
   type ContestsType,
 } from "@/interfaces/contest";
 
+import { useRoute } from "vue-router";
+const route = useRoute();
 const router = useRouter();
 
 let allSelected = ref<boolean>(false);
@@ -189,6 +191,7 @@ let contests = reactive<ContestsType>({
 
   changePage(page: number) {
     if (1 <= page && page <= maxPage.value) contests.page = page;
+    return contests.page;
   },
 
   get(showInfo = false) {
@@ -236,8 +239,9 @@ onMounted(() => {
 });
 
 watch(
-  () => contests.page,
+  () => route.query.Page,
   () => {
+    contests.page = Number(route.query.Page) || 1;
     contests.get();
     allSelected.value = false;
   }
