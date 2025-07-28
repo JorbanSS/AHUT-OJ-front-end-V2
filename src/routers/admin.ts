@@ -58,6 +58,7 @@ const Admin = {
         {
           name: "AddProblem",
           path: "add",
+
           component: () =>
             import("@/views/AdminChildren/ProblemChildren/Add.vue"),
         },

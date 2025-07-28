@@ -43,12 +43,6 @@
       </button>
     </div>
     <div id="layout-container">
-      <VideoComponent
-        v-if="localTrack"
-        :track="localTrack"
-        :participantIdentity="participantName"
-        :local="true"
-      />
       <template
         v-for="remoteTrack of remoteTracksMap.values()"
         :key="remoteTrack.trackPublication.trackSid"
@@ -65,9 +59,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive, computed, type Ref, onUnmounted } from "vue";
-import { useRouter, useRoute } from "vue-router";
 import {
-  LocalVideoTrack,
   RemoteParticipant,
   RemoteTrack,
   RemoteTrackPublication,
@@ -77,22 +69,17 @@ import {
 import VideoComponent from "@/components/Main/VideoComponent.vue";
 import { _getJoinToken } from "@/apis/livekit";
 import { useUserDataStore } from "@/stores/UserData";
-const router = useRouter();
-const route = useRoute();
 
-const userDataStore = useUserDataStore();
-
-let roomName = ref("Monitor");
+let roomName = ref("monitor");
 const room = ref<Room>();
 const livekitURL = "wss://ahutoj-uo7196ti.livekit.cloud";
+// const livekitURL = "ws://localhost:7880/";
 let livekitToken: string = "";
 type TrackInfo = {
   trackPublication: RemoteTrackPublication;
   participantIdentity: string;
 };
-const localTrack = ref<LocalVideoTrack>();
 const remoteTracksMap: Ref<Map<string, TrackInfo>> = ref(new Map());
-let participantName = ref();
 const startMonitoring = () => {
   joinRoom();
 };
@@ -102,9 +89,6 @@ const stopMonitoring = () => {
 };
 
 async function joinRoom() {
-  await _getJoinToken({}, "monitor").then((res: any) => {
-    livekitToken = res.Token;
-  });
   room.value = new Room();
   room.value.on(
     RoomEvent.TrackSubscribed,
@@ -126,22 +110,20 @@ async function joinRoom() {
     }
   );
   try {
-    room.value.connect(livekitURL, livekitToken);
-    await room.value.localParticipant.enableCameraAndMicrophone();
-    localTrack.value = room.value.localParticipant.videoTrackPublications
-      .values()
-      .next().value!.videoTrack;
+    await _getJoinToken({}, "monitor").then((res: any) => {
+      livekitToken = res.Token;
+    });
+    await room.value.connect(livekitURL, livekitToken);
   } catch (error: any) {
     console.log("There was an error connecting to the room:", error.message);
     await leaveRoom();
   }
+  window.addEventListener("beforeunload", leaveRoom);
 }
 async function leaveRoom() {
   await room.value?.disconnect();
   room.value = undefined;
-  localTrack.value = undefined;
   remoteTracksMap.value.clear();
-
   window.removeEventListener("beforeunload", leaveRoom);
 }
 onUnmounted(() => {

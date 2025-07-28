@@ -205,7 +205,7 @@ export class FileUtils {
         if (!worksheet[cellAddress]) continue;
         worksheet[cellAddress].s = {
           font: { name: "仿宋", sz: 14 },
-          fill: { fgColor: { rgb: "FFFFFF/home/rjfang/AHUT-OJ-front-end-V2/dist" } }, // 设置为白色背景
+          fill: { fgColor: { rgb: "FFFFFF" } }, // 设置为白色背景
           border: { top: { style: "thin", color: { rgb: "000000" } } },
           alignment: { horizontal: "center", vertical: "center" },
         };
